@@ -2,7 +2,7 @@
 
 class Token
 {
-	public static function getToken($userId, $secret, $expiration)
+	public static function getToken($userId, $secret, $expiration, $issuer)
 	{
 
 	}
