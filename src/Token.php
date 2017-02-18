@@ -2,13 +2,18 @@
 
 class Token
 {
-	public static function getToken()
+	public static function getToken($userId, $secret, $expiration)
 	{
 
 	}
 
-	public static function validate()
+	public static function validate($token)
 	{
-		
+
+	}
+
+	public static function make()
+	{
+		return new TokenBuilder();
 	}
 }
