@@ -6,10 +6,12 @@ class Token
 {
 	public static function getToken($userId, $secret, $expiration, $issuer)
 	{
-		$builder = Self::builder()
+		$builder = Self::builder();
 
 		return $builder->addPayload(new Payload('user_id', $userId))
-			->setExpiration()
+			->setSecret($secret)
+			->setExpiration($expiration)
+			->setIssuer($issuer)
 			->build();
 	}
 

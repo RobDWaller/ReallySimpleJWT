@@ -61,7 +61,7 @@ class TokenBuilder
 
 	public function getHeader()
 	{
-		return json_encode(['alg' => $this->getHash(), 'typ' => $this->getType()]);
+		return json_encode(['alg' => 'HS256', 'typ' => $this->getType()]);
 	}
 
 	public function getPayload()

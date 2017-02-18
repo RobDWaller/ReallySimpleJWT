@@ -23,10 +23,11 @@ class Signature
 
 	public function get()
 	{
-		return hash_hmac(
+		return base64_encode(hash_hmac(
 			$this->hash,
-			base64_encode($this->header) . "." . base64_encode($this->payload),
-			$this->secret
-		);
+			base64_encode($this->header) . '.' . base64_encode($this->payload),
+			$this->secret,
+			true
+		));
 	}
 }

@@ -28,7 +28,7 @@ class TokenBuilderTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertNotEmpty($header);	
 
-		$this->assertEquals("sha256", json_decode($header)->alg);
+		$this->assertEquals("HS256", json_decode($header)->alg);
 
 		$this->assertEquals("JWT", json_decode($header)->typ);	
 	}
