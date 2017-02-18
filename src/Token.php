@@ -1,10 +1,16 @@
 <?php namespace ReallySimpleJWT;
 
+use ReallySimpleJWT\Helper\Payload;
+
 class Token
 {
 	public static function getToken($userId, $secret, $expiration, $issuer)
 	{
+		$builder = Self::builder()
 
+		return $builder->addPayload(new Payload('user_id', $userId))
+			->setExpiration()
+			->build();
 	}
 
 	public static function validate($token)
@@ -12,8 +18,13 @@ class Token
 
 	}
 
-	public static function make()
+	public static function builder()
 	{
 		return new TokenBuilder();
+	}
+
+	public static function validator()
+	{
+		return new TokenValidator();
 	}
 }

@@ -8,13 +8,16 @@
             "email": "rdwaller1984@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "nesbot/carbon": "1.22.*"
+    },
     "require-dev": {
     	"phpunit/phpunit": "5.7.*"
     },
     "autoload": {
         "psr-4": {
-            "ReallySimpleJWT\\": "src"
+            "ReallySimpleJWT\\": "src",
+            "ReallySimpleJWT\\Helper\\": "src/Helper"
         }
     }
 }
