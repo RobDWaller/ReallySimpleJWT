@@ -1,14 +1,12 @@
 <?php namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Helper\Payload;
-
 class Token
 {
 	public static function getToken($userId, $secret, $expiration, $issuer)
 	{
 		$builder = Self::builder();
 
-		return $builder->addPayload(new Payload('user_id', $userId))
+		return $builder->addPayload('user_id', $userId)
 			->setSecret($secret)
 			->setExpiration($expiration)
 			->setIssuer($issuer)

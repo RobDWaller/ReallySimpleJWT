@@ -1,7 +1,6 @@
 <?php
  
 use ReallySimpleJWT\TokenBuilder;
-use ReallySimpleJWT\Helper\Payload;
 use Carbon\Carbon; 
 
 class TokenBuilderTest extends PHPUnit_Framework_TestCase {
@@ -74,7 +73,7 @@ class TokenBuilderTest extends PHPUnit_Framework_TestCase {
 
 		$payload = $builder->setIssuer('http://127.0.0.1')
 			->setExpiration($dateTime)
-			->addPayload(new Payload('user_id', 2));
+			->addPayload('user_id', 2);
 
 		$this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $payload);
 
@@ -102,7 +101,7 @@ class TokenBuilderTest extends PHPUnit_Framework_TestCase {
 		$token = $builder->setIssuer('http://127.0.0.1')
 			->setExpiration($dateTime)
 			->setSecret('123ABC')
-			->addPayload(new Payload('user_id', 2))
+			->addPayload('user_id', 2)
 			->build();
 
 		$this->assertNotEmpty($token);

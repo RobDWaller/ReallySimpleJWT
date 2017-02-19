@@ -1,12 +1,13 @@
 <?php namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Helper\Payload;
 use ReallySimpleJWT\Helper\Signature;
 use Carbon\Carbon;
 
 class TokenBuilder
 {
 	private $hash = 'sha256';
+
+	private $algorithm = 'HS256';
 
 	private $type = 'JWT';
 
@@ -27,6 +28,11 @@ class TokenBuilder
 	public function getHash()
 	{
 		return $this->hash;
+	}
+
+	public function getAlgorithm()
+	{
+		return $this->algorithm;
 	}	
 
 	public function getType()
@@ -61,7 +67,7 @@ class TokenBuilder
 
 	public function getHeader()
 	{
-		return json_encode(['alg' => 'HS256', 'typ' => $this->getType()]);
+		return json_encode(['alg' => $this->getAlgorithm(), 'typ' => $this->getType()]);
 	}
 
 	public function getPayload()
@@ -102,9 +108,9 @@ class TokenBuilder
 		return $this;
 	}
 
-	public function addPayload(Payload $payload)
+	public function addPayload($key, $value)
 	{
-		$this->payload = array_merge($this->payload, [$payload->getKey() => $payload->getValue()]);
+		$this->payload = array_merge($this->payload, [$key => $value]);
 
 		return $this;
 	}
