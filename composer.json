@@ -1,5 +1,6 @@
 {
     "name": "rbdwllr/reallysimplejwt",
+    "type": "library",
     "description": "A really simple library to generate user authentication JSON Web Tokens.",
     "keywords": ["jwt", "json", "tokens", "authentication"],
     "license": "MIT",
