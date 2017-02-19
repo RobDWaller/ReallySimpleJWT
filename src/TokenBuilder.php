@@ -1,6 +1,7 @@
 <?php namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Helper\Signature;
+use ReallySimpleJWT\Helper\Base64;
 use Carbon\Carbon;
 
 class TokenBuilder
@@ -117,8 +118,8 @@ class TokenBuilder
 
 	public function build()
 	{
-		return base64_encode($this->getHeader()) . "." . 
-			base64_encode($this->getPayload()) . "." .
+		return Base64::encode($this->getHeader()) . "." . 
+			Base64::encode($this->getPayload()) . "." .
 			$this->getSignature()->get();
 	}
 }

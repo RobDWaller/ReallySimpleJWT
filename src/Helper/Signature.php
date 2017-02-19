@@ -1,5 +1,8 @@
 <?php namespace ReallySimpleJWT\Helper;
 
+use ReallySimpleJWT\Helper\Hmac;
+use ReallySimpleJWT\Helper\Base64;
+
 class Signature
 {
 	private $header;
@@ -23,11 +26,15 @@ class Signature
 
 	public function get()
 	{
-		return base64_encode(hash_hmac(
+		return Base64::encode(Hmac::hash(
 			$this->hash,
-			base64_encode($this->header) . '.' . base64_encode($this->payload),
-			$this->secret,
-			true
+			$this->signatureString(),
+			$this->secret
 		));
+	}
+
+	private function signatureString()
+	{
+		return Base64::encode($this->header) . '.' . Base64::encode($this->payload);
 	}
 }
