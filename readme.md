@@ -32,5 +32,7 @@ $result = Token::validate('token', 'secret');
 ## Author
 
 Rob Waller
+
 Email: rdwaller1984@gmail.com
+
 Twitter: @robdwaller 
