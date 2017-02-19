@@ -76,4 +76,39 @@ class TokenValidatorTest extends PHPUnit_Framework_TestCase
 			->validateExpiration();
 	}
 
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+	 */
+	public function testSplitTokenFail()
+	{
+		$tokenString = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+			eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9';
+
+		$validator = new TokenValidator();
+
+		$validator->splitToken($tokenString);
+	}
+
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+	 */
+	public function testValidateSignatureFail()
+	{
+		$validator = new TokenValidator();
+
+		$tokenString = Token::getToken(
+			734, 
+			'ab9OPP10-)9)', 
+			Carbon::now()->addMinutes(11)->toDateTimeString(),
+			'www.cars.com'
+		);
+
+		$tokenString = substr($tokenString, 0, -1);
+
+		$this->assertTrue(
+			$validator->splitToken($tokenString)
+				->validateExpiration()
+				->validateSignature('ab9OPP10-)9)')
+		);
+	}
 }
