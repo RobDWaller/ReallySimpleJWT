@@ -1,6 +1,7 @@
 {
-    "name": "robdwaller/reallysimplejwt",
+    "name": "rbdwllr/reallysimplejwt",
     "description": "A really simple library to generate user authentication JSON Web Tokens.",
+    "keywords": ["jwt", "json", "tokens", "authentication"],
     "license": "MIT",
     "authors": [
         {
@@ -9,6 +10,7 @@
         }
     ],
     "require": {
+        "php": ">=5.6.0",
         "nesbot/carbon": "1.22.*"
     },
     "require-dev": {
