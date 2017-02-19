@@ -4,12 +4,8 @@ use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Helper\Base64;
 use Carbon\Carbon;
 
-class TokenBuilder
+class TokenBuilder extends TokenAbstract
 {
-	private $hash = 'sha256';
-
-	private $algorithm = 'HS256';
-
 	private $type = 'JWT';
 
 	private $secret;
@@ -24,17 +20,7 @@ class TokenBuilder
 
 	private $payload = [];
 
-	private $signature;
-
-	public function getHash()
-	{
-		return $this->hash;
-	}
-
-	public function getAlgorithm()
-	{
-		return $this->algorithm;
-	}	
+	private $signature;	
 
 	public function getType()
 	{

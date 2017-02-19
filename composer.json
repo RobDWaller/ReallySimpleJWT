@@ -17,7 +17,8 @@
     "autoload": {
         "psr-4": {
             "ReallySimpleJWT\\": "src",
-            "ReallySimpleJWT\\Helper\\": "src/Helper"
+            "ReallySimpleJWT\\Helper\\": "src/Helper",
+            "ReallySimpleJWT\\Exception\\": "src/Exception"
         }
     }
 }
