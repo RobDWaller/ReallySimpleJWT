@@ -13,9 +13,13 @@ class Token
 			->build();
 	}
 
-	public static function validate($token)
+	public static function validate($token, $secret)
 	{
+		$validator = Self::validator();
 
+		return $validator->splitToken($token)
+			->validateExpiration()
+			->validateSignature($secret);
 	}
 
 	public static function builder()

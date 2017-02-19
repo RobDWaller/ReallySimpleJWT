@@ -26,7 +26,7 @@ class TokenTest extends PHPUnit_Framework_TestCase {
             'http://127.0.0.1'
         );
 
-  		$this->assertTrue(Token::validate($token));
+  		$this->assertTrue(Token::validate($token, 'Hello&Mike'));
   	}
 	
 	public function testBuilder()
