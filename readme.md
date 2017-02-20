@@ -35,10 +35,18 @@ use ReallySimpleJWT\Token;
 $result = Token::validate('token', 'secret');
 ```
 
+### URL Encoding
+
+If you do pass the token via a URL it will need to be encoded.
+
+rawurlencode
+
+## License
+
+MIT
+
 ## Author
 
 Rob Waller
-
-Email: rdwaller1984@gmail.com
 
 Twitter: @robdwaller 

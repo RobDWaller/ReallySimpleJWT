@@ -108,4 +108,37 @@ class TokenBuilderTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertStringMatchesFormat('%s.%s.%s', $token);
 	}
+
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+	 */
+	public function testBuildFail()
+	{
+		$builder = new TokenBuilder();
+
+		$builder->build();
+	} 
+
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+	 */
+	public function testBuildFailIssuer()
+	{
+		$builder = new TokenBuilder();
+
+		$builder->setExpiration(Carbon::now()->addMinutes(10)->toDateTimeString())
+			->build();
+	}
+
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+	 */
+	public function testBuildFailureSecret()
+	{
+		$builder = new TokenBuilder();
+
+		$builder->setExpiration(Carbon::now()->addMinutes(10)->toDateTimeString())
+			->setIssuer('127.0.0.1')
+			->build();
+	}
 }

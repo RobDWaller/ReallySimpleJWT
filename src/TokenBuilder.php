@@ -1,5 +1,6 @@
 <?php namespace ReallySimpleJWT;
 
+use ReallySimpleJWT\Exception\TokenBuilderException;
 use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Helper\Base64;
 use Carbon\Carbon;
@@ -29,7 +30,13 @@ class TokenBuilder extends TokenAbstract
 
 	public function getSecret()
 	{
-		return $this->secret;
+		if (!empty($this->secret)) {
+			return $this->secret;
+		}
+
+		throw new TokenBuilderException(
+			'Token secret not set, please add a secret to increase security'
+		);
 	}
 
 	public function getExpiration()
@@ -95,6 +102,11 @@ class TokenBuilder extends TokenAbstract
 		return $this;
 	}
 
+	/**
+	 * Add key value pair to payload array
+	 *
+	 * @return TokenBuilder
+	 */
 	public function addPayload($key, $value)
 	{
 		$this->payload = array_merge($this->payload, [$key => $value]);
@@ -102,10 +114,31 @@ class TokenBuilder extends TokenAbstract
 		return $this;
 	}
 
+	/**
+	 * Check for payload, if it exists encode and return payload
+	 *
+	 * @return string
+	 */
+	private function encodePayload()
+	{
+		if (!empty($this->issuer) && !empty($this->expiration)) {
+			return Base64::encode($this->getPayload());
+		}
+
+		throw new TokenBuilderException(
+			'Token cannot be built please add a payload, including an issuer and an expiration.'
+		);
+	}
+
+	/**
+	 * Build and return the JSON Web Token
+	 *
+	 * @return string
+	 */
 	public function build()
 	{
 		return Base64::encode($this->getHeader()) . "." . 
-			Base64::encode($this->getPayload()) . "." .
+			$this->encodePayload() . "." .
 			$this->getSignature()->get();
 	}
 }
