@@ -37,9 +37,14 @@ $result = Token::validate('token', 'secret');
 
 ### URL Encoding
 
-If you do pass the token via a URL it will need to be encoded.
+If you do pass the token via a URL it will need to be encoded using 
+rawurlencode and rawurldecode. This is not the case if you make a post request.
 
-rawurlencode
+```php
+rawurlencode('token');
+
+rawurldecode('token');
+```
 
 ## License
 

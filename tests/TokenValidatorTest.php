@@ -65,12 +65,10 @@ class TokenValidatorTest extends PHPUnit_Framework_TestCase
 	{
 		$validator = new TokenValidator();
 
-		$tokenString = Token::getToken(
-			201923, 
-			12386, 
-			Carbon::now()->subMinutes(3)->toDateTimeString(),
-			'www.yoursite.com'
-		);
+		$tokenString = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+		eyJ1c2VyX2lkIjoyMDE5MjMsImlzcyI6Ind3dy55b3Vyc2l0ZS5jb20iLCJleHAiOiIyMDE3
+		LTAyLTIzIDA5OjIyOjExIiwic3ViIjpudWxsLCJhdWQiOm51bGx9.
+		Wlkt+HRQ7MIhcl6h+ECPlAArb4YhY79GsoVIEphnhlo=';
 
 		$validator->splitToken($tokenString)
 			->validateExpiration();

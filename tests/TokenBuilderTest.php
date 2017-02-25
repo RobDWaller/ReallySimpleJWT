@@ -141,4 +141,32 @@ class TokenBuilderTest extends PHPUnit_Framework_TestCase {
 			->setIssuer('127.0.0.1')
 			->build();
 	}
+
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+	 */
+	public function testBuildFailureExpirationOld()
+	{
+		$builder = new TokenBuilder();
+
+		$builder->setExpiration(Carbon::now()->subMinutes(2)->toDateTimeString())
+			->setSecret('123ABC')
+			->addPayload('user_id', 2)
+			->setIssuer('127.0.0.1')
+			->build();
+	}
+
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+	 */
+	public function testBuildFailureExpirationInvalid()
+	{
+		$builder = new TokenBuilder();
+
+		$builder->setExpiration('Hello World')
+			->setSecret('123ABC')
+			->addPayload('user_id', 2)
+			->setIssuer('127.0.0.1')
+			->build();
+	}
 }

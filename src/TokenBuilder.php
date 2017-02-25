@@ -4,6 +4,7 @@ use ReallySimpleJWT\Exception\TokenBuilderException;
 use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Helper\Base64;
 use Carbon\Carbon;
+use Exception;
 
 class TokenBuilder extends TokenAbstract
 {
@@ -41,7 +42,13 @@ class TokenBuilder extends TokenAbstract
 
 	public function getExpiration()
 	{
-		return $this->expiration;
+		if (!$this->hasOldExpiration()) {
+			return $this->expiration;
+		}
+		
+		throw new TokenBuilderException(
+			'Token expiration date has already expired, please set a future expiration date'
+		);
 	}
 
 	public function getIssuer()
@@ -90,7 +97,14 @@ class TokenBuilder extends TokenAbstract
 
 	public function setExpiration($expiration)
 	{
-		$this->expiration = Carbon::parse($expiration);
+		try {
+			$this->expiration = Carbon::parse($expiration);	
+		}
+		catch(Exception $e) {
+			throw new TokenBuilderException(
+				'Please pass in a valid date string, e.g. ' . Carbon::now()->toDateTimeString()
+			);
+		}
 
 		return $this;
 	}
@@ -140,5 +154,14 @@ class TokenBuilder extends TokenAbstract
 		return Base64::encode($this->getHeader()) . "." . 
 			$this->encodePayload() . "." .
 			$this->getSignature()->get();
+	}
+
+	private function hasOldExpiration()
+	{
+		$now = Carbon::now();
+
+		$expiration = Carbon::parse($this->expiration);
+
+		return $now->diffInSeconds($expiration, false) < 0;
 	}
 }
