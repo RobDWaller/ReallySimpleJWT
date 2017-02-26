@@ -20,7 +20,7 @@ date time string and the token issuer.
 
 use ReallySimpleJWT\Token;
 
-$token = Token::getToken(1, 'secret', '2017-01-01 01:01:01', '127.0.0.1');
+$token = Token::getToken('userIdentifier', 'secret', 'dateTimeString', 'issuerIdentifier');
 ```
 
 ### Validate Token
