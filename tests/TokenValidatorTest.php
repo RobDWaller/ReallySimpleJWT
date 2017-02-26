@@ -77,10 +77,83 @@ class TokenValidatorTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
 	 */
+	public function testValidateExpirationFailureBadData()
+	{
+		$validator = new TokenValidator();
+
+		$tokenString = 'eyJhbGciOizI1NiIsInR5cCI6IkpXVCJ9.
+		eyJ1c2VyX2lkIjoyMDE5MjMsImlzcyI6Ind3Vyc2l0ZS5jb20iLCJleHAiOiIyMDE3
+		LTAyLTIzIDA5OjIyOjExIiwic3ViIsLCJhdWQiOm51bGx9.
+		Wlkt+HRQ7MIhcl6h+ECPlAArb4YhY79GsoVIEphnhlo=';
+
+		$validator->splitToken($tokenString)
+			->validateExpiration();
+	}
+
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenDateException
+	 */
+	public function testValidateExpirationFailureEmptyDate()
+	{
+		$validator = new TokenValidator();
+
+		$tokenString = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+		eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImV4cCI6IiJ9.
+		4OGvHh_thMaNu0vc57AuiSqsn0mQYtNrSUvRa4mYt6M';
+
+		$validator->splitToken($tokenString)
+			->validateExpiration();
+	}
+
+		/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenDateException
+	 */
+	public function testValidateExpirationFailureBadDate()
+	{
+		$validator = new TokenValidator();
+
+		$tokenString = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+			eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImV4cCI6ImhlbGxvIn0.
+			yA4cawhobqrrsqDMFfcZkgj-c0KQ8ozuTlDFebTkujs';
+
+		$validator->splitToken($tokenString)
+			->validateExpiration();
+	}
+
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+	 */
 	public function testSplitTokenFail()
 	{
 		$tokenString = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 			eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9';
+
+		$validator = new TokenValidator();
+
+		$validator->splitToken($tokenString);
+	}
+
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+	 */
+	public function testSplitTokenFailNoDot()
+	{
+		$tokenString = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
+
+		$validator = new TokenValidator();
+
+		$validator->splitToken($tokenString);
+	}
+
+	/**
+	 * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+	 */
+	public function testSplitTokenFailFourDot()
+	{
+		$tokenString = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+			eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.
+			eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.
+			eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
 
 		$validator = new TokenValidator();
 

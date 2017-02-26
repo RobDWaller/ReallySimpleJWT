@@ -2,8 +2,8 @@
 
 use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Helper\Base64;
+use ReallySimpleJWT\Helper\DateTime;
 use ReallySimpleJWT\Exception\TokenValidatorException;
-use Carbon\Carbon;
 
 class TokenValidator extends TokenAbstract
 {
@@ -32,11 +32,13 @@ class TokenValidator extends TokenAbstract
 
 	public function validateExpiration()
 	{
-		$now = Carbon::now();
+		$now = DateTime::now();
 
-		$expiration = Carbon::parse($this->getExpiration());
+		//var_dump($this->getExpiration());
 
-		if ($now->diffInSeconds($expiration, false) < 0) {
+		$expiration = DateTime::parse($this->getExpiration());
+
+		if (DateTime::olderThan($now, $expiration)) {
 			throw new TokenValidatorException('This token has expired!');
 		}
 
@@ -58,7 +60,15 @@ class TokenValidator extends TokenAbstract
 
 	public function getExpiration()
 	{
-		return json_decode($this->getPayload())->exp;
+		$payload = json_decode($this->getPayload());
+
+		if (isset($payload->exp)) {
+			return  $payload->exp;
+		}
+
+		throw new TokenValidatorException(
+			'Bad payload object, no expiration parameter set'
+		); 
 	}
 
 	public function getPayload()
