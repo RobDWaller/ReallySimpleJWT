@@ -3,16 +3,47 @@
 use ReallySimpleJWT\Helper\Hmac;
 use ReallySimpleJWT\Helper\Base64;
 
+/**
+ * A simple class that helps generate a JSON Web Token signature
+ */
 class Signature
 {
+	/**
+	 * The JWT Header string
+	 *
+	 * @var string
+	 */
 	private $header;
 
+	/**
+	 * The JWT Payload string
+	 *
+	 * @var string
+	 */
 	private $payload;	
 
+	/**
+	 * The secret string / int for the hashing the signature
+	 *
+	 * @var string / int
+	 */
 	private $secret;
 
+	/**
+	 * The JWT hash type string, e.g. sha256
+	 *
+	 * @var string
+	 */
 	private $hash;
 
+	/**
+	 * Constructor for the JWT Signature generation string
+	 * 
+	 * @param string $header
+	 * @param string $payload
+	 * @param string / int $secret
+	 * @param string $hash
+	 */
 	public function __construct($header, $payload, $secret, $hash)
 	{
 		$this->header = $header;
@@ -24,6 +55,11 @@ class Signature
 		$this->hash = $hash;
 	}
 
+	/**
+	 * Generate and return the JWT Signature
+	 *
+	 * @return string
+	 */
 	public function get()
 	{
 		return Base64::encode(Hmac::hash(
@@ -33,6 +69,12 @@ class Signature
 		));
 	}
 
+	/**
+	 * Generate and return the signature string based on the JWT based on the 
+	 * JWT header and payload.
+	 *
+	 * @return string
+	 */
 	private function signatureString()
 	{
 		return Base64::encode($this->header) . '.' . Base64::encode($this->payload);
