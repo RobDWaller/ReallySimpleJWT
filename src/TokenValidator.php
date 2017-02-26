@@ -5,14 +5,43 @@ use ReallySimpleJWT\Helper\Base64;
 use ReallySimpleJWT\Helper\DateTime;
 use ReallySimpleJWT\Exception\TokenValidatorException;
 
+/**
+ * Class that validates a JSON Web Token based on the HS256 signature and the 
+ * expiration date.
+ *
+ * @author Rob Waller <rdwaller1984@gmail.com>
+ */
 class TokenValidator extends TokenAbstract
 {
+	/**
+	 * The header string of the JSON Web Token
+	 *
+	 * @var string
+	 */
 	private $header;
 
+	/**
+	 * The payload string of the JSON Web Token
+	 *
+	 * @var string
+	 */
 	private $payload;
 
+	/**
+	 * The signature string of the JSON Web Token
+	 *
+	 * @var string
+	 */
 	private $signature;
 
+	/**
+	 * Check the JWT token string has a valid structre and it into its three 
+	 * component parts, header, payload and signature 
+	 * 
+	 * @param string $tokenString
+	 *
+	 * @return TokenValidator 
+	 */
 	public function splitToken($tokenString)
 	{
 		$tokenParts = explode('.', $tokenString);
@@ -30,11 +59,14 @@ class TokenValidator extends TokenAbstract
 		);                                         
 	}
 
+	/**
+	 * Validate that the JWT expiration date is valid and has not expired.
+	 *
+	 * @return TokenValidator
+	 */
 	public function validateExpiration()
 	{
 		$now = DateTime::now();
-
-		//var_dump($this->getExpiration());
 
 		$expiration = DateTime::parse($this->getExpiration());
 
@@ -45,6 +77,14 @@ class TokenValidator extends TokenAbstract
 		return $this;
 	}
 
+	/**
+	 * Generate a new Signature object based on the header, payload and secret 
+	 * then check that the signature matches the token signature 
+	 *
+	 * @param string $secret 
+	 *
+	 * @return boolean
+	 */
 	public function validateSignature($secret)
 	{
 		$signature = new Signature($this->getHeader(), $this->getPayload(), $secret, $this->getHash());
@@ -58,6 +98,11 @@ class TokenValidator extends TokenAbstract
 		);	
 	}
 
+	/**
+	 * Json decode the JWT payload and return the expiration attribute
+	 *
+	 * @return string  
+	 */
 	public function getExpiration()
 	{
 		$payload = json_decode($this->getPayload());
@@ -71,11 +116,21 @@ class TokenValidator extends TokenAbstract
 		); 
 	}
 
+	/**
+	 * Base 64 decode and return the JWT payload
+	 *
+	 * @return string
+	 */
 	public function getPayload()
 	{
 		return Base64::decode($this->payload);
 	}
 
+	/**
+	 * Base 64 decode and return the JWT header
+	 *
+	 * @return string
+	 */
 	public function getHeader()
 	{
 		return Base64::decode($this->header);
