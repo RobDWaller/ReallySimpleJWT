@@ -35,17 +35,6 @@ use ReallySimpleJWT\Token;
 $result = Token::validate('token', 'secret');
 ```
 
-### URL Encoding
-
-If you do pass the token via a URL it will need to be encoded using 
-rawurlencode and rawurldecode. This is not the case if you make a post request.
-
-```php
-rawurlencode('token');
-
-rawurldecode('token');
-```
-
 ## License
 
 MIT

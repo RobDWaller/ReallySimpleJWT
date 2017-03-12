@@ -89,7 +89,7 @@ class TokenValidator extends TokenAbstract
 	{
 		$signature = new Signature($this->getHeader(), $this->getPayload(), $secret, $this->getHash());
 
-		if ($signature->get() === $this->signature) {
+		if (hash_equals($signature->get(), $this->signature)) {
 			return true;
 		} 
 
