@@ -2,7 +2,7 @@
 
 use ReallySimpleJWT\Exception\TokenBuilderException;
 use ReallySimpleJWT\Helper\Signature;
-use ReallySimpleJWT\Helper\Base64;
+use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\DateTime;
 
 /**
@@ -224,6 +224,11 @@ class TokenBuilder extends TokenAbstract
 		return $this;
 	}
 
+	private function encodeHeader()
+	{
+		return TokenEncodeDecode::encode($this->getHeader());
+	}
+
 	/**
 	 * Check for payload, if it exists encode and return payload
 	 *
@@ -232,7 +237,7 @@ class TokenBuilder extends TokenAbstract
 	private function encodePayload()
 	{
 		if (!empty($this->issuer) && !empty($this->expiration)) {
-			return Base64::encode($this->getPayload());
+			return TokenEncodeDecode::encode($this->getPayload());
 		}
 
 		throw new TokenBuilderException(
@@ -247,7 +252,7 @@ class TokenBuilder extends TokenAbstract
 	 */
 	public function build()
 	{
-		return Base64::encode($this->getHeader()) . "." . 
+		return $this->encodeHeader() . "." . 
 			$this->encodePayload() . "." .
 			$this->getSignature()->get();
 	}

@@ -1,7 +1,7 @@
 <?php namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Helper\Signature;
-use ReallySimpleJWT\Helper\Base64;
+use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\DateTime;
 use ReallySimpleJWT\Exception\TokenValidatorException;
 
@@ -123,7 +123,7 @@ class TokenValidator extends TokenAbstract
 	 */
 	public function getPayload()
 	{
-		return Base64::decode($this->payload);
+		return TokenEncodeDecode::decode($this->payload);
 	}
 
 	/**
@@ -133,6 +133,6 @@ class TokenValidator extends TokenAbstract
 	 */
 	public function getHeader()
 	{
-		return Base64::decode($this->header);
+		return TokenEncodeDecode::decode($this->header);
 	}
 }

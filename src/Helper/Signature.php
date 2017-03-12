@@ -1,7 +1,7 @@
 <?php namespace ReallySimpleJWT\Helper;
 
 use ReallySimpleJWT\Helper\Hmac;
-use ReallySimpleJWT\Helper\Base64;
+use ReallySimpleJWT\Helper\TokenEncodeDecode;
 
 /**
  * A simple class that helps generate a JSON Web Token signature
@@ -62,7 +62,7 @@ class Signature
 	 */
 	public function get()
 	{
-		return Base64::encode(Hmac::hash(
+		return TokenEncodeDecode::encode(Hmac::hash(
 			$this->hash,
 			$this->signatureString(),
 			$this->secret
@@ -77,6 +77,6 @@ class Signature
 	 */
 	private function signatureString()
 	{
-		return Base64::encode($this->header) . '.' . Base64::encode($this->payload);
+		return TokenEncodeDecode::encode($this->header) . '.' . TokenEncodeDecode::encode($this->payload);
 	}
 }
