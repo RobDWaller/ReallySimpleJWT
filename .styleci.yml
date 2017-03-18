@@ -1,7 +1,7 @@
 preset: psr2
 
-fixers:
-  - "single_blank_line_at_eof"
+enabled:
+  - single_blank_line_at_eof
 
 finder:
   exclude:
