@@ -33,8 +33,7 @@ class DateTime
 
         try {
             return Carbon::parse($dateTimeString);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw new TokenDateException(
                 'The date time string [' . $dateTimeString . '] you attempted to parse is invalid.'
             );
