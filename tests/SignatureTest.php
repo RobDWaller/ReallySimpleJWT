@@ -13,14 +13,14 @@ class SignatureTest extends PHPUnit_Framework_TestCase
 		$this->assertNotEmpty($signature);
 
 		$this->assertEquals(
-			str_replace('=', '', str_replace('/', '_', str_replace('+', '-', base64_encode(
+			str_replace(['=', '/', '+'], ['', '_', '-'], base64_encode(
 				hash_hmac('sha256', 
-					str_replace('=', '', str_replace('/', '_', str_replace('+', '-', base64_encode('header'))))
+					str_replace(['=', '/', '+'], ['', '_', '-'], base64_encode('header'))
 					. "." . 
-					str_replace('=', '', str_replace('/', '_', str_replace('+', '-', base64_encode('payload'))))
+					str_replace(['=', '/', '+'], ['', '_', '-'], base64_encode('payload'))
 				, '123'
 				, true)
-			)))), 
+			)), 
 			$signature
 		);
 	}
