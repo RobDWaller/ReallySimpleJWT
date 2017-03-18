@@ -15,6 +15,8 @@ For more information on JSON Web Tokens please see https://jwt.io
 Call the get token method and pass in user identifier, key secret, expiration 
 date time string and the token issuer.
 
+Will return a token string on success and throw an exception on failure.
+
 ```php
 <?php
 
@@ -26,6 +28,8 @@ $token = Token::getToken('userIdentifier', 'secret', 'dateTimeString', 'issuerId
 ### Validate Token
 
 Call the validate method, pass in your token string and the key secret. 
+
+Will return boolean true on success and throw an exception on failure.
 
 ```php
 <?php
