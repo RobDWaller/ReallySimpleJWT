@@ -37,7 +37,7 @@ class TokenValidator extends TokenAbstract
     /**
      * Check the JWT token string has a valid structre and it into its three
      * component parts, header, payload and signature
-     * 
+     *
      * @param string $tokenString
      *
      * @return TokenValidator
@@ -95,7 +95,7 @@ class TokenValidator extends TokenAbstract
 
         throw new TokenValidatorException(
             'Token signature is invalid!! Input: ' . $this->signature . ' !== Generated: ' . $signature->get()
-        );	
+        );
     }
 
     /**

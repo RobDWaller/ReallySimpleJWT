@@ -14,7 +14,7 @@ class Hmac
      * @param string $secret
      * @param boolean $output
      *
-     * @return string 
+     * @return string
      */
     public static function hash($hash, $string, $secret, $output = true)
     {

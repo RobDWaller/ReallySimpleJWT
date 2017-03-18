@@ -131,7 +131,7 @@ class TokenBuilder extends TokenAbstract
      * Return the JWT subject attribute string
      *
      * @return string
-     * @todo write setter 
+     * @todo write setter
      */
     public function getSubject()
     {
@@ -252,7 +252,7 @@ class TokenBuilder extends TokenAbstract
      */
     public function build()
     {
-        return $this->encodeHeader() . "." . 
+        return $this->encodeHeader() . "." .
             $this->encodePayload() . "." .
             $this->getSignature()->get();
     }

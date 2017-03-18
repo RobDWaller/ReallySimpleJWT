@@ -7,7 +7,7 @@
  * the use of larger payloads.
  *
  * For more information on JSON Web Tokens please see https://jwt.io
- * 
+ *
  * @author Rob Waller <rdwaller1984@gmail.com>
  */
 
@@ -64,7 +64,7 @@ class Token
     /**
      * Interface to return instance of the token validator
      *
-     * @return TokenValidator 
+     * @return TokenValidator
      */
     public static function validator()
     {

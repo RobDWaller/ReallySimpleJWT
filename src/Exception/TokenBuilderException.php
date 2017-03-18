@@ -3,7 +3,7 @@
 use Exception;
 
 /**
- * Simple exception interface class for the Token Builder class to make 
+ * Simple exception interface class for the Token Builder class to make
  * exceptions more specific and obvious. Extends the PHP exception class
  */
 class TokenBuilderException extends Exception

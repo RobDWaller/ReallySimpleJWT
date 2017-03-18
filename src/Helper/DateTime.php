@@ -22,7 +22,7 @@ class DateTime
     /**
      * Parse a date time string and return a Carbon object based on the date
      * time string.
-     * 
+     *
      * @param string $dateTimeString
      *
      * @return Carbon
@@ -32,7 +32,7 @@ class DateTime
         Self::emptyDateTimeString($dateTimeString);
 
         try {
-            return Carbon::parse($dateTimeString);	
+            return Carbon::parse($dateTimeString);
         }
         catch (Exception $e) {
             throw new TokenDateException(
