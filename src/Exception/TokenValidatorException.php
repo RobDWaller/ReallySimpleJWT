@@ -8,15 +8,15 @@ use Exception;
  */
 class TokenValidatorException extends Exception
 {
-	/**
-	 * Constructor for the Token Builder Exception class
-	 *
-	 * @param string $message
-	 * @param int $code
-	 * @param string $previous
-	 */
-	public function __construct($message, $code = 0, $previous = null)
-	{
-		parent::__construct($message, $code, $previous);
-	}
+    /**
+     * Constructor for the Token Builder Exception class
+     *
+     * @param string $message
+     * @param int $code
+     * @param string $previous
+     */
+    public function __construct($message, $code = 0, $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 }
