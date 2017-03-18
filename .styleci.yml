@@ -1,8 +1,5 @@
 preset: psr2
 
-enabled:
-  - single_blank_line_at_eof
-
 finder:
   exclude:
     - "tests"
