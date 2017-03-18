@@ -42,4 +42,38 @@ class Base64UrlConverterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals($base64String, $newBase64String); 
 	}
+
+	public function testBase64PaddingTwo()
+	{
+		$base64Url = new Base64UrlConverter();
+
+		$base64String = base64_encode('Hello');
+
+		$base64UrlString = $base64Url->setBase64String($base64String)
+							->toBase64Url()
+							->getBase64UrlString();
+
+		$newBase64String = $base64Url->setBase64UrlString($base64UrlString)
+							->toBase64()
+							->getBase64String();
+
+		$this->assertEquals($base64String, $newBase64String); 
+	}
+
+	public function testBase64PaddingThree()
+	{
+		$base64Url = new Base64UrlConverter();
+
+		$base64String = base64_encode('Hellos');
+
+		$base64UrlString = $base64Url->setBase64String($base64String)
+							->toBase64Url()
+							->getBase64UrlString();
+
+		$newBase64String = $base64Url->setBase64UrlString($base64UrlString)
+							->toBase64()
+							->getBase64String();
+
+		$this->assertEquals($base64String, $newBase64String); 
+	}
 }
