@@ -8,75 +8,75 @@ use ReallySimpleJWT\Helper\TokenEncodeDecode;
  */
 class Signature
 {
-	/**
-	 * The JWT Header string
-	 *
-	 * @var string
-	 */
-	private $header;
+    /**
+     * The JWT Header string
+     *
+     * @var string
+     */
+    private $header;
 
-	/**
-	 * The JWT Payload string
-	 *
-	 * @var string
-	 */
-	private $payload;	
+    /**
+     * The JWT Payload string
+     *
+     * @var string
+     */
+    private $payload;	
 
-	/**
-	 * The secret string / int for the hashing the signature
-	 *
-	 * @var string / int
-	 */
-	private $secret;
+    /**
+     * The secret string / int for the hashing the signature
+     *
+     * @var string / int
+     */
+    private $secret;
 
-	/**
-	 * The JWT hash type string, e.g. sha256
-	 *
-	 * @var string
-	 */
-	private $hash;
+    /**
+     * The JWT hash type string, e.g. sha256
+     *
+     * @var string
+     */
+    private $hash;
 
-	/**
-	 * Constructor for the JWT Signature generation string
-	 * 
-	 * @param string $header
-	 * @param string $payload
-	 * @param string / int $secret
-	 * @param string $hash
-	 */
-	public function __construct($header, $payload, $secret, $hash)
-	{
-		$this->header = $header;
+    /**
+     * Constructor for the JWT Signature generation string
+     * 
+     * @param string $header
+     * @param string $payload
+     * @param string / int $secret
+     * @param string $hash
+     */
+    public function __construct($header, $payload, $secret, $hash)
+    {
+        $this->header = $header;
 
-		$this->payload = $payload;
+        $this->payload = $payload;
 
-		$this->secret = $secret;
+        $this->secret = $secret;
 
-		$this->hash = $hash;
-	}
+        $this->hash = $hash;
+    }
 
-	/**
-	 * Generate and return the JWT Signature
-	 *
-	 * @return string
-	 */
-	public function get()
-	{
-		return TokenEncodeDecode::encode(Hmac::hash(
-			$this->hash,
-			$this->signatureString(),
-			$this->secret
-		));
-	}
+    /**
+     * Generate and return the JWT Signature
+     *
+     * @return string
+     */
+    public function get()
+    {
+        return TokenEncodeDecode::encode(Hmac::hash(
+        	$this->hash,
+        	$this->signatureString(),
+        	$this->secret
+        ));
+    }
 
-	/**
-	 * Generate and return the signature string based on the JWT based on the 
-	 * JWT header and payload.
-	 *
-	 * @return string
-	 */
-	private function signatureString()
-	{
-		return TokenEncodeDecode::encode($this->header) . '.' . TokenEncodeDecode::encode($this->payload);
-	}
+    /**
+     * Generate and return the signature string based on the JWT based on the 
+     * JWT header and payload.
+     *
+     * @return string
+     */
+    private function signatureString()
+    {
+        return TokenEncodeDecode::encode($this->header) . '.' . TokenEncodeDecode::encode($this->payload);
+    }
 }

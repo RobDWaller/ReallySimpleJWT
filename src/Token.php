@@ -13,61 +13,61 @@
 
 class Token
 {
-	/**
-	 * Create a JSON Web Token that contains a User Identifier Payload 
-	 *
-	 * @param string/int $userId
-	 * @param string/int $secret
-	 * @param datetimestring $expiration
-	 * @param string $issuer
-	 *
-	 * @return string
-	 */
-	public static function getToken($userId, $secret, $expiration, $issuer)
-	{
-		$builder = Self::builder();
+    /**
+     * Create a JSON Web Token that contains a User Identifier Payload 
+     *
+     * @param string/int $userId
+     * @param string/int $secret
+     * @param datetimestring $expiration
+     * @param string $issuer
+     *
+     * @return string
+     */
+    public static function getToken($userId, $secret, $expiration, $issuer)
+    {
+        $builder = Self::builder();
 
-		return $builder->addPayload('user_id', $userId)
-			->setSecret($secret)
-			->setExpiration($expiration)
-			->setIssuer($issuer)
-			->build();
-	}
+        return $builder->addPayload('user_id', $userId)
+            ->setSecret($secret)
+            ->setExpiration($expiration)
+            ->setIssuer($issuer)
+            ->build();
+    }
 
-	/**
-	 * Validate a JSON Web Token's expiration and signature  
-	 *
-	 * @param string $token
-	 * @param string/int $secret
-	 *
-	 * @return bool
-	 */
-	public static function validate($token, $secret)
-	{
-		$validator = Self::validator();
+    /**
+     * Validate a JSON Web Token's expiration and signature  
+     *
+     * @param string $token
+     * @param string/int $secret
+     *
+     * @return bool
+     */
+    public static function validate($token, $secret)
+    {
+	   $validator = Self::validator();
 
-		return $validator->splitToken($token)
-			->validateExpiration()
-			->validateSignature($secret);
-	}
+	   return $validator->splitToken($token)
+	       ->validateExpiration()
+	       ->validateSignature($secret);
+    }
 
-	/**
-	 * Interface to return instance of the token builder
-	 *
-	 * @return TokenBuilder 
-	 */
-	public static function builder()
-	{
-		return new TokenBuilder();
-	}
+    /**
+     * Interface to return instance of the token builder
+     *
+     * @return TokenBuilder 
+     */
+    public static function builder()
+    {
+        return new TokenBuilder();
+    }
 
-	/**
-	 * Interface to return instance of the token validator
-	 *
-	 * @return TokenValidator 
-	 */
-	public static function validator()
-	{
-		return new TokenValidator();
-	}
+    /**
+     * Interface to return instance of the token validator
+     *
+     * @return TokenValidator 
+     */
+    public static function validator()
+    {
+        return new TokenValidator();
+    }
 }
