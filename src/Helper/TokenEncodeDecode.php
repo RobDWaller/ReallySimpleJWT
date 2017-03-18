@@ -1,7 +1,7 @@
 <?php namespace ReallySimpleJWT\Helper;
 
 use ReallySimpleJWT\Helper\Base64;
-use ReallySimpleJWT\Helper\Base64UrlConverter; 
+use ReallySimpleJWT\Helper\Base64UrlConverter;
 
 class TokenEncodeDecode
 {

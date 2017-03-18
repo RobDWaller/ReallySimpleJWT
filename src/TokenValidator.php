@@ -6,7 +6,7 @@ use ReallySimpleJWT\Helper\DateTime;
 use ReallySimpleJWT\Exception\TokenValidatorException;
 
 /**
- * Class that validates a JSON Web Token based on the HS256 signature and the 
+ * Class that validates a JSON Web Token based on the HS256 signature and the
  * expiration date.
  *
  * @author Rob Waller <rdwaller1984@gmail.com>
@@ -35,12 +35,12 @@ class TokenValidator extends TokenAbstract
     private $signature;
 
     /**
-     * Check the JWT token string has a valid structre and it into its three 
-     * component parts, header, payload and signature 
+     * Check the JWT token string has a valid structre and it into its three
+     * component parts, header, payload and signature
      * 
      * @param string $tokenString
      *
-     * @return TokenValidator 
+     * @return TokenValidator
      */
     public function splitToken($tokenString)
     {
@@ -51,12 +51,12 @@ class TokenValidator extends TokenAbstract
             $this->payload = $tokenParts[1];
             $this->signature = $tokenParts[2];
 
-            return $this;	
+            return $this;
         }
 
         throw new TokenValidatorException(
             'Token string has invalid structure, ensure three strings seperated by dots.'
-        );                                         
+        );
     }
 
     /**
@@ -78,10 +78,10 @@ class TokenValidator extends TokenAbstract
     }
 
     /**
-     * Generate a new Signature object based on the header, payload and secret 
-     * then check that the signature matches the token signature 
+     * Generate a new Signature object based on the header, payload and secret
+     * then check that the signature matches the token signature
      *
-     * @param string $secret 
+     * @param string $secret
      *
      * @return boolean
      */
@@ -91,7 +91,7 @@ class TokenValidator extends TokenAbstract
 
         if (hash_equals($signature->get(), $this->signature)) {
             return true;
-        } 
+        }
 
         throw new TokenValidatorException(
             'Token signature is invalid!! Input: ' . $this->signature . ' !== Generated: ' . $signature->get()
@@ -101,7 +101,7 @@ class TokenValidator extends TokenAbstract
     /**
      * Json decode the JWT payload and return the expiration attribute
      *
-     * @return string  
+     * @return string
      */
     public function getExpiration()
     {
@@ -113,7 +113,7 @@ class TokenValidator extends TokenAbstract
 
         throw new TokenValidatorException(
             'Bad payload object, no expiration parameter set'
-        ); 
+        );
     }
 
     /**

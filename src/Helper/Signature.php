@@ -20,7 +20,7 @@ class Signature
      *
      * @var string
      */
-    private $payload;	
+    private $payload;
 
     /**
      * The secret string / int for the hashing the signature
@@ -38,7 +38,7 @@ class Signature
 
     /**
      * Constructor for the JWT Signature generation string
-     * 
+     *
      * @param string $header
      * @param string $payload
      * @param string / int $secret
@@ -63,14 +63,14 @@ class Signature
     public function get()
     {
         return TokenEncodeDecode::encode(Hmac::hash(
-        	$this->hash,
-        	$this->signatureString(),
-        	$this->secret
+            $this->hash,
+            $this->signatureString(),
+            $this->secret
         ));
     }
 
     /**
-     * Generate and return the signature string based on the JWT based on the 
+     * Generate and return the signature string based on the JWT based on the
      * JWT header and payload.
      *
      * @return string

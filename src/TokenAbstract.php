@@ -4,10 +4,10 @@
  * Abstract Token class that contains some global features for the Token Builder
  * class and the Token Validator class
  */
-abstract class TokenAbstract 
+abstract class TokenAbstract
 {
     /**
-     * The hash type for the signature hashing 
+     * The hash type for the signature hashing
      *
      * @var string
      */

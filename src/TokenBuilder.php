@@ -90,7 +90,7 @@ class TokenBuilder extends TokenAbstract
     }
 
     /**
-     * Check the expiration object is valid and return the JWT expiration 
+     * Check the expiration object is valid and return the JWT expiration
      * attribute as a Carbon object
      *
      * @return Carbon\Carbon
@@ -120,7 +120,7 @@ class TokenBuilder extends TokenAbstract
      * Return the JWT audience attribute string
      *
      * @return string
-     * @todo write setter 
+     * @todo write setter
      */
     public function getAudience()
     {
@@ -188,7 +188,7 @@ class TokenBuilder extends TokenAbstract
     }
 
     /**
-     * Parse a date time string to a Carbon object to set the expiration for the 
+     * Parse a date time string to a Carbon object to set the expiration for the
      * JWT Payload, return the Token Builder
      *
      * @return TokenBuilder
@@ -258,7 +258,7 @@ class TokenBuilder extends TokenAbstract
     }
 
     /**
-     * Check that the expiration Carbon object is not an old date  
+     * Check that the expiration Carbon object is not an old date
      *
      * @return boolean
      */

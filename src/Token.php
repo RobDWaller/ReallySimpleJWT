@@ -6,7 +6,7 @@
  * that stores a user identifier. The Package is set up to allow extension and
  * the use of larger payloads.
  *
- * For more information on JSON Web Tokens please see https://jwt.io 
+ * For more information on JSON Web Tokens please see https://jwt.io
  * 
  * @author Rob Waller <rdwaller1984@gmail.com>
  */
@@ -14,7 +14,7 @@
 class Token
 {
     /**
-     * Create a JSON Web Token that contains a User Identifier Payload 
+     * Create a JSON Web Token that contains a User Identifier Payload
      *
      * @param string/int $userId
      * @param string/int $secret
@@ -35,7 +35,7 @@ class Token
     }
 
     /**
-     * Validate a JSON Web Token's expiration and signature  
+     * Validate a JSON Web Token's expiration and signature
      *
      * @param string $token
      * @param string/int $secret
@@ -44,17 +44,17 @@ class Token
      */
     public static function validate($token, $secret)
     {
-	   $validator = Self::validator();
+        $validator = Self::validator();
 
-	   return $validator->splitToken($token)
-	       ->validateExpiration()
-	       ->validateSignature($secret);
+        return $validator->splitToken($token)
+            ->validateExpiration()
+            ->validateSignature($secret);
     }
 
     /**
      * Interface to return instance of the token builder
      *
-     * @return TokenBuilder 
+     * @return TokenBuilder
      */
     public static function builder()
     {
