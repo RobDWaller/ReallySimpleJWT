@@ -1,10 +1,8 @@
 # Really Simple JSON Web Tokens
-[![Build Status](https://travis-ci.org/RobDWaller/ReallySimpleJWT.svg?branch=master)](https://travis-ci.org/RobDWaller/ReallySimpleJWT) [![codecov](https://codecov.io/gh/RobDWaller/ReallySimpleJWT/branch/master/graph/badge.svg)](https://codecov.io/gh/RobDWaller/ReallySimpleJWT) [![StyleCI](https://styleci.io/repos/82379868/shield?branch=master)](https://styleci.io/repos/82379868)
+[![Build Status](https://travis-ci.org/RobDWaller/ReallySimpleJWT.svg?branch=master)](https://travis-ci.org/RobDWaller/ReallySimpleJWT) [![codecov](https://codecov.io/gh/RobDWaller/ReallySimpleJWT/branch/master/graph/badge.svg)](https://codecov.io/gh/RobDWaller/ReallySimpleJWT) [![StyleCI](https://styleci.io/repos/82379868/shield?branch=master)](https://styleci.io/repos/82379868) [![Latest Stable Version](https://poser.pugx.org/rbdwllr/reallysimplejwt/v/stable)](https://packagist.org/packages/rbdwllr/reallysimplejwt) [![Total Downloads](https://poser.pugx.org/rbdwllr/reallysimplejwt/downloads)](https://packagist.org/packages/rbdwllr/reallysimplejwt)
 
-A simple Package for creating JSON Web Tokens that uses HMAC SHA256 to sign
-signatures. Exposes a simple interface to allow you to create a simple token
-that stores a user identifier. The Package is set up to allow extension and
-the use of larger payloads.
+A simple package for creating JSON Web Tokens that uses HMAC SHA256 to sign
+signatures. Exposes a simple interface to allow you to create a token that stores a user identifier. The package is set up to allow extension and the use of larger payloads.
 
 For more information on JSON Web Tokens please see https://jwt.io
 
@@ -41,7 +39,7 @@ $result = Token::validate('token', 'secret');
 
 ### Advanced Usage
 
-If you would like to access the Token Builder interface directly simply instatiate the Token Builder class directly.
+If you would like to access the token builder interface directly simply instantiate the TokenBuilder class.
 
 As should be clear you can add as much to the token payload as you need.
 
@@ -60,7 +58,7 @@ $token = $builder->addPayload('key', 'value')
     ->build();
 ```
 
-In addition you can access the Token Validator interface directly too by instantiating the Token Validator class.
+In addition you can access the TokenValidator interface directly too by instantiating the TokenValidator class.
 
 ```php
 <?php
@@ -86,4 +84,4 @@ MIT
 
 Rob Waller
 
-Twitter: @robdwaller 
+Twitter: ![@robdwaller](https://twitter.com/RobDWaller)
