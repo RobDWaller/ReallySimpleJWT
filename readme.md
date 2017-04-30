@@ -84,4 +84,4 @@ MIT
 
 Rob Waller
 
-Twitter: ![@robdwaller](https://twitter.com/RobDWaller)
+Twitter: [@robdwaller](https://twitter.com/RobDWaller)
