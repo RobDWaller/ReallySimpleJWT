@@ -58,7 +58,7 @@ $token = $builder->addPayload('key', 'value')
     ->build();
 ```
 
-In addition you can access the TokenValidator interface directly too by instantiating the TokenValidator class.
+In addition you can access the token validator interface directly too by instantiating the TokenValidator class.
 
 ```php
 <?php
