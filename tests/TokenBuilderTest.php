@@ -92,6 +92,25 @@ class TokenBuilderTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals("", json_decode($payload)->aud);
 	}
 
+    public function testGetMultiPayload()
+    {
+        $dateTime = Carbon::now()->addMinutes(10)->toDateTimeString();
+
+        $builder = new TokenBuilder();
+
+        $payload = $builder->setIssuer('http://127.0.0.1')
+            ->setExpiration($dateTime)
+            ->addPayload('user_id', 2)
+            ->addPayload('username', 'rob1')
+            ->addPayload('description', 'A great guy');
+
+        $payload = $payload->getPayload();
+
+        $this->assertEquals('rob1', json_decode($payload)->username);
+
+        $this->assertEquals('A great guy', json_decode($payload)->description);
+    }
+
 	public function testBuild()
 	{
 		$dateTime = Carbon::now()->addMinutes(10)->toDateTimeString();

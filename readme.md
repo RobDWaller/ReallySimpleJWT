@@ -39,6 +39,45 @@ use ReallySimpleJWT\Token;
 $result = Token::validate('token', 'secret');
 ```
 
+### Advanced Usage
+
+If you would like to access the Token Builder interface directly simply instatiate the Token Builder class directly.
+
+As should be clear you can add as much to the token payload as you need.
+
+```php
+<?php
+
+use ReallySimpleJWT\TokenBuilder;
+
+$builder = new TokenBuilder();
+
+$token = $builder->addPayload('key', 'value')
+    ->addPayload('key', 'value')
+    ->setSecret($secret)
+    ->setExpiration($expiration)
+    ->setIssuer($issuer)
+    ->build();
+```
+
+In addition you can access the Token Validator interface directly too by instantiating the Token Validator class.
+
+```php
+<?php
+
+use ReallySimpleJWT\TokenValidator;
+
+$validator = new TokenValidator;
+
+$validator->splitToken('token string')
+    ->validateExpiration()
+    ->validateSignature('secret');
+        
+$payload = $validator->getPayload();
+
+$header = $validator->getHeader();
+```
+
 ## License
 
 MIT

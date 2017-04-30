@@ -2,6 +2,7 @@
  
 use ReallySimpleJWT\Token;
 use ReallySimpleJWT\TokenValidator;
+use ReallySimpleJWT\TokenBuilder;
 use Carbon\Carbon; 
 
 class TokenValidatorTest extends PHPUnit_Framework_TestCase
@@ -40,6 +41,58 @@ class TokenValidatorTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals('twelve123', json_decode($payload)->user_id);
 	}
+
+    public function testGetMultiPayload()
+    {
+        $validator = new TokenValidator();
+
+        $dateTime = Carbon::now()->addMinutes(10)->toDateTimeString();
+
+        $builder = new TokenBuilder();
+
+        $tokenString = $builder->setIssuer('http://127.0.0.1')
+            ->setSecret('secret')
+            ->setExpiration($dateTime)
+            ->addPayload('user_id', 22)
+            ->addPayload('username', 'rob2')
+            ->addPayload('description', 'A bad guy')
+            ->build();
+
+        $validator->splitToken($tokenString)
+            ->validateExpiration()
+            ->validateSignature('secret');
+        
+        $payload = $validator->getPayload();
+
+        $this->assertEquals('rob2', json_decode($payload)->username);
+
+        $this->assertEquals('A bad guy', json_decode($payload)->description);
+    }
+
+    public function testGetHeader()
+    {
+        $validator = new TokenValidator();
+
+        $dateTime = Carbon::now()->addMinutes(10)->toDateTimeString();
+
+        $builder = new TokenBuilder();
+
+        $tokenString = $builder->setIssuer('http://127.0.0.1')
+            ->setSecret('secret')
+            ->setExpiration($dateTime)
+            ->addPayload('user_id', 11)
+            ->build();
+
+        $validator->splitToken($tokenString)
+            ->validateExpiration()
+            ->validateSignature('secret');    
+
+        $header = $validator->getHeader();
+
+        $this->assertEquals('HS256', json_decode($header)->alg);
+
+        $this->assertEquals('JWT', json_decode($header)->typ);
+    }
 
 	public function testValidateExpiration()
 	{
@@ -105,7 +158,7 @@ class TokenValidatorTest extends PHPUnit_Framework_TestCase
 			->validateExpiration();
 	}
 
-		/**
+	/**
 	 * @expectedException ReallySimpleJWT\Exception\TokenDateException
 	 */
 	public function testValidateExpirationFailureBadDate()
