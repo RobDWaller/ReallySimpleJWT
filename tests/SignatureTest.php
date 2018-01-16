@@ -1,8 +1,9 @@
 <?php
- 
-use ReallySimpleJWT\Helper\Signature;
 
-class SignatureTest extends PHPUnit_Framework_TestCase 
+use ReallySimpleJWT\Helper\Signature;
+use PHPUnit\Framework\TestCase;
+
+class SignatureTest extends TestCase
 {
 	public function testSignature()
 	{
@@ -14,13 +15,13 @@ class SignatureTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(
 			str_replace(['=', '/', '+'], ['', '_', '-'], base64_encode(
-				hash_hmac('sha256', 
+				hash_hmac('sha256',
 					str_replace(['=', '/', '+'], ['', '_', '-'], base64_encode('header'))
-					. "." . 
+					. "." .
 					str_replace(['=', '/', '+'], ['', '_', '-'], base64_encode('payload'))
 				, '123'
 				, true)
-			)), 
+			)),
 			$signature
 		);
 	}

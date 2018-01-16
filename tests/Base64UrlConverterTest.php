@@ -1,8 +1,9 @@
 <?php
- 
-use ReallySimpleJWT\Helper\Base64UrlConverter;
 
-class Base64UrlConverterTest extends PHPUnit_Framework_TestCase 
+use ReallySimpleJWT\Helper\Base64UrlConverter;
+use PHPUnit\Framework\TestCase;
+
+class Base64UrlConverterTest extends TestCase
 {
 	public function testBase64UrlConverter()
 	{
@@ -12,7 +13,7 @@ class Base64UrlConverterTest extends PHPUnit_Framework_TestCase
 							->toBase64Url()
 							->getBase64UrlString();
 
-		$this->assertEquals('fh778-djfu_90pds', $base64UrlString); 
+		$this->assertEquals('fh778-djfu_90pds', $base64UrlString);
 	}
 
 	public function testBase64Converter()
@@ -40,7 +41,7 @@ class Base64UrlConverterTest extends PHPUnit_Framework_TestCase
 							->toBase64()
 							->getBase64String();
 
-		$this->assertEquals($base64String, $newBase64String); 
+		$this->assertEquals($base64String, $newBase64String);
 	}
 
 	public function testBase64PaddingTwo()
@@ -57,7 +58,7 @@ class Base64UrlConverterTest extends PHPUnit_Framework_TestCase
 							->toBase64()
 							->getBase64String();
 
-		$this->assertEquals($base64String, $newBase64String); 
+		$this->assertEquals($base64String, $newBase64String);
 	}
 
 	public function testBase64PaddingThree()
@@ -74,6 +75,6 @@ class Base64UrlConverterTest extends PHPUnit_Framework_TestCase
 							->toBase64()
 							->getBase64String();
 
-		$this->assertEquals($base64String, $newBase64String); 
+		$this->assertEquals($base64String, $newBase64String);
 	}
 }

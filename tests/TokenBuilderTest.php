@@ -1,9 +1,10 @@
 <?php
- 
-use ReallySimpleJWT\TokenBuilder;
-use Carbon\Carbon; 
 
-class TokenBuilderTest extends PHPUnit_Framework_TestCase {
+use ReallySimpleJWT\TokenBuilder;
+use Carbon\Carbon;
+use PHPUnit\Framework\TestCase;
+
+class TokenBuilderTest extends TestCase {
 
 	public function testGetHash()
 	{
@@ -25,11 +26,11 @@ class TokenBuilderTest extends PHPUnit_Framework_TestCase {
 
 		$header = $builder->getHeader();
 
-		$this->assertNotEmpty($header);	
+		$this->assertNotEmpty($header);
 
 		$this->assertEquals("HS256", json_decode($header)->alg);
 
-		$this->assertEquals("JWT", json_decode($header)->typ);	
+		$this->assertEquals("JWT", json_decode($header)->typ);
 	}
 
 	public function testSetSecret()
@@ -136,7 +137,7 @@ class TokenBuilderTest extends PHPUnit_Framework_TestCase {
 		$builder = new TokenBuilder();
 
 		$builder->build();
-	} 
+	}
 
 	/**
 	 * @expectedException ReallySimpleJWT\Exception\TokenBuilderException

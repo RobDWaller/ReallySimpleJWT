@@ -1,19 +1,20 @@
 <?php
- 
+
 use ReallySimpleJWT\Token;
 use ReallySimpleJWT\TokenValidator;
 use ReallySimpleJWT\TokenBuilder;
-use Carbon\Carbon; 
+use Carbon\Carbon;
+use PHPUnit\Framework\TestCase;
 
-class TokenValidatorTest extends PHPUnit_Framework_TestCase
+class TokenValidatorTest extends TestCase
 {
 	public function testValidateSuccessful()
 	{
 		$validator = new TokenValidator();
 
 		$tokenString = Token::getToken(
-			54, 
-			'ab&7dj)9)', 
+			54,
+			'ab&7dj)9)',
 			Carbon::now()->addMinutes(11)->toDateTimeString(),
 			'www.mysite.com'
 		);
@@ -30,8 +31,8 @@ class TokenValidatorTest extends PHPUnit_Framework_TestCase
 		$validator = new TokenValidator();
 
 		$tokenString = Token::getToken(
-			'twelve123', 
-			'op(9odP', 
+			'twelve123',
+			'op(9odP',
 			Carbon::now()->addMinutes(5)->toDateTimeString(),
 			'www.mysite.com'
 		);
@@ -61,7 +62,7 @@ class TokenValidatorTest extends PHPUnit_Framework_TestCase
         $validator->splitToken($tokenString)
             ->validateExpiration()
             ->validateSignature('secret');
-        
+
         $payload = $validator->getPayload();
 
         $this->assertEquals('rob2', json_decode($payload)->username);
@@ -85,7 +86,7 @@ class TokenValidatorTest extends PHPUnit_Framework_TestCase
 
         $validator->splitToken($tokenString)
             ->validateExpiration()
-            ->validateSignature('secret');    
+            ->validateSignature('secret');
 
         $header = $validator->getHeader();
 
@@ -99,8 +100,8 @@ class TokenValidatorTest extends PHPUnit_Framework_TestCase
 		$validator = new TokenValidator();
 
 		$tokenString = Token::getToken(
-			'twelve123', 
-			'op(9odP', 
+			'twelve123',
+			'op(9odP',
 			Carbon::now()->addMinutes(2)->toDateTimeString(),
 			'www.mysite.com'
 		);
@@ -221,8 +222,8 @@ class TokenValidatorTest extends PHPUnit_Framework_TestCase
 		$validator = new TokenValidator();
 
 		$tokenString = Token::getToken(
-			734, 
-			'ab9OPP10-)9)', 
+			734,
+			'ab9OPP10-)9)',
 			Carbon::now()->addMinutes(11)->toDateTimeString(),
 			'www.cars.com'
 		);
