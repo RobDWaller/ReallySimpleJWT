@@ -12,11 +12,11 @@ class Hmac
      * @param string $hash
      * @param string $string
      * @param string $secret
-     * @param boolean $output
+     * @param bool $output
      *
      * @return string
      */
-    public static function hash($hash, $string, $secret, $output = true)
+    public static function hash(string $hash, string $string, string $secret, bool $output = true): string
     {
         return hash_hmac($hash, $string, $secret, $output);
     }

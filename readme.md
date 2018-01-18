@@ -4,13 +4,15 @@
 A simple package for creating JSON Web Tokens that uses HMAC SHA256 to sign
 signatures. Exposes a simple interface to allow you to create a token that stores a user identifier. The package is set up to allow extension and the use of larger payloads.
 
+## What is a JSON Web Token?
+
 For more information on JSON Web Tokens please see https://jwt.io
 
 ## Usage
 
 ### Get Token
 
-Call the get token method and pass in user identifier, key secret, expiration 
+Call the get token method and pass in user identifier, key secret, expiration
 date time string and the token issuer.
 
 Will return a token string on success and throw an exception on failure.
@@ -25,7 +27,7 @@ $token = Token::getToken('userIdentifier', 'secret', 'dateTimeString', 'issuerId
 
 ### Validate Token
 
-Call the validate method, pass in your token string and the key secret. 
+Call the validate method, pass in your token string and the key secret.
 
 Will return boolean true on success and throw an exception on failure.
 
@@ -51,7 +53,7 @@ use ReallySimpleJWT\TokenBuilder;
 $builder = new TokenBuilder();
 
 $token = $builder->addPayload('key', 'value')
-    ->addPayload('key', 'value')
+    ->addPayload('key', 'value') // edit
     ->setSecret($secret)
     ->setExpiration($expiration)
     ->setIssuer($issuer)
@@ -70,7 +72,7 @@ $validator = new TokenValidator;
 $validator->splitToken('token string')
     ->validateExpiration()
     ->validateSignature('secret');
-        
+
 $payload = $validator->getPayload();
 
 $header = $validator->getHeader();

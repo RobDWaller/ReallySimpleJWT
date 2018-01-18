@@ -5,6 +5,8 @@ use Exception;
 /**
  * Simple exception interface class for the Token Builder class to make
  * exceptions more specific and obvious. Extends the PHP exception class
+ *
+ * @author Rob Waller <rdwaller1984@gmail.com>
  */
 class TokenBuilderException extends Exception
 {
@@ -15,7 +17,7 @@ class TokenBuilderException extends Exception
      * @param int $code
      * @param string $previous
      */
-    public function __construct($message, $code = 0, $previous = null)
+    public function __construct(string $message, int $code = 0, $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

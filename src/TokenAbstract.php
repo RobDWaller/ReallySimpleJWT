@@ -3,6 +3,8 @@
 /**
  * Abstract Token class that contains some global features for the Token Builder
  * class and the Token Validator class
+ *
+ * @author Rob Waller <rdwaller1984@gmail.com>
  */
 abstract class TokenAbstract
 {
@@ -25,7 +27,7 @@ abstract class TokenAbstract
      *
      * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         return $this->hash;
     }
@@ -35,7 +37,7 @@ abstract class TokenAbstract
      *
      * @return string
      */
-    public function getAlgorithm()
+    public function getAlgorithm(): string
     {
         return $this->algorithm;
     }

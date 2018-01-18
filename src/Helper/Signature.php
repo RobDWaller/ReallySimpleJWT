@@ -41,10 +41,10 @@ class Signature
      *
      * @param string $header
      * @param string $payload
-     * @param string / int $secret
+     * @param string $secret
      * @param string $hash
      */
-    public function __construct($header, $payload, $secret, $hash)
+    public function __construct(string $header, string $payload, string $secret, string $hash)
     {
         $this->header = $header;
 
@@ -60,7 +60,7 @@ class Signature
      *
      * @return string
      */
-    public function get()
+    public function get(): string
     {
         return TokenEncodeDecode::encode(Hmac::hash(
             $this->hash,
@@ -75,7 +75,7 @@ class Signature
      *
      * @return string
      */
-    private function signatureString()
+    private function signatureString(): string
     {
         return TokenEncodeDecode::encode($this->header) . '.' . TokenEncodeDecode::encode($this->payload);
     }

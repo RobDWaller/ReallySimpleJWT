@@ -4,6 +4,7 @@ use ReallySimpleJWT\Exception\TokenBuilderException;
 use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\DateTime;
+use Carbon\Carbon;
 
 /**
  * Class that generates a JSON Web Token, uses HS256 to generate the signature
@@ -68,7 +69,7 @@ class TokenBuilder extends TokenAbstract
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -78,7 +79,7 @@ class TokenBuilder extends TokenAbstract
      *
      * @return string
      */
-    public function getSecret()
+    public function getSecret(): string
     {
         if (!empty($this->secret)) {
             return $this->secret;
@@ -95,7 +96,7 @@ class TokenBuilder extends TokenAbstract
      *
      * @return Carbon\Carbon
      */
-    public function getExpiration()
+    public function getExpiration(): Carbon
     {
         if (!$this->hasOldExpiration()) {
             return $this->expiration;
@@ -111,7 +112,7 @@ class TokenBuilder extends TokenAbstract
      *
      * @return string
      */
-    public function getIssuer()
+    public function getIssuer(): string
     {
         return $this->issuer;
     }
@@ -122,9 +123,19 @@ class TokenBuilder extends TokenAbstract
      * @return string
      * @todo write setter
      */
-    public function getAudience()
+    public function getAudience(): string
     {
-        return $this->audience;
+        return empty($this->audience) ? '' : $this->audience;
+    }
+
+    /**
+     * Set the audience of the token
+     *
+     * @param string $audience
+     */
+    public function setAudience(string $audience)
+    {
+        $this->audience = $audience;
     }
 
     /**
@@ -133,9 +144,19 @@ class TokenBuilder extends TokenAbstract
      * @return string
      * @todo write setter
      */
-    public function getSubject()
+    public function getSubject(): string
     {
-        return $this->subject;
+        return empty($this->subject) ? '' : $this->subject;
+    }
+
+    /**
+     * Set the subject of the token
+     *
+     * @param string $subject
+     */
+    public function setSubject(string $subject)
+    {
+        $this->subject = $subject;
     }
 
     /**
@@ -143,7 +164,7 @@ class TokenBuilder extends TokenAbstract
      *
      * @return string
      */
-    public function getHeader()
+    public function getHeader(): string
     {
         return json_encode(['alg' => $this->getAlgorithm(), 'typ' => $this->getType()]);
     }
@@ -153,7 +174,7 @@ class TokenBuilder extends TokenAbstract
      *
      * @return string
      */
-    public function getPayload()
+    public function getPayload(): string
     {
         if (!array_key_exists('iss', $this->payload)) {
             $this->payload = array_merge($this->payload, ['iss' => $this->getIssuer()]);
@@ -170,7 +191,7 @@ class TokenBuilder extends TokenAbstract
      *
      * @return Signature
      */
-    public function getSignature()
+    public function getSignature(): Signature
     {
         return new Signature($this->getHeader(), $this->getPayload(), $this->getSecret(), $this->getHash());
     }
@@ -178,9 +199,11 @@ class TokenBuilder extends TokenAbstract
     /**
      * Set the secret for the JWT Signature, return the Token Builder
      *
+     * @param string $secret
+     *
      * @return TokenBuilder
      */
-    public function setSecret($secret)
+    public function setSecret(string $secret): TokenBuilder
     {
         $this->secret = $secret;
 
@@ -191,9 +214,11 @@ class TokenBuilder extends TokenAbstract
      * Parse a date time string to a Carbon object to set the expiration for the
      * JWT Payload, return the Token Builder
      *
+     * @param string $expiration
+     *
      * @return TokenBuilder
      */
-    public function setExpiration($expiration)
+    public function setExpiration(string $expiration): TokenBuilder
     {
         $this->expiration = DateTime::parse($expiration);
 
@@ -203,9 +228,11 @@ class TokenBuilder extends TokenAbstract
     /**
      * Set the issuer for the JWT issuer, return the Token Builder
      *
+     * @param string $issuer
+     *
      * @return TokenBuilder
      */
-    public function setIssuer($issuer)
+    public function setIssuer(string $issuer): TokenBuilder
     {
         $this->issuer = $issuer;
 
@@ -215,16 +242,27 @@ class TokenBuilder extends TokenAbstract
     /**
      * Add key value pair to payload array
      *
+     * @param array $payload
+     *
      * @return TokenBuilder
      */
-    public function addPayload($key, $value)
+    public function addPayload(array $payload): TokenBuilder
     {
-        $this->payload = array_merge($this->payload, [$key => $value]);
+        if (isset($payload['key']) && isset($payload['value'])) {
+            $this->payload = array_merge($this->payload, [$payload['key'] => $payload['value']]);
 
-        return $this;
+            return $this;
+        }
+
+        throw new TokenBuilderException('Failed to add payload, format wrong. Array must contain key and value.');
     }
 
-    private function encodeHeader()
+    /**
+     * Encode the header string and return it
+     *
+     * @return string
+     */
+    private function encodeHeader(): string
     {
         return TokenEncodeDecode::encode($this->getHeader());
     }
@@ -234,7 +272,7 @@ class TokenBuilder extends TokenAbstract
      *
      * @return string
      */
-    private function encodePayload()
+    private function encodePayload(): string
     {
         if (!empty($this->issuer) && !empty($this->expiration)) {
             return TokenEncodeDecode::encode($this->getPayload());
@@ -250,7 +288,7 @@ class TokenBuilder extends TokenAbstract
      *
      * @return string
      */
-    public function build()
+    public function build(): string
     {
         return $this->encodeHeader() . "." .
             $this->encodePayload() . "." .
@@ -260,9 +298,9 @@ class TokenBuilder extends TokenAbstract
     /**
      * Check that the expiration Carbon object is not an old date
      *
-     * @return boolean
+     * @return bool
      */
-    private function hasOldExpiration()
+    private function hasOldExpiration(): bool
     {
         return DateTime::olderThan(DateTime::now(), DateTime::parse($this->expiration));
     }

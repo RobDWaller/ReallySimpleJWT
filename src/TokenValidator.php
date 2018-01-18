@@ -42,7 +42,7 @@ class TokenValidator extends TokenAbstract
      *
      * @return TokenValidator
      */
-    public function splitToken($tokenString)
+    public function splitToken(string $tokenString): TokenValidator
     {
         $tokenParts = explode('.', $tokenString);
 
@@ -64,7 +64,7 @@ class TokenValidator extends TokenAbstract
      *
      * @return TokenValidator
      */
-    public function validateExpiration()
+    public function validateExpiration(): TokenValidator
     {
         $now = DateTime::now();
 
@@ -83,9 +83,9 @@ class TokenValidator extends TokenAbstract
      *
      * @param string $secret
      *
-     * @return boolean
+     * @return bool
      */
-    public function validateSignature($secret)
+    public function validateSignature(string $secret): bool
     {
         $signature = new Signature($this->getHeader(), $this->getPayload(), $secret, $this->getHash());
 
@@ -103,7 +103,7 @@ class TokenValidator extends TokenAbstract
      *
      * @return string
      */
-    public function getExpiration()
+    public function getExpiration(): string
     {
         $payload = json_decode($this->getPayload());
 
@@ -121,7 +121,7 @@ class TokenValidator extends TokenAbstract
      *
      * @return string
      */
-    public function getPayload()
+    public function getPayload(): string
     {
         return TokenEncodeDecode::decode($this->payload);
     }
@@ -131,7 +131,7 @@ class TokenValidator extends TokenAbstract
      *
      * @return string
      */
-    public function getHeader()
+    public function getHeader(): string
     {
         return TokenEncodeDecode::decode($this->header);
     }

@@ -74,7 +74,7 @@ class TokenBuilderTest extends TestCase
 
         $payload = $builder->setIssuer('http://127.0.0.1')
             ->setExpiration($dateTime)
-            ->addPayload('user_id', 2);
+            ->addPayload(['key' => 'user_id', 'value' => 2]);
 
         $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $payload);
 
@@ -101,9 +101,9 @@ class TokenBuilderTest extends TestCase
 
         $payload = $builder->setIssuer('http://127.0.0.1')
             ->setExpiration($dateTime)
-            ->addPayload('user_id', 2)
-            ->addPayload('username', 'rob1')
-            ->addPayload('description', 'A great guy');
+            ->addPayload(['key' => 'user_id', 'value' => 2])
+            ->addPayload(['key' => 'username', 'value' => 'rob1'])
+            ->addPayload(['key' => 'description', 'value' => 'A great guy']);
 
         $payload = $payload->getPayload();
 
@@ -121,7 +121,7 @@ class TokenBuilderTest extends TestCase
         $token = $builder->setIssuer('http://127.0.0.1')
             ->setExpiration($dateTime)
             ->setSecret('123ABC')
-            ->addPayload('user_id', 2)
+            ->addPayload(['key' => 'user_id', 'value' => 2])
             ->build();
 
         $this->assertNotEmpty($token);
@@ -171,7 +171,7 @@ class TokenBuilderTest extends TestCase
 
         $builder->setExpiration(Carbon::now()->subMinutes(2)->toDateTimeString())
             ->setSecret('123ABC')
-            ->addPayload('user_id', 2)
+            ->addPayload(['key' => 'user_id', 'value' => 2])
             ->setIssuer('127.0.0.1')
             ->build();
     }
@@ -185,7 +185,7 @@ class TokenBuilderTest extends TestCase
 
         $builder->setExpiration('Hello World')
             ->setSecret('123ABC')
-            ->addPayload('user_id', 2)
+            ->addPayload(['key' => 'user_id', 'value' => 2])
             ->setIssuer('127.0.0.1')
             ->build();
     }
@@ -199,8 +199,73 @@ class TokenBuilderTest extends TestCase
 
         $builder->setExpiration('')
             ->setSecret('123ABC')
-            ->addPayload('user_id', 2)
+            ->addPayload(['key' => 'user_id', 'value' => 2])
             ->setIssuer('127.0.0.1')
             ->build();
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Failed to add payload, format wrong. Array must contain key and value.
+     */
+    public function testBadPayload()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->addPayload(['car' => 'user_id', 'value' => 2]);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Failed to add payload, format wrong. Array must contain key and value.
+     */
+    public function testBadPayloadOne()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->addPayload(['key' => 'user_id', 'park' => 2]);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Failed to add payload, format wrong. Array must contain key and value.
+     */
+    public function testBadPayloadTwo()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->addPayload(['car' => 'user_id', 'park' => 2]);
+    }
+
+    public function testSetSubject()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->setSubject('Cars');
+
+        $this->assertEquals('Cars', $builder->getSubject());
+    }
+
+    public function testGetNoSubject()
+    {
+        $builder = new TokenBuilder();
+
+        $this->assertEquals('', $builder->getSubject());
+    }
+
+    public function testSetAudience()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->setAudience('People');
+
+        $this->assertEquals('People', $builder->getAudience());
+    }
+
+    public function testGetNoAudience()
+    {
+        $builder = new TokenBuilder();
+
+        $this->assertEquals('', $builder->getAudience());
     }
 }

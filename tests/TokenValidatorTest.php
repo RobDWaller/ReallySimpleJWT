@@ -54,9 +54,9 @@ class TokenValidatorTest extends TestCase
         $tokenString = $builder->setIssuer('http://127.0.0.1')
             ->setSecret('secret')
             ->setExpiration($dateTime)
-            ->addPayload('user_id', 22)
-            ->addPayload('username', 'rob2')
-            ->addPayload('description', 'A bad guy')
+            ->addPayload(['key' => 'user_id', 'value' => 22])
+            ->addPayload(['key' => 'username', 'value' => 'rob2'])
+            ->addPayload(['key' => 'description', 'value' => 'A bad guy'])
             ->build();
 
         $validator->splitToken($tokenString)
@@ -81,7 +81,7 @@ class TokenValidatorTest extends TestCase
         $tokenString = $builder->setIssuer('http://127.0.0.1')
             ->setSecret('secret')
             ->setExpiration($dateTime)
-            ->addPayload('user_id', 11)
+            ->addPayload(['key' => 'user_id', 'value' => 11])
             ->build();
 
         $validator->splitToken($tokenString)
