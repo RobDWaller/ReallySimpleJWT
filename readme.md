@@ -6,6 +6,16 @@ signatures. Exposes a simple interface to allow you to create a token that store
 
 ## What is a JSON Web Token?
 
+JSON Web Tokens is a standard for creating URL friendly access tokens that assert claims about a user or system. They are broken down into three parts; the header, the payload and the signature; with each part separated by a dot.
+
+For example:
+
+```
+aaa.bbb.ccc
+```
+
+Security is achieved via the signature which is made up of the header, payload and a secret none only to the token author.
+
 For more information on JSON Web Tokens please see https://jwt.io
 
 ## Usage
@@ -39,7 +49,7 @@ use ReallySimpleJWT\Token;
 $result = Token::validate('token', 'secret');
 ```
 
-### Advanced Usage
+## Advanced Usage
 
 If you would like to access the token builder interface directly simply instantiate the TokenBuilder class.
 
@@ -53,7 +63,7 @@ use ReallySimpleJWT\TokenBuilder;
 $builder = new TokenBuilder();
 
 $token = $builder->addPayload('key', 'value')
-    ->addPayload('key', 'value') // edit
+    ->addPayload(['key' => 'foo', 'value' => 'bar'])
     ->setSecret($secret)
     ->setExpiration($expiration)
     ->setIssuer($issuer)
