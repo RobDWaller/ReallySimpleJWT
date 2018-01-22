@@ -4,6 +4,7 @@ use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\DateTime;
 use ReallySimpleJWT\Exception\TokenValidatorException;
+use stdClass;
 
 /**
  * Class that validates a JSON Web Token based on the HS256 signature and the
@@ -134,5 +135,25 @@ class TokenValidator extends TokenAbstract
     public function getHeader(): string
     {
         return TokenEncodeDecode::decode($this->header);
+    }
+
+    /**
+     * Return payload but decode JSON string to stdClass first
+     *
+     * @return stdClass
+     */
+    public function getPayloadDecodeJson(): stdClass
+    {
+        return json_decode($this->getPayload());
+    }
+
+    /**
+     * Return header but decode JSON string to stdClass first
+     *
+     * @return stdClass
+     */
+    public function getHeaderDecodeJson(): stdClass
+    {
+        return json_decode($this->getHeader());
     }
 }

@@ -216,6 +216,7 @@ class TokenValidatorTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedExceptionMessageRegExp |^Token signature is invalid!! Input:\s.*|
      */
     public function testValidateSignatureFail()
     {
@@ -230,10 +231,58 @@ class TokenValidatorTest extends TestCase
 
         $tokenString = substr($tokenString, 0, -1);
 
-        $this->assertTrue(
-            $validator->splitToken($tokenString)
-                ->validateExpiration()
-                ->validateSignature('ab9OPP10-)9)')
+        $validator->splitToken($tokenString)
+            ->validateExpiration()
+            ->validateSignature('ab9OPP10-)9)');
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedExceptionMessageRegExp |^Token signature is invalid!! Input:\s.*|
+     */
+    public function testValidateSignatureFailTwo()
+    {
+        $validator = new TokenValidator();
+
+        $tokenString = Token::getToken(
+            734,
+            'ab9OPP10-)9)',
+            Carbon::now()->addMinutes(11)->toDateTimeString(),
+            'www.cars.com'
         );
+
+        $validator->splitToken($tokenString)
+            ->validateExpiration()
+            ->validateSignature('ab9OPP109)');
+    }
+
+    public function testGetPayloadDecodJson()
+    {
+        $validator = new TokenValidator();
+
+        $tokenString = Token::getToken(
+            326,
+            'ab9OPP10-)9)',
+            Carbon::now()->addMinutes(11)->toDateTimeString(),
+            'www.cars.com'
+        );
+
+        $this->assertInstanceOf(\stdClass::class, $validator->splitToken($tokenString)->getPayloadDecodeJson());
+        $this->assertEquals(326, $validator->splitToken($tokenString)->getPayloadDecodeJson()->user_id);
+    }
+
+    public function testGetHeaderDecodJson()
+    {
+        $validator = new TokenValidator();
+
+        $tokenString = Token::getToken(
+            326,
+            'ab9OPP10-)9)',
+            Carbon::now()->addMinutes(11)->toDateTimeString(),
+            'www.cars.com'
+        );
+
+        $this->assertInstanceOf(\stdClass::class, $validator->splitToken($tokenString)->getHeaderDecodeJson());
+        $this->assertEquals('HS256', $validator->splitToken($tokenString)->getHeaderDecodeJson()->alg);
     }
 }
