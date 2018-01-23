@@ -14,7 +14,7 @@ For example:
 aaa.bbb.ccc
 ```
 
-Security is achieved via the signature which is made up of the header, payload and a secret none only to the token author.
+Security is achieved via the signature which is made up of the header, payload and a secret known only to the token author.
 
 For more information on JSON Web Tokens please see https://jwt.io
 
@@ -48,6 +48,8 @@ use ReallySimpleJWT\Token;
 
 $result = Token::validate('token', 'secret');
 ```
+
+### Get Payload
 
 ## Advanced Usage
 
@@ -87,6 +89,8 @@ $payload = $validator->getPayload();
 
 $header = $validator->getHeader();
 ```
+
+## Secret Key Security
 
 ## License
 

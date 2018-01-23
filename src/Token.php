@@ -52,6 +52,22 @@ class Token
     }
 
     /**
+     * Return the payload of the token as a JSON string. You should run the
+     * validate method on your token before retrieving the payload.
+     *
+     * @param string $token
+     *
+     * @return string
+     */
+    public static function getPayload(string $token): string
+    {
+        $validator = Self::validator();
+
+        return $validator->splitToken($token)
+            ->getPayload();
+    }
+
+    /**
      * Interface to return instance of the token builder
      *
      * @return TokenBuilder
