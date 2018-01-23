@@ -10,7 +10,7 @@ class TokenTest extends TestCase
     {
         $token = Token::getToken(
             1,
-            '123ABC',
+            '123ABC%tyd*ere1',
             Carbon::now()->addMinutes(5)->toDateTimeString(),
             '127.0.0.1'
         );
@@ -22,12 +22,12 @@ class TokenTest extends TestCase
     {
         $token = Token::getToken(
             'abdY',
-            'Hello&Mike',
+            'Hello&MikeFooBar123',
             Carbon::now()->addMinutes(5)->toDateTimeString(),
             'http://127.0.0.1'
         );
 
-        $this->assertTrue(Token::validate($token, 'Hello&Mike'));
+        $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
     public function testBuilder()

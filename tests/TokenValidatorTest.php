@@ -14,7 +14,7 @@ class TokenValidatorTest extends TestCase
 
         $tokenString = Token::getToken(
             54,
-            'ab&7dj)9)',
+            'ab&7dj*9!ABC123',
             Carbon::now()->addMinutes(11)->toDateTimeString(),
             'www.mysite.com'
         );
@@ -22,7 +22,7 @@ class TokenValidatorTest extends TestCase
         $this->assertTrue(
             $validator->splitToken($tokenString)
                 ->validateExpiration()
-                ->validateSignature('ab&7dj)9)')
+                ->validateSignature('ab&7dj*9!ABC123')
         );
     }
 
@@ -32,7 +32,7 @@ class TokenValidatorTest extends TestCase
 
         $tokenString = Token::getToken(
             'twelve123',
-            'op(9odP',
+            'op*^9odP^yuoOd',
             Carbon::now()->addMinutes(5)->toDateTimeString(),
             'www.mysite.com'
         );
@@ -52,7 +52,7 @@ class TokenValidatorTest extends TestCase
         $builder = new TokenBuilder();
 
         $tokenString = $builder->setIssuer('http://127.0.0.1')
-            ->setSecret('secret')
+            ->setSecret('secret123*REVEALED')
             ->setExpiration($dateTime)
             ->addPayload(['key' => 'user_id', 'value' => 22])
             ->addPayload(['key' => 'username', 'value' => 'rob2'])
@@ -61,7 +61,7 @@ class TokenValidatorTest extends TestCase
 
         $validator->splitToken($tokenString)
             ->validateExpiration()
-            ->validateSignature('secret');
+            ->validateSignature('secret123*REVEALED');
 
         $payload = $validator->getPayload();
 
@@ -79,14 +79,14 @@ class TokenValidatorTest extends TestCase
         $builder = new TokenBuilder();
 
         $tokenString = $builder->setIssuer('http://127.0.0.1')
-            ->setSecret('secret')
+            ->setSecret('badG3rsAre*!*!')
             ->setExpiration($dateTime)
             ->addPayload(['key' => 'user_id', 'value' => 11])
             ->build();
 
         $validator->splitToken($tokenString)
             ->validateExpiration()
-            ->validateSignature('secret');
+            ->validateSignature('badG3rsAre*!*!');
 
         $header = $validator->getHeader();
 
@@ -101,7 +101,7 @@ class TokenValidatorTest extends TestCase
 
         $tokenString = Token::getToken(
             'twelve123',
-            'op(9odP',
+            'iHateC0c0mBer*&',
             Carbon::now()->addMinutes(2)->toDateTimeString(),
             'www.mysite.com'
         );
@@ -224,7 +224,7 @@ class TokenValidatorTest extends TestCase
 
         $tokenString = Token::getToken(
             734,
-            'ab9OPP10-)9)',
+            'ab9OPP10&*^9',
             Carbon::now()->addMinutes(11)->toDateTimeString(),
             'www.cars.com'
         );
@@ -233,7 +233,7 @@ class TokenValidatorTest extends TestCase
 
         $validator->splitToken($tokenString)
             ->validateExpiration()
-            ->validateSignature('ab9OPP10-)9)');
+            ->validateSignature('ab9OPP10&*^9');
     }
 
     /**
@@ -246,14 +246,14 @@ class TokenValidatorTest extends TestCase
 
         $tokenString = Token::getToken(
             734,
-            'ab9OPP10-)9)',
+            '*&123HYGhdiso*',
             Carbon::now()->addMinutes(11)->toDateTimeString(),
             'www.cars.com'
         );
 
         $validator->splitToken($tokenString)
             ->validateExpiration()
-            ->validateSignature('ab9OPP109)');
+            ->validateSignature('*&123HYGhdi');
     }
 
     public function testGetPayloadDecodJson()
@@ -262,7 +262,7 @@ class TokenValidatorTest extends TestCase
 
         $tokenString = Token::getToken(
             326,
-            'ab9OPP10-)9)',
+            'pieFace33334^',
             Carbon::now()->addMinutes(11)->toDateTimeString(),
             'www.cars.com'
         );
@@ -277,7 +277,7 @@ class TokenValidatorTest extends TestCase
 
         $tokenString = Token::getToken(
             326,
-            'ab9OPP10-)9)',
+            'eyes11ARE666&',
             Carbon::now()->addMinutes(11)->toDateTimeString(),
             'www.cars.com'
         );

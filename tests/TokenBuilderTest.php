@@ -37,11 +37,11 @@ class TokenBuilderTest extends TestCase
     {
         $builder = new TokenBuilder();
 
-        $secret = $builder->setSecret('123');
+        $secret = $builder->setSecret('abcDEFhij123*');
 
         $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $secret);
 
-        $this->assertEquals('123', $secret->getSecret());
+        $this->assertEquals('abcDEFhij123*', $secret->getSecret());
     }
 
     public function testSetExpiration()
@@ -120,7 +120,7 @@ class TokenBuilderTest extends TestCase
 
         $token = $builder->setIssuer('http://127.0.0.1')
             ->setExpiration($dateTime)
-            ->setSecret('123ABC')
+            ->setSecret('123ABC!kjhiop')
             ->addPayload(['key' => 'user_id', 'value' => 2])
             ->build();
 
@@ -170,7 +170,7 @@ class TokenBuilderTest extends TestCase
         $builder = new TokenBuilder();
 
         $builder->setExpiration(Carbon::now()->subMinutes(2)->toDateTimeString())
-            ->setSecret('123ABC')
+            ->setSecret('&123ABCuytHj7')
             ->addPayload(['key' => 'user_id', 'value' => 2])
             ->setIssuer('127.0.0.1')
             ->build();
@@ -184,7 +184,7 @@ class TokenBuilderTest extends TestCase
         $builder = new TokenBuilder();
 
         $builder->setExpiration('Hello World')
-            ->setSecret('123ABC')
+            ->setSecret('!%123ABC!&jkfds')
             ->addPayload(['key' => 'user_id', 'value' => 2])
             ->setIssuer('127.0.0.1')
             ->build();
@@ -198,7 +198,7 @@ class TokenBuilderTest extends TestCase
         $builder = new TokenBuilder();
 
         $builder->setExpiration('')
-            ->setSecret('123ABC')
+            ->setSecret('123!!&&ABCasJU90oj')
             ->addPayload(['key' => 'user_id', 'value' => 2])
             ->setIssuer('127.0.0.1')
             ->build();

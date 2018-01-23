@@ -5,6 +5,7 @@ use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\DateTime;
 use Carbon\Carbon;
+use ReallySimpleJWT\Helper\Secret;
 
 /**
  * Class that generates a JSON Web Token, uses HS256 to generate the signature
@@ -205,6 +206,8 @@ class TokenBuilder extends TokenAbstract
      */
     public function setSecret(string $secret): TokenBuilder
     {
+        Secret::validate($secret);
+
         $this->secret = $secret;
 
         return $this;
