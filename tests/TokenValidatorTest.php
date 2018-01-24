@@ -114,6 +114,7 @@ class TokenValidatorTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedExceptionMessage This token has expired!
      */
     public function testValidateExpirationFailure()
     {
@@ -130,6 +131,7 @@ class TokenValidatorTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedExceptionMessage Bad payload object, no expiration parameter set
      */
     public function testValidateExpirationFailureBadData()
     {
@@ -146,6 +148,7 @@ class TokenValidatorTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenDateException
+     * @expectedExceptionMessageRegExp |^The date time string \[.*\] you attempted to parse is empty\.$|
      */
     public function testValidateExpirationFailureEmptyDate()
     {
@@ -161,6 +164,7 @@ class TokenValidatorTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenDateException
+     * @expectedExceptionMessageRegExp |^The date time string \[.*\] you attempted to parse is invalid\.$|
      */
     public function testValidateExpirationFailureBadDate()
     {
@@ -176,6 +180,7 @@ class TokenValidatorTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedExceptionMessage Token string has invalid structure, ensure three strings seperated by dots.
      */
     public function testSplitTokenFail()
     {
@@ -189,6 +194,7 @@ class TokenValidatorTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedExceptionMessage Token string has invalid structure, ensure three strings seperated by dots.
      */
     public function testSplitTokenFailNoDot()
     {
@@ -201,6 +207,7 @@ class TokenValidatorTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedExceptionMessage Token string has invalid structure, ensure three strings seperated by dots.
      */
     public function testSplitTokenFailFourDot()
     {

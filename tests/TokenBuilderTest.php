@@ -131,6 +131,7 @@ class TokenBuilderTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Token cannot be built please add a payload, including an issuer and an expiration.
      */
     public function testBuildFail()
     {
@@ -141,6 +142,7 @@ class TokenBuilderTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Token cannot be built please add a payload, including an issuer and an expiration.
      */
     public function testBuildFailIssuer()
     {
@@ -152,6 +154,7 @@ class TokenBuilderTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Token secret not set, please add a secret to increase security
      */
     public function testBuildFailureSecret()
     {
@@ -164,6 +167,7 @@ class TokenBuilderTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Token expiration date has already expired, please set a future expiration date
      */
     public function testBuildFailureExpirationOld()
     {
@@ -178,6 +182,7 @@ class TokenBuilderTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenDateException
+     * @expectedExceptionMessageRegExp |^The date time string \[.*\] you attempted to parse is invalid\.$|
      */
     public function testBuildFailureExpirationInvalid()
     {
@@ -192,6 +197,7 @@ class TokenBuilderTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenDateException
+     * @expectedExceptionMessageRegExp |^The date time string \[.*\] you attempted to parse is empty\.$|
      */
     public function testBuildFailureExpirationEmpty()
     {

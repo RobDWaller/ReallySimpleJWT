@@ -51,6 +51,16 @@ $result = Token::validate('token', 'secret');
 
 ### Get Payload
 
+To retrieve the token payload call the `getPayload()` method.
+
+Will return a JSON string on success and throw an exception of failure.
+
+```php
+use ReallySimpleJWT\Token;
+
+$result = Token::getPayload('token');
+```
+
 ## Advanced Usage
 
 If you would like to access the token builder interface directly simply instantiate the TokenBuilder class.
@@ -91,6 +101,18 @@ $header = $validator->getHeader();
 ```
 
 ## Secret Key Security
+
+This JWT generator imposes secret security as follows: the secret must be at least 12 characters in length; contain numbers; upper and lowercase letters; and the one of the following special characters `*&!@%^#$`.
+
+```php
+// Bad Secret
+secret123
+
+// Good Secret
+sec!ReT423*&
+```
+
+The reason for this is that are lots of [JWT Crackers](https://github.com/lmammino/jwt-cracker) available mean weak secrets are easy to crack thus rendering the security JWT offers useless.
 
 ## License
 
