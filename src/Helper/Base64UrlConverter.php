@@ -43,7 +43,7 @@ class Base64UrlConverter
      *
      * @return self
      */
-    public function setBase64UrlString($base64UrlString): self
+    public function setBase64UrlString(string $base64UrlString): self
     {
         $this->base64UrlString = $base64UrlString;
 
