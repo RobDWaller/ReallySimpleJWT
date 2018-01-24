@@ -110,7 +110,7 @@ class Base64UrlConverter
      *
      * @return self
      */
-    public function toBase64()
+    public function toBase64(): self
     {
         $this->convertToBase64();
 
