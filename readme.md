@@ -53,7 +53,7 @@ $result = Token::validate('token', 'secret');
 
 To retrieve the token payload call the `getPayload()` method.
 
-Will return a JSON string on success and throw an exception of failure.
+Will return a JSON string on success and throw an exception on failure.
 
 ```php
 use ReallySimpleJWT\Token;
@@ -112,7 +112,7 @@ secret123
 sec!ReT423*&
 ```
 
-The reason for this is that are lots of [JWT Crackers](https://github.com/lmammino/jwt-cracker) available mean weak secrets are easy to crack thus rendering the security JWT offers useless.
+The reason for this is that there are lots of [JWT Crackers](https://github.com/lmammino/jwt-cracker) available meaning weak secrets are easy to crack thus rendering the security JWT offers useless.
 
 ## License
 
