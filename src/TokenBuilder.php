@@ -46,7 +46,6 @@ class TokenBuilder extends TokenAbstract
      * Payload audience attribute
      *
      * @var string
-     * @todo write setter
      */
     private $audience;
 
@@ -54,7 +53,6 @@ class TokenBuilder extends TokenAbstract
      * Payload subject attribute
      *
      * @var string
-     * @todo write setter
      */
     private $subject;
 
@@ -122,7 +120,6 @@ class TokenBuilder extends TokenAbstract
      * Return the JWT audience attribute string
      *
      * @return string
-     * @todo write setter
      */
     public function getAudience(): string
     {
@@ -143,7 +140,6 @@ class TokenBuilder extends TokenAbstract
      * Return the JWT subject attribute string
      *
      * @return string
-     * @todo write setter
      */
     public function getSubject(): string
     {
