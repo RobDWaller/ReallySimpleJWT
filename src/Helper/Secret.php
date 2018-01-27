@@ -7,7 +7,7 @@ use ReallySimpleJWT\Exception\SecretException;
 /**
  * A simply class for validating secret key format
  *
- * A good secret is 12 characters or more, contains number, upper and lowercase
+ * A good secret is 12 characters or more, contains numbers, upper and lowercase
  * letters and some special characters *&!@%^#$.
  *
  * Example good secrect: HELLOworldFOOBAR123*&!@%^#$
