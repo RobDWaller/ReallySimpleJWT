@@ -4,6 +4,7 @@ use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\DateTime;
 use ReallySimpleJWT\Exception\TokenValidatorException;
+use stdClass;
 
 /**
  * Class that validates a JSON Web Token based on the HS256 signature and the
@@ -42,7 +43,7 @@ class TokenValidator extends TokenAbstract
      *
      * @return TokenValidator
      */
-    public function splitToken($tokenString)
+    public function splitToken(string $tokenString): TokenValidator
     {
         $tokenParts = explode('.', $tokenString);
 
@@ -64,7 +65,7 @@ class TokenValidator extends TokenAbstract
      *
      * @return TokenValidator
      */
-    public function validateExpiration()
+    public function validateExpiration(): TokenValidator
     {
         $now = DateTime::now();
 
@@ -83,9 +84,9 @@ class TokenValidator extends TokenAbstract
      *
      * @param string $secret
      *
-     * @return boolean
+     * @return bool
      */
-    public function validateSignature($secret)
+    public function validateSignature(string $secret): bool
     {
         $signature = new Signature($this->getHeader(), $this->getPayload(), $secret, $this->getHash());
 
@@ -103,7 +104,7 @@ class TokenValidator extends TokenAbstract
      *
      * @return string
      */
-    public function getExpiration()
+    public function getExpiration(): string
     {
         $payload = json_decode($this->getPayload());
 
@@ -121,7 +122,7 @@ class TokenValidator extends TokenAbstract
      *
      * @return string
      */
-    public function getPayload()
+    public function getPayload(): string
     {
         return TokenEncodeDecode::decode($this->payload);
     }
@@ -131,8 +132,28 @@ class TokenValidator extends TokenAbstract
      *
      * @return string
      */
-    public function getHeader()
+    public function getHeader(): string
     {
         return TokenEncodeDecode::decode($this->header);
+    }
+
+    /**
+     * Return payload but decode JSON string to stdClass first
+     *
+     * @return stdClass
+     */
+    public function getPayloadDecodeJson(): stdClass
+    {
+        return json_decode($this->getPayload());
+    }
+
+    /**
+     * Return header but decode JSON string to stdClass first
+     *
+     * @return stdClass
+     */
+    public function getHeaderDecodeJson(): stdClass
+    {
+        return json_decode($this->getHeader());
     }
 }

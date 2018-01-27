@@ -14,7 +14,7 @@ class DateTime
      *
      * @return Carbon
      */
-    public static function now()
+    public static function now(): Carbon
     {
         return Carbon::now();
     }
@@ -27,7 +27,7 @@ class DateTime
      *
      * @return Carbon
      */
-    public static function parse($dateTimeString)
+    public static function parse(string $dateTimeString): Carbon
     {
         Self::emptyDateTimeString($dateTimeString);
 
@@ -45,9 +45,9 @@ class DateTime
      *
      * @param string $dateTimeString
      *
-     * @return boolean
+     * @return bool
      */
-    private static function emptyDateTimeString($dateTimeString)
+    private static function emptyDateTimeString(string $dateTimeString): bool
     {
         if (!empty($dateTimeString)) {
             return true;
@@ -64,9 +64,9 @@ class DateTime
      * @param Carbon $baseDate
      * @param Carbon $comparisonDate
      *
-     * @return boolean
+     * @return bool
      */
-    public static function olderThan(Carbon $baseDate, Carbon $comparisonDate)
+    public static function olderThan(Carbon $baseDate, Carbon $comparisonDate): bool
     {
         return $baseDate->diffInSeconds($comparisonDate, false) < 0;
     }

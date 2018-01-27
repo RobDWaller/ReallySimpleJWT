@@ -8,7 +8,7 @@ use Exception;
  *
  * @author Rob Waller <rdwaller1984@gmail.com>
  */
-class TokenValidatorException extends Exception
+class SecretException extends Exception
 {
     /**
      * Constructor for the Token Builder Exception class

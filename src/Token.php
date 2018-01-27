@@ -16,18 +16,18 @@ class Token
     /**
      * Create a JSON Web Token that contains a User Identifier Payload
      *
-     * @param string/int $userId
-     * @param string/int $secret
-     * @param datetimestring $expiration
+     * @param mixed $userId
+     * @param string $secret
+     * @param string $expiration
      * @param string $issuer
      *
      * @return string
      */
-    public static function getToken($userId, $secret, $expiration, $issuer)
+    public static function getToken($userId, string $secret, string $expiration, string $issuer): string
     {
         $builder = Self::builder();
 
-        return $builder->addPayload('user_id', $userId)
+        return $builder->addPayload(['key' => 'user_id', 'value' => $userId])
             ->setSecret($secret)
             ->setExpiration($expiration)
             ->setIssuer($issuer)
@@ -38,11 +38,11 @@ class Token
      * Validate a JSON Web Token's expiration and signature
      *
      * @param string $token
-     * @param string/int $secret
+     * @param string $secret
      *
      * @return bool
      */
-    public static function validate($token, $secret)
+    public static function validate(string $token, string $secret): bool
     {
         $validator = Self::validator();
 
@@ -52,11 +52,27 @@ class Token
     }
 
     /**
+     * Return the payload of the token as a JSON string. You should run the
+     * validate method on your token before retrieving the payload.
+     *
+     * @param string $token
+     *
+     * @return string
+     */
+    public static function getPayload(string $token): string
+    {
+        $validator = Self::validator();
+
+        return $validator->splitToken($token)
+            ->getPayload();
+    }
+
+    /**
      * Interface to return instance of the token builder
      *
      * @return TokenBuilder
      */
-    public static function builder()
+    public static function builder(): TokenBuilder
     {
         return new TokenBuilder();
     }
@@ -66,7 +82,7 @@ class Token
      *
      * @return TokenValidator
      */
-    public static function validator()
+    public static function validator(): TokenValidator
     {
         return new TokenValidator();
     }

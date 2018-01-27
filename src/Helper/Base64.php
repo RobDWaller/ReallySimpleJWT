@@ -2,6 +2,8 @@
 
 /**
  * Simple class that provides an interface for php Base 64 encoding methods
+ *
+ * @author Rob Waller <rdwaller1984@gmail.com>
  */
 class Base64
 {
@@ -12,7 +14,7 @@ class Base64
      *
      * @return string
      */
-    public static function encode($string)
+    public static function encode(string $string): string
     {
         return base64_encode($string);
     }
@@ -24,7 +26,7 @@ class Base64
      *
      * @return string
      */
-    public static function decode($base64String)
+    public static function decode(string $base64String): string
     {
         return base64_decode($base64String);
     }

@@ -1,96 +1,97 @@
 <?php
- 
+
 use ReallySimpleJWT\TokenBuilder;
-use Carbon\Carbon; 
+use Carbon\Carbon;
+use PHPUnit\Framework\TestCase;
 
-class TokenBuilderTest extends PHPUnit_Framework_TestCase {
+class TokenBuilderTest extends TestCase
+{
+    public function testGetHash()
+    {
+        $builder = new TokenBuilder();
 
-	public function testGetHash()
-	{
-		$builder = new TokenBuilder();
+        $this->assertNotEmpty($builder->getHash());
+    }
 
-		$this->assertNotEmpty($builder->getHash());
-	}
+    public function testGetType()
+    {
+        $builder = new TokenBuilder();
 
-	public function testGetType()
-	{
-		$builder = new TokenBuilder();
+        $this->assertNotEmpty($builder->getType());
+    }
 
-		$this->assertNotEmpty($builder->getType());
-	}
+    public function testGetHeader()
+    {
+        $builder = new TokenBuilder();
 
-	public function testGetHeader()
-	{
-		$builder = new TokenBuilder();
+        $header = $builder->getHeader();
 
-		$header = $builder->getHeader();
+        $this->assertNotEmpty($header);
 
-		$this->assertNotEmpty($header);	
+        $this->assertEquals("HS256", json_decode($header)->alg);
 
-		$this->assertEquals("HS256", json_decode($header)->alg);
+        $this->assertEquals("JWT", json_decode($header)->typ);
+    }
 
-		$this->assertEquals("JWT", json_decode($header)->typ);	
-	}
+    public function testSetSecret()
+    {
+        $builder = new TokenBuilder();
 
-	public function testSetSecret()
-	{
-		$builder = new TokenBuilder();
+        $secret = $builder->setSecret('abcDEFhij123*');
 
-		$secret = $builder->setSecret('123');
+        $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $secret);
 
-		$this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $secret);
+        $this->assertEquals('abcDEFhij123*', $secret->getSecret());
+    }
 
-		$this->assertEquals('123', $secret->getSecret());
-	}
+    public function testSetExpiration()
+    {
+        $builder = new TokenBuilder();
 
-	public function testSetExpiration()
-	{
-		$builder = new TokenBuilder();
+        $expiration = $builder->setExpiration(Carbon::now()->addMinutes(10)->toDateTimeString());
 
-		$expiration = $builder->setExpiration(Carbon::now()->addMinutes(10)->toDateTimeString());
+        $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $expiration);
 
-		$this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $expiration);
+        $this->assertInstanceOf('Carbon\Carbon', $expiration->getExpiration());
+    }
 
-		$this->assertInstanceOf('Carbon\Carbon', $expiration->getExpiration());
-	}
+    public function testSetIssuer()
+    {
+        $builder = new TokenBuilder();
 
-	public function testSetIssuer()
-	{
-		$builder = new TokenBuilder();
+        $issuer = $builder->setIssuer('http://127.0.0.1');
 
-		$issuer = $builder->setIssuer('http://127.0.0.1');
+        $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $issuer);
 
-		$this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $issuer);
+        $this->assertEquals('http://127.0.0.1', $issuer->getIssuer());
+    }
 
-		$this->assertEquals('http://127.0.0.1', $issuer->getIssuer());
-	}
+    public function testGetPayload()
+    {
+        $dateTime = Carbon::now()->addMinutes(10)->toDateTimeString();
 
-	public function testGetPayload()
-	{
-		$dateTime = Carbon::now()->addMinutes(10)->toDateTimeString();
+        $builder = new TokenBuilder();
 
-		$builder = new TokenBuilder();
+        $payload = $builder->setIssuer('http://127.0.0.1')
+            ->setExpiration($dateTime)
+            ->addPayload(['key' => 'user_id', 'value' => 2]);
 
-		$payload = $builder->setIssuer('http://127.0.0.1')
-			->setExpiration($dateTime)
-			->addPayload('user_id', 2);
+        $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $payload);
 
-		$this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $payload);
+        $payload = $payload->getPayload();
 
-		$payload = $payload->getPayload();
+        $this->assertNotEmpty($payload);
 
-		$this->assertNotEmpty($payload);
+        $this->assertEquals(2, json_decode($payload)->user_id);
 
-		$this->assertEquals(2, json_decode($payload)->user_id);
+        $this->assertEquals("http://127.0.0.1", json_decode($payload)->iss);
 
-		$this->assertEquals("http://127.0.0.1", json_decode($payload)->iss);
+        $this->assertEquals("", json_decode($payload)->sub);
 
-		$this->assertEquals("", json_decode($payload)->sub);
+        $this->assertEquals($dateTime, json_decode($payload)->exp);
 
-		$this->assertEquals($dateTime, json_decode($payload)->exp);
-
-		$this->assertEquals("", json_decode($payload)->aud);
-	}
+        $this->assertEquals("", json_decode($payload)->aud);
+    }
 
     public function testGetMultiPayload()
     {
@@ -100,9 +101,9 @@ class TokenBuilderTest extends PHPUnit_Framework_TestCase {
 
         $payload = $builder->setIssuer('http://127.0.0.1')
             ->setExpiration($dateTime)
-            ->addPayload('user_id', 2)
-            ->addPayload('username', 'rob1')
-            ->addPayload('description', 'A great guy');
+            ->addPayload(['key' => 'user_id', 'value' => 2])
+            ->addPayload(['key' => 'username', 'value' => 'rob1'])
+            ->addPayload(['key' => 'description', 'value' => 'A great guy']);
 
         $payload = $payload->getPayload();
 
@@ -111,95 +112,166 @@ class TokenBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('A great guy', json_decode($payload)->description);
     }
 
-	public function testBuild()
-	{
-		$dateTime = Carbon::now()->addMinutes(10)->toDateTimeString();
+    public function testBuild()
+    {
+        $dateTime = Carbon::now()->addMinutes(10)->toDateTimeString();
 
-		$builder = new TokenBuilder();
+        $builder = new TokenBuilder();
 
-		$token = $builder->setIssuer('http://127.0.0.1')
-			->setExpiration($dateTime)
-			->setSecret('123ABC')
-			->addPayload('user_id', 2)
-			->build();
+        $token = $builder->setIssuer('http://127.0.0.1')
+            ->setExpiration($dateTime)
+            ->setSecret('123ABC!kjhiop')
+            ->addPayload(['key' => 'user_id', 'value' => 2])
+            ->build();
 
-		$this->assertNotEmpty($token);
+        $this->assertNotEmpty($token);
 
-		$this->assertStringMatchesFormat('%s.%s.%s', $token);
-	}
+        $this->assertStringMatchesFormat('%s.%s.%s', $token);
+    }
 
-	/**
-	 * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
-	 */
-	public function testBuildFail()
-	{
-		$builder = new TokenBuilder();
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Token cannot be built please add a payload, including an issuer and an expiration.
+     */
+    public function testBuildFail()
+    {
+        $builder = new TokenBuilder();
 
-		$builder->build();
-	} 
+        $builder->build();
+    }
 
-	/**
-	 * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
-	 */
-	public function testBuildFailIssuer()
-	{
-		$builder = new TokenBuilder();
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Token cannot be built please add a payload, including an issuer and an expiration.
+     */
+    public function testBuildFailIssuer()
+    {
+        $builder = new TokenBuilder();
 
-		$builder->setExpiration(Carbon::now()->addMinutes(10)->toDateTimeString())
-			->build();
-	}
+        $builder->setExpiration(Carbon::now()->addMinutes(10)->toDateTimeString())
+            ->build();
+    }
 
-	/**
-	 * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
-	 */
-	public function testBuildFailureSecret()
-	{
-		$builder = new TokenBuilder();
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Token secret not set, please add a secret to increase security
+     */
+    public function testBuildFailureSecret()
+    {
+        $builder = new TokenBuilder();
 
-		$builder->setExpiration(Carbon::now()->addMinutes(10)->toDateTimeString())
-			->setIssuer('127.0.0.1')
-			->build();
-	}
+        $builder->setExpiration(Carbon::now()->addMinutes(10)->toDateTimeString())
+            ->setIssuer('127.0.0.1')
+            ->build();
+    }
 
-	/**
-	 * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
-	 */
-	public function testBuildFailureExpirationOld()
-	{
-		$builder = new TokenBuilder();
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Token expiration date has already expired, please set a future expiration date
+     */
+    public function testBuildFailureExpirationOld()
+    {
+        $builder = new TokenBuilder();
 
-		$builder->setExpiration(Carbon::now()->subMinutes(2)->toDateTimeString())
-			->setSecret('123ABC')
-			->addPayload('user_id', 2)
-			->setIssuer('127.0.0.1')
-			->build();
-	}
+        $builder->setExpiration(Carbon::now()->subMinutes(2)->toDateTimeString())
+            ->setSecret('&123ABCuytHj7')
+            ->addPayload(['key' => 'user_id', 'value' => 2])
+            ->setIssuer('127.0.0.1')
+            ->build();
+    }
 
-	/**
-	 * @expectedException ReallySimpleJWT\Exception\TokenDateException
-	 */
-	public function testBuildFailureExpirationInvalid()
-	{
-		$builder = new TokenBuilder();
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenDateException
+     * @expectedExceptionMessageRegExp |^The date time string \[.*\] you attempted to parse is invalid\.$|
+     */
+    public function testBuildFailureExpirationInvalid()
+    {
+        $builder = new TokenBuilder();
 
-		$builder->setExpiration('Hello World')
-			->setSecret('123ABC')
-			->addPayload('user_id', 2)
-			->setIssuer('127.0.0.1')
-			->build();
-	}
+        $builder->setExpiration('Hello World')
+            ->setSecret('!%123ABC!&jkfds')
+            ->addPayload(['key' => 'user_id', 'value' => 2])
+            ->setIssuer('127.0.0.1')
+            ->build();
+    }
 
-	/**
-	 * @expectedException ReallySimpleJWT\Exception\TokenDateException
-	 */
-	public function testBuildFailureExpirationEmpty()
-	{
-		$builder = new TokenBuilder();
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenDateException
+     * @expectedExceptionMessageRegExp |^The date time string \[.*\] you attempted to parse is empty\.$|
+     */
+    public function testBuildFailureExpirationEmpty()
+    {
+        $builder = new TokenBuilder();
 
-		$builder->setExpiration('')
-			->setSecret('123ABC')
-			->addPayload('user_id', 2)
-			->setIssuer('127.0.0.1')
-			->build();
-	}
+        $builder->setExpiration('')
+            ->setSecret('123!!&&ABCasJU90oj')
+            ->addPayload(['key' => 'user_id', 'value' => 2])
+            ->setIssuer('127.0.0.1')
+            ->build();
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Failed to add payload, format wrong. Array must contain key and value.
+     */
+    public function testBadPayload()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->addPayload(['car' => 'user_id', 'value' => 2]);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Failed to add payload, format wrong. Array must contain key and value.
+     */
+    public function testBadPayloadOne()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->addPayload(['key' => 'user_id', 'park' => 2]);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Failed to add payload, format wrong. Array must contain key and value.
+     */
+    public function testBadPayloadTwo()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->addPayload(['car' => 'user_id', 'park' => 2]);
+    }
+
+    public function testSetSubject()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->setSubject('Cars');
+
+        $this->assertEquals('Cars', $builder->getSubject());
+    }
+
+    public function testGetNoSubject()
+    {
+        $builder = new TokenBuilder();
+
+        $this->assertEquals('', $builder->getSubject());
+    }
+
+    public function testSetAudience()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->setAudience('People');
+
+        $this->assertEquals('People', $builder->getAudience());
+    }
+
+    public function testGetNoAudience()
+    {
+        $builder = new TokenBuilder();
+
+        $this->assertEquals('', $builder->getAudience());
+    }
 }

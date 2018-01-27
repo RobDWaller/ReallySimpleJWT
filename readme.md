@@ -4,13 +4,25 @@
 A simple package for creating JSON Web Tokens that uses HMAC SHA256 to sign
 signatures. Exposes a simple interface to allow you to create a token that stores a user identifier. The package is set up to allow extension and the use of larger payloads.
 
+## What is a JSON Web Token?
+
+JSON Web Tokens is a standard for creating URL friendly access tokens that assert claims about a user or system. They are broken down into three parts; the header, the payload and the signature; with each part separated by a dot.
+
+For example:
+
+```
+aaa.bbb.ccc
+```
+
+Security is achieved via the signature which is made up of the header, payload and a secret known only to the token author.
+
 For more information on JSON Web Tokens please see https://jwt.io
 
 ## Usage
 
 ### Get Token
 
-Call the get token method and pass in user identifier, key secret, expiration 
+Call the get token method and pass in user identifier, key secret, expiration
 date time string and the token issuer.
 
 Will return a token string on success and throw an exception on failure.
@@ -25,7 +37,7 @@ $token = Token::getToken('userIdentifier', 'secret', 'dateTimeString', 'issuerId
 
 ### Validate Token
 
-Call the validate method, pass in your token string and the key secret. 
+Call the validate method, pass in your token string and the key secret.
 
 Will return boolean true on success and throw an exception on failure.
 
@@ -37,7 +49,19 @@ use ReallySimpleJWT\Token;
 $result = Token::validate('token', 'secret');
 ```
 
-### Advanced Usage
+### Get Payload
+
+To retrieve the token payload call the `getPayload()` method.
+
+Will return a JSON string on success and throw an exception on failure.
+
+```php
+use ReallySimpleJWT\Token;
+
+$result = Token::getPayload('token');
+```
+
+## Advanced Usage
 
 If you would like to access the token builder interface directly simply instantiate the TokenBuilder class.
 
@@ -51,7 +75,7 @@ use ReallySimpleJWT\TokenBuilder;
 $builder = new TokenBuilder();
 
 $token = $builder->addPayload('key', 'value')
-    ->addPayload('key', 'value')
+    ->addPayload(['key' => 'foo', 'value' => 'bar'])
     ->setSecret($secret)
     ->setExpiration($expiration)
     ->setIssuer($issuer)
@@ -70,11 +94,25 @@ $validator = new TokenValidator;
 $validator->splitToken('token string')
     ->validateExpiration()
     ->validateSignature('secret');
-        
+
 $payload = $validator->getPayload();
 
 $header = $validator->getHeader();
 ```
+
+## Secret Key Security
+
+This JWT generator imposes secret security as follows: the secret must be at least 12 characters in length; contain numbers; upper and lowercase letters; and the one of the following special characters `*&!@%^#$`.
+
+```php
+// Bad Secret
+secret123
+
+// Good Secret
+sec!ReT423*&
+```
+
+The reason for this is that there are lots of [JWT Crackers](https://github.com/lmammino/jwt-cracker) available meaning weak secrets are easy to crack thus rendering the security JWT offers useless.
 
 ## License
 
