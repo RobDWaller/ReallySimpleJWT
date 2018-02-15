@@ -6,11 +6,13 @@ use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\DateTime;
 use Carbon\Carbon;
 use ReallySimpleJWT\Helper\Secret;
+use ReallySimpleJWT\TokenObject;
 
 /**
  * Class that generates a JSON Web Token, uses HS256 to generate the signature
  *
  * @author Rob Waller <rdwaller1984@gmail.com>
+ * @todo Conceptually this class is wrong it needs to abstracted to a proper builder pattern
  */
 class TokenBuilder extends TokenAbstract
 {
@@ -289,9 +291,13 @@ class TokenBuilder extends TokenAbstract
      */
     public function build(): string
     {
-        return $this->encodeHeader() . "." .
+        $jwt = $this->encodeHeader() . "." .
             $this->encodePayload() . "." .
             $this->getSignature()->get();
+
+        $this->tearDown();
+
+        return $jwt;
     }
 
     /**
@@ -302,5 +308,20 @@ class TokenBuilder extends TokenAbstract
     private function hasOldExpiration(): bool
     {
         return DateTime::olderThan(DateTime::now(), DateTime::parse($this->expiration));
+    }
+
+    /**
+     * This method is a fix to allow the creation of multiple tokens at the same
+     * time. It is essentially a flawed but working approach. This class needs
+     * to be rebuilt in the 2.0.0 release.
+     */
+    private function tearDown()
+    {
+        $this->payload = [];
+        $this->secret = null;
+        $this->expiration = null;
+        $this->issuer = null;
+        $this->subject = null;
+        $this->audience = null;
     }
 }
