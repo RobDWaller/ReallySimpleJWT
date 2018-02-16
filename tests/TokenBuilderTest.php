@@ -3,6 +3,7 @@
 use ReallySimpleJWT\TokenBuilder;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
+use ReallySimpleJWT\Token;
 
 class TokenBuilderTest extends TestCase
 {
@@ -273,5 +274,68 @@ class TokenBuilderTest extends TestCase
         $builder = new TokenBuilder();
 
         $this->assertEquals('', $builder->getAudience());
+    }
+
+
+    public function testAddDuplicatePayloadKey()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->setIssuer('127.0.0.1')
+            ->setExpiration(Carbon::now()->addMinutes(10)->toDateTimeString())
+            ->addPayload(['key' => 'id', 'value' => 'hello'])
+            ->addPayload(['key' => 'id', 'value' => 'world']);
+
+        $this->assertEquals('world', json_decode($builder->getPayload())->id);
+    }
+
+    public function testCreateMultipleTokens()
+    {
+        $builder = new TokenBuilder();
+
+        $jwt1 = $builder->setIssuer('127.0.0.1')
+            ->setSecret('123ABC*$def456')
+            ->setExpiration(Carbon::now()->addMinutes(10)->toDateTimeString())
+            ->addPayload(['key' => 'id', 'value' => 'hello'])
+            ->build();
+
+        $jwt2 = $builder->setIssuer('127.0.0.1')
+            ->setSecret('123ABC*$def456')
+            ->setExpiration(Carbon::now()->addMinutes(20)->toDateTimeString())
+            ->addPayload(['key' => 'id', 'value' => 'hello'])
+            ->build();
+
+        $this->assertNotEquals($jwt1, $jwt2);
+    }
+
+    public function testCreateMultipleTokensCheckPayloads()
+    {
+        $builder = new TokenBuilder();
+
+        $time1 = Carbon::now()->addMinutes(10)->toDateTimeString();
+        $time2 = Carbon::now()->addMinutes(19)->toDateTimeString();
+
+        $jwt1 = $builder->setIssuer('127.0.0.1')
+            ->setSecret('123ABC*$def456')
+            ->setExpiration($time1)
+            ->addPayload(['key' => 'id', 'value' => 'hello'])
+            ->build();
+
+        $jwt2 = $builder->setIssuer('localhost')
+            ->setSecret('123ABC*$def456')
+            ->setExpiration($time2)
+            ->addPayload(['key' => 'id', 'value' => 'world'])
+            ->build();
+
+        $this->assertNotEquals($jwt1, $jwt2);
+
+        $payload1 = json_decode(Token::getPayload($jwt1));
+        $payload2 = json_decode(Token::getPayload($jwt2));
+
+        $this->assertNotEquals($payload1->id, $payload2->id);
+        $this->assertNotEquals($payload1->exp, $payload2->exp);
+
+        $this->assertEquals($payload1->id, 'hello');
+        $this->assertEquals($payload2->id, 'world');
     }
 }

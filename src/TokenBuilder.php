@@ -283,15 +283,19 @@ class TokenBuilder extends TokenAbstract
     }
 
     /**
-     * Build and return the JSON Web Token
+     * Build and return the JSON Web Token, then tear down / reset class
      *
      * @return string
      */
     public function build(): string
     {
-        return $this->encodeHeader() . "." .
+        $jwt = $this->encodeHeader() . "." .
             $this->encodePayload() . "." .
             $this->getSignature()->get();
+
+        $this->tearDown();
+
+        return $jwt;
     }
 
     /**
@@ -302,5 +306,18 @@ class TokenBuilder extends TokenAbstract
     private function hasOldExpiration(): bool
     {
         return DateTime::olderThan(DateTime::now(), DateTime::parse($this->expiration));
+    }
+
+    /**
+     * This method resets the class state after the build method is called.
+     */
+    private function tearDown()
+    {
+        $this->payload = [];
+        $this->secret = null;
+        $this->expiration = null;
+        $this->issuer = null;
+        $this->subject = null;
+        $this->audience = null;
     }
 }
