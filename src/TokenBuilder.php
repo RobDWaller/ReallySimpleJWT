@@ -12,7 +12,6 @@ use ReallySimpleJWT\TokenObject;
  * Class that generates a JSON Web Token, uses HS256 to generate the signature
  *
  * @author Rob Waller <rdwaller1984@gmail.com>
- * @todo Conceptually this class is wrong it needs to abstracted to a proper builder pattern
  */
 class TokenBuilder extends TokenAbstract
 {
@@ -285,7 +284,7 @@ class TokenBuilder extends TokenAbstract
     }
 
     /**
-     * Build and return the JSON Web Token
+     * Build and return the JSON Web Token, then tear down / reset class
      *
      * @return string
      */
@@ -311,9 +310,7 @@ class TokenBuilder extends TokenAbstract
     }
 
     /**
-     * This method is a fix to allow the creation of multiple tokens at the same
-     * time. It is essentially a flawed but working approach. This class needs
-     * to be rebuilt in the 2.0.0 release.
+     * This method resets the class state after the build method is called.
      */
     private function tearDown()
     {
