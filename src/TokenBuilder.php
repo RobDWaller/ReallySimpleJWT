@@ -6,7 +6,6 @@ use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\DateTime;
 use Carbon\Carbon;
 use ReallySimpleJWT\Helper\Secret;
-use ReallySimpleJWT\TokenObject;
 
 /**
  * Class that generates a JSON Web Token, uses HS256 to generate the signature
