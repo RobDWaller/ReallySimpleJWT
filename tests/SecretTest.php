@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use ReallySimpleJWT\Helper\Secret;
 use PHPUnit\Framework\TestCase;
 

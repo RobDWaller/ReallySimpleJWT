@@ -15,13 +15,15 @@
         "nesbot/carbon": "1.22.*"
     },
     "require-dev": {
-    	"phpunit/phpunit": "6.5.*"
+    	"phpunit/phpunit": "6.5.*",
+        "phpstan/phpstan": "0.9.*"
     },
     "autoload": {
         "psr-4": {
             "ReallySimpleJWT\\": "src",
             "ReallySimpleJWT\\Helper\\": "src/Helper",
-            "ReallySimpleJWT\\Exception\\": "src/Exception"
+            "ReallySimpleJWT\\Exception\\": "src/Exception",
+            "Tests\\": "tests"
         }
     }
 }

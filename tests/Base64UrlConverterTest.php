@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use ReallySimpleJWT\Helper\Base64UrlConverter;
 use PHPUnit\Framework\TestCase;
 

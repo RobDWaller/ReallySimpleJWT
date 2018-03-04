@@ -25,7 +25,7 @@ class Token
      */
     public static function getToken($userId, string $secret, string $expiration, string $issuer): string
     {
-        $builder = Self::builder();
+        $builder = self::builder();
 
         return $builder->addPayload(['key' => 'user_id', 'value' => $userId])
             ->setSecret($secret)
@@ -44,7 +44,7 @@ class Token
      */
     public static function validate(string $token, string $secret): bool
     {
-        $validator = Self::validator();
+        $validator = self::validator();
 
         return $validator->splitToken($token)
             ->validateExpiration()
@@ -61,7 +61,7 @@ class Token
      */
     public static function getPayload(string $token): string
     {
-        $validator = Self::validator();
+        $validator = self::validator();
 
         return $validator->splitToken($token)
             ->getPayload();

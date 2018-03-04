@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use ReallySimpleJWT\Token;
 use ReallySimpleJWT\TokenValidator;
 use ReallySimpleJWT\TokenBuilder;

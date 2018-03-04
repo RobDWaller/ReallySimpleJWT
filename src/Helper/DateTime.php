@@ -29,7 +29,7 @@ class DateTime
      */
     public static function parse(string $dateTimeString): Carbon
     {
-        Self::isEmptyDateTimeString($dateTimeString);
+        self::isEmptyDateTimeString($dateTimeString);
 
         try {
             return Carbon::parse($dateTimeString);
