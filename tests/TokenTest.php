@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use ReallySimpleJWT\Token;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;

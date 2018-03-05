@@ -31,7 +31,7 @@ class TokenBuilder extends TokenAbstract
     /**
      * Payload expiration date time string
      *
-     * @var Carbon\Carbon
+     * @var Carbon
      */
     private $expiration;
 
@@ -93,7 +93,7 @@ class TokenBuilder extends TokenAbstract
      * Check the expiration object is valid and return the JWT expiration
      * attribute as a Carbon object
      *
-     * @return Carbon\Carbon
+     * @return Carbon
      */
     public function getExpiration(): Carbon
     {
@@ -314,10 +314,10 @@ class TokenBuilder extends TokenAbstract
     private function tearDown()
     {
         $this->payload = [];
-        $this->secret = null;
-        $this->expiration = null;
-        $this->issuer = null;
-        $this->subject = null;
-        $this->audience = null;
+        $this->secret = '';
+        $this->expiration = new Carbon;
+        $this->issuer = '';
+        $this->subject = '';
+        $this->audience = '';
     }
 }

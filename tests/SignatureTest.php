@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use ReallySimpleJWT\Helper\Signature;
 use PHPUnit\Framework\TestCase;
 

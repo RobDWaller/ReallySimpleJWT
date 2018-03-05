@@ -74,8 +74,7 @@ use ReallySimpleJWT\TokenBuilder;
 
 $builder = new TokenBuilder();
 
-$token = $builder->addPayload('key', 'value')
-    ->addPayload(['key' => 'foo', 'value' => 'bar'])
+$token = $builder->addPayload(['key' => 'foo', 'value' => 'bar'])
     ->setSecret($secret)
     ->setExpiration($expiration)
     ->setIssuer($issuer)
