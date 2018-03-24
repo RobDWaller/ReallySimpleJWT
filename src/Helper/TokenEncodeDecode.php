@@ -17,11 +17,11 @@ class TokenEncodeDecode
      *
      * @return string
      */
-    public static function encode(string $JSONTokenString): string
+    public static function encode(string $jsonTokenString): string
     {
         $base64Url = new Base64UrlConverter();
 
-        return $base64Url->setBase64String(Base64::encode($JSONTokenString))
+        return $base64Url->setBase64String(Base64::encode($jsonTokenString))
             ->toBase64Url()
             ->getBase64UrlString();
     }
