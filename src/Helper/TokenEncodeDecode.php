@@ -13,7 +13,7 @@ class TokenEncodeDecode
     /**
      * Encode a JSON string to a base64 Url string
      *
-     * @param string $JSONTokenString
+     * @param string $jsonTokenString
      *
      * @return string
      */

@@ -12,7 +12,6 @@ class Hmac
      * @param string $hash
      * @param string $string
      * @param string $secret
-     * @param bool $output
      *
      * @return string
      */
