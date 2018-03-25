@@ -7,17 +7,16 @@
 class Hmac
 {
     /**
-     * Hash a string
+     * Hash a string and always return the output as raw binary.
      *
      * @param string $hash
      * @param string $string
      * @param string $secret
-     * @param bool $output
      *
      * @return string
      */
-    public static function hash(string $hash, string $string, string $secret, bool $output = true): string
+    public static function hash(string $hash, string $string, string $secret): string
     {
-        return hash_hmac($hash, $string, $secret, $output);
+        return hash_hmac($hash, $string, $secret, true);
     }
 }

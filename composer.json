@@ -16,7 +16,8 @@
     },
     "require-dev": {
     	"phpunit/phpunit": "6.5.*",
-        "phpstan/phpstan": "0.9.*"
+        "phpstan/phpstan": "0.9.*",
+        "phpmd/phpmd": "2.6.*"
     },
     "autoload": {
         "psr-4": {
