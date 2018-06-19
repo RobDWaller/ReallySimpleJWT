@@ -20,6 +20,17 @@ class DateTime
     }
 
     /**
+     * Return a Carbon object based a unix timestamp
+     *
+     * @param int $timestamp
+     * @return Carbon
+     */
+    public static function createFromTimestamp(int $timestamp): Carbon
+    {
+        return Carbon::createFromTimestamp($timestamp);
+    }
+
+    /**
      * Parse a date time string and return a Carbon object based on the date
      * time string.
      *

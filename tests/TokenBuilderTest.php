@@ -71,12 +71,12 @@ class TokenBuilderTest extends TestCase
 
     public function testGetPayload()
     {
-        $dateTime = Carbon::now()->addMinutes(10)->toDateTimeString();
+        $dateTime = Carbon::now()->addMinutes(10);
 
         $builder = new TokenBuilder();
 
         $payload = $builder->setIssuer('http://127.0.0.1')
-            ->setExpiration($dateTime)
+            ->setExpiration($dateTime->toDateTimeString())
             ->addPayload(['key' => 'user_id', 'value' => 2]);
 
         $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $payload);
@@ -91,9 +91,24 @@ class TokenBuilderTest extends TestCase
 
         $this->assertEquals("", json_decode($payload)->sub);
 
-        $this->assertEquals($dateTime, json_decode($payload)->exp);
+        $this->assertEquals($dateTime->getTimestamp(), json_decode($payload)->exp);
 
         $this->assertEquals("", json_decode($payload)->aud);
+    }
+
+    public function testGetPayloadWithTimestamp()
+    {
+        $dateTime = Carbon::now()->addMinutes(10);
+
+        $builder = new TokenBuilder();
+
+        $payload = $builder->setIssuer('http://127.0.0.1')
+            ->setExpiration($dateTime->getTimestamp())
+            ->addPayload(['key' => 'user_id', 'value' => 2]);
+
+        $payload = $payload->getPayload();
+
+        $this->assertEquals($dateTime->getTimestamp(), json_decode($payload)->exp);
     }
 
     public function testGetMultiPayload()
