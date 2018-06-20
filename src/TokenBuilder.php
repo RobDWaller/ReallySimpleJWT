@@ -220,7 +220,7 @@ class TokenBuilder extends TokenAbstract
     public function setExpiration($expiration): TokenBuilder
     {
         if (is_numeric($expiration)) {
-            $this->expiration = DateTime::createFromTimestamp($expiration);
+            $this->expiration = DateTime::createFromTimestamp((int) $expiration);
             return $this;
         }
 
