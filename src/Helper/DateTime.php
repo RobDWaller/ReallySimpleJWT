@@ -20,7 +20,7 @@ class DateTime
     }
 
     /**
-     * Return a Carbon object based a unix timestamp
+     * Return a Carbon object based on a unix timestamp
      *
      * @param int $timestamp
      * @return Carbon

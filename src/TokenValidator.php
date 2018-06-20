@@ -88,11 +88,9 @@ class TokenValidator extends TokenAbstract
      */
     private function parseExpiration($expiration): Carbon
     {
-        if (is_numeric($this->getExpiration())) {
-            return DateTime::createFromTimestamp($expiration);
-        }
-
-        return DateTime::parse($expiration);
+        return is_numeric($this->getExpiration()) ?
+            DateTime::createFromTimestamp($expiration) :
+            DateTime::parse($expiration);
     }
 
     /**
