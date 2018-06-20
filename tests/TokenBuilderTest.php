@@ -31,9 +31,9 @@ class TokenBuilderTest extends TestCase
 
         $this->assertNotEmpty($header);
 
-        $this->assertEquals("HS256", json_decode($header)->alg);
+        $this->assertSame("HS256", json_decode($header)->alg);
 
-        $this->assertEquals("JWT", json_decode($header)->typ);
+        $this->assertSame("JWT", json_decode($header)->typ);
     }
 
     public function testSetSecret()
@@ -44,7 +44,7 @@ class TokenBuilderTest extends TestCase
 
         $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $secret);
 
-        $this->assertEquals('abcDEFhij123*', $secret->getSecret());
+        $this->assertSame('abcDEFhij123*', $secret->getSecret());
     }
 
     public function testSetExpiration()
@@ -77,7 +77,7 @@ class TokenBuilderTest extends TestCase
 
         $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $issuer);
 
-        $this->assertEquals('http://127.0.0.1', $issuer->getIssuer());
+        $this->assertSame('http://127.0.0.1', $issuer->getIssuer());
     }
 
     public function testGetPayload()
@@ -96,15 +96,15 @@ class TokenBuilderTest extends TestCase
 
         $this->assertNotEmpty($payload);
 
-        $this->assertEquals(2, json_decode($payload)->user_id);
+        $this->assertSame(2, json_decode($payload)->user_id);
 
-        $this->assertEquals("http://127.0.0.1", json_decode($payload)->iss);
+        $this->assertSame("http://127.0.0.1", json_decode($payload)->iss);
 
-        $this->assertEquals("", json_decode($payload)->sub);
+        $this->assertSame("", json_decode($payload)->sub);
 
-        $this->assertEquals($dateTime->getTimestamp(), json_decode($payload)->exp);
+        $this->assertSame($dateTime->getTimestamp(), json_decode($payload)->exp);
 
-        $this->assertEquals("", json_decode($payload)->aud);
+        $this->assertSame("", json_decode($payload)->aud);
     }
 
     public function testGetPayloadWithTimestamp()
@@ -119,7 +119,7 @@ class TokenBuilderTest extends TestCase
 
         $payload = $payload->getPayload();
 
-        $this->assertEquals($dateTime->getTimestamp(), json_decode($payload)->exp);
+        $this->assertSame($dateTime->getTimestamp(), json_decode($payload)->exp);
     }
 
     public function testGetMultiPayload()
@@ -136,9 +136,9 @@ class TokenBuilderTest extends TestCase
 
         $payload = $payload->getPayload();
 
-        $this->assertEquals('rob1', json_decode($payload)->username);
+        $this->assertSame('rob1', json_decode($payload)->username);
 
-        $this->assertEquals('A great guy', json_decode($payload)->description);
+        $this->assertSame('A great guy', json_decode($payload)->description);
     }
 
     public function testBuild()
@@ -278,14 +278,14 @@ class TokenBuilderTest extends TestCase
 
         $builder->setSubject('Cars');
 
-        $this->assertEquals('Cars', $builder->getSubject());
+        $this->assertSame('Cars', $builder->getSubject());
     }
 
     public function testGetNoSubject()
     {
         $builder = new TokenBuilder();
 
-        $this->assertEquals('', $builder->getSubject());
+        $this->assertSame('', $builder->getSubject());
     }
 
     public function testSetAudience()
@@ -294,14 +294,14 @@ class TokenBuilderTest extends TestCase
 
         $builder->setAudience('People');
 
-        $this->assertEquals('People', $builder->getAudience());
+        $this->assertSame('People', $builder->getAudience());
     }
 
     public function testGetNoAudience()
     {
         $builder = new TokenBuilder();
 
-        $this->assertEquals('', $builder->getAudience());
+        $this->assertSame('', $builder->getAudience());
     }
 
 
@@ -314,7 +314,7 @@ class TokenBuilderTest extends TestCase
             ->addPayload(['key' => 'id', 'value' => 'hello'])
             ->addPayload(['key' => 'id', 'value' => 'world']);
 
-        $this->assertEquals('world', json_decode($builder->getPayload())->id);
+        $this->assertSame('world', json_decode($builder->getPayload())->id);
     }
 
     public function testCreateMultipleTokens()
@@ -363,7 +363,7 @@ class TokenBuilderTest extends TestCase
         $this->assertNotEquals($payload1->id, $payload2->id);
         $this->assertNotEquals($payload1->exp, $payload2->exp);
 
-        $this->assertEquals($payload1->id, 'hello');
-        $this->assertEquals($payload2->id, 'world');
+        $this->assertSame($payload1->id, 'hello');
+        $this->assertSame($payload2->id, 'world');
     }
 }

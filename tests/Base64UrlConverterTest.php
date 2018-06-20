@@ -15,7 +15,7 @@ class Base64UrlConverterTest extends TestCase
                             ->toBase64Url()
                             ->getBase64UrlString();
 
-        $this->assertEquals('fh778-djfu_90pds', $base64UrlString);
+        $this->assertSame('fh778-djfu_90pds', $base64UrlString);
     }
 
     public function testBase64Converter()
@@ -26,7 +26,7 @@ class Base64UrlConverterTest extends TestCase
                             ->toBase64()
                             ->getBase64String();
 
-        $this->assertEquals('fh778+djfu/90pds', $base64String);
+        $this->assertSame('fh778+djfu/90pds', $base64String);
     }
 
     public function testBase64Padding()
@@ -43,7 +43,7 @@ class Base64UrlConverterTest extends TestCase
                             ->toBase64()
                             ->getBase64String();
 
-        $this->assertEquals($base64String, $newBase64String);
+        $this->assertSame($base64String, $newBase64String);
     }
 
     public function testBase64PaddingTwo()
@@ -60,7 +60,7 @@ class Base64UrlConverterTest extends TestCase
                             ->toBase64()
                             ->getBase64String();
 
-        $this->assertEquals($base64String, $newBase64String);
+        $this->assertSame($base64String, $newBase64String);
     }
 
     public function testBase64PaddingThree()
@@ -77,6 +77,6 @@ class Base64UrlConverterTest extends TestCase
                             ->toBase64()
                             ->getBase64String();
 
-        $this->assertEquals($base64String, $newBase64String);
+        $this->assertSame($base64String, $newBase64String);
     }
 }

@@ -51,7 +51,7 @@ class TokenTest extends TestCase
             'http://127.0.0.1'
         );
 
-        $this->assertEquals('abdY', json_decode(Token::getPayload($token))->user_id);
+        $this->assertSame('abdY', json_decode(Token::getPayload($token))->user_id);
     }
 
     /**

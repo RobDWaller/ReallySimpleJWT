@@ -42,7 +42,7 @@ class TokenValidatorTest extends TestCase
         $payload = $validator->splitToken($tokenString)
             ->getPayload();
 
-        $this->assertEquals('twelve123', json_decode($payload)->user_id);
+        $this->assertSame('twelve123', json_decode($payload)->user_id);
     }
 
     public function testGetMultiPayload()
@@ -67,9 +67,9 @@ class TokenValidatorTest extends TestCase
 
         $payload = $validator->getPayload();
 
-        $this->assertEquals('rob2', json_decode($payload)->username);
+        $this->assertSame('rob2', json_decode($payload)->username);
 
-        $this->assertEquals('A bad guy', json_decode($payload)->description);
+        $this->assertSame('A bad guy', json_decode($payload)->description);
     }
 
     public function testGetHeader()
@@ -92,9 +92,9 @@ class TokenValidatorTest extends TestCase
 
         $header = $validator->getHeader();
 
-        $this->assertEquals('HS256', json_decode($header)->alg);
+        $this->assertSame('HS256', json_decode($header)->alg);
 
-        $this->assertEquals('JWT', json_decode($header)->typ);
+        $this->assertSame('JWT', json_decode($header)->typ);
     }
 
     public function testValidateExpiration()
@@ -294,7 +294,7 @@ class TokenValidatorTest extends TestCase
         );
 
         $this->assertInstanceOf(\stdClass::class, $validator->splitToken($tokenString)->getPayloadDecodeJson());
-        $this->assertEquals(326, $validator->splitToken($tokenString)->getPayloadDecodeJson()->user_id);
+        $this->assertSame(326, $validator->splitToken($tokenString)->getPayloadDecodeJson()->user_id);
     }
 
     public function testGetHeaderDecodJson()
@@ -309,6 +309,6 @@ class TokenValidatorTest extends TestCase
         );
 
         $this->assertInstanceOf(\stdClass::class, $validator->splitToken($tokenString)->getHeaderDecodeJson());
-        $this->assertEquals('HS256', $validator->splitToken($tokenString)->getHeaderDecodeJson()->alg);
+        $this->assertSame('HS256', $validator->splitToken($tokenString)->getHeaderDecodeJson()->alg);
     }
 }
