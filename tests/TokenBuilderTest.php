@@ -58,6 +58,17 @@ class TokenBuilderTest extends TestCase
         $this->assertInstanceOf('Carbon\Carbon', $expiration->getExpiration());
     }
 
+    public function testSetExpirationUnixTime()
+    {
+        $builder = new TokenBuilder();
+
+        $expiration = $builder->setExpiration(Carbon::now()->addMinutes(10)->getTimestamp());
+
+        $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', $expiration);
+
+        $this->assertInstanceOf('Carbon\Carbon', $expiration->getExpiration());
+    }
+
     public function testSetIssuer()
     {
         $builder = new TokenBuilder();
