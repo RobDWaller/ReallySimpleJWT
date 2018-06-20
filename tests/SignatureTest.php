@@ -15,7 +15,7 @@ class SignatureTest extends TestCase
 
         $this->assertNotEmpty($signature);
 
-        $this->assertEquals(
+        $this->assertSame(
             str_replace(['=', '/', '+'], ['', '_', '-'], base64_encode(
                 hash_hmac('sha256',
                     str_replace(['=', '/', '+'], ['', '_', '-'], base64_encode('header'))
