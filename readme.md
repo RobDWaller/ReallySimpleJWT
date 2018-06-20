@@ -32,8 +32,12 @@ Will return a token string on success and throw an exception on failure.
 
 use ReallySimpleJWT\Token;
 
-$token = Token::getToken('userIdentifier', 'secret', 'dateTimeString', 'issuerIdentifier');
+$token = Token::getToken('userIdentifier', 'secret', 'dateTimeString' | 'dateTimeNumber', 'issuerIdentifier');
 ```
+
+**Expiration Time Note:** It was [pointed out](https://github.com/RobDWaller/ReallySimpleJWT/issues/13) that the expiration date does not comply with the [JWT RFC](https://tools.ietf.org/html/rfc7519#section-4.1.4). It should output a date time number and not a date time string. eg `exp: 1529495956` not `exp: '2018-06-20 11:59:16'`.
+
+This has been fixed, but to aid backwards compatibility when generating a token you can set the expiration as a date time number or a date time string. The token will now always output with a date time number.
 
 ### Validate Token
 

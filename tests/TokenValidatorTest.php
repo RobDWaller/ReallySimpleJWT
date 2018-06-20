@@ -114,6 +114,23 @@ class TokenValidatorTest extends TestCase
         $this->assertInstanceOf('ReallySimpleJWT\TokenValidator', $payload);
     }
 
+    public function testValidateExpirationWithUnixTimestamp()
+    {
+        $validator = new TokenValidator();
+
+        $tokenString = Token::getToken(
+            'twelve123',
+            'iHateC0c0mBer*&',
+            Carbon::now()->addMinutes(2)->getTimestamp(),
+            'www.mysite.com'
+        );
+
+        $payload = $validator->splitToken($tokenString)
+            ->validateExpiration();
+
+        $this->assertInstanceOf('ReallySimpleJWT\TokenValidator', $payload);
+    }
+
     /**
      * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
      * @expectedExceptionMessage This token has expired!

@@ -5,6 +5,7 @@ use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\DateTime;
 use ReallySimpleJWT\Exception\TokenValidatorException;
 use stdClass;
+use Carbon\Carbon;
 
 /**
  * Class that validates a JSON Web Token based on the HS256 signature and the
@@ -67,15 +68,29 @@ class TokenValidator extends TokenAbstract
      */
     public function validateExpiration(): TokenValidator
     {
-        $now = DateTime::now();
-
-        $expiration = DateTime::parse($this->getExpiration());
-
-        if (DateTime::olderThan($now, $expiration)) {
+        if (
+            DateTime::olderThan(
+                DateTime::now(),
+                $this->parseExpiration($this->getExpiration())
+            )
+        ) {
             throw new TokenValidatorException('This token has expired!');
         }
 
         return $this;
+    }
+
+    /**
+     * Parse the expiration string or integer into a Carbon object
+     *
+     * @param mixed $expiration
+     * @return Carbon
+     */
+    private function parseExpiration($expiration): Carbon
+    {
+        return is_numeric($this->getExpiration()) ?
+            DateTime::createFromTimestamp($expiration) :
+            DateTime::parse($expiration);
     }
 
     /**

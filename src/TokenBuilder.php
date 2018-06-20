@@ -175,7 +175,7 @@ class TokenBuilder extends TokenAbstract
     {
         if (!array_key_exists('iss', $this->payload)) {
             $this->payload = array_merge($this->payload, ['iss' => $this->getIssuer()]);
-            $this->payload = array_merge($this->payload, ['exp' => $this->getExpiration()->toDateTimeString()]);
+            $this->payload = array_merge($this->payload, ['exp' => $this->getExpiration()->getTimestamp()]);
             $this->payload = array_merge($this->payload, ['sub' => $this->getSubject()]);
             $this->payload = array_merge($this->payload, ['aud' => $this->getAudience()]);
         }
@@ -213,14 +213,18 @@ class TokenBuilder extends TokenAbstract
      * Parse a date time string to a Carbon object to set the expiration for the
      * JWT Payload, return the Token Builder
      *
-     * @param string $expiration
+     * @param mixed $expiration
      *
      * @return TokenBuilder
      */
-    public function setExpiration(string $expiration): TokenBuilder
+    public function setExpiration($expiration): TokenBuilder
     {
-        $this->expiration = DateTime::parse($expiration);
+        if (is_numeric($expiration)) {
+            $this->expiration = DateTime::createFromTimestamp((int) $expiration);
+            return $this;
+        }
 
+        $this->expiration = DateTime::parse($expiration);
         return $this;
     }
 
