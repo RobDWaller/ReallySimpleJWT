@@ -7,6 +7,7 @@ use ReallySimpleJWT\TokenValidator;
 use ReallySimpleJWT\TokenBuilder;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
+use Mockery as m;
 
 class TokenValidatorTest extends TestCase
 {
@@ -129,6 +130,62 @@ class TokenValidatorTest extends TestCase
             ->validateExpiration();
 
         $this->assertInstanceOf('ReallySimpleJWT\TokenValidator', $payload);
+    }
+
+    public function testValidateExpirationWithNumber()
+    {
+        $validator = m::mock(TokenValidator::class);
+        $validator->makePartial();
+        $validator->shouldReceive('getExpiration')->once()->andReturn(
+            Carbon::now()->addMinutes(2)->getTimestamp()
+        );
+
+        $payload = $validator->validateExpiration();
+
+        $this->assertInstanceOf('ReallySimpleJWT\TokenValidator', $payload);
+    }
+
+    public function testValidateExpirationWithString()
+    {
+        $validator = m::mock(TokenValidator::class);
+        $validator->makePartial();
+        $validator->shouldReceive('getExpiration')->once()->andReturn(
+            Carbon::now()->addMinutes(2)->toDateTimeString()
+        );
+
+        $payload = $validator->validateExpiration();
+
+        $this->assertInstanceOf('ReallySimpleJWT\TokenValidator', $payload);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedExceptionMessage This token has expired!
+     */
+    public function testValidateExpirationWithNumberFail()
+    {
+        $validator = m::mock(TokenValidator::class);
+        $validator->makePartial();
+        $validator->shouldReceive('getExpiration')->once()->andReturn(
+            Carbon::now()->subMinutes(2)->getTimestamp()
+        );
+
+        $validator->validateExpiration();
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedExceptionMessage This token has expired!
+     */
+    public function testValidateExpirationWithStringFail()
+    {
+        $validator = m::mock(TokenValidator::class);
+        $validator->makePartial();
+        $validator->shouldReceive('getExpiration')->once()->andReturn(
+            Carbon::now()->subMinutes(2)->toDateTimeString()
+        );
+
+        $validator->validateExpiration();
     }
 
     /**
