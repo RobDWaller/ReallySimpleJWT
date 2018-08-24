@@ -130,10 +130,13 @@ class TokenBuilder extends TokenAbstract
      * Set the audience of the token
      *
      * @param string $audience
+     *
+     * @return TokenBuilder
      */
     public function setAudience(string $audience)
     {
         $this->audience = $audience;
+        return $this;
     }
 
     /**
@@ -150,10 +153,13 @@ class TokenBuilder extends TokenAbstract
      * Set the subject of the token
      *
      * @param string $subject
+     *
+     * @return TokenBuilder
      */
     public function setSubject(string $subject)
     {
         $this->subject = $subject;
+        return $this;
     }
 
     /**
