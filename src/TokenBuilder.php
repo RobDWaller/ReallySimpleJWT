@@ -183,7 +183,9 @@ class TokenBuilder extends TokenAbstract
             $this->payload = array_merge($this->payload, ['iss' => $this->getIssuer()]);
             $this->payload = array_merge($this->payload, ['exp' => $this->getExpiration()->getTimestamp()]);
             $this->payload = array_merge($this->payload, ['sub' => $this->getSubject()]);
-            $this->payload = array_merge($this->payload, ['aud' => $this->getAudience()]);
+            if (!empty($this->getAudience())) {
+                $this->payload = array_merge($this->payload, ['aud' => $this->getAudience()]);
+            }
         }
 
         return json_encode($this->payload);
