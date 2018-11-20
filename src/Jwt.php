@@ -10,4 +10,9 @@ class Jwt
     {
         $this->jwt = $jwt;
     }
+
+    public function getJwt(): string
+    {
+        return $this->jwt;
+    }
 }

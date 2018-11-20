@@ -13,4 +13,11 @@ class JwtTest extends TestCase
 
         $this->assertInstanceOf(Jwt::class, $jwt);
     }
+
+    public function testGetJwt()
+    {
+        $jwt = new Jwt('Hello');
+
+        $this->assertSame('Hello', $jwt->getJwt());
+    }
 }
