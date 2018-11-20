@@ -6,6 +6,8 @@ namespace ReallySimpleJWT;
 
 class Jwt
 {
+    private $jwt;
+
     public function __construct(string $jwt)
     {
         $this->jwt = $jwt;
