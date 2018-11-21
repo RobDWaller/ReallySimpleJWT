@@ -16,15 +16,8 @@ class Validate
         ) === 1;
     }
 
-    public function expiration(string $expiration): bool
+    public function expiration(int $expiration): bool
     {
-        if (empty($expiration)) {
-            return false;
-        }
-
-        $now = Carbon::now();
-        $comparison = Carbon::parse($expiration);
-
-        return $now->diffInSeconds($comparison, false) > 0;
+        return $expiration >= time();
     }
 }

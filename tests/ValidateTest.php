@@ -44,6 +44,6 @@ class ValidateTest extends TestCase
     {
         $validate = new Validate();
 
-        $this->assertTrue($validate->expiration(Carbon::now()->addMinutes(5)->toDateTimeString()));
+        $this->assertTrue($validate->expiration(time() + 10));
     }
 }
