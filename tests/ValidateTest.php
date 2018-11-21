@@ -46,4 +46,11 @@ class ValidateTest extends TestCase
 
         $this->assertTrue($validate->expiration(time() + 10));
     }
+
+    public function testValidateExpirationOld()
+    {
+        $validate = new Validate();
+
+        $this->assertFalse($validate->expiration(time() - 10));
+    }
 }
