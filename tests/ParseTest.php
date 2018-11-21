@@ -13,7 +13,7 @@ class ParseTest extends TestCase
 {
     public function testParse()
     {
-        $parse = new Parse(new JWT('Hello'), new Validate());
+        $parse = new Parse(new JWT('Hello', 'secret'), new Validate());
 
         $this->assertInstanceOf(Parse::class, $parse);
     }
