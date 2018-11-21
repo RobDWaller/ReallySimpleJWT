@@ -6,20 +6,20 @@ namespace ReallySimpleJWT;
 
 class Jwt
 {
-    private $jwt;
+    private $token;
 
     private $secret;
 
-    public function __construct(string $jwt, string $secret)
+    public function __construct(string $token, string $secret)
     {
-        $this->jwt = $jwt;
+        $this->token = $token;
 
         $this->secret = $secret;
     }
 
-    public function getJwt(): string
+    public function getToken(): string
     {
-        return $this->jwt;
+        return $this->token;
     }
 
     public function getSecret(): string
