@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Jwt;
+use Carbon\Carbon;
 
 class Validate
 {
-    private $jwt;
-
-    public function __construct(Jwt $jwt)
-    {
-        $this->jwt = $jwt;
-    }
-
-    private function tokenStructure(): bool
+    public function tokenStructure(string $jwt): bool
     {
         return preg_match(
             '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
-            $this->jwt->getJwt()
+            $jwt
         ) === 1;
+    }
+
+    public function expiration(string $expiration): bool
+    {
+        if (empty($expiration)) {
+            return false;
+        }
+
+        $now = Carbon::now();
+        $comparison = Carbon::parse($expiration);
+
+        return $now->diffInSeconds($comparison, false) > 0;
     }
 }
