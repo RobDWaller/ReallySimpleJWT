@@ -101,7 +101,7 @@ class ParseTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\Validate
-     * @expectedExceptionMessage The JSON web token has an invalid structure
+     * @expectedExceptionMessage The JSON web token has an invalid structure.
      */
     public function testParseValidateInvalidStructure()
     {
@@ -111,5 +111,34 @@ class ParseTest extends TestCase
         );
 
         $parse->validate();
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage The JSON web token signature is invalid.
+     */
+    public function testParseValidateInvalidSignature()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbT', 'foo1234He$$llo56'),
+            new Validate
+        );
+
+        $parse->validate();
+    }
+
+    public function testGetSignature()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', 'foo1234He$$llo56'),
+            new Validate
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'getSignature');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame('--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', $result);
     }
 }
