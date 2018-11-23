@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\TokenAbstract;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Parsed;
 
-class Parse extends TokenAbstract
+class Parse
 {
     private $jwt;
 
@@ -19,5 +19,10 @@ class Parse extends TokenAbstract
         $this->jwt = $jwt;
 
         $this->validate = $validate;
+    }
+
+    public function parse(): Parsed
+    {
+        return new Parsed();
     }
 }
