@@ -9,6 +9,7 @@ use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Token;
 use Carbon\Carbon;
+use ReflectionMethod;
 
 class ParseTest extends TestCase
 {
@@ -27,5 +28,49 @@ class ParseTest extends TestCase
         );
 
         $this->assertInstanceOf(Parsed::class, $parse->parse());
+    }
+
+    public function testParseIssuer()
+    {
+        $parse = new Parse(
+            new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
+            new Validate
+        );
+
+        $result = $parse->parse();
+
+        $this->assertSame('localhost', $result->getPayload()->iss);
+    }
+
+    public function testParseSplitToken()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c', 'foo1234He$$llo56'),
+            new Validate
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'splitToken');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame($result[0], 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
+        $this->assertSame($result[1], 'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ');
+        $this->assertSame($result[2], 'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c');
+    }
+
+    public function testParseGetPayload()
+    {
+        $parse = new Parse(
+            new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
+            new Validate
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'getPayload');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame('localhost', $result->iss);
     }
 }

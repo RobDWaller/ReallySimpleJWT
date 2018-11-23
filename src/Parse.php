@@ -7,6 +7,8 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parsed;
+use ReallySimpleJWT\Helper\TokenEncodeDecode;
+use stdClass;
 
 class Parse
 {
@@ -26,7 +28,21 @@ class Parse
         return new Parsed(
             $this->jwt,
             json_decode('{"typ": "JWT"}'),
-            json_decode('{"iss": "127.0.0.1"}')
+            $this->getPayload()
+        );
+    }
+
+    private function splitToken(): array
+    {
+        return explode('.', $this->jwt->getToken());
+    }
+
+    private function getPayload(): stdClass
+    {
+        return json_decode(
+            TokenEncodeDecode::decode(
+                $this->splitToken()[1]
+            )
         );
     }
 }
