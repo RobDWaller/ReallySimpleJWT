@@ -23,6 +23,9 @@ class Parse
 
     public function parse(): Parsed
     {
-        return new Parsed();
+        return new Parsed(
+            $this->jwt,
+            json_decode('{"typ": "JWT"}')
+        );
     }
 }
