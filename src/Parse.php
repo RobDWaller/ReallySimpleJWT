@@ -8,6 +8,7 @@ use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Helper\TokenEncodeDecode;
+use ReallySimpleJWT\Exception\Validate as ValidateException;
 use stdClass;
 
 class Parse
@@ -32,6 +33,15 @@ class Parse
         );
     }
 
+    public function validate(): self
+    {
+        if (!$this->validate->tokenStructure($this->jwt->getToken())) {
+            throw new ValidateException('The JSON web token has an invalid structure');
+        }
+
+        return $this;
+    }
+
     private function splitToken(): array
     {
         return explode('.', $this->jwt->getToken());
@@ -53,10 +63,5 @@ class Parse
                 $this->splitToken()[0]
             )
         );
-    }
-
-    private function validate(): void
-    {
-        
     }
 }

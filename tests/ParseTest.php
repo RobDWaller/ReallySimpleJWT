@@ -96,9 +96,20 @@ class ParseTest extends TestCase
             new Validate
         );
 
-        $method = new ReflectionMethod(Parse::class, 'validate');
-        $method->setAccessible(true);
+        $this->assertInstanceOf(Parse::class, $parse->validate());
+    }
 
-        $this->assertSame(Null, $method->invoke($parse));
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage The JSON web token has an invalid structure
+     */
+    public function testParseValidateInvalidStructure()
+    {
+        $parse = new Parse(
+            new Jwt('hello', 'foo1234He$$llo56'),
+            new Validate
+        );
+
+        $parse->validate();
     }
 }
