@@ -73,4 +73,19 @@ class ParseTest extends TestCase
 
         $this->assertSame('localhost', $result->iss);
     }
+
+    public function testParseGetHeader()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', 'foo1234He$$llo56'),
+            new Validate
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'getHeader');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame('JWE', $result->typ);
+    }
 }

@@ -27,7 +27,7 @@ class Parse
     {
         return new Parsed(
             $this->jwt,
-            json_decode('{"typ": "JWT"}'),
+            $this->getHeader(),
             $this->getPayload()
         );
     }
@@ -42,6 +42,15 @@ class Parse
         return json_decode(
             TokenEncodeDecode::decode(
                 $this->splitToken()[1]
+            )
+        );
+    }
+
+    private function getHeader(): stdClass
+    {
+        return json_decode(
+            TokenEncodeDecode::decode(
+                $this->splitToken()[0]
             )
         );
     }
