@@ -88,4 +88,17 @@ class ParseTest extends TestCase
 
         $this->assertSame('JWE', $result->typ);
     }
+
+    public function testParseValidate()
+    {
+        $parse = new Parse(
+            new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
+            new Validate
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'validate');
+        $method->setAccessible(true);
+
+        $this->assertSame(Null, $method->invoke($parse));
+    }
 }

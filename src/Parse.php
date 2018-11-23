@@ -54,4 +54,9 @@ class Parse
             )
         );
     }
+
+    private function validate(): void
+    {
+        
+    }
 }
