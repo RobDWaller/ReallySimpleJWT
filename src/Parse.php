@@ -25,7 +25,8 @@ class Parse
     {
         return new Parsed(
             $this->jwt,
-            json_decode('{"typ": "JWT"}')
+            json_decode('{"typ": "JWT"}'),
+            json_decode('{"iss": "127.0.0.1"}')
         );
     }
 }
