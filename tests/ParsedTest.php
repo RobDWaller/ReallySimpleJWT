@@ -20,7 +20,8 @@ class ParsedTest extends TestCase
                 'foo1234He$$llo56'
             ),
             json_decode('{"typ": "JWT"}'),
-            json_decode('{"iss": "127.0.0.1"}')
+            json_decode('{"iss": "127.0.0.1"}'),
+            'hello'
         );
 
         $this->assertInstanceOf(Parsed::class, $parsed);
@@ -34,7 +35,8 @@ class ParsedTest extends TestCase
                 'foo1234He$$llo56'
             ),
             json_decode('{"typ": "JWT"}'),
-            json_decode('{"iss": "127.0.0.1"}')
+            json_decode('{"iss": "127.0.0.1"}'),
+            'hello'
         );
 
         $this->assertInstanceOf(Jwt::class, $parsed->getJwt());
@@ -48,7 +50,8 @@ class ParsedTest extends TestCase
                 'foo1234He$$llo56'
             ),
             json_decode('{"typ": "JWT"}'),
-            json_decode('{"iss": "127.0.0.1"}')
+            json_decode('{"iss": "127.0.0.1"}'),
+            'hello'
         );
 
         $this->assertSame('JWT', $parsed->getHeader()->typ);
@@ -62,9 +65,25 @@ class ParsedTest extends TestCase
                 'foo1234He$$llo56'
             ),
             json_decode('{"typ": "JWT"}'),
-            json_decode('{"iss": "127.0.0.1"}')
+            json_decode('{"iss": "127.0.0.1"}'),
+            'hello'
         );
 
         $this->assertSame('127.0.0.1', $parsed->getPayload()->iss);
+    }
+
+    public function testParsedGetSignature()
+    {
+        $parsed = new Parsed(
+            new Jwt(
+                Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
+                'foo1234He$$llo56'
+            ),
+            json_decode('{"typ": "JWT"}'),
+            json_decode('{"iss": "127.0.0.1"}'),
+            'hello'
+        );
+
+        $this->assertSame('hello', $parsed->getSignature());
     }
 }

@@ -30,7 +30,8 @@ class Parse
         return new Parsed(
             $this->jwt,
             $this->getHeader(),
-            $this->getPayload()
+            $this->getPayload(),
+            $this->getSignature()
         );
     }
 

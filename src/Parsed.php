@@ -15,13 +15,17 @@ class Parsed
 
     private $payload;
 
-    public function __construct(Jwt $jwt, stdClass $header, stdClass $payload)
+    private $signature;
+
+    public function __construct(Jwt $jwt, stdClass $header, stdClass $payload, string $signature)
     {
         $this->jwt = $jwt;
 
         $this->header = $header;
 
         $this->payload = $payload;
+
+        $this->signature = $signature;
     }
 
     public function getJwt(): Jwt
@@ -37,5 +41,10 @@ class Parsed
     public function getPayload(): stdClass
     {
         return $this->payload;
+    }
+
+    public function getSignature(): string
+    {
+        return $this->signature;
     }
 }
