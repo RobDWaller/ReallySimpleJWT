@@ -14,4 +14,11 @@ class BuildTest extends TestCase
 
         $this->assertInstanceOf(Build::class, $build);
     }
+
+    public function testBuildSetSecret()
+    {
+        $build = new Build(new Validate);
+
+        $this->assertInstanceOf(Build::class, $build->setSecret('Hello123$$Abc!!4538'));
+    }
 }
