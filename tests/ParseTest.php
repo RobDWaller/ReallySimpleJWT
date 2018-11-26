@@ -141,4 +141,59 @@ class ParseTest extends TestCase
 
         $this->assertSame('--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', $result);
     }
+
+    public function testParseValidateExpiration()
+    {
+        $parse = new Parse(
+            new Jwt(Token::getToken(1, 'Hoo1234%&HePPo99', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'Hoo1234%&HePPo99'),
+            new Validate
+        );
+
+        $this->assertInstanceOf(Parse::class, $parse->validateExpiration());
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage The expiration time has elapsed or it was never set, this token is not valid.
+     */
+    public function testParseValidateExpirationInvalid()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyMzkwMjJ9.FruqGMjzi7Ql7a8WJeMz6f6G5UeUQcy5kauLmeO8Ksc', 'Hoo1234%&HePPo99'),
+            new Validate
+        );
+
+        $parse->validateExpiration();
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage The expiration time has elapsed or it was never set, this token is not valid.
+     */
+    public function testParseValidateExpirationInvalidTwo()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', 'Hoo1234%&HePPo99'),
+            new Validate
+        );
+
+        $parse->validateExpiration();
+    }
+
+    public function testGetExpiration()
+    {
+        $timestamp = Carbon::now()->addMinutes(5);
+
+        $parse = new Parse(
+            new Jwt(Token::getToken(1, 'Hoo1234%&HePPo99', $timestamp->toDateTimeString(), 'localhost'), 'Hoo1234%&HePPo99'),
+            new Validate
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'getExpiration');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame($timestamp->getTimestamp(), $result);
+    }
 }

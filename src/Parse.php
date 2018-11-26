@@ -54,6 +54,15 @@ class Parse
         return $this;
     }
 
+    public function validateExpiration(): self
+    {
+        if (!$this->validate->expiration($this->getExpiration())) {
+            throw new ValidateException('The expiration time has elapsed or it was never set, this token is not valid.');
+        }
+
+        return $this;
+    }
+
     private function splitToken(): array
     {
         return explode('.', $this->jwt->getToken());
@@ -80,5 +89,10 @@ class Parse
     private function getSignature(): string
     {
         return $this->splitToken()[2];
+    }
+
+    private function getExpiration(): int
+    {
+        return $this->getPayload()->exp ?? 0;
     }
 }
