@@ -52,6 +52,17 @@ class BuildTest extends TestCase
         $this->assertInstanceOf(Build::class, $build->setExpiration(Carbon::now()->subMinutes(5)->getTimestamp()));
     }
 
+    public function testSetExpirationCheckPayload()
+    {
+        $build = new Build(new Validate);
+
+        $timestamp = Carbon::now()->addMinutes(5)->getTimestamp();
+
+        $build->setExpiration($timestamp);
+
+        $this->assertSame($build->getPayload()['exp'], $timestamp);
+    }
+
     public function testGetPayload()
     {
         $build = new Build(new Validate);
