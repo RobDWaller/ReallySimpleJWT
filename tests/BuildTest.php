@@ -51,4 +51,13 @@ class BuildTest extends TestCase
 
         $this->assertInstanceOf(Build::class, $build->setExpiration(Carbon::now()->subMinutes(5)->getTimestamp()));
     }
+
+    public function testGetPayload()
+    {
+        $build = new Build(new Validate);
+
+        $build->setExpiration(Carbon::now()->addMinutes(5)->getTimestamp());
+
+        $this->assertArrayHasKey('exp', $build->getPayload());
+    }
 }

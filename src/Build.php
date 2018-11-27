@@ -8,6 +8,8 @@ use ReallySimpleJWT\Exception\Validate as ValidateException;
 
 class Build extends TokenAbstract
 {
+    private $payload = [];
+
     private $validate;
 
     private $secret;
@@ -15,6 +17,11 @@ class Build extends TokenAbstract
     public function __construct(Validate $validate)
     {
         $this->validate = $validate;
+    }
+
+    public function getPayload(): array
+    {
+        return $this->payload;
     }
 
     public function setSecret(string $secret): self
@@ -33,6 +40,8 @@ class Build extends TokenAbstract
         if (!$this->validate->expiration($timestamp)) {
             throw new ValidateException('The expiration timestamp you set has already expired.');
         }
+
+        $this->payload['exp'] = $timestamp;
 
         return $this;
     }
