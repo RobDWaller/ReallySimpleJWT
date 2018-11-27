@@ -71,4 +71,18 @@ class BuildTest extends TestCase
 
         $this->assertArrayHasKey('exp', $build->getPayload());
     }
+
+    public function testSetIssuer()
+    {
+        $build = new Build(new Validate);
+
+        $this->assertInstanceOf(Build::class, $build->setIssuer('127.0.0.1'));
+    }
+
+    public function testSetIssuerCheckPayload()
+    {
+        $build = new Build(new Validate);
+
+        $this->assertSame('127.0.0.1', $build->setIssuer('127.0.0.1')->getPayload()['iss']);
+    }
 }

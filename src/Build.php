@@ -45,4 +45,11 @@ class Build extends TokenAbstract
 
         return $this;
     }
+
+    public function setIssuer(string $issuer): self
+    {
+        $this->payload['iss'] = $issuer;
+
+        return $this;
+    }
 }
