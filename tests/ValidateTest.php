@@ -90,4 +90,11 @@ class ValidateTest extends TestCase
 
         $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }
+
+    public function testValidateSecret()
+    {
+        $validate = new Validate();
+
+        $this->assertTrue($validate->secret('Hello123$$Abc!!4538'));
+    }
 }

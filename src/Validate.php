@@ -26,4 +26,29 @@ class Validate
     {
         return hash_equals($signature->get(), $comparison);
     }
+
+    public function secret(string $secret): bool
+    {
+        if (strlen($secret) < 12) {
+            return false;
+        }
+
+        if (!preg_match('/[0-9]/', $secret)) {
+            return false;
+        }
+
+        if (!preg_match('/[A-Z]/', $secret)) {
+            return false;
+        }
+
+        if (!preg_match('/[a-z]/', $secret)) {
+            return false;
+        }
+
+        if (!preg_match('/[\*&!@%\^#\$]/', $secret)) {
+            return false;
+        }
+
+        return true;
+    }
 }

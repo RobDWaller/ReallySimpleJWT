@@ -4,6 +4,7 @@ namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\TokenAbstract;
 use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Exception\Validate as ValidateException;
 
 class Build extends TokenAbstract
 {
@@ -18,6 +19,10 @@ class Build extends TokenAbstract
 
     public function setSecret(string $secret): self
     {
+        if (!$this->validate->secret($secret)) {
+            throw new ValidateException('Please set a valid secret. It must be at least twelve characters in length, contain lower and upper case letters, a number and one of the following characters *&!@%^#$.');
+        }
+
         $this->secret = $secret;
 
         return $this;
