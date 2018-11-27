@@ -27,4 +27,13 @@ class Build extends TokenAbstract
 
         return $this;
     }
+
+    public function setExpiration(int $timestamp): self
+    {
+        if (!$this->validate->expiration($timestamp)) {
+            throw new ValidateException('The expiration timestamp you set has already expired.');
+        }
+
+        return $this;
+    }
 }
