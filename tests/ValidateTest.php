@@ -97,4 +97,39 @@ class ValidateTest extends TestCase
 
         $this->assertTrue($validate->secret('Hello123$$Abc!!4538'));
     }
+
+    public function testValidateSecretInvalidLength()
+    {
+        $validate = new Validate();
+
+        $this->assertFalse($validate->secret('hello'));
+    }
+
+    public function testValidateSecretInvalidNumbers()
+    {
+        $validate = new Validate();
+
+        $this->assertFalse($validate->secret('helloworldfoobar'));
+    }
+
+    public function testValidateSecretInvalidUppercase()
+    {
+        $validate = new Validate();
+
+        $this->assertFalse($validate->secret('helloworldfoobar123'));
+    }
+
+    public function testValidateSecretInvalidLowercase()
+    {
+        $validate = new Validate();
+
+        $this->assertFalse($validate->secret('HELLOWORLDFOOBAR123'));
+    }
+
+    public function testValidateSecretSpecialCharacters()
+    {
+        $validate = new Validate();
+
+        $this->assertFalse($validate->secret('HELLOworldFOOBAR123'));
+    }
 }
