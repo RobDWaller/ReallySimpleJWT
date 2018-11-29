@@ -54,4 +54,11 @@ class Build extends TokenAbstract
 
         return $this;
     }
+
+    public function setPrivateClaim(string $key, $value): self
+    {
+        $this->payload[$key] = $value;
+
+        return $this;
+    }
 }

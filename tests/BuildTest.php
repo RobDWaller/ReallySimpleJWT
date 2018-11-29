@@ -87,4 +87,20 @@ class BuildTest extends TestCase
 
         $this->assertSame($build->getPayload()['iss'], '127.0.0.1');
     }
+
+    public function testSetPrivateClaim()
+    {
+        $build = new Build(new Validate);
+
+        $this->assertInstanceOf(Build::class, $build->setPrivateClaim('user_id', 1));
+    }
+
+    public function testSetPrivateClaimCheckPayload()
+    {
+        $build = new Build(new Validate);
+
+        $build->setPrivateClaim('user_id', 1);
+
+        $this->assertSame($build->getPayload()['user_id'], 1);
+    }
 }
