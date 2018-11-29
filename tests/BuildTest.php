@@ -83,6 +83,8 @@ class BuildTest extends TestCase
     {
         $build = new Build(new Validate);
 
-        $this->assertSame('127.0.0.1', $build->setIssuer('127.0.0.1')->getPayload()['iss']);
+        $build->setIssuer('127.0.0.1');
+
+        $this->assertSame($build->getPayload()['iss'], '127.0.0.1');
     }
 }
