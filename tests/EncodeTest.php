@@ -37,4 +37,28 @@ class EncodeTest extends TestCase
 
         $this->assertNotSame('world', $result);
     }
+
+    public function testToBase64Url()
+    {
+        $encode = new Encode();
+
+        $method = new ReflectionMethod(Encode::class, 'toBase64Url');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($encode, ['he=llo+/']);
+
+        $this->assertSame('hello-_', $result);
+    }
+
+    public function testToBase64UrlTwo()
+    {
+        $encode = new Encode();
+
+        $method = new ReflectionMethod(Encode::class, 'toBase64Url');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($encode, ['/Wo==r+/12+/=']);
+
+        $this->assertSame('_Wor-_12-_', $result);
+    }
 }

@@ -8,6 +8,11 @@ class Encode
 {
     public function encode(string $toEncode): string
     {
-        return base64_encode($toEncode);
+        return $this->toBase64Url(base64_encode($toEncode));
+    }
+
+    private function toBase64Url(string $base64): string
+    {
+        return str_replace(['+', '/', '='], ['-', '_', ''], $base64);
     }
 }
