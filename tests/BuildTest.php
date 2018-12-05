@@ -4,6 +4,7 @@ namespace Test;
 
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use PHPUnit\Framework\TestCase;
 use Carbon\Carbon;
@@ -116,5 +117,38 @@ class BuildTest extends TestCase
             ->build();
 
         $this->assertInstanceOf(Jwt::class, $token);
+    }
+
+    public function testBuildMethodCheckJwt()
+    {
+        $build = new Build(new Validate);
+
+        $token = $build->setSecret('!123$!456htHeLOOl!')
+            ->setIssuer('https://google.com')
+            ->setExpiration(time() + 200)
+            ->setPrivateClaim('user_id', 3)
+            ->build();
+
+        $this->assertSame($token->getSecret(), '!123$!456htHeLOOl!');
+        $this->assertRegExp('/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/', $token->getToken());
+    }
+
+    public function testBuildMethodParse()
+    {
+        $build = new Build(new Validate);
+
+        $token = $build->setSecret('!123$!456htHeLOOl!')
+            ->setIssuer('https://google.com')
+            ->setExpiration(time() + 200)
+            ->setPrivateClaim('user_id', 3)
+            ->build();
+
+        $parse = new Parse($token, new Validate);
+
+        $parsed = $parse->validate()
+            ->validateExpiration()
+            ->parse();
+
+        $this->assertSames($parsed->getHeader()->user_id, 3);
     }
 }

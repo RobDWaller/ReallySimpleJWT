@@ -115,6 +115,20 @@ class ParseTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage The JSON web token is invalid [hello.hello.hello].
+     */
+    public function testParseValidateBadTokenGoodStructure()
+    {
+        $parse = new Parse(
+            new Jwt('hello.hello.hello', 'foo1234He$$llo56'),
+            new Validate
+        );
+
+        $parse->validate();
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
      * @expectedExceptionMessage The JSON web token signature is invalid.
      */
     public function testParseValidateInvalidSignature()

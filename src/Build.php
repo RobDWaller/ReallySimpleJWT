@@ -6,6 +6,7 @@ namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\TokenAbstract;
 use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Exception\Validate as ValidateException;
 
 class Build extends TokenAbstract
@@ -64,6 +65,6 @@ class Build extends TokenAbstract
 
     public function build(): Jwt
     {
-        return new Jwt('Hello', $this->secret);
+        return new Jwt('Hello.Hello.Hello', $this->secret);
     }
 }

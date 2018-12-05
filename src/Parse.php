@@ -41,12 +41,17 @@ class Parse
             throw new ValidateException('The JSON web token has an invalid structure.');
         }
 
-        $signature = new Signature(
-            json_encode($this->getHeader()),
-            json_encode($this->getPayload()),
-            $this->jwt->getSecret(),
-            'sha256'
-        );
+        try {
+            $signature = new Signature(
+                json_encode($this->getHeader()),
+                json_encode($this->getPayload()),
+                $this->jwt->getSecret(),
+                'sha256'
+            );
+        } catch (\Throwable $e) {
+            throw new ValidateException('The JSON web token is invalid [' . $this->jwt->getToken() . '].');
+        }
+
 
         if (!$this->validate->signature($signature, $this->getSignature())) {
             throw new ValidateException('The JSON web token signature is invalid.');
