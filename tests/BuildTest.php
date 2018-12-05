@@ -4,6 +4,7 @@ namespace Test;
 
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Jwt;
 use PHPUnit\Framework\TestCase;
 use Carbon\Carbon;
 
@@ -102,5 +103,18 @@ class BuildTest extends TestCase
         $build->setPrivateClaim('user_id', 1);
 
         $this->assertSame($build->getPayload()['user_id'], 1);
+    }
+
+    public function testBuildMethod()
+    {
+        $build = new Build(new Validate);
+
+        $token = $build->setSecret('helLLO123$!456ht')
+            ->setIssuer('127.0.0.1')
+            ->setExpiration(time() + 100)
+            ->setPrivateClaim('user_id', 2)
+            ->build();
+
+        $this->assertInstanceOf(Jwt::class, $token);
     }
 }

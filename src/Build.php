@@ -61,4 +61,9 @@ class Build extends TokenAbstract
 
         return $this;
     }
+
+    public function build(): Jwt
+    {
+        return new Jwt('Hello', $this->secret);
+    }
 }
