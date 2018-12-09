@@ -36,4 +36,9 @@ class Encode
     {
         return hash_hmac($algorithm, $toHash, $secret, true);
     }
+
+    public function getAlgorithm()
+    {
+        return self::HASH;
+    }
 }

@@ -17,9 +17,25 @@ class Build extends TokenAbstract
 
     private $secret;
 
-    public function __construct(Validate $validate)
+    private $encode;
+
+    private $type;
+
+    public function __construct(string $type, Validate $validate, Encode $encode)
     {
+        $this->type = $type;
+
         $this->validate = $validate;
+
+        $this->encode = $encode;
+    }
+
+    public function getHeader(): array
+    {
+        return [
+            'typ' => $this->type,
+            'alg' => $this->encode->getAlgorithm()
+        ];
     }
 
     public function getPayload(): array
@@ -65,6 +81,11 @@ class Build extends TokenAbstract
 
     public function build(): Jwt
     {
-        return new Jwt('Hello.Hello.Hello', $this->secret);
+        return new Jwt(
+            $this->encode->encode(json_encode($this->getHeader())) . "." .
+            $this->encode->encode(json_encode($this->getPayload())) . "." .
+            $this->encode->signature(json_encode($this->getPayload()), json_encode($this->getHeader()), $this->secret),
+            $this->secret
+        );
     }
 }

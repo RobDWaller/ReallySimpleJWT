@@ -91,4 +91,11 @@ class EncodeTest extends TestCase
 
         $this->assertNotSame('hello', $result);
     }
+
+    public function testGetAlgorithm()
+    {
+        $encode = new Encode();
+
+        $this->assertSame('sha256', $encode->getAlgorithm());
+    }
 }

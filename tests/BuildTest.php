@@ -8,19 +8,20 @@ use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use PHPUnit\Framework\TestCase;
 use Carbon\Carbon;
+use ReallySimpleJWT\Encode;
 
 class BuildTest extends TestCase
 {
     public function testBuild()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $this->assertInstanceOf(Build::class, $build);
     }
 
     public function testBuildSetSecret()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $this->assertInstanceOf(Build::class, $build->setSecret('Hello123$$Abc!!4538'));
     }
@@ -31,14 +32,14 @@ class BuildTest extends TestCase
      */
     public function testBuildSetSecretInvalid()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $this->assertInstanceOf(Build::class, $build->setSecret('Hello'));
     }
 
     public function testSetExpiration()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $this->assertInstanceOf(Build::class, $build->setExpiration(Carbon::now()->addMinutes(5)->getTimestamp()));
     }
@@ -49,14 +50,14 @@ class BuildTest extends TestCase
      */
     public function testSetExpirationInvalid()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $this->assertInstanceOf(Build::class, $build->setExpiration(Carbon::now()->subMinutes(5)->getTimestamp()));
     }
 
     public function testSetExpirationCheckPayload()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $timestamp = Carbon::now()->addMinutes(5)->getTimestamp();
 
@@ -67,7 +68,7 @@ class BuildTest extends TestCase
 
     public function testGetPayload()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $build->setExpiration(Carbon::now()->addMinutes(5)->getTimestamp());
 
@@ -76,14 +77,14 @@ class BuildTest extends TestCase
 
     public function testSetIssuer()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $this->assertInstanceOf(Build::class, $build->setIssuer('127.0.0.1'));
     }
 
     public function testSetIssuerCheckPayload()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $build->setIssuer('127.0.0.1');
 
@@ -92,14 +93,14 @@ class BuildTest extends TestCase
 
     public function testSetPrivateClaim()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $this->assertInstanceOf(Build::class, $build->setPrivateClaim('user_id', 1));
     }
 
     public function testSetPrivateClaimCheckPayload()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $build->setPrivateClaim('user_id', 1);
 
@@ -108,7 +109,7 @@ class BuildTest extends TestCase
 
     public function testBuildMethod()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $token = $build->setSecret('helLLO123$!456ht')
             ->setIssuer('127.0.0.1')
@@ -121,7 +122,7 @@ class BuildTest extends TestCase
 
     public function testBuildMethodCheckJwt()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $token = $build->setSecret('!123$!456htHeLOOl!')
             ->setIssuer('https://google.com')
@@ -135,7 +136,7 @@ class BuildTest extends TestCase
 
     public function testBuildMethodParse()
     {
-        $build = new Build(new Validate);
+        $build = new Build('JWT', new Validate, new Encode);
 
         $token = $build->setSecret('!123$!456htHeLOOl!')
             ->setIssuer('https://google.com')
@@ -143,12 +144,22 @@ class BuildTest extends TestCase
             ->setPrivateClaim('user_id', 3)
             ->build();
 
-        $parse = new Parse($token, new Validate);
+        $parse = new Parse($token, new Validate, new Encode);
 
         $parsed = $parse->validate()
             ->validateExpiration()
             ->parse();
 
         $this->assertSames($parsed->getHeader()->user_id, 3);
+    }
+
+    public function testGetHeader()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $result = $build->getHeader();
+
+        $this->assertSame('JWT', $result['typ']);
+        $this->assertSame('sha256', $result['alg']);
     }
 }
