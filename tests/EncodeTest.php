@@ -61,4 +61,34 @@ class EncodeTest extends TestCase
 
         $this->assertSame('_Wor-_12-_', $result);
     }
+
+    public function testSignature()
+    {
+        $encode = new Encode();
+
+        $result = $encode->signature('header', 'footer', 'secret');
+
+        $this->assertRegExp('/^[a-zA-Z0-9\-\_\=]+$/', $result);
+    }
+
+    public function testSignatureDoesNotEqualHello()
+    {
+        $encode = new Encode();
+
+        $result = $encode->signature('header', 'footer', 'secret');
+
+        $this->assertNotSame('Hello', $result);
+    }
+
+    public function testHash()
+    {
+        $encode = new Encode();
+
+        $method = new ReflectionMethod(Encode::class, 'hash');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($encode, [ 'sha256', 'hello', '123']);
+
+        $this->assertNotSame('hello', $result);
+    }
 }

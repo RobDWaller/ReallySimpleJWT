@@ -6,6 +6,8 @@ namespace ReallySimpleJWT;
 
 class Encode
 {
+    private const HASH = 'sha256';
+
     public function encode(string $toEncode): string
     {
         return $this->toBase64Url(base64_encode($toEncode));
@@ -14,5 +16,24 @@ class Encode
     private function toBase64Url(string $base64): string
     {
         return str_replace(['+', '/', '='], ['-', '_', ''], $base64);
+    }
+
+    public function signature(string $header, string $payload, string $secret): string
+    {
+        return $this->encode(
+            $this->hash(
+                self::HASH,
+                $this->encode($header) . "." . $this->encode($payload),
+                $secret
+            )
+        );
+    }
+
+    /**
+     * Why do I return this as raw binary?
+     */
+    public function hash(string $algorithm, string $toHash, string $secret): string
+    {
+        return hash_hmac($algorithm, $toHash, $secret, true);
     }
 }
