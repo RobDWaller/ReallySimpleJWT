@@ -6,9 +6,11 @@ use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
+use ReallySimpleJWT\TokenBuilder;
 use PHPUnit\Framework\TestCase;
 use Carbon\Carbon;
 use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Token;
 
 class BuildTest extends TestCase
 {
@@ -150,7 +152,7 @@ class BuildTest extends TestCase
             ->validateExpiration()
             ->parse();
 
-        $this->assertSames($parsed->getHeader()->user_id, 3);
+        $this->assertSame($parsed->getPayload()->user_id, 3);
     }
 
     public function testGetHeader()
@@ -160,6 +162,6 @@ class BuildTest extends TestCase
         $result = $build->getHeader();
 
         $this->assertSame('JWT', $result['typ']);
-        $this->assertSame('sha256', $result['alg']);
+        $this->assertSame('HS256', $result['alg']);
     }
 }

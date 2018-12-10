@@ -3,6 +3,9 @@
 namespace Test;
 
 use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Helper\Signature;
+use ReallySimpleJWT\Helper\TokenEncodeDecode;
+use ReallySimpleJWT\Helper\Hmac;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 
@@ -96,6 +99,13 @@ class EncodeTest extends TestCase
     {
         $encode = new Encode();
 
-        $this->assertSame('sha256', $encode->getAlgorithm());
+        $this->assertSame('HS256', $encode->getAlgorithm());
+    }
+
+    public function testGetHash()
+    {
+        $encode = new Encode();
+
+        $this->assertSame('sha256', $encode->getHash());
     }
 }

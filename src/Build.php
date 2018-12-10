@@ -32,10 +32,7 @@ class Build extends TokenAbstract
 
     public function getHeader(): array
     {
-        return [
-            'typ' => $this->type,
-            'alg' => $this->encode->getAlgorithm()
-        ];
+        return ['alg' => $this->encode->getAlgorithm(), 'typ' => $this->type];
     }
 
     public function getPayload(): array
@@ -84,7 +81,7 @@ class Build extends TokenAbstract
         return new Jwt(
             $this->encode->encode(json_encode($this->getHeader())) . "." .
             $this->encode->encode(json_encode($this->getPayload())) . "." .
-            $this->encode->signature(json_encode($this->getPayload()), json_encode($this->getHeader()), $this->secret),
+            $this->encode->signature(json_encode($this->getHeader()), json_encode($this->getPayload()), $this->secret),
             $this->secret
         );
     }

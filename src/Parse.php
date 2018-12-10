@@ -29,8 +29,8 @@ class Parse
     {
         return new Parsed(
             $this->jwt,
-            $this->getHeader(),
-            $this->getPayload(),
+            json_decode(TokenEncodeDecode::decode($this->getHeader())),
+            json_decode(TokenEncodeDecode::decode($this->getPayload())),
             $this->getSignature()
         );
     }
@@ -43,15 +43,14 @@ class Parse
 
         try {
             $signature = new Signature(
-                json_encode($this->getHeader()),
-                json_encode($this->getPayload()),
+                TokenEncodeDecode::decode($this->getHeader()),
+                TokenEncodeDecode::decode($this->getPayload()),
                 $this->jwt->getSecret(),
                 'sha256'
             );
         } catch (\Throwable $e) {
             throw new ValidateException('The JSON web token is invalid [' . $this->jwt->getToken() . '].');
         }
-
 
         if (!$this->validate->signature($signature, $this->getSignature())) {
             throw new ValidateException('The JSON web token signature is invalid.');
@@ -74,22 +73,14 @@ class Parse
         return explode('.', $this->jwt->getToken());
     }
 
-    private function getPayload(): stdClass
+    private function getHeader(): string
     {
-        return json_decode(
-            TokenEncodeDecode::decode(
-                $this->splitToken()[1]
-            )
-        );
+        return $this->splitToken()[0];
     }
 
-    private function getHeader(): stdClass
+    private function getPayload(): string
     {
-        return json_decode(
-            TokenEncodeDecode::decode(
-                $this->splitToken()[0]
-            )
-        );
+        return $this->splitToken()[1];
     }
 
     private function getSignature(): string
@@ -99,6 +90,6 @@ class Parse
 
     private function getExpiration(): int
     {
-        return $this->getPayload()->exp ?? 0;
+        return json_decode(TokenEncodeDecode::decode($this->getPayload()))->exp ?? 0;
     }
 }

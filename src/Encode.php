@@ -6,6 +6,8 @@ namespace ReallySimpleJWT;
 
 class Encode
 {
+    private const ALGORITHM = 'HS256';
+
     private const HASH = 'sha256';
 
     public function encode(string $toEncode): string
@@ -38,6 +40,11 @@ class Encode
     }
 
     public function getAlgorithm()
+    {
+        return self::ALGORITHM;
+    }
+
+    public function getHash()
     {
         return self::HASH;
     }

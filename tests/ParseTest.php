@@ -61,8 +61,10 @@ class ParseTest extends TestCase
 
     public function testParseGetPayload()
     {
+        $token = new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56');
+
         $parse = new Parse(
-            new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
+            $token,
             new Validate
         );
 
@@ -71,13 +73,15 @@ class ParseTest extends TestCase
 
         $result = $method->invoke($parse);
 
-        $this->assertSame('localhost', $result->iss);
+        $this->assertSame(explode('.', $token->getToken())[1], $result);
     }
 
     public function testParseGetHeader()
     {
+        $token = new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', 'foo1234He$$llo56');
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', 'foo1234He$$llo56'),
+            $token,
             new Validate
         );
 
@@ -86,7 +90,7 @@ class ParseTest extends TestCase
 
         $result = $method->invoke($parse);
 
-        $this->assertSame('JWE', $result->typ);
+        $this->assertSame(explode('.', $token->getToken())[0], $result);
     }
 
     public function testParseValidate()
@@ -115,7 +119,10 @@ class ParseTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\Validate
-     * @expectedExceptionMessage The JSON web token is invalid [hello.hello.hello].
+     * @expectedExceptionMessage The JSON web token signature is invalid.
+     * @todo we need a test for The JSON web token is invalid
+     * [' . $this->jwt->getToken() . ']. Or confirm it was bad code causing the
+     * issue.
      */
     public function testParseValidateBadTokenGoodStructure()
     {
