@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Validate;
@@ -56,9 +56,11 @@ class LegacyTest extends TestCase
     {
         $encode = new Encode();
 
-        $encode1 = $encode->encode(json_encode(['foo' => 'bar']));
+        $json1 = json_encode(['foo' => 'bar']);
 
-        $encode2 = TokenEncodeDecode::encode(json_encode(['foo' => 'bar']));
+        $encode1 = $encode->encode(!$json1 ? '' : $json1);
+
+        $encode2 = TokenEncodeDecode::encode(!$json1 ? '' : $json1);
 
         $this->assertSame($encode1, $encode2);
     }

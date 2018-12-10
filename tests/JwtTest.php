@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Tests;
 
 use ReallySimpleJWT\Jwt;
 use PHPUnit\Framework\TestCase;

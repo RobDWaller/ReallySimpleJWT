@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Tests;
 
 use ReflectionMethod;
 use PHPUnit\Framework\TestCase;
@@ -62,7 +62,7 @@ class ValidateTest extends TestCase
         $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
         $payload = json_encode(json_decode('{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}'));
 
-        $signature = new Signature($header, $payload, 'foo1234He$$llo56', 'sha256');
+        $signature = new Signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56', 'sha256');
 
         $this->assertTrue($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }
@@ -74,7 +74,7 @@ class ValidateTest extends TestCase
         $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
         $payload = json_encode(json_decode('{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}'));
 
-        $signature = new Signature($header, $payload, 'foo1234He$$llo56', 'sha256');
+        $signature = new Signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56', 'sha256');
 
         $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hVZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }
@@ -86,7 +86,7 @@ class ValidateTest extends TestCase
         $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
         $payload = json_encode(json_decode('{"sub": "1234567890", "name": "Jane Doe", "iat": 1516239022}'));
 
-        $signature = new Signature($header, $payload, 'foo1234He$$llo56', 'sha256');
+        $signature = new Signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56', 'sha256');
 
         $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }

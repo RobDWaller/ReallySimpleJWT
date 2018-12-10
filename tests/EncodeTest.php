@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Tests;
 
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Helper\Signature;

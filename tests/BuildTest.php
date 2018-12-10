@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Tests;
 
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Validate;
@@ -146,7 +146,7 @@ class BuildTest extends TestCase
             ->setPrivateClaim('user_id', 3)
             ->build();
 
-        $parse = new Parse($token, new Validate, new Encode);
+        $parse = new Parse($token, new Validate);
 
         $parsed = $parse->validate()
             ->validateExpiration()
