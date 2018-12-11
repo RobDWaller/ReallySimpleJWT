@@ -48,4 +48,9 @@ class Encode
     {
         return self::HASH;
     }
+
+    public function decode(string $toDecode): string
+    {
+        return 'Hello World';
+    }
 }

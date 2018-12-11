@@ -108,4 +108,11 @@ class EncodeTest extends TestCase
 
         $this->assertSame('sha256', $encode->getHash());
     }
+
+    public function testDecode()
+    {
+        $encode = new Encode();
+
+        $this->assertSame('Hello World', $encode->decode('SGVsbG8gV29ybGQ='));
+    }
 }
