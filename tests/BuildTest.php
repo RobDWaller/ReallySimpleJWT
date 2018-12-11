@@ -146,7 +146,7 @@ class BuildTest extends TestCase
             ->setPrivateClaim('user_id', 3)
             ->build();
 
-        $parse = new Parse($token, new Validate);
+        $parse = new Parse($token, new Validate, new Encode());
 
         $parsed = $parse->validate()
             ->validateExpiration()

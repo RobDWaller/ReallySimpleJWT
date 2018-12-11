@@ -10,6 +10,7 @@ use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Exception\Validate as ValidateException;
+use ReallySimpleJWT\Encode;
 use stdClass;
 
 class Parse
@@ -18,11 +19,15 @@ class Parse
 
     private $validate;
 
-    public function __construct(Jwt $jwt, Validate $validate)
+    private $encode;
+
+    public function __construct(Jwt $jwt, Validate $validate, Encode $encode)
     {
         $this->jwt = $jwt;
 
         $this->validate = $validate;
+
+        $this->encode = $encode;
     }
 
     public function parse(): Parsed
