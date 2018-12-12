@@ -11,10 +11,13 @@ use ReallySimpleJWT\Helper\TokenEncodeDecode;
 use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Exception\Validate as ValidateException;
 use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Helper\JsonEncoder;
 use stdClass;
 
 class Parse
 {
+    use JsonEncoder;
+
     private $jwt;
 
     private $validate;
@@ -34,8 +37,8 @@ class Parse
     {
         return new Parsed(
             $this->jwt,
-            json_decode(TokenEncodeDecode::decode($this->getHeader())),
-            json_decode(TokenEncodeDecode::decode($this->getPayload())),
+            $this->jsonDecode($this->encode->decode($this->getHeader())),
+            $this->jsonDecode($this->encode->decode($this->getPayload())),
             $this->getSignature()
         );
     }
@@ -47,11 +50,10 @@ class Parse
         }
 
         try {
-            $signature = new Signature(
-                TokenEncodeDecode::decode($this->getHeader()),
-                TokenEncodeDecode::decode($this->getPayload()),
-                $this->jwt->getSecret(),
-                'sha256'
+            $signature = $this->encode->signature(
+                $this->encode->decode($this->getHeader()),
+                $this->encode->decode($this->getPayload()),
+                $this->jwt->getSecret()
             );
         } catch (\Throwable $e) {
             throw new ValidateException('The JSON web token is invalid [' . $this->jwt->getToken() . '].');
@@ -95,6 +97,8 @@ class Parse
 
     private function getExpiration(): int
     {
-        return json_decode(TokenEncodeDecode::decode($this->getPayload()))->exp ?? 0;
+        return $this->jsonDecode($this->encode->decode(
+            $this->getPayload()
+        ))['exp'] ?? 0;
     }
 }

@@ -42,7 +42,7 @@ class ParseTest extends TestCase
 
         $result = $parse->parse();
 
-        $this->assertSame('localhost', $result->getPayload()->iss);
+        $this->assertSame('localhost', $result->getPayload()['iss']);
     }
 
     public function testParseSplitToken()
@@ -127,10 +127,7 @@ class ParseTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\Validate
-     * @expectedExceptionMessage The JSON web token signature is invalid.
-     * @todo we need a test for The JSON web token is invalid
-     * [' . $this->jwt->getToken() . ']. Or confirm it was bad code causing the
-     * issue.
+     * @expectedExceptionMessage The JSON web token is invalid [hello.hello.hello].
      */
     public function testParseValidateBadTokenGoodStructure()
     {

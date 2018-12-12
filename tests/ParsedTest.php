@@ -19,8 +19,8 @@ class ParsedTest extends TestCase
                 Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
                 'foo1234He$$llo56'
             ),
-            json_decode('{"typ": "JWT"}'),
-            json_decode('{"iss": "127.0.0.1"}'),
+            ["typ" => "JWT"],
+            ["iss" => "127.0.0.1"],
             'hello'
         );
 
@@ -34,8 +34,8 @@ class ParsedTest extends TestCase
                 Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
                 'foo1234He$$llo56'
             ),
-            json_decode('{"typ": "JWT"}'),
-            json_decode('{"iss": "127.0.0.1"}'),
+            ["typ" => "JWT"],
+            ["iss" => "127.0.0.1"],
             'hello'
         );
 
@@ -49,12 +49,12 @@ class ParsedTest extends TestCase
                 Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
                 'foo1234He$$llo56'
             ),
-            json_decode('{"typ": "JWT"}'),
-            json_decode('{"iss": "127.0.0.1"}'),
+            ["typ" => "JWT"],
+            ["iss" => "127.0.0.1"],
             'hello'
         );
 
-        $this->assertSame('JWT', $parsed->getHeader()->typ);
+        $this->assertSame('JWT', $parsed->getHeader()['typ']);
     }
 
     public function testParsedGetPayload()
@@ -64,12 +64,12 @@ class ParsedTest extends TestCase
                 Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
                 'foo1234He$$llo56'
             ),
-            json_decode('{"typ": "JWT"}'),
-            json_decode('{"iss": "127.0.0.1"}'),
+            ["typ" => "JWT"],
+            ["iss" => "127.0.0.1"],
             'hello'
         );
 
-        $this->assertSame('127.0.0.1', $parsed->getPayload()->iss);
+        $this->assertSame('127.0.0.1', $parsed->getPayload()['iss']);
     }
 
     public function testParsedGetSignature()
@@ -79,8 +79,8 @@ class ParsedTest extends TestCase
                 Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
                 'foo1234He$$llo56'
             ),
-            json_decode('{"typ": "JWT"}'),
-            json_decode('{"iss": "127.0.0.1"}'),
+            ["typ" => "JWT"],
+            ["iss" => "127.0.0.1"],
             'hello'
         );
 

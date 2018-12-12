@@ -22,9 +22,9 @@ class Validate
         return $expiration >= time();
     }
 
-    public function signature(Signature $signature, string $comparison): bool
+    public function signature(string $signature, string $comparison): bool
     {
-        return hash_equals($signature->get(), $comparison);
+        return hash_equals($signature, $comparison);
     }
 
     public function secret(string $secret): bool

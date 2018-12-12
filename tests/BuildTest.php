@@ -152,7 +152,7 @@ class BuildTest extends TestCase
             ->validateExpiration()
             ->parse();
 
-        $this->assertSame($parsed->getPayload()->user_id, 3);
+        $this->assertSame($parsed->getPayload()['user_id'], 3);
     }
 
     public function testGetHeader()

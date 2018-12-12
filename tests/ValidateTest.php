@@ -5,6 +5,7 @@ namespace Tests;
 use ReflectionMethod;
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Token;
 use ReallySimpleJWT\Helper\Signature;
 use Carbon\Carbon;
@@ -58,11 +59,12 @@ class ValidateTest extends TestCase
     public function testValidateSignature()
     {
         $validate = new Validate();
+        $encode = new Encode();
 
         $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
         $payload = json_encode(json_decode('{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}'));
 
-        $signature = new Signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56', 'sha256');
+        $signature = $encode->signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56');
 
         $this->assertTrue($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }
@@ -70,11 +72,12 @@ class ValidateTest extends TestCase
     public function testValidateSignatureInvalid()
     {
         $validate = new Validate();
+        $encode = new Encode();
 
         $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
         $payload = json_encode(json_decode('{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}'));
 
-        $signature = new Signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56', 'sha256');
+        $signature = $encode->signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56');
 
         $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hVZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }
@@ -82,11 +85,12 @@ class ValidateTest extends TestCase
     public function testValidateSignatureInvalidTwo()
     {
         $validate = new Validate();
+        $encode = new Encode();
 
         $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
         $payload = json_encode(json_decode('{"sub": "1234567890", "name": "Jane Doe", "iat": 1516239022}'));
 
-        $signature = new Signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56', 'sha256');
+        $signature = $encode->signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56');
 
         $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }
