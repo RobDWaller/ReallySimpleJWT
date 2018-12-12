@@ -1,4 +1,14 @@
-<?php namespace ReallySimpleJWT;
+<?php
+
+namespace ReallySimpleJWT;
+
+use ReallySimpleJWT\Build;
+use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Jwt;
+use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Exception\Validate as ValidateException;
+use Carbon\Carbon;
 
 /**
  * A simple Package for creating JSON Web Tokens that uses HMAC SHA256 to sign
@@ -27,11 +37,12 @@ class Token
     {
         $builder = self::builder();
 
-        return $builder->addPayload(['key' => 'user_id', 'value' => $userId])
+        return $builder->setPrivateClaim('user_id', $userId)
             ->setSecret($secret)
-            ->setExpiration($expiration)
+            ->setExpiration(Carbon::parse($expiration)->getTimestamp())
             ->setIssuer($issuer)
-            ->build();
+            ->build()
+            ->getToken();
     }
 
     /**
@@ -44,11 +55,15 @@ class Token
      */
     public static function validate(string $token, string $secret): bool
     {
-        $validator = self::validator();
+        $parse = self::validator($token, $secret);
 
-        return $validator->splitToken($token)
-            ->validateExpiration()
-            ->validateSignature($secret);
+        try {
+            $parse->validate()->validateExpiration();
+            return true;
+        }
+        catch (ValidateException $e) {
+            return false;
+        }
     }
 
     /**
@@ -59,12 +74,11 @@ class Token
      *
      * @return string
      */
-    public static function getPayload(string $token): string
+    public static function getPayload(string $token, string $secret): array
     {
-        $validator = self::validator();
+        $validator = self::validator($token, $secret);
 
-        return $validator->splitToken($token)
-            ->getPayload();
+        return $validator->validate()->parse()->getPayload();
     }
 
     /**
@@ -72,9 +86,9 @@ class Token
      *
      * @return TokenBuilder
      */
-    public static function builder(): TokenBuilder
+    public static function builder(): Build
     {
-        return new TokenBuilder();
+        return new Build('JWT', new Validate(), new Encode());
     }
 
     /**
@@ -82,8 +96,10 @@ class Token
      *
      * @return TokenValidator
      */
-    public static function validator(): TokenValidator
+    public static function validator(string $token, string $secret): Parse
     {
-        return new TokenValidator();
+        $jwt = new Jwt($token, $secret);
+
+        return new Parse($jwt, new Validate(), new Encode());
     }
 }

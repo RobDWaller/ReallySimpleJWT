@@ -34,12 +34,12 @@ class TokenTest extends TestCase
 
     public function testBuilder()
     {
-        $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', Token::builder());
+        $this->assertInstanceOf('ReallySimpleJWT\Build', Token::builder());
     }
 
     public function testValidator()
     {
-        $this->assertInstanceOf('ReallySimpleJWT\TokenValidator', Token::validator());
+        $this->assertInstanceOf('ReallySimpleJWT\Parse', Token::validator('Hello', '1234'));
     }
 
     public function testGetPayload()
@@ -51,24 +51,20 @@ class TokenTest extends TestCase
             'http://127.0.0.1'
         );
 
-        $this->assertSame('abdY', json_decode(Token::getPayload($token))->user_id);
+        $this->assertSame('abdY', Token::getPayload($token, 'Hello*JamesFooBar$!3')['user_id']);
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
-     * @expectedException Token string has invalid structure, ensure three strings seperated by dots.
-     */
     public function testValidateTokenFail()
     {
-        Token::validate('World', 'FooBar');
+        $this->assertFalse(Token::validate('World', 'FooBar'));
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedException ReallySimpleJWT\Exception\Validate
      * @expectedException Token string has invalid structure, ensure three strings seperated by dots.
      */
     public function testGetPayloadFail()
     {
-        Token::getPayload('Hello');
+        Token::getPayload('Hello', 'CarPark');
     }
 }
