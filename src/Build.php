@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\TokenAbstract;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Helper\TokenEncodeDecode;
+use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Exception\Validate as ValidateException;
 
-class Build extends TokenAbstract
+class Build
 {
     private $payload = [];
 
