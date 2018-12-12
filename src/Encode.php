@@ -51,10 +51,8 @@ class Encode
 
     public function decode(string $toDecode): string
     {
-        return base64_decode($this->addPadding(
-                $this->toBase64($toDecode)
-            )
-        , true);
+        return (string) base64_decode($this->addPadding(
+                $this->toBase64($toDecode)), true);
     }
 
     private function toBase64(string $urlString): string

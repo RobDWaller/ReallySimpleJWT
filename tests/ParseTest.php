@@ -127,7 +127,7 @@ class ParseTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\Validate
-     * @expectedExceptionMessage The JSON web token is invalid [hello.hello.hello].
+     * @expectedExceptionMessage The JSON web token signature is invalid.
      */
     public function testParseValidateBadTokenGoodStructure()
     {

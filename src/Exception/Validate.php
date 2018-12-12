@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ReallySimpleJWT\Exception;
 
 use Exception;
+use Throwable;
 
 /**
  * Simple exception interface class for the Token Validator class to make
@@ -19,9 +20,9 @@ class Validate extends Exception
      *
      * @param string $message
      * @param int $code
-     * @param string $previous
+     * @param Throwable $previous
      */
-    public function __construct(string $message, int $code = 0, $previous = null)
+    public function __construct(string $message, int $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

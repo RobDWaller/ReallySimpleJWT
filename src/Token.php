@@ -72,7 +72,7 @@ class Token
      *
      * @param string $token
      *
-     * @return string
+     * @return array
      */
     public static function getPayload(string $token, string $secret): array
     {
@@ -84,7 +84,7 @@ class Token
     /**
      * Interface to return instance of the token builder
      *
-     * @return TokenBuilder
+     * @return Build
      */
     public static function builder(): Build
     {
@@ -94,7 +94,7 @@ class Token
     /**
      * Interface to return instance of the token validator
      *
-     * @return TokenValidator
+     * @return Parse
      */
     public static function validator(string $token, string $secret): Parse
     {

@@ -8,7 +8,7 @@ trait JsonEncoder
 {
     public function jsonEncode(array $jsonArray): string
     {
-        return json_encode($jsonArray);
+        return (string) json_encode($jsonArray);
     }
 
     public function jsonDecode(string $json): array
