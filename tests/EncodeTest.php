@@ -41,6 +41,24 @@ class EncodeTest extends TestCase
         $this->assertNotSame('world', $result);
     }
 
+    public function testEncodeExact()
+    {
+        $encode = new Encode();
+
+        $result = $encode->encode('!"£$%^&*()1235_-+={POp}[]:;@abE~#,><.?/|\¬');
+
+        $this->assertSame('ISLCoyQlXiYqKCkxMjM1Xy0rPXtQT3B9W106O0BhYkV-Iyw-PC4_L3xcwqw', $result);
+    }
+
+    public function testEncodeExactTwo()
+    {
+        $encode = new Encode();
+
+        $result = $encode->encode('Hello World');
+
+        $this->assertSame('SGVsbG8gV29ybGQ', $result);
+    }
+
     public function testToBase64Url()
     {
         $encode = new Encode();
