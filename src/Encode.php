@@ -51,6 +51,23 @@ class Encode
 
     public function decode(string $toDecode): string
     {
-        return 'Hello World';
+        return base64_decode($this->addPadding(
+                $this->toBase64($toDecode)
+            )
+        , true);
+    }
+
+    private function toBase64(string $urlString): string
+    {
+        return str_replace(['-', '_'], ['+', '/'], $urlString);
+    }
+
+    private function addPadding(string $urlString): string
+    {
+        if (strlen($urlString) % 4 !== 0) {
+            return $this->addPadding($urlString . '=');
+        }
+
+        return $urlString;
     }
 }
