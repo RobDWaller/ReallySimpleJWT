@@ -57,6 +57,14 @@ class TokenBuilder extends TokenAbstract
     private $subject;
 
     /**
+     * Array for generating the JWT header
+     *
+     * @var array
+     */
+    private $header = [];
+
+
+    /**
      * Array for generating the JWT payload
      *
      * @var array
@@ -163,7 +171,9 @@ class TokenBuilder extends TokenAbstract
      */
     public function getHeader(): string
     {
-        return json_encode(['alg' => $this->getAlgorithm(), 'typ' => $this->getType()]);
+        $header = array_merge($this->header, ['alg' => $this->getAlgorithm(), 'typ' => $this->getType()]);
+
+        return json_encode($header);
     }
 
     /**
@@ -261,6 +271,24 @@ class TokenBuilder extends TokenAbstract
     }
 
     /**
+     * Add key value pair to header array
+     *
+     * @param array $header
+     *
+     * @return TokenBuilder
+     */
+    public function addHeader(array $header): TokenBuilder
+    {
+        if (isset($header['key']) && isset($header['value'])) {
+            $this->header = array_merge($this->header, [$header['key'] => $header['value']]);
+
+            return $this;
+        }
+
+        throw new TokenBuilderException('Failed to add header, format wrong. Array must contain key and value.');
+    }
+
+    /**
      * Encode the header string and return it
      *
      * @return string
@@ -317,6 +345,7 @@ class TokenBuilder extends TokenAbstract
      */
     private function tearDown()
     {
+        $this->header = [];
         $this->payload = [];
         $this->secret = '';
         $this->expiration = new Carbon;

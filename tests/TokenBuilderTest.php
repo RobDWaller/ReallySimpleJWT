@@ -36,6 +36,46 @@ class TokenBuilderTest extends TestCase
         $this->assertSame("JWT", json_decode($header)->typ);
     }
 
+    public function testaddHeader()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->addHeader(['key' => 'hello', 'value' => 'world']);
+
+        $header = $builder->getHeader();
+
+        $this->assertNotEmpty($header);
+
+
+        $this->assertSame("HS256", json_decode($header)->alg);
+
+        $this->assertSame("JWT", json_decode($header)->typ);
+
+        $this->assertSame("world", json_decode($header)->hello);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Failed to add header, format wrong. Array must contain key and value.
+     */
+    public function testBadHeader()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->addHeader(['car' => 'user_id', 'value' => 2]);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\TokenBuilderException
+     * @expectedExceptionMessage Failed to add header, format wrong. Array must contain key and value.
+     */
+    public function testBadHeaderOne()
+    {
+        $builder = new TokenBuilder();
+
+        $builder->addHeader(['key' => 'user_id', 'park' => 2]);
+    }
+
     public function testSetSecret()
     {
         $builder = new TokenBuilder();

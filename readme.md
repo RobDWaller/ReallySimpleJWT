@@ -24,6 +24,14 @@ For more information on JSON Web Tokens please see https://jwt.io
 
 ## Usage
 
+### Setup
+
+via composer: 
+
+```bash 
+composer require rbdwllr/reallysimplejwt
+``` 
+
 ### Get Token
 
 Call the get token method and pass in user identifier, key secret, expiration
@@ -83,6 +91,7 @@ use ReallySimpleJWT\TokenBuilder;
 $builder = new TokenBuilder();
 
 $token = $builder->addPayload(['key' => 'foo', 'value' => 'bar'])
+    ->addHeader(['key' => 'baz', 'value' => 'qux'])
     ->setSecret($secret)
     ->setExpiration($expiration)
     ->setIssuer($issuer)
