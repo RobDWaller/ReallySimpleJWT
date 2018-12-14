@@ -4,6 +4,10 @@
 A simple package for creating JSON Web Tokens that uses HMAC SHA256 to sign
 signatures. Exposes a simple interface to allow you to create a token that stores a user identifier. The package is set up to allow extension and the use of larger payloads.
 
+## Version 2.0.0
+
+Version two of this library is currently [in alpha](https://github.com/RobDWaller/ReallySimpleJWT/releases/tag/2.0.0-alpha1) and will be released early in 2019. It is a significant improvement to the library but will contain a number of breaking changes. I advise all users of this library to read my [blog post](https://rbrt.wllr.info/2018/12/14/really-simple-jwt-version-two.html) on the subject to better understand what will be happening and when.  
+
 ## What is a JSON Web Token?
 
 JSON Web Tokens is a standard for creating URL friendly access tokens that assert claims about a user or system. They are broken down into three parts; the header, the payload and the signature; with each part separated by a dot.
