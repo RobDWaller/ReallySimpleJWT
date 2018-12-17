@@ -15,6 +15,8 @@ class Build
 
     private $payload = [];
 
+    private $header = [];
+
     private $validate;
 
     private $secret;
@@ -86,5 +88,14 @@ class Build
             $this->encode->signature($this->jsonEncode($this->getHeader()), $this->jsonEncode($this->getPayload()), $this->secret),
             $this->secret
         );
+    }
+
+    public function reset(): self
+    {
+        $this->payload = [];
+        $this->header = [];
+        $this->secret = '';
+
+        return $this;
     }
 }

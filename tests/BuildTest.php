@@ -228,4 +228,46 @@ class BuildTest extends TestCase
         $this->assertSame($parsed2->getPayload()['exp'], $time2);
         $this->assertSame($parsed2->getPayload()['iss'], 'https://facebook.com');
     }
+
+    public function testResetMethod()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $time1 = time() + 10;
+
+        $token1 = $build->setSecret('$$$pdr432!456htHeLOOl!')
+            ->setIssuer('https://google.com')
+            ->setExpiration($time1)
+            ->setPrivateClaim('user_id', 5)
+            ->build();
+
+        $time2 = time() + 99;
+
+        $token2 = $build->reset()
+            ->setSecret('!123$!9283htHeLOOl!')
+            ->setIssuer('https://facebook.com')
+            ->setExpiration($time2)
+            ->setPrivateClaim('uid', 7)
+            ->build();
+
+        $parse1 = new Parse($token1, new Validate, new Encode());
+
+        $parsed1 = $parse1->validate()
+            ->validateExpiration()
+            ->parse();
+
+        $parse2 = new Parse($token2, new Validate, new Encode());
+
+        $parsed2 = $parse2->validate()
+            ->validateExpiration()
+            ->parse();
+
+        $this->assertSame($parsed1->getPayload()['user_id'], 5);
+        $this->assertSame($parsed1->getPayload()['exp'], $time1);
+        $this->assertSame($parsed1->getPayload()['iss'], 'https://google.com');
+
+        $this->assertSame($parsed2->getPayload()['uid'], 7);
+        $this->assertSame($parsed2->getPayload()['exp'], $time2);
+        $this->assertSame($parsed2->getPayload()['iss'], 'https://facebook.com');
+    }
 }
