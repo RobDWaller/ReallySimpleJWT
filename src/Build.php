@@ -6,10 +6,13 @@ namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Helper\JsonEncoder;
 use ReallySimpleJWT\Exception\Validate as ValidateException;
 
 class Build
 {
+    use JsonEncoder;
+
     private $payload = [];
 
     private $validate;
@@ -78,9 +81,9 @@ class Build
     public function build(): Jwt
     {
         return new Jwt(
-            $this->encode->encode(json_encode($this->getHeader())) . "." .
-            $this->encode->encode(json_encode($this->getPayload())) . "." .
-            $this->encode->signature(json_encode($this->getHeader()), json_encode($this->getPayload()), $this->secret),
+            $this->encode->encode($this->jsonEncode($this->getHeader())) . "." .
+            $this->encode->encode($this->jsonEncode($this->getPayload())) . "." .
+            $this->encode->signature($this->jsonEncode($this->getHeader()), $this->jsonEncode($this->getPayload()), $this->secret),
             $this->secret
         );
     }
