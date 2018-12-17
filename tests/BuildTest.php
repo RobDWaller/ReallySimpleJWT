@@ -164,4 +164,68 @@ class BuildTest extends TestCase
         $this->assertSame('JWT', $result['typ']);
         $this->assertSame('HS256', $result['alg']);
     }
+
+    public function testTwoTokenGeneration()
+    {
+        $build1 = new Build('JWT', new Validate, new Encode);
+
+        $token1 = $build1->setSecret('$$$pdr432!456htHeLOOl!')
+            ->setIssuer('https://google.com')
+            ->setExpiration(time() + 10)
+            ->setPrivateClaim('user_id', 5)
+            ->build();
+
+        $build2 = new Build('JWT', new Validate, new Encode);
+
+        $token2 = $build2->setSecret('!123$!9283htHeLOOl!')
+            ->setIssuer('https://facebook.com')
+            ->setExpiration(time() + 99)
+            ->setPrivateClaim('uid', 7)
+            ->build();
+
+        $this->assertNotSame($token1->getToken(), $token2->getToken());
+    }
+
+    public function testTwoTokenGenerationAndParse()
+    {
+        $build1 = new Build('JWT', new Validate, new Encode);
+
+        $time1 = time() + 10;
+
+        $token1 = $build1->setSecret('$$$pdr432!456htHeLOOl!')
+            ->setIssuer('https://google.com')
+            ->setExpiration($time1)
+            ->setPrivateClaim('user_id', 5)
+            ->build();
+
+        $build2 = new Build('JWT', new Validate, new Encode);
+
+        $time2 = time() + 99;
+
+        $token2 = $build2->setSecret('!123$!9283htHeLOOl!')
+            ->setIssuer('https://facebook.com')
+            ->setExpiration($time2)
+            ->setPrivateClaim('uid', 7)
+            ->build();
+
+        $parse1 = new Parse($token1, new Validate, new Encode());
+
+        $parsed1 = $parse1->validate()
+            ->validateExpiration()
+            ->parse();
+
+        $parse2 = new Parse($token2, new Validate, new Encode());
+
+        $parsed2 = $parse2->validate()
+            ->validateExpiration()
+            ->parse();
+
+        $this->assertSame($parsed1->getPayload()['user_id'], 5);
+        $this->assertSame($parsed1->getPayload()['exp'], $time1);
+        $this->assertSame($parsed1->getPayload()['iss'], 'https://google.com');
+
+        $this->assertSame($parsed2->getPayload()['uid'], 7);
+        $this->assertSame($parsed2->getPayload()['exp'], $time2);
+        $this->assertSame($parsed2->getPayload()['iss'], 'https://facebook.com');
+    }
 }
