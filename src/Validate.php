@@ -22,6 +22,11 @@ class Validate
         return $expiration >= time();
     }
 
+    public function notBefore(int $notBefore): bool
+    {
+        return $notBefore <= time();
+    }
+
     public function signature(string $signature, string $comparison): bool
     {
         return hash_equals($signature, $comparison);

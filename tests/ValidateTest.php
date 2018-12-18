@@ -136,4 +136,18 @@ class ValidateTest extends TestCase
 
         $this->assertFalse($validate->secret('HELLOworldFOOBAR123'));
     }
+
+    public function testValidateNotBefore()
+    {
+        $validate = new Validate();
+
+        $this->assertTrue($validate->notBefore(time() - 10));
+    }
+
+    public function testValidateNotFalse()
+    {
+        $validate = new Validate();
+
+        $this->assertFalse($validate->notBefore(time() + 10));
+    }
 }
