@@ -85,7 +85,7 @@ class Build
         return new Jwt(
             $this->encode->encode($this->jsonEncode($this->getHeader())) . "." .
             $this->encode->encode($this->jsonEncode($this->getPayload())) . "." .
-            $this->encode->signature($this->jsonEncode($this->getHeader()), $this->jsonEncode($this->getPayload()), $this->secret),
+            $this->getSignature(),
             $this->secret
         );
     }
@@ -97,5 +97,18 @@ class Build
         $this->secret = '';
 
         return $this;
+    }
+
+    private function getSignature(): string
+    {
+        if (!empty($this->secret)) {
+            return $this->encode->signature(
+                $this->jsonEncode($this->getHeader()),
+                $this->jsonEncode($this->getPayload()),
+                $this->secret
+            );
+        }
+
+        throw new ValidateException('Please set a valid secret for your token.');
     }
 }

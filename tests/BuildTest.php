@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Carbon\Carbon;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Token;
+use ReflectionMethod;
 
 class BuildTest extends TestCase
 {
@@ -269,5 +270,40 @@ class BuildTest extends TestCase
         $this->assertSame($parsed2->getPayload()['uid'], 7);
         $this->assertSame($parsed2->getPayload()['exp'], $time2);
         $this->assertSame($parsed2->getPayload()['iss'], 'https://facebook.com');
+    }
+
+    public function testGetSignature()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $build->setSecret('$$$pdr432!456htHeLOOl!')
+            ->setIssuer('https://google.com')
+            ->setExpiration(time() + 10)
+            ->setPrivateClaim('user_id', 5);
+
+        $method = new ReflectionMethod(Build::class, 'getSignature');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($build);
+
+        $this->assertInternalType('string', $result);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage Please set a valid secret for your token.
+     */
+    public function testGetSignatureNoSecret()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $build->setIssuer('https://google.com')
+            ->setExpiration(time() + 10)
+            ->setPrivateClaim('user_id', 5);
+
+        $method = new ReflectionMethod(Build::class, 'getSignature');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($build);
     }
 }
