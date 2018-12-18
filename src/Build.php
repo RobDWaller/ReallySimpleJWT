@@ -34,9 +34,9 @@ class Build
         $this->encode = $encode;
     }
 
-    public function setContentType(string $value): self
+    public function setContentType(string $contentType): self
     {
-        $this->header['cty'] = $value;
+        $this->header['cty'] = $contentType;
 
         return $this;
     }
@@ -67,6 +67,31 @@ class Build
         return $this;
     }
 
+    public function setIssuer(string $issuer): self
+    {
+        $this->payload['iss'] = $issuer;
+
+        return $this;
+    }
+
+    public function setSubject(string $subject): self
+    {
+        $this->payload['sub'] = $subject;
+
+        return $this;
+    }
+
+    public function setAudience($audience): self
+    {
+        if (is_string($audience) || is_array($audience)) {
+            $this->payload['aud'] = $audience;
+
+            return $this;
+        }
+
+        throw new ValidateException('Token audience must be either a string or array of strings.');
+    }
+
     public function setExpiration(int $timestamp): self
     {
         if (!$this->validate->expiration($timestamp)) {
@@ -78,9 +103,23 @@ class Build
         return $this;
     }
 
-    public function setIssuer(string $issuer): self
+    public function setNotBefore(int $notBefore): self
     {
-        $this->payload['iss'] = $issuer;
+        $this->payload['nbf'] = $notBefore;
+
+        return $this;
+    }
+
+    public function setIssuedAt(int $issuedAt): self
+    {
+        $this->payload['iat'] = $issuedAt;
+
+        return $this;
+    }
+
+    public function setJwtId(string $jwtId): self
+    {
+        $this->payload['jti'] = $jwtId;
 
         return $this;
     }

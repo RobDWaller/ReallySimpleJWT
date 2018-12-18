@@ -326,4 +326,80 @@ class BuildTest extends TestCase
 
         $this->assertSame($result['cty'], 'JWT');
     }
+
+    public function testSetSubject()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $result = $build->setSubject('Johnson')
+            ->getPayload();
+
+        $this->assertSame($result['sub'], 'Johnson');
+    }
+
+    public function testSetAudienceString()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $result = $build->setAudience('Chris')
+            ->getPayload();
+
+        $this->assertSame($result['aud'], 'Chris');
+    }
+
+    public function testSetAudienceArray()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $result = $build->setAudience(['John', 'Sarah'])
+            ->getPayload();
+
+        $this->assertSame($result['aud'][0], 'John');
+        $this->assertSame($result['aud'][1], 'Sarah');
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage Token audience must be either a string or array of strings.
+     */
+    public function testSetAudienceIntFail()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $result = $build->setAudience(123);
+    }
+
+    public function testSetNotBefore()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $time = time();
+
+        $result = $build->setNotBefore($time)
+            ->getPayload();
+
+        $this->assertSame($result['nbf'], $time);
+    }
+
+    public function testIssuedAt()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $time = time();
+
+        $result = $build->setIssuedAt($time)
+            ->getPayload();
+
+        $this->assertSame($result['iat'], $time);
+    }
+
+    public function testSetJwtId()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $result = $build->setJwtId('helLo123')
+            ->getPayload();
+
+        $this->assertSame($result['jti'], 'helLo123');
+    }
 }
