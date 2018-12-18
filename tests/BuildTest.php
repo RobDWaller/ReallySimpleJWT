@@ -306,4 +306,24 @@ class BuildTest extends TestCase
 
         $result = $method->invoke($build);
     }
+
+    public function testSetHeaderClaim()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $result = $build->setHeaderClaim('enc', 'A128CBC-HS256')
+            ->getHeader();
+
+        $this->assertSame($result['enc'], 'A128CBC-HS256');
+    }
+
+    public function testSetContentType()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $result = $build->setContentType('JWT')
+            ->getHeader();
+
+        $this->assertSame($result['cty'], 'JWT');
+    }
 }

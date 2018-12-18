@@ -34,14 +34,26 @@ class Build
         $this->encode = $encode;
     }
 
-    public function getHeader(): array
+    public function setContentType(string $value): self
     {
-        return ['alg' => $this->encode->getAlgorithm(), 'typ' => $this->type];
+        $this->header['cty'] = $value;
+
+        return $this;
     }
 
-    public function getPayload(): array
+    public function setHeaderClaim(string $key, $value): self
     {
-        return $this->payload;
+        $this->header[$key] = $value;
+
+        return $this;
+    }
+
+    public function getHeader(): array
+    {
+        return array_merge(
+            $this->header,
+            ['alg' => $this->encode->getAlgorithm(), 'typ' => $this->type]
+        );
     }
 
     public function setSecret(string $secret): self
@@ -78,6 +90,11 @@ class Build
         $this->payload[$key] = $value;
 
         return $this;
+    }
+
+    public function getPayload(): array
+    {
+        return $this->payload;
     }
 
     public function build(): Jwt
