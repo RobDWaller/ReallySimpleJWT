@@ -46,7 +46,7 @@ class Parse
     public function validate(): self
     {
         if (!$this->validate->structure($this->jwt->getToken())) {
-            throw new ValidateException('The JSON web token has an invalid structure.');
+            $this->error('The JSON web token has an invalid structure.');
         }
 
         try {
@@ -56,11 +56,11 @@ class Parse
                 $this->jwt->getSecret()
             );
         } catch (\Throwable $e) {
-            throw new ValidateException('The JSON web token is invalid [' . $this->jwt->getToken() . '].');
+            $this->error('The JSON web token is invalid [' . $this->jwt->getToken() . '].');
         }
 
         if (!$this->validate->signature($signature, $this->getSignature())) {
-            throw new ValidateException('The JSON web token signature is invalid.');
+            $this->error('The JSON web token signature is invalid.');
         }
 
         return $this;
@@ -69,7 +69,16 @@ class Parse
     public function validateExpiration(): self
     {
         if (!$this->validate->expiration($this->getExpiration())) {
-            throw new ValidateException('The expiration time has elapsed or it was never set, this token is not valid.');
+            $this->error('The expiration time has elapsed, this token is no longer valid.');
+        }
+
+        return $this;
+    }
+
+    public function validateNotBefore(): self
+    {
+        if (!$this->validate->notBefore($this->getNotBefore())) {
+            $this->error('This token is not valid as the Not Before date/time value has not elapsed.');
         }
 
         return $this;
@@ -99,6 +108,18 @@ class Parse
     {
         return $this->jsonDecode($this->encode->decode(
             $this->getPayload()
-        ))['exp'] ?? 0;
+        ))['exp'] ?? $this->error('The Expiration claim was not set on this token.');
+    }
+
+    private function getNotBefore(): int
+    {
+        return $this->jsonDecode($this->encode->decode(
+            $this->getPayload()
+        ))['nbf'] ?? $this->error('The Not Before claim was not set on this token.');;
+    }
+
+    private function error(string $message): void
+    {
+        throw new ValidateException($message);
     }
 }

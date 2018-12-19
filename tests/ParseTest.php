@@ -11,6 +11,7 @@ use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Token;
 use Carbon\Carbon;
 use ReflectionMethod;
+use ReallySimpleJWT\Build;
 
 class ParseTest extends TestCase
 {
@@ -184,7 +185,7 @@ class ParseTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\Validate
-     * @expectedExceptionMessage The expiration time has elapsed or it was never set, this token is not valid.
+     * @expectedExceptionMessage The expiration time has elapsed, this token is no longer valid.
      */
     public function testParseValidateExpirationInvalid()
     {
@@ -199,7 +200,7 @@ class ParseTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\Validate
-     * @expectedExceptionMessage The expiration time has elapsed or it was never set, this token is not valid.
+     * @expectedExceptionMessage The Expiration claim was not set on this token.
      */
     public function testParseValidateExpirationInvalidTwo()
     {
@@ -228,5 +229,135 @@ class ParseTest extends TestCase
         $result = $method->invoke($parse);
 
         $this->assertSame($timestamp->getTimestamp(), $result);
+    }
+
+    public function testGetNotBefore()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $time = time() - 10;
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setNotBefore($time)
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate,
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'getNotBefore');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame($time, $result);
+    }
+
+    public function testParseValidateNotBefore()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setNotBefore(time() - 10)
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate,
+            new Encode()
+        );
+
+        $this->assertInstanceOf(Parse::class, $parse->validateNotBefore());
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage This token is not valid as the Not Before date/time value has not elapsed.
+     */
+    public function testParseValidateNotBeforeInvalid()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setNotBefore(time() + 100)
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate,
+            new Encode()
+        );
+
+        $parse->validateNotBefore();
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage The Not Before claim was not set on this token.
+     */
+    public function testParseValidateNotBeforeNotSet()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setExpiration(time() + 100)
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate,
+            new Encode()
+        );
+
+        $parse->validateNotBefore();
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage The Expiration claim was not set on this token.
+     */
+    public function testParseValidateExpirationNotSet()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setNotBefore(time() + 100)
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate,
+            new Encode()
+        );
+
+        $parse->validateExpiration();
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage The Expiration claim was not set on this token.
+     */
+    public function testError()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $time = time() - 10;
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setNotBefore($time)
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate,
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'error');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($parse, ['The Expiration claim was not set on this token.']);
     }
 }
