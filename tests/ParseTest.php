@@ -360,4 +360,28 @@ class ParseTest extends TestCase
 
         $result = $method->invokeArgs($parse, ['The Expiration claim was not set on this token.']);
     }
+
+    public function testDecodePayload()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $time = time() - 10;
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setNotBefore($time)
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate,
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'decodePayload');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame($time, $result['nbf']);
+    }
 }

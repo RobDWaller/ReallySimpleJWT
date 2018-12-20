@@ -109,16 +109,27 @@ class Parse
 
     private function getExpiration(): int
     {
-        return $this->jsonDecode($this->encode->decode(
-            $this->getPayload()
-        ))['exp'] ?? $this->error('The Expiration claim was not set on this token.');
+        if (isset($this->decodePayload()['exp'])) {
+            return $this->decodePayload()['exp'];
+        }
+
+        $this->error('The Expiration claim was not set on this token.');
     }
 
     private function getNotBefore(): int
     {
+        if (isset($this->decodePayload()['nbf'])) {
+            return $this->decodePayload()['nbf'];
+        }
+
+        $this->error('The Not Before claim was not set on this token.');
+    }
+
+    private function decodePayload(): array
+    {
         return $this->jsonDecode($this->encode->decode(
             $this->getPayload()
-        ))['nbf'] ?? $this->error('The Not Before claim was not set on this token.');;
+        ));
     }
 
     private function error(string $message): void
