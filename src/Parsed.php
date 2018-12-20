@@ -38,9 +38,54 @@ class Parsed
         return $this->header;
     }
 
+    public function getType(): string
+    {
+        return $this->header['typ'] ?? '';
+    }
+
+    public function getContentType(): string
+    {
+        return $this->header['cty'] ?? '';
+    }
+
     public function getPayload(): array
     {
         return $this->payload;
+    }
+
+    public function getIssuer(): string
+    {
+        return $this->payload['iss'] ?? '';
+    }
+
+    public function getSubject(): string
+    {
+        return $this->payload['sub'] ?? '';
+    }
+
+    public function getAudience(): string
+    {
+        return $this->payload['aud'] ?? '';
+    }
+
+    public function getExpiration(): int
+    {
+        return $this->payload['exp'] ?? 0;
+    }
+
+    public function getNotBefore(): int
+    {
+        return $this->payload['nbf'] ?? 0;
+    }
+
+    public function getIssuedAt(): int
+    {
+        return $this->payload['iat'] ?? 0;
+    }
+
+    public function getJwtId(): string
+    {
+        return $this->payload['jti'] ?? '';
     }
 
     public function getSignature(): string
