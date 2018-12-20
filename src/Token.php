@@ -60,8 +60,7 @@ class Token
         try {
             $parse->validate()->validateExpiration();
             return true;
-        }
-        catch (ValidateException $e) {
+        } catch (ValidateException $e) {
             return false;
         }
     }

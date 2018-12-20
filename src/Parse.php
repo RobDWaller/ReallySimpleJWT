@@ -57,7 +57,6 @@ class Parse
                 $this->encode->decode($this->getPayload()),
                 $this->jwt->getSecret()
             );
-
         } catch (\Throwable $e) {
             $this->error('The JSON web token is invalid [' . $this->jwt->getToken() . '].');
         }
