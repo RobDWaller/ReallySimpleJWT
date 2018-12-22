@@ -6,7 +6,7 @@ signatures. Exposes a simple interface to allow you to create a token that store
 
 ## Version 2.0.0
 
-Version two of this library is currently [in alpha](https://github.com/RobDWaller/ReallySimpleJWT/releases/tag/2.0.0-alpha1) and will be released early in 2019. It is a significant improvement to the library but will contain a number of breaking changes. I advise all users of this library to read my [blog post](https://rbrt.wllr.info/2018/12/14/really-simple-jwt-version-two.html) on the subject to better understand what will be happening and when.  
+Version two of this library is currently [in beta](https://github.com/RobDWaller/ReallySimpleJWT/releases/tag/2.0.0-beta) and will be released early in 2019. It is a significant improvement to the library but will contain a number of breaking changes. I advise all users of this library to read my [blog post](https://rbrt.wllr.info/2018/12/14/really-simple-jwt-version-two.html) on the subject to better understand what will be happening and when.  
 
 ## What is a JSON Web Token?
 
@@ -26,11 +26,11 @@ For more information on JSON Web Tokens please see https://jwt.io
 
 ### Setup
 
-via composer: 
+via composer:
 
-```bash 
+```bash
 composer require rbdwllr/reallysimplejwt
-``` 
+```
 
 ### Get Token
 
