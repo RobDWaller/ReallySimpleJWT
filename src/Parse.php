@@ -33,37 +33,13 @@ class Parse
         $this->encode = $encode;
     }
 
-    public function parse(): Parsed
-    {
-        return new Parsed(
-            $this->jwt,
-            $this->jsonDecode($this->encode->decode($this->getHeader())),
-            $this->jsonDecode($this->encode->decode($this->getPayload())),
-            $this->getSignature()
-        );
-    }
-
     public function validate(): self
     {
-        $signature = '';
-
         if (!$this->validate->structure($this->jwt->getToken())) {
             $this->error('The JSON web token has an invalid structure.');
         }
 
-        try {
-            $signature = $this->encode->signature(
-                $this->encode->decode($this->getHeader()),
-                $this->encode->decode($this->getPayload()),
-                $this->jwt->getSecret()
-            );
-        } catch (\Throwable $e) {
-            $this->error('The JSON web token is invalid [' . $this->jwt->getToken() . '].');
-        }
-
-        if (!$this->validate->signature($signature, $this->getSignature())) {
-            $this->error('The JSON web token signature is invalid.');
-        }
+        $this->validateSignature();
 
         return $this;
     }
@@ -84,6 +60,35 @@ class Parse
         }
 
         return $this;
+    }
+
+    public function parse(): Parsed
+    {
+        return new Parsed(
+            $this->jwt,
+            $this->decodeHeader(),
+            $this->decodePayload(),
+            $this->getSignature()
+        );
+    }
+
+    private function validateSignature(): void
+    {
+        $signature = '';
+
+        try {
+            $signature = $this->encode->signature(
+                $this->encode->decode($this->getHeader()),
+                $this->encode->decode($this->getPayload()),
+                $this->jwt->getSecret()
+            );
+        } catch (\Throwable $e) {
+            $this->error('The JSON web token is invalid [' . $this->jwt->getToken() . '].');
+        }
+
+        if (!$this->validate->signature($signature, $this->getSignature())) {
+            $this->error('The JSON web token signature is invalid.');
+        }
     }
 
     private function splitToken(): array
@@ -122,6 +127,13 @@ class Parse
         }
 
         $this->error('The Not Before claim was not set on this token.');
+    }
+
+    private function decodeHeader(): array
+    {
+        return $this->jsonDecode($this->encode->decode(
+            $this->getHeader()
+        ));
     }
 
     private function decodePayload(): array

@@ -384,4 +384,78 @@ class ParseTest extends TestCase
 
         $this->assertSame($time, $result['nbf']);
     }
+
+    public function testDecodeHeader()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $time = time() - 10;
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setNotBefore($time)
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate,
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'decodeHeader');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame('JWT', $result['typ']);
+    }
+
+    public function testValidateSignature()
+    {
+        $parse = new Parse(
+            new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
+            new Validate,
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'validateSignature');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invoke($parse));
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage The JSON web token signature is invalid.
+     */
+    public function testValidateSignatureBadTokenGoodStructure()
+    {
+        $parse = new Parse(
+            new Jwt('hello.hello.hello', 'foo1234He$$llo56'),
+            new Validate,
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'validateSignature');
+        $method->setAccessible(true);
+
+        $method->invoke($parse);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedExceptionMessage The JSON web token signature is invalid.
+     */
+    public function testValidateSignatureInvalidSignature()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbT', 'foo1234He$$llo56'),
+            new Validate,
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'validateSignature');
+        $method->setAccessible(true);
+
+        $method->invoke($parse);
+    }
 }
