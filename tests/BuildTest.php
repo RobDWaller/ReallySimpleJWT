@@ -31,7 +31,9 @@ class BuildTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\Validate
-     * @expectedExceptionMessage Please set a valid secret. It must be at least twelve characters in length, contain lower and upper case letters, a number and one of the following characters *&!@%^#$.
+     * @expectedExceptionMessage Please set a valid secret. It must be at least twelve characters in length,
+     * contain lower and upper case letters,
+     * a number and one of the following characters *&!@%^#$.
      */
     public function testBuildSetSecretInvalid()
     {
