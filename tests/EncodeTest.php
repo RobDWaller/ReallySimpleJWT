@@ -3,9 +3,6 @@
 namespace Tests;
 
 use ReallySimpleJWT\Encode;
-use ReallySimpleJWT\Helper\Signature;
-use ReallySimpleJWT\Helper\TokenEncodeDecode;
-use ReallySimpleJWT\Helper\Hmac;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 

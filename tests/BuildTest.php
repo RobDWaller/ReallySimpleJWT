@@ -6,11 +6,9 @@ use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\TokenBuilder;
+use ReallySimpleJWT\Encode;
 use PHPUnit\Framework\TestCase;
 use Carbon\Carbon;
-use ReallySimpleJWT\Encode;
-use ReallySimpleJWT\Token;
 use ReflectionMethod;
 
 class BuildTest extends TestCase

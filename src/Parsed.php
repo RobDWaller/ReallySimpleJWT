@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Jwt;
-use stdClass;
 
 class Parsed
 {

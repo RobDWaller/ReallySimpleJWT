@@ -9,9 +9,9 @@ use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Token;
+use ReallySimpleJWT\Build;
 use Carbon\Carbon;
 use ReflectionMethod;
-use ReallySimpleJWT\Build;
 
 class ParseTest extends TestCase
 {

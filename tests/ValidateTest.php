@@ -2,12 +2,10 @@
 
 namespace Tests;
 
-use ReflectionMethod;
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Token;
-use ReallySimpleJWT\Helper\Signature;
 use Carbon\Carbon;
 
 class ValidateTest extends TestCase

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use Carbon\Carbon;
-use ReallySimpleJWT\Helper\Signature;
-
 class Validate
 {
     public function structure(string $jwt): bool

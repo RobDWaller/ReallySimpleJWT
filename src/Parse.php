@@ -7,12 +7,9 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parsed;
-use ReallySimpleJWT\Helper\TokenEncodeDecode;
-use ReallySimpleJWT\Helper\Signature;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Helper\JsonEncoder;
-use stdClass;
 
 class Parse
 {
