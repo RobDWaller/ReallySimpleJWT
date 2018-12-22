@@ -60,7 +60,7 @@ class TokenTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedException Token string has invalid structure, ensure three strings seperated by dots.
      */
     public function testGetPayloadFail()

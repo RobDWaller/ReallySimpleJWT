@@ -112,7 +112,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The JSON web token has an invalid structure.
      */
     public function testParseValidateInvalidStructure()
@@ -127,7 +127,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The JSON web token signature is invalid.
      */
     public function testParseValidateBadTokenGoodStructure()
@@ -142,7 +142,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The JSON web token signature is invalid.
      */
     public function testParseValidateInvalidSignature()
@@ -184,7 +184,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The expiration time has elapsed, this token is no longer valid.
      */
     public function testParseValidateExpirationInvalid()
@@ -199,7 +199,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The Expiration claim was not set on this token.
      */
     public function testParseValidateExpirationInvalidTwo()
@@ -273,7 +273,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage This token is not valid as the Not Before date/time value has not elapsed.
      */
     public function testParseValidateNotBeforeInvalid()
@@ -294,7 +294,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The Not Before claim was not set on this token.
      */
     public function testParseValidateNotBeforeNotSet()
@@ -315,7 +315,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The Expiration claim was not set on this token.
      */
     public function testParseValidateExpirationNotSet()
@@ -336,7 +336,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The Expiration claim was not set on this token.
      */
     public function testError()
@@ -424,7 +424,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The JSON web token signature is invalid.
      */
     public function testValidateSignatureBadTokenGoodStructure()
@@ -442,7 +442,7 @@ class ParseTest extends TestCase
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\Validate
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The JSON web token signature is invalid.
      */
     public function testValidateSignatureInvalidSignature()

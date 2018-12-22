@@ -8,15 +8,15 @@ use Exception;
 use Throwable;
 
 /**
- * Simple exception interface class for the Token Validator class to make
+ * Simple exception interface class for all token validation exceptions to make
  * exceptions more specific and obvious. Extends the PHP exception class
  *
  * @author Rob Waller <rdwaller1984@gmail.com>
  */
-class Validate extends Exception
+class ValidateException extends Exception
 {
     /**
-     * Constructor for the Token Builder Exception class
+     * Constructor for the Validate Exception class
      *
      * @param string $message
      * @param int $code

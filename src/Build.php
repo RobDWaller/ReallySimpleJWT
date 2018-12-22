@@ -7,7 +7,7 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Helper\JsonEncoder;
-use ReallySimpleJWT\Exception\Validate as ValidateException;
+use ReallySimpleJWT\Exception\ValidateException;
 
 class Build
 {

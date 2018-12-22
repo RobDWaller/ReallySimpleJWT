@@ -7,7 +7,7 @@ use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Encode;
-use ReallySimpleJWT\Exception\Validate as ValidateException;
+use ReallySimpleJWT\Exception\ValidateException;
 use Carbon\Carbon;
 
 /**
