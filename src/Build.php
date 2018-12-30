@@ -6,13 +6,13 @@ namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Encode;
-use 'ReallySimpleJWT\JWT'.;
+use ReallySimpleJWT\JWT;
 use ReallySimpleJWT\Helper\JsonEncoder;
 use ReallySimpleJWT\Exception\ValidateException;
 
 /**
  * A class to build a JSON Web Token, returns the token as an instance of
- * 'ReallySimpleJWT\JWT'.
+ * ReallySimpleJWT\JWT.
  *
  * Class contains helper methods that allow you to easily set JWT claims
  * defined in the JWT RFC. Eg setIssuer() will set the iss claim in the
@@ -29,7 +29,7 @@ class Build
     use JsonEncoder;
 
     /**
-     * Defines the type of JWT to be created, usually just 'JWT'.
+     * Defines the type of JWT to be created, usually just JWT.
      *
      * @var string
      */
@@ -88,6 +88,7 @@ class Build
      * nested token.
      *
      * @param string $contentType
+     * @return ReallySimpleJWT\Build
      */
     public function setContentType(string $contentType): self
     {
@@ -324,7 +325,7 @@ class Build
 
     /**
      * Generate and return the JWT signature this is made up of the header,
-     * payload and secret. 
+     * payload and secret.
      *
      * @return string
      * @throws ReallySimpleJWT\Exception\ValidateException

@@ -70,7 +70,7 @@ class Validate
      * It should contain a number, upper and lowercase letters, and a special
      * character. It should be at least 12 charachers in length.
      *
-     * The regex here uses...
+     * The regex here uses Lookahead Assertions.
      *
      * @param string $secret
      * @return bool
