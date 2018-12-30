@@ -443,6 +443,42 @@ class ParseTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
+     * @expectedExceptionMessage The JSON web token is invalid []
+     */
+    public function testValidateSignatureEmptyToken()
+    {
+        $parse = new Parse(
+            new Jwt('', 'foo1234He$$llo56'),
+            new Validate,
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'validateSignature');
+        $method->setAccessible(true);
+
+        $method->invoke($parse);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
+     * @expectedExceptionMessage The JSON web token is invalid [car]
+     */
+    public function testValidateSignatureBadTokenStructure()
+    {
+        $parse = new Parse(
+            new Jwt('car', 'foo1234He$$llo56'),
+            new Validate,
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'validateSignature');
+        $method->setAccessible(true);
+
+        $method->invoke($parse);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The JSON web token signature is invalid.
      */
     public function testValidateSignatureInvalidSignature()
