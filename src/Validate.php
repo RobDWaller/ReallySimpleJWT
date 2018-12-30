@@ -66,7 +66,7 @@ class Validate
     /**
      * Validate the secret used to secure the token signature is strong enough.
      * It should contain a number, upper and lowercase letters, and a special
-     * character *&!@%^#$. It should be at least 12 charachers in length.
+     * character *&!@%^#$. It should be at least 12 characters in length.
      *
      * The regex here uses Lookahead Assertions.
      *
