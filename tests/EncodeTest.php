@@ -121,7 +121,12 @@ class EncodeTest extends TestCase
     {
         $encode = new Encode();
 
-        $this->assertSame('sha256', $encode->getHash());
+        $method = new ReflectionMethod(Encode::class, 'getHashAlgorithm');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($encode);
+
+        $this->assertSame('sha256', $result);
     }
 
     public function testDecode()

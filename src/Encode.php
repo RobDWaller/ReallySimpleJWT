@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
+use ReallySimpleJWT\Interfaces\EncodeInterface;
+
 /**
  * Class used to encode the JSON Web Token signature. Also defines the
  * hash / algorithm to be used.
@@ -11,15 +13,21 @@ namespace ReallySimpleJWT;
  * This class is written so it is replaceable with a custom encoding.
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>
- * @todo this class needs some tidyup addPadding method is semantically wrong
- * and the hash algorithm stuff needs clarifying. Also need to add
- * the interface.
  */
-class Encode
+class Encode implements EncodeInterface
 {
+    /**
+     * The Algorithm which was used to hash the token signature. This is what
+     * is displayed as the alg claim in the token header. Note this may be
+     * slightly different from the actual algorithm used to hash the
+     * signature string.
+     */
     private const ALGORITHM = 'HS256';
 
-    private const HASH = 'sha256';
+    /**
+     * This is the actual algorithm used to hash the token's signature string.
+     */
+    private const HASH_ALGORITHM = 'sha256';
 
     /**
      * Get the algorithm used to encode the signature. Note this is for show,
@@ -27,20 +35,20 @@ class Encode
      *
      * @return string
      */
-    public function getAlgorithm()
+    public function getAlgorithm(): string
     {
         return self::ALGORITHM;
     }
 
     /**
-     * Get the hash to be used when encoding the signature, nte this is the
-     * actual hash type used to encode the signature.
+     * Get the hash algorithm string to be used when encoding the signature,
+     * this is the actual hash type used to encode the signature.
      *
      * @return string
      */
-    public function getHash()
+    private function getHashAlgorithm(): string
     {
-        return self::HASH;
+        return self::HASH_ALGORITHM;
     }
 
     /**
@@ -82,7 +90,7 @@ class Encode
     {
         return $this->encode(
             $this->hash(
-                self::HASH,
+                $this->getHashAlgorithm(),
                 $this->encode($header) . "." . $this->encode($payload),
                 $secret
             )
@@ -97,7 +105,7 @@ class Encode
      * @param string $secret
      * @return string
      */
-    public function hash(string $algorithm, string $toHash, string $secret): string
+    private function hash(string $algorithm, string $toHash, string $secret): string
     {
         return hash_hmac($algorithm, $toHash, $secret, true);
     }
@@ -126,18 +134,18 @@ class Encode
 
     /**
      * Add padding to base64 string which require it. Some base64 URL strings
-     * which are decode will have missing padding which is represented by the
+     * which are decoded will have missing padding which is represented by the
      * equals sign.
      *
-     * @param string $urlString
+     * @param string $base64String
      * @return string
      */
-    private function addPadding(string $urlString): string
+    private function addPadding(string $base64String): string
     {
-        if (strlen($urlString) % 4 !== 0) {
-            return $this->addPadding($urlString . '=');
+        if (strlen($base64String) % 4 !== 0) {
+            return $this->addPadding($base64String . '=');
         }
 
-        return $urlString;
+        return $base64String;
     }
 }
