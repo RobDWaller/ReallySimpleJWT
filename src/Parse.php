@@ -8,7 +8,7 @@ use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Exception\ValidateException;
-use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Interfaces\EncodeInterface;
 use ReallySimpleJWT\Helper\JsonEncoder;
 
 /**
@@ -43,7 +43,7 @@ class Parse
     /**
      * A class to encode and decode JWTs, in Parse it does decode.
      *
-     * @var Encode
+     * @var Interfaces\EncodeInterface
      */
     private $encode;
 
@@ -52,9 +52,9 @@ class Parse
      *
      * @param Jwt $jwt
      * @param Validate $validate
-     * @param Encode $encode
+     * @param Interfaces\EncodeInterface $encode
      */
-    public function __construct(Jwt $jwt, Validate $validate, Encode $encode)
+    public function __construct(Jwt $jwt, Validate $validate, EncodeInterface $encode)
     {
         $this->jwt = $jwt;
 

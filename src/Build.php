@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Interfaces\EncodeInterface;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Helper\JsonEncoder;
 use ReallySimpleJWT\Exception\ValidateException;
@@ -62,7 +62,7 @@ class Build
     private $validate;
 
     /**
-     * @var Encode
+     * @var Interfaces\EncodeInterface
      */
     private $encode;
 
@@ -71,9 +71,9 @@ class Build
      *
      * @param string $type
      * @param Validate $validate
-     * @param Encode $encode
+     * @param Interfaces\EncodeInterface $encode
      */
-    public function __construct(string $type, Validate $validate, Encode $encode)
+    public function __construct(string $type, Validate $validate, EncodeInterface $encode)
     {
         $this->type = $type;
 
