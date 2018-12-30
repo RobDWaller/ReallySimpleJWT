@@ -34,11 +34,10 @@ class Validate
      *
      * @param int $expiration
      * @return bool
-     * @todo This should not be greater or equal to, just greater.
      */
     public function expiration(int $expiration): bool
     {
-        return $expiration >= time();
+        return $expiration > time();
     }
 
     /**
@@ -48,11 +47,10 @@ class Validate
      *
      * @param int $notBefore
      * @return bool
-     * @todo This should not be less or equal to, just less.
      */
     public function notBefore(int $notBefore): bool
     {
-        return $notBefore <= time();
+        return $notBefore < time();
     }
 
     /**
@@ -68,14 +66,12 @@ class Validate
     /**
      * Validate the secret used to secure the token signature is strong enough.
      * It should contain a number, upper and lowercase letters, and a special
-     * character. It should be at least 12 charachers in length.
+     * character *&!@%^#$. It should be at least 12 charachers in length.
      *
      * The regex here uses Lookahead Assertions.
      *
      * @param string $secret
      * @return bool
-     * @todo write test to check it still works with other special characters
-     * maybe requires a signature generation test too.
      */
     public function secret(string $secret): bool
     {

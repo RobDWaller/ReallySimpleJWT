@@ -168,6 +168,23 @@ class ParsedTest extends TestCase
         $this->assertSame('users', $parsed->getAudience());
     }
 
+    public function testGetAudienceIsArray()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+
+        $parsed = new Parsed(
+            $token,
+            ["typ" => "JWT"],
+            ["aud" => ["users", "admins"]],
+            'hello'
+        );
+
+        $this->assertSame('users', $parsed->getAudience()[0]);
+        $this->assertSame('admins', $parsed->getAudience()[1]);
+    }
+
     public function testGetAudienceNotSet()
     {
         $build = new Build('JWT', new Validate(), new Encode());

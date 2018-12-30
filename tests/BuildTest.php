@@ -289,6 +289,23 @@ class BuildTest extends TestCase
         $this->assertInternalType('string', $result);
     }
 
+    public function testGetSignatureOddSpecialCharacters()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $build->setSecret('$£~pdr432!456htHeLOOl!')
+            ->setIssuer('https://google.com')
+            ->setExpiration(time() + 10)
+            ->setPrivateClaim('user_id', 5);
+
+        $method = new ReflectionMethod(Build::class, 'getSignature');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($build);
+
+        $this->assertInternalType('string', $result);
+    }
+
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage Please set a valid secret for your token.

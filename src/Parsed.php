@@ -142,7 +142,6 @@ class Parsed
      * Can return a string or an array. Will return an empty string if not set.
      *
      * @return string|array
-     * @todo this can return an array, fix this
      */
     public function getAudience()
     {
