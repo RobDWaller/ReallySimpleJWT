@@ -12,19 +12,19 @@ use Carbon\Carbon;
 
 /**
  * A simple Package for creating JSON Web Tokens that uses HMAC SHA256 to sign
- * signatures. Exposes a simple interface to allow you to create a simple token
+ * signatures. Exposes a simple interface to allow you to create a token
  * that stores a user identifier. The Package is set up to allow extension and
- * the use of larger payloads.
+ * the use of larger payloads. You can use your own encoding if you choose.
  *
  * For more information on JSON Web Tokens please see https://jwt.io
+ * along with the RFC https://tools.ietf.org/html/rfc7519
  *
  * @author Rob Waller <rdwaller1984@gmail.com>
  */
-
 class Token
 {
     /**
-     * Create a JSON Web Token that contains a User Identifier Payload
+     * Create a JSON Web Token that contains a user identifier payload.
      *
      * @param mixed $userId
      * @param string $secret
@@ -46,7 +46,7 @@ class Token
     }
 
     /**
-     * Validate a JSON Web Token's expiration and signature
+     * Validate a JSON Web Token's expiration and signature.
      *
      * @param string $token
      * @param string $secret
@@ -81,7 +81,7 @@ class Token
     }
 
     /**
-     * Interface to return instance of the token builder
+     * Factory method to return an instance of the ReallySimpleJWT\Build class.
      *
      * @return Build
      */
@@ -91,7 +91,7 @@ class Token
     }
 
     /**
-     * Interface to return instance of the token validator
+     * Factory method to return instance of the ReallySimpleJWT\Parse class.
      *
      * @return Parse
      */

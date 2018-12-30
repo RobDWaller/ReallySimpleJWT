@@ -11,16 +11,49 @@ use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Helper\JsonEncoder;
 
+/**
+ * This class parses and validates a JSON Web Token. The token is housed in
+ * the JWT value object. The class outputs a Parsed value object to give
+ * access to the data held within the JSON Web Token.
+ *
+ * @author Rob Waller <rdwaller1984@googlemail.com>
+ */
 class Parse
 {
+    /**
+     * This is a trait to tidy away the JSON encode / decode functionality.
+     * exposes the methods jsonEncode and jsonDecode to class.
+     */
     use JsonEncoder;
 
+    /**
+     * The JSON Web Token value object
+     *
+     * @var ReallySimpleJWT\Jwt
+     */
     private $jwt;
 
+    /**
+     * A class of validate helper methods
+     *
+     * @var ReallySimpleJWT\Validate
+     */
     private $validate;
 
+    /**
+     * A class to encode and decode JWTs, in Parse it does decode.
+     *
+     * @var ReallySimpleJWT\Encode
+     */
     private $encode;
 
+    /**
+     * Parse constructor
+     *
+     * @param ReallySimpleJWT\Jwt $jwt
+     * @param ReallySimpleJWT\Validate $validate
+     * @param ReallySimpleJWT\Encode $encode
+     */
     public function __construct(Jwt $jwt, Validate $validate, Encode $encode)
     {
         $this->jwt = $jwt;
@@ -30,6 +63,12 @@ class Parse
         $this->encode = $encode;
     }
 
+    /**
+     * Validate the JWT has the right string structure and the signature
+     * is valid and has not been tampered with.
+     *
+     * @return ReallySimpleJWT\Parse
+     */
     public function validate(): self
     {
         if (!$this->validate->structure($this->jwt->getToken())) {
@@ -41,6 +80,12 @@ class Parse
         return $this;
     }
 
+    /**
+     * Validate the JWT's expiration claim in the payload is valid, if the
+     * expiration has elapsed it will throw an exception.
+     *
+     * @return ReallySimpleJWT\Parse
+     */
     public function validateExpiration(): self
     {
         if (!$this->validate->expiration($this->getExpiration())) {
@@ -50,6 +95,12 @@ class Parse
         return $this;
     }
 
+    /**
+     * Validate the JWT's not before claim in the payload is valid, if the
+     * not before time has not elapsed it will throw an exception.
+     *
+     * @return ReallySimpleJWT\Parse
+     */
     public function validateNotBefore(): self
     {
         if (!$this->validate->notBefore($this->getNotBefore())) {
@@ -59,6 +110,12 @@ class Parse
         return $this;
     }
 
+    /**
+     * Generate the Parsed Value Object. This method should be called last
+     * after the relevant validate methods have been called.
+     *
+     * @return ReallySimpleJWT\Parsed
+     */
     public function parse(): Parsed
     {
         return new Parsed(
@@ -69,6 +126,12 @@ class Parse
         );
     }
 
+    /**
+     * Validate the JWT's signature. The provide signature token from the JWT
+     * should match one newly generated from the JWT header and payload.
+     *
+     * @throws ReallySimpleJWT\Exception\ValidateException
+     */
     private function validateSignature(): void
     {
         $signature = '';
@@ -88,26 +151,56 @@ class Parse
         }
     }
 
+    /**
+     * Split the JWT into it's component parts, the header, payload and
+     * signature are all separated by a dot.
+     *
+     * @return array
+     */
     private function splitToken(): array
     {
         return explode('.', $this->jwt->getToken());
     }
 
+    /**
+     * Get the header string from the JWT string. This is the first part of the
+     * JWT string.
+     *
+     * @return string
+     */
     private function getHeader(): string
     {
         return $this->splitToken()[0];
     }
 
+    /**
+     * Get the payload string from the JWT string. This is the second part of
+     * the JWT string.
+     *
+     * @return string
+     */
     private function getPayload(): string
     {
         return $this->splitToken()[1];
     }
 
+    /**
+     * Get the payload string from the JWT string. This is the third part of
+     * the JWT string.
+     *
+     * @return string
+     */
     private function getSignature(): string
     {
         return $this->splitToken()[2];
     }
 
+    /**
+     * Decode the JWT payload and retireve the expiration claim. If it is not
+     * set throw an exception.
+     *
+     * @return int
+     */
     private function getExpiration(): int
     {
         if (isset($this->decodePayload()['exp'])) {
@@ -117,6 +210,12 @@ class Parse
         $this->error('The Expiration claim was not set on this token.');
     }
 
+    /**
+     * Decode the JWT payload and retireve the not before claim. If it is not
+     * set throw an exception.
+     *
+     * @return int
+     */
     private function getNotBefore(): int
     {
         if (isset($this->decodePayload()['nbf'])) {
@@ -126,6 +225,12 @@ class Parse
         $this->error('The Not Before claim was not set on this token.');
     }
 
+    /**
+     * Decode the JWT header string to json and then decode it to an
+     * associative array.
+     *
+     * @return array
+     */
     private function decodeHeader(): array
     {
         return $this->jsonDecode($this->encode->decode(
@@ -133,6 +238,12 @@ class Parse
         ));
     }
 
+    /**
+     * Decode the JWT payload string to json and then decode it to an
+     * associative array.
+     *
+     * @return array
+     */
     private function decodePayload(): array
     {
         return $this->jsonDecode($this->encode->decode(
@@ -140,6 +251,12 @@ class Parse
         ));
     }
 
+    /**
+     * Helper method that throws the Validate Exception, just tidier.
+     *
+     * @return void
+     * @throws ReallySimpleJWT\Exception\ValidateException
+     */
     private function error(string $message): void
     {
         throw new ValidateException($message);
