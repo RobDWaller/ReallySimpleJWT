@@ -129,7 +129,7 @@ class Encode
      * which are decode will have missing padding which is represented by the
      * equals sign.
      *
-     * @param string $urlSting
+     * @param string $urlString
      * @return string
      */
     private function addPadding(string $urlString): string

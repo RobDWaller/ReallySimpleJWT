@@ -6,7 +6,7 @@ namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Encode;
-use ReallySimpleJWT\JWT;
+use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Helper\JsonEncoder;
 use ReallySimpleJWT\Exception\ValidateException;
 
@@ -57,12 +57,12 @@ class Build
     private $secret;
 
     /**
-     * @var ReallySimpleJWT\Validate
+     * @var Validate
      */
     private $validate;
 
     /**
-     * @var ReallySimpleJWT\Encode
+     * @var Encode
      */
     private $encode;
 
@@ -88,7 +88,7 @@ class Build
      * nested token.
      *
      * @param string $contentType
-     * @return ReallySimpleJWT\Build
+     * @return Build
      */
     public function setContentType(string $contentType): self
     {
@@ -102,7 +102,7 @@ class Build
      *
      * @param string $key
      * @param mixed $value
-     * @return ReallySimpleJWT\Build
+     * @return Build
      */
     public function setHeaderClaim(string $key, $value): self
     {
@@ -132,8 +132,8 @@ class Build
      * ReallySimpleJWT\Validate class.
      *
      * @param string $secret
-     * @return ReallySimpleJWT\Build
-     * @throws ReallySimpleJWT\Exception\ValidateException
+     * @return Build
+     * @throws Exception\ValidateException
      */
     public function setSecret(string $secret): self
     {
@@ -155,7 +155,7 @@ class Build
      * Can be a string or URI.
      *
      * @param string $issuer
-     * @return ReallySimpleJWT\Build
+     * @return Build
      */
     public function setIssuer(string $issuer): self
     {
@@ -169,7 +169,7 @@ class Build
      * Eg an application user or admin.
      *
      * @param string $subject
-     * @return ReallySimpleJWT\Build
+     * @return Build
      */
     public function setSubject(string $subject): self
     {
@@ -184,9 +184,9 @@ class Build
      * users who use this token. This claim can either be a single string or an
      * array of strings.
      *
-     * @param array|string $audience
-     * @return ReallySimpleJWT\Build
-     * @throws ReallySimpleJWT\Exception\ValidateException
+     * @param mixed $audience
+     * @return Build
+     * @throws Exception\ValidateException
      */
     public function setAudience($audience): self
     {
@@ -204,8 +204,8 @@ class Build
      * JWT should expire and no longer be accepted.
      *
      * @param int $timestamp
-     * @return ReallySimpleJWT\Build
-     * @throws ReallySimpleJWT\Exception\ValidateException
+     * @return Build
+     * @throws Exception\ValidateException
      */
     public function setExpiration(int $timestamp): self
     {
@@ -223,7 +223,7 @@ class Build
      * JWT can be accepted.
      *
      * @param int $notBefore
-     * @return ReallySimpleJWT\Build
+     * @return Build
      */
     public function setNotBefore(int $notBefore): self
     {
@@ -237,7 +237,7 @@ class Build
      * JWT was issued / created.
      *
      * @param int $issuedAt
-     * @return ReallySimpleJWT\Build
+     * @return Build
      */
     public function setIssuedAt(int $issuedAt): self
     {
@@ -251,7 +251,7 @@ class Build
      * identifier for the token.
      *
      * @param string $jwtId
-     * @return ReallySimpleJWT\Build
+     * @return Build
      */
     public function setJwtId(string $jwtId): self
     {
@@ -266,7 +266,7 @@ class Build
      *
      * @param string $key
      * @param mixed $value
-     * @return ReallySimpleJWT\Build
+     * @return Build
      */
     public function setPrivateClaim(string $key, $value): self
     {
@@ -295,7 +295,7 @@ class Build
      * This JWT string along with the secret are then used to generate a new
      * instance of the JWT class which is returned.
      *
-     * @return ReallySimpleJWT\Jwt
+     * @return Jwt
      */
     public function build(): Jwt
     {
@@ -312,7 +312,7 @@ class Build
      * tokens you can use this reset method to unset the predefined header,
      * payload and secret properties.
      *
-     *  @return ReallySimpleJWT\Build
+     *  @return Build
      */
     public function reset(): self
     {
@@ -328,7 +328,7 @@ class Build
      * payload and secret.
      *
      * @return string
-     * @throws ReallySimpleJWT\Exception\ValidateException
+     * @throws Exception\ValidateException
      */
     private function getSignature(): string
     {

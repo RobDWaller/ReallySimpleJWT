@@ -19,7 +19,7 @@ class Parsed
     /**
      * The pre-parsed JWT value object
      *
-     * @var ReallySimpleJWT\Jwt
+     * @var Jwt
      */
     private $jwt;
 
@@ -47,7 +47,7 @@ class Parsed
     /**
      * The Parsed constructor
      *
-     * @param ReallySimpleJWT\Jwt $jwt
+     * @param Jwt $jwt
      * @param array $header
      * @param array $payload
      * @param string $signature
@@ -66,7 +66,7 @@ class Parsed
     /**
      * Return the origin JWT value object
      *
-     * @return ReallySimpleJWT\Jwt
+     * @return Jwt
      */
     public function getJwt(): Jwt
     {
@@ -144,7 +144,7 @@ class Parsed
      * @return string|array
      * @todo this can return an array, fix this
      */
-    public function getAudience(): string
+    public function getAudience()
     {
         return $this->payload['aud'] ?? '';
     }

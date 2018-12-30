@@ -29,30 +29,30 @@ class Parse
     /**
      * The JSON Web Token value object
      *
-     * @var ReallySimpleJWT\Jwt
+     * @var Jwt
      */
     private $jwt;
 
     /**
      * A class of validate helper methods
      *
-     * @var ReallySimpleJWT\Validate
+     * @var Validate
      */
     private $validate;
 
     /**
      * A class to encode and decode JWTs, in Parse it does decode.
      *
-     * @var ReallySimpleJWT\Encode
+     * @var Encode
      */
     private $encode;
 
     /**
      * Parse constructor
      *
-     * @param ReallySimpleJWT\Jwt $jwt
-     * @param ReallySimpleJWT\Validate $validate
-     * @param ReallySimpleJWT\Encode $encode
+     * @param Jwt $jwt
+     * @param Validate $validate
+     * @param Encode $encode
      */
     public function __construct(Jwt $jwt, Validate $validate, Encode $encode)
     {
@@ -67,7 +67,7 @@ class Parse
      * Validate the JWT has the right string structure and the signature
      * is valid and has not been tampered with.
      *
-     * @return ReallySimpleJWT\Parse
+     * @return Parse
      */
     public function validate(): self
     {
@@ -84,7 +84,7 @@ class Parse
      * Validate the JWT's expiration claim in the payload is valid, if the
      * expiration has elapsed it will throw an exception.
      *
-     * @return ReallySimpleJWT\Parse
+     * @return Parse
      */
     public function validateExpiration(): self
     {
@@ -99,7 +99,7 @@ class Parse
      * Validate the JWT's not before claim in the payload is valid, if the
      * not before time has not elapsed it will throw an exception.
      *
-     * @return ReallySimpleJWT\Parse
+     * @return Parse
      */
     public function validateNotBefore(): self
     {
@@ -114,7 +114,7 @@ class Parse
      * Generate the Parsed Value Object. This method should be called last
      * after the relevant validate methods have been called.
      *
-     * @return ReallySimpleJWT\Parsed
+     * @return Parsed
      */
     public function parse(): Parsed
     {
@@ -130,7 +130,7 @@ class Parse
      * Validate the JWT's signature. The provide signature token from the JWT
      * should match one newly generated from the JWT header and payload.
      *
-     * @throws ReallySimpleJWT\Exception\ValidateException
+     * @throws Exception\ValidateException
      */
     private function validateSignature(): void
     {
@@ -255,7 +255,7 @@ class Parse
      * Helper method that throws the Validate Exception, just tidier.
      *
      * @return void
-     * @throws ReallySimpleJWT\Exception\ValidateException
+     * @throws Exception\ValidateException
      */
     private function error(string $message): void
     {
