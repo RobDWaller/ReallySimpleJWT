@@ -20,7 +20,7 @@
     </rule>
     <rule ref="rulesets/codesize.xml/NPathComplexity">
         <properties>
-            <property name="minimum" value="20" />
+            <property name="minimum" value="10" />
         </properties>
     </rule>
     <rule ref="rulesets/controversial.xml" />
