@@ -8,20 +8,20 @@ The library is also open to extension, developers can define their own encoding 
 
 ## Contents
 
-* What is a JSON Web Token?
-* Setup
-* Basic Usage
-- Create Token
-- Validate Token
-- Get Payload Claims
-- Factory Methods
-* Advanced Usage
-- Create Custom Token
-- Advanced Token Validation
-- Access Token Claims
-- Customised Encoding
-* Secret Security
-* Version One Support
+- What is a JSON Web Token?
+- Setup
+- Basic Usage
+    - Create Token
+    - Validate Token
+    - Get Payload Claims
+    - Factory Methods
+- Advanced Usage
+    - Create Custom Token
+    - Advanced Token Validation
+    - Access Token Claims
+    - Customised Encoding
+- Secret Security
+- Version One Support
 
 ## What is a JSON Web Token?
 
