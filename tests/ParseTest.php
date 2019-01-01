@@ -25,7 +25,7 @@ class ParseTest extends TestCase
     public function testParseParse()
     {
         $parse = new Parse(
-            new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'), 'foo1234He$$llo56'),
+            new Jwt(Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'), 'foo1234He$$llo56'),
             new Validate,
             new Encode()
         );
@@ -36,7 +36,7 @@ class ParseTest extends TestCase
     public function testParseIssuer()
     {
         $parse = new Parse(
-            new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
+            new Jwt(Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
             new Validate,
             new Encode()
         );
@@ -66,7 +66,7 @@ class ParseTest extends TestCase
 
     public function testParseGetPayload()
     {
-        $token = new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56');
+        $token = new Jwt(Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56');
 
         $parse = new Parse(
             $token,
@@ -103,7 +103,7 @@ class ParseTest extends TestCase
     public function testParseValidate()
     {
         $parse = new Parse(
-            new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
+            new Jwt(Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
             new Validate,
             new Encode()
         );
@@ -175,7 +175,7 @@ class ParseTest extends TestCase
     public function testParseValidateExpiration()
     {
         $parse = new Parse(
-            new Jwt(Token::getToken(1, 'Hoo1234%&HePPo99', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'Hoo1234%&HePPo99'),
+            new Jwt(Token::create(1, 'Hoo1234%&HePPo99', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'Hoo1234%&HePPo99'),
             new Validate,
             new Encode()
         );
@@ -218,7 +218,7 @@ class ParseTest extends TestCase
         $timestamp = Carbon::now()->addMinutes(5);
 
         $parse = new Parse(
-            new Jwt(Token::getToken(1, 'Hoo1234%&HePPo99', $timestamp->toDateTimeString(), 'localhost'), 'Hoo1234%&HePPo99'),
+            new Jwt(Token::create(1, 'Hoo1234%&HePPo99', $timestamp->toDateTimeString(), 'localhost'), 'Hoo1234%&HePPo99'),
             new Validate,
             new Encode()
         );
@@ -412,7 +412,7 @@ class ParseTest extends TestCase
     public function testValidateSignature()
     {
         $parse = new Parse(
-            new Jwt(Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
+            new Jwt(Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), 'localhost'), 'foo1234He$$llo56'),
             new Validate,
             new Encode()
         );

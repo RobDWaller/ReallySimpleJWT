@@ -33,7 +33,7 @@ class Token
      *
      * @return string
      */
-    public static function getToken($userId, string $secret, string $expiration, string $issuer): string
+    public static function create($userId, string $secret, string $expiration, string $issuer): string
     {
         $builder = self::builder();
 
@@ -55,7 +55,7 @@ class Token
      */
     public static function validate(string $token, string $secret): bool
     {
-        $parse = self::validator($token, $secret);
+        $parse = self::parser($token, $secret);
 
         try {
             $parse->validate()->validateExpiration();
@@ -75,9 +75,9 @@ class Token
      */
     public static function getPayload(string $token, string $secret): array
     {
-        $validator = self::validator($token, $secret);
+        $parser = self::parser($token, $secret);
 
-        return $validator->validate()->parse()->getPayload();
+        return $parser->validate()->parse()->getPayload();
     }
 
     /**
@@ -95,7 +95,7 @@ class Token
      *
      * @return Parse
      */
-    public static function validator(string $token, string $secret): Parse
+    public static function parser(string $token, string $secret): Parse
     {
         $jwt = new Jwt($token, $secret);
 

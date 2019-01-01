@@ -26,7 +26,7 @@ class ValidateTest extends TestCase
 
     public function testValidateStructureWithRSJWT()
     {
-        $token = Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1');
+        $token = Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1');
 
         $validate = new Validate();
 

@@ -17,7 +17,7 @@ class ParsedTest extends TestCase
     {
         $parsed = new Parsed(
             new Jwt(
-                Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
+                Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
                 'foo1234He$$llo56'
             ),
             ["typ" => "JWT"],
@@ -32,7 +32,7 @@ class ParsedTest extends TestCase
     {
         $parsed = new Parsed(
             new Jwt(
-                Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
+                Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
                 'foo1234He$$llo56'
             ),
             ["typ" => "JWT"],
@@ -47,7 +47,7 @@ class ParsedTest extends TestCase
     {
         $parsed = new Parsed(
             new Jwt(
-                Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
+                Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
                 'foo1234He$$llo56'
             ),
             ["typ" => "JWT"],
@@ -62,7 +62,7 @@ class ParsedTest extends TestCase
     {
         $parsed = new Parsed(
             new Jwt(
-                Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
+                Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
                 'foo1234He$$llo56'
             ),
             ["typ" => "JWT"],
@@ -77,7 +77,7 @@ class ParsedTest extends TestCase
     {
         $parsed = new Parsed(
             new Jwt(
-                Token::getToken(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
+                Token::create(1, 'foo1234He$$llo56', Carbon::now()->addMinutes(5)->toDateTimeString(), '127.0.0.1'),
                 'foo1234He$$llo56'
             ),
             ["typ" => "JWT"],

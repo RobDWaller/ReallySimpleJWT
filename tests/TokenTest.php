@@ -8,9 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 class TokenTest extends TestCase
 {
-    public function testGetToken()
+    public function testCreateToken()
     {
-        $token = Token::getToken(
+        $token = Token::create(
             1,
             '123ABC%tyd*ere1',
             Carbon::now()->addMinutes(5)->toDateTimeString(),
@@ -22,7 +22,7 @@ class TokenTest extends TestCase
 
     public function testValidateToken()
     {
-        $token = Token::getToken(
+        $token = Token::create(
             'abdY',
             'Hello&MikeFooBar123',
             Carbon::now()->addMinutes(5)->toDateTimeString(),
@@ -39,12 +39,12 @@ class TokenTest extends TestCase
 
     public function testValidator()
     {
-        $this->assertInstanceOf('ReallySimpleJWT\Parse', Token::validator('Hello', '1234'));
+        $this->assertInstanceOf('ReallySimpleJWT\Parse', Token::parser('Hello', '1234'));
     }
 
     public function testGetPayload()
     {
-        $token = Token::getToken(
+        $token = Token::create(
             'abdY',
             'Hello*JamesFooBar$!3',
             Carbon::now()->addMinutes(5)->toDateTimeString(),
