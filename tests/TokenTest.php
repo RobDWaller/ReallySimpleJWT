@@ -54,6 +54,18 @@ class TokenTest extends TestCase
         $this->assertSame('abdY', Token::getPayload($token, 'Hello*JamesFooBar$!3')['user_id']);
     }
 
+    public function testGetHeader()
+    {
+        $token = Token::create(
+            'abdY',
+            'Hello*JamesFooBar$!3',
+            Carbon::now()->addMinutes(5)->toDateTimeString(),
+            'http://127.0.0.1'
+        );
+
+        $this->assertSame('JWT', Token::getHeader($token, 'Hello*JamesFooBar$!3')['typ']);
+    }
+
     public function testValidateTokenFail()
     {
         $this->assertFalse(Token::validate('World', 'FooBar'));

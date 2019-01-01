@@ -66,8 +66,23 @@ class Token
     }
 
     /**
-     * Return the payload of the token as a JSON string. You should run the
-     * validate method on your token before retrieving the payload.
+     * Return the header of the token as an associative array. You should run
+     * the validate method on your token before retrieving the header.
+     *
+     * @param string $token
+     *
+     * @return array
+     */
+    public static function getHeader(string $token, string $secret): array
+    {
+        $parser = self::parser($token, $secret);
+
+        return $parser->validate()->parse()->getHeader();
+    }
+
+    /**
+     * Return the payload of the token as an associative array. You should run
+     * the validate method on your token before retrieving the payload.
      *
      * @param string $token
      *
