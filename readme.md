@@ -21,7 +21,7 @@ The library is also open to extension, developers can define their own encoding 
     - [Advanced Token Validation](#advanced-token-validation)
     - [Access Token Claims Data](#access-token-claims-data)
     - [Customised Encoding](#customised-encoding)
-- [Secret Security](#secret-security)
+- [Token Secret Security](#token-secret-security)
 - [Version One Support](#version-one-support)
 
 ## What is a JSON Web Token?
@@ -271,7 +271,7 @@ interface EncodeInterface
 }
 ```
 
-## Secret Key Security
+## Token Secret Security
 
 This JWT library imposes strict secret security as follows: the secret must be at least 12 characters in length; contain numbers; upper and lowercase letters; and the one of the following special characters `*&!@%^#$`.
 
