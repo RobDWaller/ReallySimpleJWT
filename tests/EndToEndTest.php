@@ -29,7 +29,7 @@ class EndToEndTest extends TestCase
             ->setNotBefore($notBefore)
             ->setIssuedAt($issuedAt)
             ->setJwtId('123ABC')
-            ->setPrivateClaim('uid', 2)
+            ->setPayloadClaim('uid', 2)
             ->build();
 
         $parse = new Parse($token, new Validate(), new Encode());
@@ -73,7 +73,7 @@ class EndToEndTest extends TestCase
             ->setNotBefore($notBefore)
             ->setIssuedAt($issuedAt)
             ->setJwtId('123ABC')
-            ->setPrivateClaim('uid', 2)
+            ->setPayloadClaim('uid', 2)
             ->build();
 
         $build1 = new Build('JWT', new Validate(), new Encode());
@@ -92,7 +92,7 @@ class EndToEndTest extends TestCase
             ->setNotBefore($notBefore1)
             ->setIssuedAt($issuedAt1)
             ->setJwtId('456jkl')
-            ->setPrivateClaim('user_id', 5)
+            ->setPayloadClaim('user_id', 5)
             ->build();
 
         $this->assertNotSame($token->getToken(), $token1->getToken());
@@ -163,7 +163,7 @@ class EndToEndTest extends TestCase
             ->setNotBefore($notBefore)
             ->setIssuedAt($issuedAt)
             ->setJwtId('123ABC')
-            ->setPrivateClaim('uid', 2)
+            ->setPayloadClaim('uid', 2)
             ->build();
 
         $expiration1 = time() + 20;
@@ -181,7 +181,7 @@ class EndToEndTest extends TestCase
             ->setNotBefore($notBefore1)
             ->setIssuedAt($issuedAt1)
             ->setJwtId('456jkl')
-            ->setPrivateClaim('user_id', 5)
+            ->setPayloadClaim('user_id', 5)
             ->build();
 
         $this->assertNotSame($token->getToken(), $token1->getToken());
@@ -252,7 +252,7 @@ class EndToEndTest extends TestCase
             ->setNotBefore($notBefore)
             ->setIssuedAt($issuedAt)
             ->setJwtId('123ABC')
-            ->setPrivateClaim('uid', 2)
+            ->setPayloadClaim('uid', 2)
             ->build();
 
         $build1 = new Build('JWT', new Validate(), new Encode());
@@ -268,7 +268,7 @@ class EndToEndTest extends TestCase
             ->setExpiration($expiration1)
             ->setIssuedAt($issuedAt1)
             ->setJwtId('456jkl')
-            ->setPrivateClaim('user_id', 5)
+            ->setPayloadClaim('user_id', 5)
             ->build();
 
         $this->assertNotSame($token->getToken(), $token1->getToken());
@@ -338,7 +338,7 @@ class EndToEndTest extends TestCase
             ->setNotBefore($notBefore)
             ->setIssuedAt($issuedAt)
             ->setJwtId('123ABC')
-            ->setPrivateClaim('uid', 2)
+            ->setPayloadClaim('uid', 2)
             ->build();
 
         $expiration1 = time() + 20;
@@ -353,7 +353,7 @@ class EndToEndTest extends TestCase
             ->setExpiration($expiration1)
             ->setNotBefore($notBefore1)
             ->setJwtId('456jkl')
-            ->setPrivateClaim('user_id', 5)
+            ->setPayloadClaim('user_id', 5)
             ->build();
 
         $this->assertNotSame($token->getToken(), $token1->getToken());
@@ -428,7 +428,7 @@ class EndToEndTest extends TestCase
             ->setNotBefore($notBefore)
             ->setIssuedAt($issuedAt)
             ->setJwtId('123ABC')
-            ->setPrivateClaim('uid', 2)
+            ->setPayloadClaim('uid', 2)
             ->build();
 
         $parse = new Parse($token, new Validate(), new Encode());
@@ -459,7 +459,7 @@ class EndToEndTest extends TestCase
             ->setNotBefore($notBefore)
             ->setIssuedAt($issuedAt)
             ->setJwtId('123ABC')
-            ->setPrivateClaim('uid', 2)
+            ->setPayloadClaim('uid', 2)
             ->build();
 
         $parse = new Parse($token, new Validate(), new Encode());

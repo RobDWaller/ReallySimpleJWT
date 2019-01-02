@@ -37,7 +37,7 @@ class Token
     {
         $builder = self::builder();
 
-        return $builder->setPrivateClaim('user_id', $userId)
+        return $builder->setPayloadClaim('user_id', $userId)
             ->setSecret($secret)
             ->setExpiration(Carbon::parse($expiration)->getTimestamp())
             ->setIssuer($issuer)

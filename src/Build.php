@@ -268,7 +268,7 @@ class Build
      * @param mixed $value
      * @return Build
      */
-    public function setPrivateClaim(string $key, $value): self
+    public function setPayloadClaim(string $key, $value): self
     {
         $this->payload[$key] = $value;
 

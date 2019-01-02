@@ -98,14 +98,14 @@ class BuildTest extends TestCase
     {
         $build = new Build('JWT', new Validate, new Encode);
 
-        $this->assertInstanceOf(Build::class, $build->setPrivateClaim('user_id', 1));
+        $this->assertInstanceOf(Build::class, $build->setPayloadClaim('user_id', 1));
     }
 
     public function testSetPrivateClaimCheckPayload()
     {
         $build = new Build('JWT', new Validate, new Encode);
 
-        $build->setPrivateClaim('user_id', 1);
+        $build->setPayloadClaim('user_id', 1);
 
         $this->assertSame($build->getPayload()['user_id'], 1);
     }
@@ -117,7 +117,7 @@ class BuildTest extends TestCase
         $token = $build->setSecret('helLLO123$!456ht')
             ->setIssuer('127.0.0.1')
             ->setExpiration(time() + 100)
-            ->setPrivateClaim('user_id', 2)
+            ->setPayloadClaim('user_id', 2)
             ->build();
 
         $this->assertInstanceOf(Jwt::class, $token);
@@ -130,7 +130,7 @@ class BuildTest extends TestCase
         $token = $build->setSecret('!123$!456htHeLOOl!')
             ->setIssuer('https://google.com')
             ->setExpiration(time() + 200)
-            ->setPrivateClaim('user_id', 3)
+            ->setPayloadClaim('user_id', 3)
             ->build();
 
         $this->assertSame($token->getSecret(), '!123$!456htHeLOOl!');
@@ -144,7 +144,7 @@ class BuildTest extends TestCase
         $token = $build->setSecret('!123$!456htHeLOOl!')
             ->setIssuer('https://google.com')
             ->setExpiration(time() + 200)
-            ->setPrivateClaim('user_id', 3)
+            ->setPayloadClaim('user_id', 3)
             ->build();
 
         $parse = new Parse($token, new Validate, new Encode());
@@ -173,7 +173,7 @@ class BuildTest extends TestCase
         $token1 = $build1->setSecret('$$$pdr432!456htHeLOOl!')
             ->setIssuer('https://google.com')
             ->setExpiration(time() + 10)
-            ->setPrivateClaim('user_id', 5)
+            ->setPayloadClaim('user_id', 5)
             ->build();
 
         $build2 = new Build('JWT', new Validate, new Encode);
@@ -181,7 +181,7 @@ class BuildTest extends TestCase
         $token2 = $build2->setSecret('!123$!9283htHeLOOl!')
             ->setIssuer('https://facebook.com')
             ->setExpiration(time() + 99)
-            ->setPrivateClaim('uid', 7)
+            ->setPayloadClaim('uid', 7)
             ->build();
 
         $this->assertNotSame($token1->getToken(), $token2->getToken());
@@ -196,7 +196,7 @@ class BuildTest extends TestCase
         $token1 = $build1->setSecret('$$$pdr432!456htHeLOOl!')
             ->setIssuer('https://google.com')
             ->setExpiration($time1)
-            ->setPrivateClaim('user_id', 5)
+            ->setPayloadClaim('user_id', 5)
             ->build();
 
         $build2 = new Build('JWT', new Validate, new Encode);
@@ -206,7 +206,7 @@ class BuildTest extends TestCase
         $token2 = $build2->setSecret('!123$!9283htHeLOOl!')
             ->setIssuer('https://facebook.com')
             ->setExpiration($time2)
-            ->setPrivateClaim('uid', 7)
+            ->setPayloadClaim('uid', 7)
             ->build();
 
         $parse1 = new Parse($token1, new Validate, new Encode());
@@ -239,7 +239,7 @@ class BuildTest extends TestCase
         $token1 = $build->setSecret('$$$pdr432!456htHeLOOl!')
             ->setIssuer('https://google.com')
             ->setExpiration($time1)
-            ->setPrivateClaim('user_id', 5)
+            ->setPayloadClaim('user_id', 5)
             ->build();
 
         $time2 = time() + 99;
@@ -248,7 +248,7 @@ class BuildTest extends TestCase
             ->setSecret('!123$!9283htHeLOOl!')
             ->setIssuer('https://facebook.com')
             ->setExpiration($time2)
-            ->setPrivateClaim('uid', 7)
+            ->setPayloadClaim('uid', 7)
             ->build();
 
         $parse1 = new Parse($token1, new Validate, new Encode());
@@ -279,7 +279,7 @@ class BuildTest extends TestCase
         $build->setSecret('$$$pdr432!456htHeLOOl!')
             ->setIssuer('https://google.com')
             ->setExpiration(time() + 10)
-            ->setPrivateClaim('user_id', 5);
+            ->setPayloadClaim('user_id', 5);
 
         $method = new ReflectionMethod(Build::class, 'getSignature');
         $method->setAccessible(true);
@@ -296,7 +296,7 @@ class BuildTest extends TestCase
         $build->setSecret('$£~pdr432!456htHeLOOl!')
             ->setIssuer('https://google.com')
             ->setExpiration(time() + 10)
-            ->setPrivateClaim('user_id', 5);
+            ->setPayloadClaim('user_id', 5);
 
         $method = new ReflectionMethod(Build::class, 'getSignature');
         $method->setAccessible(true);
@@ -316,7 +316,7 @@ class BuildTest extends TestCase
 
         $build->setIssuer('https://google.com')
             ->setExpiration(time() + 10)
-            ->setPrivateClaim('user_id', 5);
+            ->setPayloadClaim('user_id', 5);
 
         $method = new ReflectionMethod(Build::class, 'getSignature');
         $method->setAccessible(true);
