@@ -41,6 +41,7 @@ class Token
             ->setSecret($secret)
             ->setExpiration(Carbon::parse($expiration)->getTimestamp())
             ->setIssuer($issuer)
+            ->setIssuedAt(time())
             ->build()
             ->getToken();
     }
