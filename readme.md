@@ -56,7 +56,7 @@ The header and payload are both encoded JSON strings that contain a number of cl
 A claim is a key value pair, eg `"typ": "JWT"`, please read [RFC 7519](https://tools.ietf.org/html/rfc7519#section-4) to learn more about JSON Web Token claims.
 
 Token security is achieved via the signature which is made up of the header, payload and a secret known only to the token author. This information is hashed and then base64url encoded.
-If a malicious user attempts to edit the header or payload claims they will be unable to replicate the signature so long as you use a strong key. See [Secret Security] for more information on this.
+If a malicious user attempts to edit the header or payload claims they will be unable to replicate the signature so long as you use a strong key. See [Token Secret Security](#token-secret-security) for more information on this.
 
 ## Setup
 
@@ -66,7 +66,7 @@ Via Composer on the command line:
 composer require rbdwllr/reallysimplejwt
 ```
 
-Via Composer.json:
+Via composer.json:
 
 ```javascript
 "require": {
@@ -80,9 +80,9 @@ For basic usage the library exposes a set of static methods via the `ReallySimpl
 
 ### Create Token
 
-Call the get token static method and pass in a user identifier, a secret, an expiration date time number and the token issuer.
+Call the `create()` static method and pass in a user identifier, a secret, an expiration date time number and the token issuer.
 
-This will return a token string on success and throw an exception on failure.
+This will return a token string on success and throw a `ReallySimpleJWT\Exception\ValidateException` on failure.
 
 ```php
 use ReallySimpleJWT\Token;
@@ -97,9 +97,7 @@ $token = Token::create($userId, $secret, $expiration, $issuer);
 
 ### Validate Token
 
-To validate a JSON web token call the validate static method, pass in the token string and the secret.
-
-The validate method checks the token structure is correct, the signature is valid and the expiration time has not elapsed.
+To validate a JSON web token call the `validate()` static method, pass in the token string and the secret. The validate method checks the token structure is correct, the signature is valid and the expiration time has not elapsed.
 
 It will return true on success and false on failure.
 
@@ -148,9 +146,9 @@ To create customised JSON Web Tokens developers need to access the `ReallySimple
 
 ### Create Custom Token
 
-The `ReallySimpleJWT\Build` class allows you to create a completely unique JSON Web Token. It has helper methods for all the RFC defined header and payload claims. The `setIssuer()` method will add the `iss` claim to the token header.
+The `ReallySimpleJWT\Build` class allows you to create a completely unique JSON Web Token. It has helper methods for all the [RFC](https://tools.ietf.org/html/rfc7519#section-4) defined header and payload claims. For example, the `setIssuer()` method will add the `iss` claim to the token header.
 
-The class also allows developers to set custom header and payload claims via the `setHeaderClaim()` and `setPrivateClaim()` methods.
+The class also allows developers to set custom header and payload claims via the `setHeaderClaim()` and `setPayloadClaim()` methods.
 
 The methods can be chained together and when the `build()` method is called the token will be generated and returned within a `ReallySimpleJWT\Jwt` object.
 
@@ -171,7 +169,7 @@ $token = $build->setContentType('JWT')
     ->setNotBefore(time() - 30)
     ->setIssuedAt(time())
     ->setJwtId('123ABC')
-    ->setPrivateClaim('uid', 12)
+    ->setPayloadClaim('uid', 12)
     ->build();
 ```
 
@@ -239,7 +237,7 @@ The `ReallySimpleJWT\Parsed` class is returned when a developer calls the `parse
 
 It provides a number of helper methods to gain access to the token claim data. A developer can call the `getHeader()` and `getPayload()` methods to gain access to the respective claim data as associative arrays.
 
-Alternatively a developer can call one of the RFC compliant claim methods:
+Alternatively a developer can call one of the [RFC](https://tools.ietf.org/html/rfc7519#section-4) compliant claim methods:
 
 **Header**
 - `getType()`
@@ -273,7 +271,7 @@ interface EncodeInterface
 
 ## Token Secret Security
 
-This JWT library imposes strict secret security as follows: the secret must be at least 12 characters in length; contain numbers; upper and lowercase letters; and the one of the following special characters `*&!@%^#$`.
+This JWT library imposes strict secret security as follows: the secret must be at least 12 characters in length; contain numbers; upper and lowercase letters; and one of the following special characters `*&!@%^#$`.
 
 ```php
 // Bad Secret
