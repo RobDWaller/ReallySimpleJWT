@@ -8,20 +8,21 @@ The library is also open to extension, developers can define their own encoding 
 
 ## Contents
 
-- What is a JSON Web Token?
-- Setup
-- Basic Usage
-    - Create Token
-    - Validate Token
-    - Get Payload Claims
-    - Factory Methods
-- Advanced Usage
-    - Create Custom Token
-    - Advanced Token Validation
-    - Access Token Claims
-    - Customised Encoding
-- Secret Security
-- Version One Support
+- [What is a JSON Web Token?](#what-is-a-json-web-token)
+- [Setup](#setup)
+- [Basic Usage](#basic-usage)
+    - [Create Token](#create-token)
+    - [Validate Token](#validate-token)
+    - [Get Header and Payload Claims Data](#get-header-and-payload-claims-data)
+    - [Factory Methods](#factory-methods)
+- [Advanced Usage](#advanced-usage)
+    - [Create Custom Token](#create-custom-token)
+    - [Access the Token](#access-the-token)
+    - [Advanced Token Validation](#advanced-token-validation)
+    - [Access Token Claims Data](#access-token-claims-data)
+    - [Customised Encoding](#customised-encoding)
+- [Secret Security](#secret-security)
+- [Version One Support](#version-one-support)
 
 ## What is a JSON Web Token?
 
@@ -111,11 +112,11 @@ $secret = 'sec!ReT423*&'
 $result = Token::validate($token, $secret);
 ```
 
-### Get Payload Claims
+### Get Header and Payload Claims Data
 
-To retrieve the token payload call the get payload static method.
+To retrieve the token claims data from the header or payload call the `getHeader()` and or `getPayload()` static methods.
 
-Will return a JSON string on success and throw an exception on failure.
+Both methods will return an associative array on success and throw an exception on failure.
 
 ```php
 use ReallySimpleJWT\Token;
@@ -123,7 +124,11 @@ use ReallySimpleJWT\Token;
 $token = 'aaa.bbb.ccc';
 $secret = 'sec!ReT423*&'
 
-$result = Token::getPayload($token, $secret);
+// Return the header claims
+Token::getHeader($token, $secret);
+
+// Return the payload claims
+Token::getPayload($token, $secret);
 ```
 
 ### Factory Methods
@@ -170,11 +175,11 @@ $token = $build->setContentType('JWT')
     ->build();
 ```
 
-### The Jwt Class
+### Access the Token
 
-The `ReallySimpleJWT\Jwt` is returned when a developer calls the `build()` method on the `ReallySimpleJWT\Build` class. The Jwt class offers two methods `getToken()` and `getSecret()`. The former returns the generated JSON Web Token and the latter returns the secret used for the signature.
+The `ReallySimpleJWT\Jwt` is returned when a developer calls the `build()` method on the `ReallySimpleJWT\Build` class. The Jwt class offers two methods `getToken()` and `getSecret()`. The former returns the generated JSON Web Token and the latter returns the secret used for the token signature.
 
-To parse a JSON Web Token via the `ReallySimpleJWT\Parse` class a developer must first create a `ReallySimpleJWT\Jwt` object by injecting the token and secret.
+To parse a JSON Web Token via the `ReallySimpleJWT\Parse` class a developer must first create a new `ReallySimpleJWT\Jwt` object by injecting the token and secret.
 
 ```php
 use ReallySimpleJWT\Jwt;
@@ -228,7 +233,7 @@ $parsed->getHeader();
 $parsed->getPayload();
 ```
 
-### The Parsed Class
+### Access Token Claims Data
 
 The `ReallySimpleJWT\Parsed` class is returned when a developer calls the `parse()` method on the `ReallySimpleJWT\Parse` class.
 
