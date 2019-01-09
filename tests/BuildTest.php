@@ -166,6 +166,17 @@ class BuildTest extends TestCase
         $this->assertSame('HS256', $result['alg']);
     }
 
+    public function testGetHeaderSetContentType()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $result = $build->setContentType('JWT')->getHeader();
+
+        $this->assertSame('JWT', $result['typ']);
+        $this->assertSame('HS256', $result['alg']);
+        $this->assertSame('JWT', $result['cty']);
+    }
+
     public function testTwoTokenGeneration()
     {
         $build1 = new Build('JWT', new Validate, new Encode);
