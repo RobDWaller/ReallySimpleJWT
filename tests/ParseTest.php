@@ -494,4 +494,106 @@ class ParseTest extends TestCase
 
         $method->invoke($parse);
     }
+
+    public function testParseRandomTokenNoSecret()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkphbWVzIiwiaWF0IjoxNTE2MjM5MDIyfQ.BtrZtcOwhxY9BuV0-Eqc7CybKiWqgr6Y5jFVr15zcFk', ''),
+            new Validate,
+            new Encode()
+        );
+
+        $parsed = $parse->validate()
+            ->parse();
+
+        $this->assertSame($parsed->getAlgorithm(), "HS256");
+        $this->assertSame($parsed->getType(), "JWT");
+        $this->assertSame($parsed->getSubject(), "1234567890");
+        $this->assertSame($parsed->getPayload()['name'], 'James');
+        $this->assertSame($parsed->getIssuedAt(), 1516239022);
+    }
+
+    public function testParseRandomTokenInvalidSecret()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJSVzg0LTIwMTkwMTA5IiwibmFtZSI6IlJvYiIsImlhdCI6MTUxNjIzOTAyMn0.JojSqQXc-nsiongo1I33lsd7eJZ9WbMoZn65_LL1U8A', 'hello'),
+            new Validate,
+            new Encode()
+        );
+
+        $parsed = $parse->validate()
+            ->parse();
+
+        $this->assertSame($parsed->getAlgorithm(), "HS256");
+        $this->assertSame($parsed->getType(), "JWT");
+        $this->assertSame($parsed->getJwtId(), "RW84-20190109");
+        $this->assertSame($parsed->getPayload()['name'], 'Rob');
+        $this->assertSame($parsed->getIssuedAt(), 1516239022);
+    }
+
+    public function testParseRandomTokenValidSecret()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio', '123$car*PARK456'),
+            new Validate,
+            new Encode()
+        );
+
+        $parsed = $parse->validate()
+            ->parse();
+
+        $this->assertSame($parsed->getAlgorithm(), "HS256");
+        $this->assertSame($parsed->getType(), "JWT");
+        $this->assertSame($parsed->getAudience(), "https://google.com");
+        $this->assertSame($parsed->getPayload()['name'], 'Chris');
+        $this->assertSame($parsed->getIssuedAt(), 1516239022);
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
+     * @expectedExceptionMessage The expiration time has elapsed, this token is no longer valid.
+     */
+    public function testParseRandomTokenExpirationException()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJleHAiOjE1MTYyMzkwMjJ9.Pzio_7YdNC2NCcBBmVjRlTTgC4RNofEGYWm9ygx41JQ', '123$car*PARK456'),
+            new Validate,
+            new Encode()
+        );
+
+        $parse->validate()
+            ->validateExpiration();
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
+     * @expectedExceptionMessage The Expiration claim was not set on this token.
+     */
+     public function testParseRandomTokenExpirationNotSetException()
+     {
+         $parse = new Parse(
+             new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio', '123$car*PARK456'),
+             new Validate,
+             new Encode()
+         );
+
+         $parse->validate()
+             ->validateExpiration();
+     }
+
+     /**
+      * @expectedException ReallySimpleJWT\Exception\ValidateException
+      * @expectedExceptionMessage The Not Before claim was not set on this token.
+      */
+      public function testParseRandomTokenNotBeforeNotSetException()
+      {
+          $parse = new Parse(
+              new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio', '123$car*PARK456'),
+              new Validate,
+              new Encode()
+          );
+
+          $parse->validate()
+              ->validateNotBefore();
+      }
 }
