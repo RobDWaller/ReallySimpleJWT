@@ -329,6 +329,22 @@ class ParsedTest extends TestCase
         $this->assertSame('', $parsed->getJwtId());
     }
 
+    public function testGetAlgorithm()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+
+        $parsed = new Parsed(
+            $token,
+            ["typ" => "JWT", "alg" => "HS256"],
+            ["jti" => "he6236Yui"],
+            'hello'
+        );
+
+        $this->assertSame('HS256', $parsed->getAlgorithm());
+    }
+
     public function testGetType()
     {
         $build = new Build('JWT', new Validate(), new Encode());

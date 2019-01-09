@@ -84,6 +84,17 @@ class Parsed
     }
 
     /**
+     * Helper method to quickly access the algorithm claim from the header.
+     * Will return an empty string if not set.
+     *
+     * @return string
+     */
+    public function getAlgorithm(): string
+    {
+        return $this->header['alg'] ?? '';
+    }
+
+    /**
      * Helper method to quickly access the type claim from the header. Will
      * return an empty string if not set.
      *
