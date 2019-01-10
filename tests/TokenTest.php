@@ -31,6 +31,44 @@ class TokenTest extends TestCase
         $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
+    public function testCustomPayload()
+    {
+        $token = Token::customPayload([
+            'iat' => time(),
+            'uid' => 1,
+            'exp' => time() + 10,
+            'iss' => 'localhost'
+        ], 'Hello&MikeFooBar123');
+
+        $this->assertNotEmpty($token);
+    }
+
+    public function testValidateCustomPayload()
+    {
+        $token = Token::customPayload([
+            'iat' => time(),
+            'uid' => 1,
+            'exp' => time() + 10,
+            'iss' => 'localhost'
+        ], 'Hello&MikeFooBar123');
+
+        $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
+     * @expectedExceptionMessage Payload key invalid, please use strings.
+     */
+    public function testCustomPayloadBadArray()
+    {
+        $token = Token::customPayload([
+            time(),
+            1,
+            time() + 10,
+            'localhost'
+        ], 'Hello&MikeFooBar123');
+    }
+
     public function testBuilder()
     {
         $this->assertInstanceOf('ReallySimpleJWT\Build', Token::builder());

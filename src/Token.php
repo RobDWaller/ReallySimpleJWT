@@ -25,7 +25,8 @@ use ReallySimpleJWT\Exception\ValidateException;
 class Token
 {
     /**
-     * Create a JSON Web Token that contains a user identifier payload.
+     * Create a JSON Web Token that contains a user identifier and
+     * expiration payload.
      *
      * @param mixed $userId
      * @param string $secret
@@ -43,6 +44,31 @@ class Token
             ->setExpiration($expiration)
             ->setIssuer($issuer)
             ->setIssuedAt(time())
+            ->build()
+            ->getToken();
+    }
+
+    /**
+     * Create a JSON Web Token with a custom payload built from a key
+     * value array.
+     *
+     * @param array $payload
+     *
+     * @return string
+     */
+    public function customPayload(array $payload, string $secret): string
+    {
+        $builder = self::builder();
+
+        foreach ($payload as $key => $value) {
+            if (is_int($key)) {
+                throw new ValidateException('Payload key invalid, please use strings.');
+            }
+
+            $builder->setPayloadClaim($key, $value);
+        }
+
+        return $builder->setSecret($secret)
             ->build()
             ->getToken();
     }
