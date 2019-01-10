@@ -568,31 +568,31 @@ class ParseTest extends TestCase
      * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage The Expiration claim was not set on this token.
      */
-     public function testParseRandomTokenExpirationNotSetException()
-     {
-         $parse = new Parse(
-             new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio', '123$car*PARK456'),
-             new Validate,
-             new Encode()
-         );
+    public function testParseRandomTokenExpirationNotSetException()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio', '123$car*PARK456'),
+            new Validate,
+            new Encode()
+        );
 
-         $parse->validate()
-             ->validateExpiration();
-     }
+        $parse->validate()
+            ->validateExpiration();
+    }
 
-     /**
-      * @expectedException ReallySimpleJWT\Exception\ValidateException
-      * @expectedExceptionMessage The Not Before claim was not set on this token.
-      */
-      public function testParseRandomTokenNotBeforeNotSetException()
-      {
-          $parse = new Parse(
-              new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio', '123$car*PARK456'),
-              new Validate,
-              new Encode()
-          );
+    /**
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
+     * @expectedExceptionMessage The Not Before claim was not set on this token.
+     */
+    public function testParseRandomTokenNotBeforeNotSetException()
+    {
+        $parse = new Parse(
+            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio', '123$car*PARK456'),
+            new Validate,
+            new Encode()
+        );
 
-          $parse->validate()
-              ->validateNotBefore();
-      }
+        $parse->validate()
+            ->validateNotBefore();
+    }
 }
