@@ -8,7 +8,6 @@ use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Encode;
 use PHPUnit\Framework\TestCase;
-use Carbon\Carbon;
 use ReflectionMethod;
 
 class BuildTest extends TestCase
@@ -44,7 +43,7 @@ class BuildTest extends TestCase
     {
         $build = new Build('JWT', new Validate, new Encode);
 
-        $this->assertInstanceOf(Build::class, $build->setExpiration(Carbon::now()->addMinutes(5)->getTimestamp()));
+        $this->assertInstanceOf(Build::class, $build->setExpiration(time() + 300));
     }
 
     /**
@@ -55,14 +54,14 @@ class BuildTest extends TestCase
     {
         $build = new Build('JWT', new Validate, new Encode);
 
-        $this->assertInstanceOf(Build::class, $build->setExpiration(Carbon::now()->subMinutes(5)->getTimestamp()));
+        $this->assertInstanceOf(Build::class, $build->setExpiration(time() - 300));
     }
 
     public function testSetExpirationCheckPayload()
     {
         $build = new Build('JWT', new Validate, new Encode);
 
-        $timestamp = Carbon::now()->addMinutes(5)->getTimestamp();
+        $timestamp = time() + 300;
 
         $build->setExpiration($timestamp);
 
@@ -73,7 +72,7 @@ class BuildTest extends TestCase
     {
         $build = new Build('JWT', new Validate, new Encode);
 
-        $build->setExpiration(Carbon::now()->addMinutes(5)->getTimestamp());
+        $build->setExpiration(time() + 300);
 
         $this->assertArrayHasKey('exp', $build->getPayload());
     }

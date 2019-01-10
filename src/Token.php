@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Build;
@@ -8,7 +10,6 @@ use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Exception\ValidateException;
-use Carbon\Carbon;
 
 /**
  * A simple Package for creating JSON Web Tokens that uses HMAC SHA256 to sign
@@ -33,13 +34,13 @@ class Token
      *
      * @return string
      */
-    public static function create($userId, string $secret, string $expiration, string $issuer): string
+    public static function create($userId, string $secret, int $expiration, string $issuer): string
     {
         $builder = self::builder();
 
         return $builder->setPayloadClaim('user_id', $userId)
             ->setSecret($secret)
-            ->setExpiration(Carbon::parse($expiration)->getTimestamp())
+            ->setExpiration($expiration)
             ->setIssuer($issuer)
             ->setIssuedAt(time())
             ->build()

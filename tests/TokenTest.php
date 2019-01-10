@@ -3,7 +3,6 @@
 namespace Tests;
 
 use ReallySimpleJWT\Token;
-use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 
 class TokenTest extends TestCase
@@ -13,7 +12,7 @@ class TokenTest extends TestCase
         $token = Token::create(
             1,
             '123ABC%tyd*ere1',
-            Carbon::now()->addMinutes(5)->toDateTimeString(),
+            time() + 300,
             '127.0.0.1'
         );
 
@@ -25,7 +24,7 @@ class TokenTest extends TestCase
         $token = Token::create(
             'abdY',
             'Hello&MikeFooBar123',
-            Carbon::now()->addMinutes(5)->toDateTimeString(),
+            time() + 300,
             'http://127.0.0.1'
         );
 
@@ -47,7 +46,7 @@ class TokenTest extends TestCase
         $token = Token::create(
             'abdY',
             'Hello*JamesFooBar$!3',
-            Carbon::now()->addMinutes(5)->toDateTimeString(),
+            time() + 300,
             'http://127.0.0.1'
         );
 
@@ -59,7 +58,7 @@ class TokenTest extends TestCase
         $token = Token::create(
             'abdY',
             'Hello*JamesFooBar$!3',
-            Carbon::now()->addMinutes(5)->toDateTimeString(),
+            time() + 300,
             'http://127.0.0.1'
         );
 
