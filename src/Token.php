@@ -30,7 +30,7 @@ class Token
      *
      * @param mixed $userId
      * @param string $secret
-     * @param string $expiration
+     * @param int $expiration
      * @param string $issuer
      *
      * @return string
@@ -56,7 +56,7 @@ class Token
      *
      * @return string
      */
-    public function customPayload(array $payload, string $secret): string
+    public static function customPayload(array $payload, string $secret): string
     {
         $builder = self::builder();
 
