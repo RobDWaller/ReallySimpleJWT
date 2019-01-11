@@ -97,6 +97,25 @@ $issuer = 'localhost'
 $token = Token::create($userId, $secret, $expiration, $issuer);
 ```
 
+To create a more customised token developers can use the `customPayload()` method. This allows the creation of a JWT based on an array of key value pays which represent the payload claims.
+
+```php
+use ReallySimpleJWT\Token;
+
+$payload = [
+    'iat' => time(),
+    'uid' => 1,
+    'exp' => time() + 10,
+    'iss' => 'localhost'
+];
+
+$secret = 'Hello&MikeFooBar123';
+
+$token = Token::customPayload($payload, $secret);
+```
+
+On success the `customPayload()` method will return a JWT token string on a failure, due to a misconfigured payload array, it will throw an exception.
+
 ### Validate Token
 
 To validate a JSON web token call the `validate()` static method, pass in the token string and the secret. The validate method checks the token structure is correct, the signature is valid and the expiration time has not elapsed.
