@@ -86,23 +86,11 @@ class Token
         $parse = self::parser($token, $secret);
 
         try {
-            $parse->validate();
+            $parse->validate()
+                ->validateExpiration()
+                ->validateNotBefore();
         } catch (ValidateException $e) {
-            return false;
-        }
-
-        try {
-            $parse->validateExpiration();
-        } catch (ValidateException $e) {
-            if ($e->getCode() === 4) {
-                return false;
-            }
-        }
-
-        try {
-            $parse->validateNotBefore();
-        } catch (ValidateException $e) {
-            if ($e->getCode() === 5) {
+            if (in_array($e->getCode(), [1, 2, 3, 4, 5], true)) {
                 return false;
             }
         }
