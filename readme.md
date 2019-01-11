@@ -309,17 +309,6 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | 9    | Invalid secret.                   | Must be: 12 character length, a upper / lower case letters, a number, a special character `*&!@%^#$`` |
 | 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
 
-- 1: Token is invalid: Token must have three parts separated by dots.
-- 2: Token could not be parsed: Something weird happened ;)
-- 3: Signature is invalid: Signature does not match header / payload content.
-- 4: Expiration claim has expired.
-- 5: Not Before claim has not elapsed.
-- 6: Expiration claim is not set.
-- 7: Not Before claim is not set.
-- 8: Invalid payload claim: Claims must be key values of type string:mixed
-- 9: Invalid secret: 12 character length, upper / lower case letters, a number, a special character `*&!@%^#$``
-- 10: Invalid Audience claim: Must be either a string or array of strings.
-
 ## Token Security
 
 The JWT [RFC 7519](https://tools.ietf.org/html/rfc7519#section-7) allows for the creation of tokens without signatures and without secured / hashed signatures. The ReallySimpleJWT library however imposes security by default as there is no logical reason not to. All created tokens must have a signature and a strong secret, but the library will validate tokens without a secret or a strong secret. The library will not validate tokens without a signature.
