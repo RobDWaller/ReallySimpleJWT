@@ -19,7 +19,7 @@ namespace ReallySimpleJWT;
  * 8: Invalid payload claim: Claims must be key values of type string:mixed
  * 9: Invalid secret: 12 character length, upper / lower case letters, a number,
  * a special character *&!@%^#$
- * 10: Ivalid Audience claim: Must be either a string or array of strings.
+ * 10: Invalid Audience claim: Must be either a string or array of strings.
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>
  */

@@ -21,6 +21,7 @@ The library is also open to extension, developers can define their own encoding 
     - [Advanced Token Validation](#advanced-token-validation)
     - [Access Token Claims Data](#access-token-claims-data)
     - [Customised Encoding](#customised-encoding)
+- [Error Messages and Codes](#error-messages-and-codes)
 - [Token Security](#token-security)
     - [Signature Secret](#signature-secret)
 - [Version One Support](#version-one-support)
@@ -290,6 +291,34 @@ interface EncodeInterface
     public function signature(string $header, string $payload, string $secret): string;
 }
 ```
+
+## Error Messages and Codes
+
+The ReallySimpleJWT library will in a number of situations throw exceptions to highlight problems when creating and parsing JWT tokens. There error codes, messages and their explanations are below.
+
+| Code | Message                           | Explanation                                |
+|:----:| --------------------------------- | ------------------------------------------ |
+| 1    | Token is invalid.                 | Token must have three parts separated by dots. |
+| 2    | Token could not be parsed.        | Something weird happened ;) undefined problem with the token. |
+| 3    | Signature is invalid.             | Signature does not match header / payload content. Could not replicate signature with provided header and payload. |
+| 4    | Expiration claim has expired.     | The exp claim must be a valid date time number in the future. |
+| 5    | Not Before claim has not elapsed. | The nbf claim must be a valid date time number in the past. |
+| 6    | Expiration claim is not set.      | Attempt was made to validate an Expiration claim which does not exist. |
+| 7    | Not Before claim is not set.      | Attempt was made to validate a Not Before claim which does not exist. |
+| 8    | Invalid payload claim.            | Payload claims must be key value pairs of the format string:mixed. |
+| 9    | Invalid secret.                   | Must be: 12 character length, a upper / lower case letters, a number, a special character `*&!@%^#$`` |
+| 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
+
+- 1: Token is invalid: Token must have three parts separated by dots.
+- 2: Token could not be parsed: Something weird happened ;)
+- 3: Signature is invalid: Signature does not match header / payload content.
+- 4: Expiration claim has expired.
+- 5: Not Before claim has not elapsed.
+- 6: Expiration claim is not set.
+- 7: Not Before claim is not set.
+- 8: Invalid payload claim: Claims must be key values of type string:mixed
+- 9: Invalid secret: 12 character length, upper / lower case letters, a number, a special character `*&!@%^#$``
+- 10: Invalid Audience claim: Must be either a string or array of strings.
 
 ## Token Security
 
