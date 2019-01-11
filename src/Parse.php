@@ -72,7 +72,7 @@ class Parse
     public function validate(): self
     {
         if (!$this->validate->structure($this->jwt->getToken())) {
-            $this->error('The JSON web token has an invalid structure.');
+            throw new ValidateException('Token is invalid.', 1);
         }
 
         $this->validateSignature();
@@ -89,7 +89,7 @@ class Parse
     public function validateExpiration(): self
     {
         if (!$this->validate->expiration($this->getExpiration())) {
-            $this->error('The expiration time has elapsed, this token is no longer valid.');
+            throw new ValidateException('Expiration claim has expired.', 4);
         }
 
         return $this;
@@ -104,7 +104,7 @@ class Parse
     public function validateNotBefore(): self
     {
         if (!$this->validate->notBefore($this->getNotBefore())) {
-            $this->error('This token is not valid as the Not Before date/time value has not elapsed.');
+            throw new ValidateException('Not Before claim has not elapsed.', 5);
         }
 
         return $this;
@@ -143,11 +143,11 @@ class Parse
                 $this->jwt->getSecret()
             );
         } catch (\Throwable $e) {
-            $this->error('The JSON web token is invalid [' . $this->jwt->getToken() . '].');
+            throw new ValidateException('Token could not be parsed.', 2);
         }
 
         if (!$this->validate->signature($signature, $this->getSignature())) {
-            $this->error('The JSON web token signature is invalid.');
+            throw new ValidateException('Signature is invalid.', 3);
         }
     }
 
@@ -207,7 +207,7 @@ class Parse
             return $this->decodePayload()['exp'];
         }
 
-        $this->error('The Expiration claim was not set on this token.');
+        throw new ValidateException('Expiration claim is not set.', 6);
     }
 
     /**
@@ -222,7 +222,7 @@ class Parse
             return $this->decodePayload()['nbf'];
         }
 
-        $this->error('The Not Before claim was not set on this token.');
+        throw new ValidateException('Not Before claim is not set.', 7);
     }
 
     /**
@@ -249,16 +249,5 @@ class Parse
         return $this->jsonDecode($this->encode->decode(
             $this->getPayload()
         ));
-    }
-
-    /**
-     * Helper method that throws the Validate Exception, just tidier.
-     *
-     * @return void
-     * @throws Exception\ValidateException
-     */
-    private function error(string $message): void
-    {
-        throw new ValidateException($message);
     }
 }

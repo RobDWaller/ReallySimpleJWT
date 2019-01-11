@@ -138,11 +138,7 @@ class Build
     public function setSecret(string $secret): self
     {
         if (!$this->validate->secret($secret)) {
-            throw new ValidateException(
-                'Please set a valid secret. It must be at least twelve characters in length,
-                contain lower and upper case letters,
-                a number and one of the following characters *&!@%^#$.'
-            );
+            throw new ValidateException('Invalid secret.', 9);
         }
 
         $this->secret = $secret;
@@ -196,7 +192,7 @@ class Build
             return $this;
         }
 
-        throw new ValidateException('Token audience must be either a string or array of strings.');
+        throw new ValidateException('Invalid Audience claim.', 10);
     }
 
     /**
@@ -210,7 +206,7 @@ class Build
     public function setExpiration(int $timestamp): self
     {
         if (!$this->validate->expiration($timestamp)) {
-            throw new ValidateException('The expiration timestamp you set has already expired.');
+            throw new ValidateException('Expiration claim has expired.', 4);
         }
 
         $this->payload['exp'] = $timestamp;
@@ -340,6 +336,6 @@ class Build
             );
         }
 
-        throw new ValidateException('Please set a valid secret for your token.');
+        throw new ValidateException('Invalid secret.', 9);
     }
 }

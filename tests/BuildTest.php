@@ -28,9 +28,8 @@ class BuildTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Please set a valid secret. It must be at least twelve characters in length,
-     * contain lower and upper case letters,
-     * a number and one of the following characters *&!@%^#$.
+     * @expectedExceptionMessage Invalid secret.
+     * @expectedExceptionCode 9
      */
     public function testBuildSetSecretInvalid()
     {
@@ -48,7 +47,8 @@ class BuildTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage The expiration timestamp you set has already expired.
+     * @expectedExceptionMessage Expiration claim has expired.
+     * @expectedExceptionCode 4
      */
     public function testSetExpirationInvalid()
     {
@@ -318,7 +318,8 @@ class BuildTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Please set a valid secret for your token.
+     * @expectedExceptionMessage Invalid secret.
+     * @expectedExceptionCode 9
      */
     public function testGetSignatureNoSecret()
     {
@@ -387,7 +388,8 @@ class BuildTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Token audience must be either a string or array of strings.
+     * @expectedExceptionMessage Invalid Audience claim.
+     * @expectedException 10
      */
     public function testSetAudienceIntFail()
     {

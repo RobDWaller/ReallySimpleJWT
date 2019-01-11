@@ -408,7 +408,8 @@ class EndToEndTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage The expiration timestamp you set has already expired.
+     * @expectedExceptionMessage Expiration claim has expired.
+     * @expectedExceptionCode 4
      */
     public function testEndToEndBadExpiration()
     {
@@ -439,7 +440,8 @@ class EndToEndTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage This token is not valid as the Not Before date/time value has not elapsed.
+     * @expectedExceptionMessage Not Before claim has not elapsed.
+     * @expectedExceptionCode 5
      */
     public function testEndToEndBadNotBefore()
     {
@@ -470,7 +472,8 @@ class EndToEndTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage The JSON web token signature is invalid.
+     * @expectedExceptionMessage Signature is invalid.
+     * @expectedExceptionCode 3
      */
     public function testEndToEndBadSignature()
     {
