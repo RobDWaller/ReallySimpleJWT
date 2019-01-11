@@ -55,9 +55,34 @@ class TokenTest extends TestCase
         $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
+    public function testValidateCustomPayloadWithoutExpiration()
+    {
+        $token = Token::customPayload([
+            'iat' => time(),
+            'uid' => 1,
+            'iss' => 'localhost'
+        ], 'Hello&MikeFooBar123');
+
+        $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
+    public function testValidateCustomPayloadWithNotBefore()
+    {
+        $token = Token::customPayload([
+            'iat' => time(),
+            'uid' => 1,
+            'exp' => time() + 20,
+            'nbf' => time() + 20,
+            'iss' => 'localhost'
+        ], 'Hello&MikeFooBar123');
+
+        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Payload key invalid, please use strings.
+     * @expectedExceptionMessage Invalid payload claim.
+     * @expectedExceptionCode 8
      */
     public function testCustomPayloadBadArray()
     {

@@ -62,7 +62,7 @@ class Token
 
         foreach ($payload as $key => $value) {
             if (is_int($key)) {
-                throw new ValidateException('Payload key invalid, please use strings.');
+                throw new ValidateException('Invalid payload claim.', 8);
             }
 
             $builder->setPayloadClaim($key, $value);
@@ -86,11 +86,28 @@ class Token
         $parse = self::parser($token, $secret);
 
         try {
-            $parse->validate()->validateExpiration();
-            return true;
+            $parse->validate();
         } catch (ValidateException $e) {
             return false;
         }
+
+        try {
+            $parse->validateExpiration();
+        } catch (ValidateException $e) {
+            if ($e->getCode() === 4) {
+                return false;
+            }
+        }
+
+        try {
+            $parse->validateNotBefore();
+        } catch (ValidateException $e) {
+            if ($e->getCode() === 5) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
