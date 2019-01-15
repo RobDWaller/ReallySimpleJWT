@@ -18,7 +18,7 @@ The library is also open to extension, developers can define their own encoding 
 - [Advanced Usage](#advanced-usage)
     - [Create Custom Token](#create-custom-token)
     - [Access the Token](#access-the-token)
-    - [Advanced Token Validation](#advanced-token-validation)
+    - [Parse and Validate Token](#parse-and-validate-token)
     - [Access Token Claims Data](#access-token-claims-data)
     - [Customised Encoding](#customised-encoding)
 - [Error Messages and Codes](#error-messages-and-codes)
@@ -79,7 +79,7 @@ Via composer.json:
 
 ## Basic Usage
 
-For basic usage the library exposes a set of static methods via the `ReallySimpleJWT\Token` class. This allows a developer to create and validate a token, with a user identifier and a token expiration time, via two method calls.
+For basic usage the library exposes a set of static methods via the `ReallySimpleJWT\Token` class which allow a developer to create and validate basic JSON Web Tokens.
 
 ### Create Token
 
@@ -98,7 +98,7 @@ $issuer = 'localhost'
 $token = Token::create($userId, $secret, $expiration, $issuer);
 ```
 
-To create a more customised token developers can use the `customPayload()` method. This allows the creation of a JWT based on an array of key value pays which represent the payload claims.
+To create a more customised token developers can use the `customPayload()` method. This allows the creation of a token based on an array of key value pairs which represent the payload claims.
 
 ```php
 use ReallySimpleJWT\Token;
@@ -115,11 +115,11 @@ $secret = 'Hello&MikeFooBar123';
 $token = Token::customPayload($payload, $secret);
 ```
 
-On success the `customPayload()` method will return a JWT token string on a failure, due to a misconfigured payload array, it will throw an exception.
+On success the `customPayload()` method will return a JWT token string and on failure it will throw an exception.
 
 ### Validate Token
 
-To validate a JSON web token call the `validate()` static method, pass in the token string and the secret. The validate method checks the token structure is correct, the signature is valid and the expiration time has not elapsed.
+To validate a JSON web token call the `validate()` static method, pass in the token string and the secret. The validate method checks the token structure is correct, the signature is valid, the expiration time has not expired and the not before time has elapsed.
 
 It will return true on success and false on failure.
 
@@ -153,8 +153,7 @@ Token::getPayload($token, $secret);
 
 ### Factory Methods
 
-The `ReallySimpleJWT\Token` class also provides two Factory methods to gain
-access to the core `ReallySimpleJWT\Build` and `ReallySimpleJWT\Parse` classes.
+The `ReallySimpleJWT\Token` class also provides two factory methods to gain access to the core `ReallySimpleJWT\Build` and `ReallySimpleJWT\Parse` classes.
 
 ```php
 Token::builder(); // Returns an instance of ReallySimpleJWT\Build
@@ -197,7 +196,7 @@ $token = $build->setContentType('JWT')
 
 ### Access the Token
 
-The `ReallySimpleJWT\Jwt` is returned when a developer calls the `build()` method on the `ReallySimpleJWT\Build` class. The Jwt class offers two methods `getToken()` and `getSecret()`. The former returns the generated JSON Web Token and the latter returns the secret used for the token signature.
+A `ReallySimpleJWT\Jwt` object is returned when a developer calls the `build()` method on the `ReallySimpleJWT\Build` class. The Jwt class offers two methods `getToken()` and `getSecret()`. The former returns the generated JSON Web Token and the latter returns the secret used for the token signature.
 
 To parse a JSON Web Token via the `ReallySimpleJWT\Parse` class a developer must first create a new `ReallySimpleJWT\Jwt` object by injecting the token and secret.
 
@@ -216,17 +215,17 @@ $jwt->getToken();
 $jwt->getSecret();
 ```
 
-### Advanced Token Validation
+### Parse and Validate Token
 
 The `ReallySimpleJWT\Parse` class allows a developer to parse and validate a JSON Web Token. Three validation methods are available which can all be chained:
 
 - `validate()` confirms the structure of the token and the validity of the signature.
-- `validateExpiration()` confirms the token expiration claim has not elapsed.
-- `validateNotBefore()` confirms the token not before claim has elapsed.
+- `validateExpiration()` confirms the token expiration claim (`exp`) has not expired.
+- `validateNotBefore()` confirms the token not before claim (`nbf`) has elapsed.
 
 Each validation method will throw a `ReallySimpleJWT\Exception\ValidateException` if there is anything wrong with the supplied token.
 
-The `parse()` method which should be called after validation is complete will decode the JSON Web Token. It will then return the result as a `ReallySimpleJWT\Parsed` object. This will provide access to the claim data the token holds in the header and the payload.
+The `parse()` method which should be called after validation is complete will decode the JSON Web Token. It will then return the result as a `ReallySimpleJWT\Parsed` object. This will provide access to the claims data the token holds in the header and the payload.
 
 ```php
 use ReallySimpleJWT\Parse;
@@ -294,7 +293,7 @@ interface EncodeInterface
 
 ## Error Messages and Codes
 
-The ReallySimpleJWT library will in a number of situations throw exceptions to highlight problems when creating and parsing JWT tokens. There error codes, messages and their explanations are below.
+The ReallySimpleJWT library will in a number of situations throw exceptions to highlight problems when creating and parsing JWT tokens. The error codes, messages and their explanations are below.
 
 | Code | Message                           | Explanation                                |
 |:----:| --------------------------------- | ------------------------------------------ |
@@ -306,7 +305,7 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | 6    | Expiration claim is not set.      | Attempt was made to validate an Expiration claim which does not exist. |
 | 7    | Not Before claim is not set.      | Attempt was made to validate a Not Before claim which does not exist. |
 | 8    | Invalid payload claim.            | Payload claims must be key value pairs of the format string:mixed. |
-| 9    | Invalid secret.                   | Must be: 12 character length, a upper / lower case letters, a number, a special character `*&!@%^#$`` |
+| 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$`` |
 | 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
 
 ## Token Security
