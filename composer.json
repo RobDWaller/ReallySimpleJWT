@@ -2,7 +2,7 @@
     "name": "rbdwllr/reallysimplejwt",
     "type": "library",
     "description": "A really simple library to generate user authentication JSON Web Tokens.",
-    "keywords": ["jwt", "json", "tokens", "authentication"],
+    "keywords": ["jwt", "json", "tokens", "authentication", "json web tokens", "php"],
     "license": "MIT",
     "authors": [
         {
@@ -22,8 +22,6 @@
     "autoload": {
         "psr-4": {
             "ReallySimpleJWT\\": "src",
-            "ReallySimpleJWT\\Helper\\": "src/Helper",
-            "ReallySimpleJWT\\Exception\\": "src/Exception",
             "Tests\\": "tests"
         }
     }
