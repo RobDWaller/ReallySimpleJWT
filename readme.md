@@ -1,124 +1,322 @@
 # Really Simple JSON Web Tokens
 [![Build Status](https://travis-ci.org/RobDWaller/ReallySimpleJWT.svg?branch=master)](https://travis-ci.org/RobDWaller/ReallySimpleJWT) [![codecov](https://codecov.io/gh/RobDWaller/ReallySimpleJWT/branch/master/graph/badge.svg)](https://codecov.io/gh/RobDWaller/ReallySimpleJWT) [![StyleCI](https://styleci.io/repos/82379868/shield?branch=master)](https://styleci.io/repos/82379868) [![Latest Stable Version](https://poser.pugx.org/rbdwllr/reallysimplejwt/v/stable)](https://packagist.org/packages/rbdwllr/reallysimplejwt) [![Total Downloads](https://poser.pugx.org/rbdwllr/reallysimplejwt/downloads)](https://packagist.org/packages/rbdwllr/reallysimplejwt)
 
-A simple package for creating JSON Web Tokens that uses HMAC SHA256 to sign
-signatures. Exposes a simple interface to allow you to create a token that stores a user identifier. The package is set up to allow extension and the use of larger payloads.
+A simple PHP library for creating JSON Web Tokens that uses HMAC SHA256 to sign
+signatures. For basic usage the library exposes a static interface to allow developers to create a token that stores a user identifier and expiration time.
 
-## Version 2.0.0
+The library is also open to extension, developers can define their own encoding standard, set all the [RFC standard](https://tools.ietf.org/html/rfc7519) JWT claims and set their own private claims.  
 
-Version two of this library is currently [in beta](https://github.com/RobDWaller/ReallySimpleJWT/releases/tag/2.0.0-beta) and will be released early in 2019. It is a significant improvement to the library but will contain a number of breaking changes. I advise all users of this library to read my [blog post](https://rbrt.wllr.info/2018/12/14/really-simple-jwt-version-two.html) on the subject to better understand what will be happening and when.  
+## Contents
+
+- [What is a JSON Web Token?](#what-is-a-json-web-token)
+- [Setup](#setup)
+- [Basic Usage](#basic-usage)
+    - [Create Token](#create-token)
+    - [Validate Token](#validate-token)
+    - [Get Header and Payload Claims Data](#get-header-and-payload-claims-data)
+    - [Factory Methods](#factory-methods)
+- [Advanced Usage](#advanced-usage)
+    - [Create Custom Token](#create-custom-token)
+    - [Access the Token](#access-the-token)
+    - [Parse and Validate Token](#parse-and-validate-token)
+    - [Access Token Claims Data](#access-token-claims-data)
+    - [Customised Encoding](#customised-encoding)
+- [Error Messages and Codes](#error-messages-and-codes)
+- [Token Security](#token-security)
+    - [Signature Secret](#signature-secret)
+- [Version One Support](#version-one-support)
 
 ## What is a JSON Web Token?
 
-JSON Web Tokens is a standard for creating URL friendly access tokens that assert claims about a user or system. They are broken down into three parts; the header, the payload and the signature; with each part separated by a dot.
+JSON Web Tokens is a standard for creating URL friendly access tokens that assert claims about a user or system.
 
-For example:
+A token is broken down into three parts; the header, the payload and the signature; with each part separated by a dot. Each part is encoded using the base64url standard, see the [RFC](https://tools.ietf.org/html/rfc4648#page-7).
+
+An example JWT:
 
 ```
-aaa.bbb.ccc
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 ```
 
-Security is achieved via the signature which is made up of the header, payload and a secret known only to the token author.
+The header and payload are both encoded JSON strings that contain a number of claims:
 
-For more information on JSON Web Tokens please see https://jwt.io
+```javascript
+// Header
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
 
-## Usage
+// Payload
+{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "iat": 1516239022
+}
+```
 
-### Setup
+A claim is a key value pair, eg `"typ": "JWT"`, please read [RFC 7519](https://tools.ietf.org/html/rfc7519#section-4) to learn more about JSON Web Token claims.
 
-via composer:
+Token security is achieved via the signature which is made up of the header, payload and a secret known only to the token author. This information is hashed and then base64url encoded.
+
+If a malicious user attempts to edit the header or payload claims they will be unable to replicate the signature so long as you use a strong key. See [Token Security](#token-security) for more information on this.
+
+## Setup
+
+Via Composer on the command line:
 
 ```bash
 composer require rbdwllr/reallysimplejwt
 ```
 
-### Get Token
+Via composer.json:
 
-Call the get token method and pass in user identifier, key secret, expiration
-date time string and the token issuer.
-
-Will return a token string on success and throw an exception on failure.
-
-```php
-<?php
-
-use ReallySimpleJWT\Token;
-
-$token = Token::getToken('userIdentifier', 'secret', 'dateTimeString' | 'dateTimeNumber', 'issuerIdentifier');
+```javascript
+"require": {
+    "rbdwllr/reallysimplejwt": "^2.0"
+}
 ```
 
-**Expiration Time Note:** It was [pointed out](https://github.com/RobDWaller/ReallySimpleJWT/issues/13) that the expiration date does not comply with the [JWT RFC](https://tools.ietf.org/html/rfc7519#section-4.1.4). It should output a date time number and not a date time string. eg `exp: 1529495956` not `exp: '2018-06-20 11:59:16'`.
+## Basic Usage
 
-This has been fixed, but to aid backwards compatibility when generating a token you can set the expiration as a date time number or a date time string. The token will now always output with a date time number.
+For basic usage the library exposes a set of static methods via the `ReallySimpleJWT\Token` class which allow a developer to create and validate basic JSON Web Tokens.
+
+### Create Token
+
+Call the `create()` static method and pass in a user identifier, a secret, an expiration date time number and the token issuer.
+
+This will return a token string on success and throw a `ReallySimpleJWT\Exception\ValidateException` on failure.
+
+```php
+use ReallySimpleJWT\Token;
+
+$userId = 12;
+$secret = 'sec!ReT423*&'
+$expiration = time() + 3600;
+$issuer = 'localhost'
+
+$token = Token::create($userId, $secret, $expiration, $issuer);
+```
+
+To create a more customised token developers can use the `customPayload()` method. This allows the creation of a token based on an array of key value pairs which represent the payload claims.
+
+```php
+use ReallySimpleJWT\Token;
+
+$payload = [
+    'iat' => time(),
+    'uid' => 1,
+    'exp' => time() + 10,
+    'iss' => 'localhost'
+];
+
+$secret = 'Hello&MikeFooBar123';
+
+$token = Token::customPayload($payload, $secret);
+```
+
+On success the `customPayload()` method will return a JWT token string and on failure it will throw an exception.
 
 ### Validate Token
 
-Call the validate method, pass in your token string and the key secret.
+To validate a JSON web token call the `validate()` static method, pass in the token string and the secret. The validate method checks the token structure is correct, the signature is valid, the expiration time has not expired and the not before time has elapsed.
 
-Will return boolean true on success and throw an exception on failure.
+It will return true on success and false on failure.
 
 ```php
-<?php
-
 use ReallySimpleJWT\Token;
 
-$result = Token::validate('token', 'secret');
+$token = 'aaa.bbb.ccc';
+$secret = 'sec!ReT423*&'
+
+$result = Token::validate($token, $secret);
 ```
 
-### Get Payload
+### Get Header and Payload Claims Data
 
-To retrieve the token payload call the `getPayload()` method.
+To retrieve the token claims data from the header or payload call the `getHeader()` and or `getPayload()` static methods.
 
-Will return a JSON string on success and throw an exception on failure.
+Both methods will return an associative array on success and throw an exception on failure.
 
 ```php
 use ReallySimpleJWT\Token;
 
-$result = Token::getPayload('token');
+$token = 'aaa.bbb.ccc';
+$secret = 'sec!ReT423*&'
+
+// Return the header claims
+Token::getHeader($token, $secret);
+
+// Return the payload claims
+Token::getPayload($token, $secret);
+```
+
+### Factory Methods
+
+The `ReallySimpleJWT\Token` class also provides two factory methods to gain access to the core `ReallySimpleJWT\Build` and `ReallySimpleJWT\Parse` classes.
+
+```php
+Token::builder(); // Returns an instance of ReallySimpleJWT\Build
+
+Token::parser($token, $secret); // Returns an instance of ReallySimpleJWT\Parse
 ```
 
 ## Advanced Usage
 
-If you would like to access the token builder interface directly simply instantiate the TokenBuilder class.
+To create customised JSON Web Tokens developers need to access the `ReallySimpleJWT\Build` and `ReallySimpleJWT\Parse` classes directly.
 
-As should be clear you can add as much to the token payload as you need.
+### Create Custom Token
+
+The `ReallySimpleJWT\Build` class allows you to create a completely unique JSON Web Token. It has helper methods for all the [RFC](https://tools.ietf.org/html/rfc7519#section-4) defined header and payload claims. For example, the `setIssuer()` method will add the `iss` claim to the token payload.
+
+The class also allows developers to set custom header and payload claims via the `setHeaderClaim()` and `setPayloadClaim()` methods.
+
+The methods can be chained together and when the `build()` method is called the token will be generated and returned within a `ReallySimpleJWT\Jwt` object.
 
 ```php
-<?php
+use ReallySimpleJWT\Build;
+use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Encode;
 
-use ReallySimpleJWT\TokenBuilder;
+$build = new Build('JWT', new Validate(), new Encode());
 
-$builder = new TokenBuilder();
-
-$token = $builder->addPayload(['key' => 'foo', 'value' => 'bar'])
-    ->addHeader(['key' => 'baz', 'value' => 'qux'])
-    ->setSecret($secret)
-    ->setExpiration($expiration)
-    ->setIssuer($issuer)
+$token = $build->setContentType('JWT')
+    ->setHeaderClaim('info', 'foo')
+    ->setSecret('!secReT$123*')
+    ->setIssuer('localhost')
+    ->setSubject('admins')
+    ->setAudience('https://google.com')
+    ->setExpiration(time() + 30)
+    ->setNotBefore(time() - 30)
+    ->setIssuedAt(time())
+    ->setJwtId('123ABC')
+    ->setPayloadClaim('uid', 12)
     ->build();
 ```
 
-In addition you can access the token validator interface directly too by instantiating the TokenValidator class.
+### Access the Token
+
+A `ReallySimpleJWT\Jwt` object is returned when a developer calls the `build()` method on the `ReallySimpleJWT\Build` class. The Jwt class offers two methods `getToken()` and `getSecret()`. The former returns the generated JSON Web Token and the latter returns the secret used for the token signature.
+
+To parse a JSON Web Token via the `ReallySimpleJWT\Parse` class a developer must first create a new `ReallySimpleJWT\Jwt` object by injecting the token and secret.
 
 ```php
-<?php
+use ReallySimpleJWT\Jwt;
 
-use ReallySimpleJWT\TokenValidator;
+$token = 'aaa.bbb.ccc';
+$secret = '!secReT$123*';
 
-$validator = new TokenValidator;
+$jwt = new Jwt($token, $secret);
 
-$validator->splitToken('token string')
-    ->validateExpiration()
-    ->validateSignature('secret');
+// Return the token
+$jwt->getToken();
 
-$payload = $validator->getPayload();
-
-$header = $validator->getHeader();
+// Return the secret
+$jwt->getSecret();
 ```
 
-## Secret Key Security
+### Parse and Validate Token
 
-This JWT generator imposes secret security as follows: the secret must be at least 12 characters in length; contain numbers; upper and lowercase letters; and the one of the following special characters `*&!@%^#$`.
+The `ReallySimpleJWT\Parse` class allows a developer to parse and validate a JSON Web Token. Three validation methods are available which can all be chained:
+
+- `validate()` confirms the structure of the token and the validity of the signature.
+- `validateExpiration()` confirms the token expiration claim (`exp`) has not expired.
+- `validateNotBefore()` confirms the token not before claim (`nbf`) has elapsed.
+
+Each validation method will throw a `ReallySimpleJWT\Exception\ValidateException` if there is anything wrong with the supplied token.
+
+The `parse()` method which should be called after validation is complete will decode the JSON Web Token. It will then return the result as a `ReallySimpleJWT\Parsed` object. This will provide access to the claims data the token holds in the header and the payload.
+
+```php
+use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Jwt;
+use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Encode;
+
+$token = 'aaa.bbb.ccc';
+$secret = '!secReT$123*';
+
+$jwt = new Jwt($token, $secret);
+
+$parse = new Parse($jwt, new Validate(), new Encode());
+
+$parsed = $parse->validate()
+    ->validateExpiration()
+    ->validateNotBefore()
+    ->parse();
+
+// Return the token header claims as an associative array.
+$parsed->getHeader();
+
+// Return the token payload claims as an associative array.
+$parsed->getPayload();
+```
+
+### Access Token Claims Data
+
+The `ReallySimpleJWT\Parsed` class is returned when a developer calls the `parse()` method on the `ReallySimpleJWT\Parse` class.
+
+It provides a number of helper methods to gain access to the token claim data. A developer can call the `getHeader()` and `getPayload()` methods to gain access to the respective claim data as associative arrays.
+
+Alternatively a developer can call one of the [RFC](https://tools.ietf.org/html/rfc7519#section-4) compliant claim methods:
+
+**Header**
+- `getAlgorithm()`
+- `getType()`
+- `getContentType()`
+
+**Payload**
+- `getIssuer()`
+- `getSubject()`
+- `getAudience()`
+- `getExpiration()`
+- `getNotBefore()`
+- `getIssuedAt()`
+- `getJwtId()`
+
+### Customised Encoding
+
+By default this library hashes and encodes the JWT signature via `hash_hmac()` using the sha256 algorithm. If a developer would like to use a customised form of encoding they just need to generate a custom encode class which complies with the `ReallySimpleJWT\Interfaces\EncodeInterface`.
+
+```php
+interface EncodeInterface
+{
+    public function getAlgorithm(): string;
+
+    public function encode(string $toEncode): string;
+
+    public function decode(string $toDecode): string;
+
+    public function signature(string $header, string $payload, string $secret): string;
+}
+```
+
+## Error Messages and Codes
+
+The ReallySimpleJWT library will in a number of situations throw exceptions to highlight problems when creating and parsing JWT tokens. The error codes, messages and their explanations are below.
+
+| Code | Message                           | Explanation                                |
+|:----:| --------------------------------- | ------------------------------------------ |
+| 1    | Token is invalid.                 | Token must have three parts separated by dots. |
+| 2    | Token could not be parsed.        | Something weird happened ;) undefined problem with the token. |
+| 3    | Signature is invalid.             | Signature does not match header / payload content. Could not replicate signature with provided header and payload. |
+| 4    | Expiration claim has expired.     | The exp claim must be a valid date time number in the future. |
+| 5    | Not Before claim has not elapsed. | The nbf claim must be a valid date time number in the past. |
+| 6    | Expiration claim is not set.      | Attempt was made to validate an Expiration claim which does not exist. |
+| 7    | Not Before claim is not set.      | Attempt was made to validate a Not Before claim which does not exist. |
+| 8    | Invalid payload claim.            | Payload claims must be key value pairs of the format string:mixed. |
+| 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$`` |
+| 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
+
+## Token Security
+
+The JWT [RFC 7519](https://tools.ietf.org/html/rfc7519#section-7) allows for the creation of tokens without signatures and without secured / hashed signatures. The ReallySimpleJWT library however imposes security by default as there is no logical reason not to. All created tokens must have a signature and a strong secret, but the library will validate tokens without a secret or a strong secret. The library will not validate tokens without a signature.
+
+It is possible to edit and enhance the implementation of the signature and its security level by creating a custom encode class that implements the `ReallySimpleJWT\Interfaces\EncodeInterface`. See section [Customised Encoding](#customised-encoding)
+
+### Signature Secret
+
+This JWT library imposes strict secret security as follows: the secret must be at least 12 characters in length; contain numbers; upper and lowercase letters; and one of the following special characters `*&!@%^#$`.
 
 ```php
 // Bad Secret
@@ -129,6 +327,10 @@ sec!ReT423*&
 ```
 
 The reason for this is that there are lots of [JWT Crackers](https://github.com/lmammino/jwt-cracker) available meaning weak secrets are easy to crack thus rendering the security JWT offers useless.
+
+## Version One Support
+
+Support for version one of this library will continue until July 2019. No new features will be added to the version, just bug fixes and security patches.
 
 ## License
 

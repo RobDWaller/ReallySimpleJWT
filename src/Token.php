@@ -1,41 +1,80 @@
-<?php namespace ReallySimpleJWT;
+<?php
+
+declare(strict_types=1);
+
+namespace ReallySimpleJWT;
+
+use ReallySimpleJWT\Build;
+use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Jwt;
+use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Exception\ValidateException;
 
 /**
  * A simple Package for creating JSON Web Tokens that uses HMAC SHA256 to sign
- * signatures. Exposes a simple interface to allow you to create a simple token
+ * signatures. Exposes a simple interface to allow you to create a token
  * that stores a user identifier. The Package is set up to allow extension and
- * the use of larger payloads.
+ * the use of larger payloads. You can use your own encoding if you choose.
  *
  * For more information on JSON Web Tokens please see https://jwt.io
+ * along with the RFC https://tools.ietf.org/html/rfc7519
  *
  * @author Rob Waller <rdwaller1984@gmail.com>
  */
-
 class Token
 {
     /**
-     * Create a JSON Web Token that contains a User Identifier Payload
+     * Create a JSON Web Token that contains a user identifier and
+     * expiration payload.
      *
      * @param mixed $userId
      * @param string $secret
-     * @param string $expiration
+     * @param int $expiration
      * @param string $issuer
      *
      * @return string
      */
-    public static function getToken($userId, string $secret, string $expiration, string $issuer): string
+    public static function create($userId, string $secret, int $expiration, string $issuer): string
     {
         $builder = self::builder();
 
-        return $builder->addPayload(['key' => 'user_id', 'value' => $userId])
+        return $builder->setPayloadClaim('user_id', $userId)
             ->setSecret($secret)
             ->setExpiration($expiration)
             ->setIssuer($issuer)
-            ->build();
+            ->setIssuedAt(time())
+            ->build()
+            ->getToken();
     }
 
     /**
-     * Validate a JSON Web Token's expiration and signature
+     * Create a JSON Web Token with a custom payload built from a key
+     * value array.
+     *
+     * @param array $payload
+     *
+     * @return string
+     */
+    public static function customPayload(array $payload, string $secret): string
+    {
+        $builder = self::builder();
+
+        foreach ($payload as $key => $value) {
+            if (is_int($key)) {
+                throw new ValidateException('Invalid payload claim.', 8);
+            }
+
+            $builder->setPayloadClaim($key, $value);
+        }
+
+        return $builder->setSecret($secret)
+            ->build()
+            ->getToken();
+    }
+
+    /**
+     * Validate a JSON Web Token's expiration and signature.
      *
      * @param string $token
      * @param string $secret
@@ -44,46 +83,70 @@ class Token
      */
     public static function validate(string $token, string $secret): bool
     {
-        $validator = self::validator();
+        $parse = self::parser($token, $secret);
 
-        return $validator->splitToken($token)
-            ->validateExpiration()
-            ->validateSignature($secret);
+        try {
+            $parse->validate()
+                ->validateExpiration()
+                ->validateNotBefore();
+        } catch (ValidateException $e) {
+            if (in_array($e->getCode(), [1, 2, 3, 4, 5], true)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
-     * Return the payload of the token as a JSON string. You should run the
-     * validate method on your token before retrieving the payload.
+     * Return the header of the token as an associative array. You should run
+     * the validate method on your token before retrieving the header.
      *
      * @param string $token
      *
-     * @return string
+     * @return array
      */
-    public static function getPayload(string $token): string
+    public static function getHeader(string $token, string $secret): array
     {
-        $validator = self::validator();
+        $parser = self::parser($token, $secret);
 
-        return $validator->splitToken($token)
-            ->getPayload();
+        return $parser->validate()->parse()->getHeader();
     }
 
     /**
-     * Interface to return instance of the token builder
+     * Return the payload of the token as an associative array. You should run
+     * the validate method on your token before retrieving the payload.
      *
-     * @return TokenBuilder
+     * @param string $token
+     *
+     * @return array
      */
-    public static function builder(): TokenBuilder
+    public static function getPayload(string $token, string $secret): array
     {
-        return new TokenBuilder();
+        $parser = self::parser($token, $secret);
+
+        return $parser->validate()->parse()->getPayload();
     }
 
     /**
-     * Interface to return instance of the token validator
+     * Factory method to return an instance of the ReallySimpleJWT\Build class.
      *
-     * @return TokenValidator
+     * @return Build
      */
-    public static function validator(): TokenValidator
+    public static function builder(): Build
     {
-        return new TokenValidator();
+        return new Build('JWT', new Validate(), new Encode());
+    }
+
+    /**
+     * Factory method to return instance of the ReallySimpleJWT\Parse class.
+     *
+     * @return Parse
+     */
+    public static function parser(string $token, string $secret): Parse
+    {
+        $jwt = new Jwt($token, $secret);
+
+        return new Parse($jwt, new Validate(), new Encode());
     }
 }

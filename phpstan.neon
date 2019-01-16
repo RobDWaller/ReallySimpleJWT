@@ -1,4 +1,0 @@
-parameters:
-        ignoreErrors:
-                -'#Mockery\\MockInterface#'
-                -'#Mockery\\ExpectationInterface#'

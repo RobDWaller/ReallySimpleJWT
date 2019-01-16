@@ -1,16 +1,17 @@
 language: php
 
 php:
-    - 7.0
     - 7.1
     - 7.2
+    - 7.3
 
 before_script:
     - travis_retry composer self-update
     - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
-    - vendor/bin/phpstan analyse -l 7 -c phpstan.neon tests src
+    - vendor/bin/phpcs --standard=psr12 src
+    - vendor/bin/phpstan analyse -l 7 tests src
     - vendor/bin/phpmd src text ruleset.xml
     - vendor/bin/phpunit --coverage-clover=coverage.xml
 

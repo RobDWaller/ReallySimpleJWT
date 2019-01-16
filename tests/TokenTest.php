@@ -3,17 +3,16 @@
 namespace Tests;
 
 use ReallySimpleJWT\Token;
-use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 
 class TokenTest extends TestCase
 {
-    public function testGetToken()
+    public function testCreateToken()
     {
-        $token = Token::getToken(
+        $token = Token::create(
             1,
             '123ABC%tyd*ere1',
-            Carbon::now()->addMinutes(5)->toDateTimeString(),
+            time() + 300,
             '127.0.0.1'
         );
 
@@ -22,53 +21,124 @@ class TokenTest extends TestCase
 
     public function testValidateToken()
     {
-        $token = Token::getToken(
+        $token = Token::create(
             'abdY',
             'Hello&MikeFooBar123',
-            Carbon::now()->addMinutes(5)->toDateTimeString(),
+            time() + 300,
             'http://127.0.0.1'
         );
 
         $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
+    public function testCustomPayload()
+    {
+        $token = Token::customPayload([
+            'iat' => time(),
+            'uid' => 1,
+            'exp' => time() + 10,
+            'iss' => 'localhost'
+        ], 'Hello&MikeFooBar123');
+
+        $this->assertNotEmpty($token);
+    }
+
+    public function testValidateCustomPayload()
+    {
+        $token = Token::customPayload([
+            'iat' => time(),
+            'uid' => 1,
+            'exp' => time() + 10,
+            'iss' => 'localhost'
+        ], 'Hello&MikeFooBar123');
+
+        $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
+    public function testValidateCustomPayloadWithoutExpiration()
+    {
+        $token = Token::customPayload([
+            'iat' => time(),
+            'uid' => 1,
+            'iss' => 'localhost'
+        ], 'Hello&MikeFooBar123');
+
+        $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
+    public function testValidateCustomPayloadWithNotBefore()
+    {
+        $token = Token::customPayload([
+            'iat' => time(),
+            'uid' => 1,
+            'exp' => time() + 20,
+            'nbf' => time() + 20,
+            'iss' => 'localhost'
+        ], 'Hello&MikeFooBar123');
+
+        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
+     * @expectedExceptionMessage Invalid payload claim.
+     * @expectedExceptionCode 8
+     */
+    public function testCustomPayloadBadArray()
+    {
+        $token = Token::customPayload([
+            time(),
+            1,
+            time() + 10,
+            'localhost'
+        ], 'Hello&MikeFooBar123');
+    }
+
     public function testBuilder()
     {
-        $this->assertInstanceOf('ReallySimpleJWT\TokenBuilder', Token::builder());
+        $this->assertInstanceOf('ReallySimpleJWT\Build', Token::builder());
     }
 
     public function testValidator()
     {
-        $this->assertInstanceOf('ReallySimpleJWT\TokenValidator', Token::validator());
+        $this->assertInstanceOf('ReallySimpleJWT\Parse', Token::parser('Hello', '1234'));
     }
 
     public function testGetPayload()
     {
-        $token = Token::getToken(
+        $token = Token::create(
             'abdY',
             'Hello*JamesFooBar$!3',
-            Carbon::now()->addMinutes(5)->toDateTimeString(),
+            time() + 300,
             'http://127.0.0.1'
         );
 
-        $this->assertSame('abdY', json_decode(Token::getPayload($token))->user_id);
+        $this->assertSame('abdY', Token::getPayload($token, 'Hello*JamesFooBar$!3')['user_id']);
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
-     * @expectedException Token string has invalid structure, ensure three strings seperated by dots.
-     */
+    public function testGetHeader()
+    {
+        $token = Token::create(
+            'abdY',
+            'Hello*JamesFooBar$!3',
+            time() + 300,
+            'http://127.0.0.1'
+        );
+
+        $this->assertSame('JWT', Token::getHeader($token, 'Hello*JamesFooBar$!3')['typ']);
+    }
+
     public function testValidateTokenFail()
     {
-        Token::validate('World', 'FooBar');
+        $this->assertFalse(Token::validate('World', 'FooBar'));
     }
 
     /**
-     * @expectedException ReallySimpleJWT\Exception\TokenValidatorException
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedException Token string has invalid structure, ensure three strings seperated by dots.
      */
     public function testGetPayloadFail()
     {
-        Token::getPayload('Hello');
+        Token::getPayload('Hello', 'CarPark');
     }
 }
