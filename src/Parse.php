@@ -27,21 +27,21 @@ class Parse
     use JsonEncoder;
 
     /**
-     * The JSON Web Token value object
+     * The JSON Web Token value object.
      *
      * @var Jwt
      */
     private $jwt;
 
     /**
-     * A class of validate helper methods
+     * A class of validate helper methods.
      *
      * @var Validate
      */
     private $validate;
 
     /**
-     * A class to encode and decode JWTs, in Parse it does decode.
+     * A class to decode JWT tokens.
      *
      * @var Interfaces\EncodeInterface
      */
@@ -82,7 +82,7 @@ class Parse
 
     /**
      * Validate the JWT's expiration claim in the payload is valid, if the
-     * expiration has elapsed it will throw an exception.
+     * expiration has expired it will throw an exception.
      *
      * @return Parse
      */
@@ -127,7 +127,7 @@ class Parse
     }
 
     /**
-     * Validate the JWT's signature. The provide signature token from the JWT
+     * Validate the JWT's signature. The provided signature taken from the JWT
      * should match one newly generated from the JWT header and payload.
      *
      * @throws Exception\ValidateException
@@ -185,7 +185,7 @@ class Parse
     }
 
     /**
-     * Get the payload string from the JWT string. This is the third part of
+     * Get the signature string from the JWT string. This is the third part of
      * the JWT string.
      *
      * @return string

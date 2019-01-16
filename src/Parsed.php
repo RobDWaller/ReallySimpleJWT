@@ -64,7 +64,7 @@ class Parsed
     }
 
     /**
-     * Return the origin JWT value object
+     * Return the original JWT value object.
      *
      * @return Jwt
      */

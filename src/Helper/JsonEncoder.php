@@ -24,8 +24,8 @@ trait JsonEncoder
     }
 
     /**
-     * Consumes a json string and decode it, will always return an associative
-     * array.
+     * Consumes a json string and decodes it, will always return an
+     * associative array.
      *
      * @param string $json
      * @return array

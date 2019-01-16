@@ -10,7 +10,8 @@ use ReallySimpleJWT\Interfaces\EncodeInterface;
  * Class used to encode the JSON Web Token signature. Also defines the
  * hash / algorithm to be used.
  *
- * This class is written so it is replaceable with a custom encoding.
+ * This class is written so it is replaceable with a custom encoding. See
+ * the encode interface.
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>
  */
@@ -133,7 +134,7 @@ class Encode implements EncodeInterface
     }
 
     /**
-     * Add padding to base64 string which require it. Some base64 URL strings
+     * Add padding to base64 strings which require it. Some base64 URL strings
      * which are decoded will have missing padding which is represented by the
      * equals sign.
      *

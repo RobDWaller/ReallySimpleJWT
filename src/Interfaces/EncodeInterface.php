@@ -5,7 +5,7 @@ namespace ReallySimpleJWT\Interfaces;
 /**
  * This is an interface for the ReallySimpleJWT\Encode class, it defines what
  * public methods must be available and what they must return. Custom encoding
- * class must implement this interface to work with the ReallySimpleJWT library.
+ * classes must implement this interface to work with this library.
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>
  */

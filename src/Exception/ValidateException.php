@@ -8,8 +8,8 @@ use Exception;
 use Throwable;
 
 /**
- * Simple exception interface class for all token validation exceptions to make
- * exceptions more specific and obvious. Extends the PHP exception class
+ * Simple PHP exception extension class for all token validation exceptions to
+ * make exceptions more specific and obvious.
  *
  * @author Rob Waller <rdwaller1984@gmail.com>
  */

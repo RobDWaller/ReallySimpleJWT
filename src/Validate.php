@@ -16,9 +16,8 @@ namespace ReallySimpleJWT;
  * 5: Not Before claim has not elapsed.
  * 6: Expiration claim is not set.
  * 7: Not Before claim is not set.
- * 8: Invalid payload claim: Claims must be key values of type string:mixed
- * 9: Invalid secret: 12 character length, upper / lower case letters, a number,
- * a special character *&!@%^#$
+ * 8: Invalid payload claim: Claims must be key values of type string:mixed.
+ * 9: Invalid secret: See README for more information.
  * 10: Invalid Audience claim: Must be either a string or array of strings.
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>
@@ -67,7 +66,7 @@ class Validate
     }
 
     /**
-     * Check to signature hashes match. One signature is supplied by the token.
+     * Check two signature hashes match. One signature is supplied by the token.
      * The other is newly gernated from the token's header and payload. They
      * should match if they don't someone has likely tampered with the token.
      */
@@ -78,7 +77,7 @@ class Validate
 
     /**
      * Validate the secret used to secure the token signature is strong enough.
-     * It should contain a number, upper and lowercase letters, and a special
+     * It should contain a number, a upper and a lowercase letter, and a special
      * character *&!@%^#$. It should be at least 12 characters in length.
      *
      * The regex here uses Lookahead Assertions.

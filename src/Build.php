@@ -12,7 +12,7 @@ use ReallySimpleJWT\Exception\ValidateException;
 
 /**
  * A class to build a JSON Web Token, returns the token as an instance of
- * ReallySimpleJWT\JWT.
+ * ReallySimpleJWT\Jwt.
  *
  * Class contains helper methods that allow you to easily set JWT claims
  * defined in the JWT RFC. Eg setIssuer() will set the iss claim in the
@@ -57,11 +57,15 @@ class Build
     private $secret;
 
     /**
+     * A class of validate helper methods.
+     *
      * @var Validate
      */
     private $validate;
 
     /**
+     * A class to encode JWT tokens.
+     *
      * @var Interfaces\EncodeInterface
      */
     private $encode;
@@ -215,7 +219,7 @@ class Build
     }
 
     /**
-     * Set the not before JWT payload claim. This sets the time at which the
+     * Set the not before JWT payload claim. This sets the time after which the
      * JWT can be accepted.
      *
      * @param int $notBefore
@@ -257,8 +261,9 @@ class Build
     }
 
     /**
-     * Set a custom payload claim on the JWT. The RFC calls these privat claims.
-     * Eg you may wish to set a user id or a username in the JWT payload.
+     * Set a custom payload claim on the JWT. The RFC calls these private
+     * claims. Eg you may wish to set a user_id or a username in the
+     * JWT payload.
      *
      * @param string $key
      * @param mixed $value
@@ -272,7 +277,7 @@ class Build
     }
 
     /**
-     * Get the JWT payload. This will return an array registered claims and
+     * Get the JWT payload. This will return an array of registered claims and
      * private claims which make up the JWT payload.
      *
      * @return array
@@ -305,7 +310,7 @@ class Build
 
     /**
      * If you wish to use the same build instance to generate two or more
-     * tokens you can use this reset method to unset the predefined header,
+     * tokens you can use this reset method to unset the pre-defined header,
      * payload and secret properties.
      *
      *  @return Build
