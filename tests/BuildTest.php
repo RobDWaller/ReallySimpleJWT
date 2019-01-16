@@ -431,4 +431,16 @@ class BuildTest extends TestCase
 
         $this->assertSame($result['jti'], 'helLo123');
     }
+
+    /**
+     * @expectedException ReallySimpleJWT\Exception\ValidateException
+     * @expectedExceptionMessage Invalid secret.
+     * @expectedExceptionCode 9
+     */
+    public function testImmediateBuild()
+    {
+        $build = new Build('JWT', new Validate, new Encode);
+
+        $build->build();
+    }
 }
