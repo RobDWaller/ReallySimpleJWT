@@ -25,8 +25,8 @@ use ReallySimpleJWT\Exception\ValidateException;
 class Token
 {
     /**
-     * Create a JSON Web Token that contains a user identifier and
-     * expiration payload.
+     * Create a JSON Web Token that contains a user identifier and a basic
+     * payload including issued at, expiration and issuer.
      *
      * @param mixed $userId
      * @param string $secret
@@ -74,7 +74,8 @@ class Token
     }
 
     /**
-     * Validate a JSON Web Token's expiration and signature.
+     * Validate the Json web token, check it's structure and signature. Also
+     * check its expiration claim and not before claim if they are set.
      *
      * @param string $token
      * @param string $secret
