@@ -87,10 +87,17 @@ class Token
 
         try {
             $parse->validate()
-                ->validateExpiration()
-                ->validateNotBefore();
+                ->validateExpiration();
         } catch (ValidateException $e) {
-            if (in_array($e->getCode(), [1, 2, 3, 4, 5], true)) {
+            if (in_array($e->getCode(), [1, 2, 3, 4], true)) {
+                return false;
+            }
+        }
+
+        try {
+            $parse->validateNotBefore();
+        } catch (ValidateException $e) {
+            if ($e->getCode() === 5) {
                 return false;
             }
         }
