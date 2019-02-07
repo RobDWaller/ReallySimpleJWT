@@ -85,21 +85,12 @@ class Token
     {
         $parse = self::parser($token, $secret);
 
-        try {
-            $parse->validate()
-                ->validateExpiration();
-        } catch (ValidateException $e) {
-            if (in_array($e->getCode(), [1, 2, 3, 4], true)) {
-                return false;
-            }
+        if (!self::validateExpiration($parse)) {
+            return false;
         }
 
-        try {
-            $parse->validateNotBefore();
-        } catch (ValidateException $e) {
-            if ($e->getCode() === 5) {
-                return false;
-            }
+        if (!self::validateNotBefore($parse)) {
+            return false;
         }
 
         return true;
@@ -155,5 +146,32 @@ class Token
         $jwt = new Jwt($token, $secret);
 
         return new Parse($jwt, new Validate(), new Encode());
+    }
+
+    private static function validateExpiration(Parse $parse): bool
+    {
+        try {
+            $parse->validate()
+                ->validateExpiration();
+        } catch (ValidateException $e) {
+            if (in_array($e->getCode(), [1, 2, 3, 4], true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static function validateNotBefore(Parse $parse): bool
+    {
+        try {
+            $parse->validateNotBefore();
+        } catch (ValidateException $e) {
+            if ($e->getCode() === 5) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
