@@ -85,7 +85,7 @@ class Token
     {
         $parse = self::parser($token, $secret);
 
-        if (!self::validateExpiration($parse)) {
+        if (!self::validateWithExpiration($parse)) {
             return false;
         }
 
@@ -148,7 +148,14 @@ class Token
         return new Parse($jwt, new Validate(), new Encode());
     }
 
-    private static function validateExpiration(Parse $parse): bool
+    /**
+     * Run standard validation and expiration validation against the token.
+     * Will not return false if the expiration claim is not set.
+     *
+     * @param Parse $parse
+     * @return bool
+     */
+    private static function validateWithExpiration(Parse $parse): bool
     {
         try {
             $parse->validate()
@@ -162,6 +169,13 @@ class Token
         return true;
     }
 
+    /**
+     * Run not before validation against token. Will not return false if the
+     * not before claim is not set.
+     *
+     * @param Parse $parse
+     * @return bool
+     */
     private static function validateNotBefore(Parse $parse): bool
     {
         try {
