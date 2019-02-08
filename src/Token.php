@@ -25,8 +25,8 @@ use ReallySimpleJWT\Exception\ValidateException;
 class Token
 {
     /**
-     * Create a JSON Web Token that contains a user identifier and
-     * expiration payload.
+     * Create a JSON Web Token that contains a user identifier and a basic
+     * payload including issued at, expiration and issuer.
      *
      * @param mixed $userId
      * @param string $secret
@@ -74,7 +74,8 @@ class Token
     }
 
     /**
-     * Validate a JSON Web Token's expiration and signature.
+     * Validate the Json web token, check it's structure and signature. Also
+     * check its expiration claim and not before claim if they are set.
      *
      * @param string $token
      * @param string $secret
@@ -85,14 +86,12 @@ class Token
     {
         $parse = self::parser($token, $secret);
 
-        try {
-            $parse->validate()
-                ->validateExpiration()
-                ->validateNotBefore();
-        } catch (ValidateException $e) {
-            if (in_array($e->getCode(), [1, 2, 3, 4, 5], true)) {
-                return false;
-            }
+        if (!self::validateWithExpiration($parse)) {
+            return false;
+        }
+
+        if (!self::validateNotBefore($parse)) {
+            return false;
         }
 
         return true;
@@ -148,5 +147,46 @@ class Token
         $jwt = new Jwt($token, $secret);
 
         return new Parse($jwt, new Validate(), new Encode());
+    }
+
+    /**
+     * Run standard validation and expiration validation against the token.
+     * Will not return false if the expiration claim is not set.
+     *
+     * @param Parse $parse
+     * @return bool
+     */
+    private static function validateWithExpiration(Parse $parse): bool
+    {
+        try {
+            $parse->validate()
+                ->validateExpiration();
+        } catch (ValidateException $e) {
+            if (in_array($e->getCode(), [1, 2, 3, 4], true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Run not before validation against token. Will not return false if the
+     * not before claim is not set.
+     *
+     * @param Parse $parse
+     * @return bool
+     */
+    private static function validateNotBefore(Parse $parse): bool
+    {
+        try {
+            $parse->validateNotBefore();
+        } catch (ValidateException $e) {
+            if ($e->getCode() === 5) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

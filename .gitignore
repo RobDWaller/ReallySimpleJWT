@@ -3,3 +3,4 @@ Vagrantfile
 vendor/
 composer.lock
 build
+coverage

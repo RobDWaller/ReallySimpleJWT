@@ -79,6 +79,18 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
+    public function testValidateCustomPayloadWithBadNotBeforeNoExpiration()
+    {
+        $token = Token::customPayload([
+            'iat' => time(),
+            'uid' => 1,
+            'nbf' => time() + 20,
+            'iss' => 'localhost'
+        ], 'Hello&MikeFooBar123');
+
+        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage Invalid payload claim.
