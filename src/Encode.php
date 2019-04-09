@@ -112,7 +112,7 @@ class Encode implements EncodeInterface
     }
 
     /**
-     * Convert a base64 string to a base64 Url string
+     * Convert a base64 string to a base64 Url string.
      *
      * @param string $base64
      * @return string
@@ -123,7 +123,7 @@ class Encode implements EncodeInterface
     }
 
     /**
-     * Convert a base64 URL string to a base64 string
+     * Convert a base64 URL string to a base64 string.
      *
      * @param string $urlString
      * @return string
