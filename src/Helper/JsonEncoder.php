@@ -32,6 +32,6 @@ trait JsonEncoder
      */
     public function jsonDecode(string $json): array
     {
-        return json_decode($json, true);
+        return (array) json_decode($json, true);
     }
 }

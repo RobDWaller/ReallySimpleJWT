@@ -16,10 +16,24 @@ class JsonEncoderTest extends TestCase
         $this->assertSame('{"hello":"world"}', $this->jsonEncode($array));
     }
 
+    public function testJsonEncodeEmptyArray()
+    {
+        $array = [];
+
+        $this->assertSame('[]', $this->jsonEncode($array));
+    }
+
     public function testJsonDecode()
     {
         $json = '{"hello":"world"}';
 
         $this->assertSame(['hello' => 'world'], $this->jsonDecode($json));
+    }
+
+    public function testJsonDecodeEmptyString()
+    {
+        $json = '';
+
+        $this->assertSame([], $this->jsonDecode($json));
     }
 }
