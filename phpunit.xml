@@ -7,7 +7,9 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="false">
+         stopOnFailure="false"
+         executionOrder="random"
+         resolveDependencies="true">
     <testsuites>
         <testsuite name="Really Simple JWT Test Suite">
             <directory suffix=".php">./tests/</directory>
