@@ -134,17 +134,11 @@ class Parse
      */
     private function validateSignature(): void
     {
-        $signature = '';
-
-        try {
-            $signature = $this->encode->signature(
-                $this->encode->decode($this->getHeader()),
-                $this->encode->decode($this->getPayload()),
-                $this->jwt->getSecret()
-            );
-        } catch (\Throwable $e) {
-            throw new ValidateException('Token could not be parsed.', 2);
-        }
+        $signature = $this->encode->signature(
+            $this->encode->decode($this->getHeader()),
+            $this->encode->decode($this->getPayload()),
+            $this->jwt->getSecret()
+        );
 
         if (!$this->validate->signature($signature, $this->getSignature())) {
             throw new ValidateException('Signature is invalid.', 3);
@@ -170,7 +164,7 @@ class Parse
      */
     private function getHeader(): string
     {
-        return $this->splitToken()[0];
+        return $this->splitToken()[0] ?? '';
     }
 
     /**
@@ -181,7 +175,7 @@ class Parse
      */
     private function getPayload(): string
     {
-        return $this->splitToken()[1];
+        return $this->splitToken()[1] ?? '';
     }
 
     /**
@@ -192,7 +186,7 @@ class Parse
      */
     private function getSignature(): string
     {
-        return $this->splitToken()[2];
+        return $this->splitToken()[2] ?? '';
     }
 
     /**
