@@ -425,8 +425,8 @@ class ParseTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Token could not be parsed.
-     * @expectedExceptionCode 2
+     * @expectedExceptionMessage Signature is invalid.
+     * @expectedExceptionCode 3
      */
     public function testValidateSignatureEmptyToken()
     {
@@ -444,8 +444,8 @@ class ParseTest extends TestCase
 
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Token could not be parsed
-     * @expectedExceptionCode 2
+     * @expectedExceptionMessage Signature is invalid.
+     * @expectedExceptionCode 3
      */
     public function testValidateSignatureBadTokenStructure()
     {

@@ -4,3 +4,4 @@ vendor/
 composer.lock
 build
 coverage
+infection.log
