@@ -12,6 +12,7 @@ script:
 - vendor/bin/phpmd src text ruleset.xml
 - vendor/bin/phpunit --coverage-clover=coverage.xml
 - vendor/bin/infection -s --min-msi=90
+- vendor/bin/phploc src
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 env:
