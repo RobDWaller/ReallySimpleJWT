@@ -310,7 +310,7 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$`` |
 | 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
 
-\* No longer in use, code will not generate this error number.
+\* No longer in use, library will not generate this error code.
 
 ## Token Security
 
