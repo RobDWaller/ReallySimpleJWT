@@ -1,10 +1,12 @@
 # Really Simple JSON Web Tokens
-[![Build Status](https://travis-ci.org/RobDWaller/ReallySimpleJWT.svg?branch=master)](https://travis-ci.org/RobDWaller/ReallySimpleJWT) [![codecov](https://codecov.io/gh/RobDWaller/ReallySimpleJWT/branch/master/graph/badge.svg)](https://codecov.io/gh/RobDWaller/ReallySimpleJWT) [![StyleCI](https://styleci.io/repos/82379868/shield?branch=master)](https://styleci.io/repos/82379868) [![Latest Stable Version](https://poser.pugx.org/rbdwllr/reallysimplejwt/v/stable)](https://packagist.org/packages/rbdwllr/reallysimplejwt) [![Total Downloads](https://poser.pugx.org/rbdwllr/reallysimplejwt/downloads)](https://packagist.org/packages/rbdwllr/reallysimplejwt)
+[![Build Status](https://travis-ci.org/RobDWaller/ReallySimpleJWT.svg?branch=master)](https://travis-ci.org/RobDWaller/ReallySimpleJWT) [![codecov](https://codecov.io/gh/RobDWaller/ReallySimpleJWT/branch/master/graph/badge.svg)](https://codecov.io/gh/RobDWaller/ReallySimpleJWT) [![Infection MSI](https://badge.stryker-mutator.io/github.com/RobDWaller/ReallySimpleJWT/master)](https://infection.github.io) [![StyleCI](https://styleci.io/repos/82379868/shield?branch=master)](https://styleci.io/repos/82379868) [![Latest Stable Version](https://poser.pugx.org/rbdwllr/reallysimplejwt/v/stable)](https://packagist.org/packages/rbdwllr/reallysimplejwt) [![Total Downloads](https://poser.pugx.org/rbdwllr/reallysimplejwt/downloads)](https://packagist.org/packages/rbdwllr/reallysimplejwt)
 
 A simple PHP library for creating JSON Web Tokens that uses HMAC SHA256 to sign
 signatures. For basic usage the library exposes a static interface to allow developers to create a token that stores a user identifier and expiration time.
 
 The library is also open to extension, developers can define their own encoding standard, set all the [RFC standard](https://tools.ietf.org/html/rfc7519) JWT claims and set their own private claims.  
+
+**Note:** This library only supports PHP 7.1 and above.
 
 ## Contents
 
@@ -298,7 +300,7 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | Code | Message                           | Explanation                                |
 |:----:| --------------------------------- | ------------------------------------------ |
 | 1    | Token is invalid.                 | Token must have three parts separated by dots. |
-| 2    | Token could not be parsed.        | Something weird happened ;) undefined problem with the token. |
+| 2*    | Token could not be parsed.        | Something weird happened ;) undefined problem with the token. |
 | 3    | Signature is invalid.             | Signature does not match header / payload content. Could not replicate signature with provided header and payload. |
 | 4    | Expiration claim has expired.     | The exp claim must be a valid date time number in the future. |
 | 5    | Not Before claim has not elapsed. | The nbf claim must be a valid date time number in the past. |
@@ -307,6 +309,8 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | 8    | Invalid payload claim.            | Payload claims must be key value pairs of the format string:mixed. |
 | 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$`` |
 | 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
+
+\* No longer in use, library will not generate this error code.
 
 ## Token Security
 
