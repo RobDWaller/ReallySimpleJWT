@@ -93,9 +93,9 @@ This will return a token string on success and throw a `ReallySimpleJWT\Exceptio
 use ReallySimpleJWT\Token;
 
 $userId = 12;
-$secret = 'sec!ReT423*&'
+$secret = 'sec!ReT423*&';
 $expiration = time() + 3600;
-$issuer = 'localhost'
+$issuer = 'localhost';
 
 $token = Token::create($userId, $secret, $expiration, $issuer);
 ```
