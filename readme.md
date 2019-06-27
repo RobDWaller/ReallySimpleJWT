@@ -65,13 +65,17 @@ If a malicious user attempts to edit the header or payload claims they will be u
 
 ## Setup
 
-Via Composer on the command line:
+To install this package you will need to install [Composer](https://getcomposer.org/) and then run `composer init`. Once this is done you can install the package via the command line or by editing the composer.json file created by the `composer init` command.
+
+Finally you will need to reference the composer autoloader in your PHP code, `require 'vendor/autoload.php';`. The location of the autoload file will differ dependent on where your code is run. Also you will not need to reference the autoload file if you are using a framework like Laravel or Symfony.
+
+**Install via Composer on the command line:**
 
 ```bash
 composer require rbdwllr/reallysimplejwt
 ```
 
-Via composer.json:
+**Install via the composer.json file:**
 
 ```javascript
 "require": {
@@ -92,6 +96,8 @@ This will return a token string on success and throw a `ReallySimpleJWT\Exceptio
 ```php
 use ReallySimpleJWT\Token;
 
+require 'vendor/autoload.php';
+
 $userId = 12;
 $secret = 'sec!ReT423*&';
 $expiration = time() + 3600;
@@ -104,6 +110,8 @@ To create a more customised token developers can use the `customPayload()` metho
 
 ```php
 use ReallySimpleJWT\Token;
+
+require 'vendor/autoload.php';
 
 $payload = [
     'iat' => time(),
@@ -128,8 +136,10 @@ It will return true on success and false on failure.
 ```php
 use ReallySimpleJWT\Token;
 
+require 'vendor/autoload.php';
+
 $token = 'aaa.bbb.ccc';
-$secret = 'sec!ReT423*&'
+$secret = 'sec!ReT423*&';
 
 $result = Token::validate($token, $secret);
 ```
@@ -143,8 +153,10 @@ Both methods will return an associative array on success and throw an exception 
 ```php
 use ReallySimpleJWT\Token;
 
+require 'vendor/autoload.php';
+
 $token = 'aaa.bbb.ccc';
-$secret = 'sec!ReT423*&'
+$secret = 'sec!ReT423*&';
 
 // Return the header claims
 Token::getHeader($token, $secret);
@@ -180,6 +192,8 @@ use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Encode;
 
+require 'vendor/autoload.php';
+
 $build = new Build('JWT', new Validate(), new Encode());
 
 $token = $build->setContentType('JWT')
@@ -204,6 +218,8 @@ To parse a JSON Web Token via the `ReallySimpleJWT\Parse` class a developer must
 
 ```php
 use ReallySimpleJWT\Jwt;
+
+require 'vendor/autoload.php';
 
 $token = 'aaa.bbb.ccc';
 $secret = '!secReT$123*';
@@ -234,6 +250,8 @@ use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Encode;
+
+require 'vendor/autoload.php';
 
 $token = 'aaa.bbb.ccc';
 $secret = '!secReT$123*';
