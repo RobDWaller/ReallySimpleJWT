@@ -407,4 +407,44 @@ class ParsedTest extends TestCase
 
         $this->assertSame('', $parsed->getContentType());
     }
+
+    public function testGetExpiresIn()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+
+        $time = time() + 300;
+
+        $parsed = new Parsed(
+            $token,
+            ["typ" => "JWT"],
+            ["exp" => $time],
+            'hello'
+        );
+
+        $result = $parsed->getExpiresIn();
+
+        $this->assertTrue(300 === $result || 299 === $result);
+    }
+
+    public function testGetExpiresInNegative()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+
+        $time = time() - 100;
+
+        $parsed = new Parsed(
+            $token,
+            ["typ" => "JWT"],
+            ["exp" => $time],
+            'hello'
+        );
+
+        $result = $parsed->getExpiresIn();
+
+        $this->assertTrue(-100 === $result || -99 === $result);
+    }
 }

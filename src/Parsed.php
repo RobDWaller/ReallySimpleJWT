@@ -170,6 +170,11 @@ class Parsed
         return $this->payload['exp'] ?? 0;
     }
 
+    public function getExpiresIn(): int
+    {
+        return $this->payload['exp'] - time();
+    }
+
     /**
      * Helper method to quickly access the not before claim from the payload.
      * Will return zero if not set.
