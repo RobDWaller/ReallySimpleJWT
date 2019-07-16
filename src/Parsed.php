@@ -172,7 +172,7 @@ class Parsed
 
     public function getExpiresIn(): int
     {
-        $expiresIn = $this->payload['exp'] - time();
+        $expiresIn = $this->getExpiration() - time();
         return $expiresIn > 0 ? $expiresIn : 0;
     }
 
