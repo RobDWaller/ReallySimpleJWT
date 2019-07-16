@@ -170,6 +170,9 @@ class Parsed
         return $this->payload['exp'] ?? 0;
     }
 
+    /**
+     * Helper method to calculate how long the token has until it expires.
+     */
     public function getExpiresIn(): int
     {
         $expiresIn = $this->getExpiration() - time();
@@ -187,6 +190,10 @@ class Parsed
         return $this->payload['nbf'] ?? 0;
     }
 
+    /**
+     * Helper method to calculate how long until the Not Before claim expires
+     * and the token is usable.
+     */
     public function getUsableIn(): int
     {
         $usableIn = $this->getNotBefore() - time();
