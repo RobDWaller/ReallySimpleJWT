@@ -18,9 +18,13 @@ class ValidateTest extends TestCase
 
     public function testValidateStructure()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvZSBCbG9ncyIsImlhdCI6MTUxNjIzOTAyMn0.' .
+        '-wvw8Qad0enQkwNhG2j-GCT-7PbrMN_gtUwOKZTu54M';
+
         $validate = new Validate();
 
-        $this->assertTrue($validate->structure('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvZSBCbG9ncyIsImlhdCI6MTUxNjIzOTAyMn0.-wvw8Qad0enQkwNhG2j-GCT-7PbrMN_gtUwOKZTu54M'));
+        $this->assertTrue($validate->structure($token));
     }
 
     public function testValidateStructureWithRSJWT()

@@ -477,8 +477,13 @@ class EndToEndTest extends TestCase
      */
     public function testEndToEndBadSignature()
     {
+        $token = 'eyJjdHkiOiJKV1QiLCJpbmZvIjoiSGVsbG8gV29ybGQiLCJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJpc3MiOiJsb2NhbGhvc3QiLCJzdWIiOiJ1c2VycyIsImF1ZCI6Imh0dHBzOi8vZ29vZ2xlLmNvbSIsImV4cCI6MTU0N' .
+        'jE4MTA2MiwibmJmIjoxNTQ2MTgxMDYyLCJpYXQiOjE1NDYxODEwNDIsImp0aSI6IjEyM0FCQyIsInVpZCI6M30.' .
+        'SGxo3LiVYRBfFL8pX1QM-dQSMBCf93OWpE0ZnCiQiFc';
+
         $token = new Jwt(
-            'eyJjdHkiOiJKV1QiLCJpbmZvIjoiSGVsbG8gV29ybGQiLCJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb2NhbGhvc3QiLCJzdWIiOiJ1c2VycyIsImF1ZCI6Imh0dHBzOi8vZ29vZ2xlLmNvbSIsImV4cCI6MTU0NjE4MTA2MiwibmJmIjoxNTQ2MTgxMDYyLCJpYXQiOjE1NDYxODEwNDIsImp0aSI6IjEyM0FCQyIsInVpZCI6M30.SGxo3LiVYRBfFL8pX1QM-dQSMBCf93OWpE0ZnCiQiFc',
+            $token,
             '123abcDEF!$£%456'
         );
 

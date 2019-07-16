@@ -25,7 +25,7 @@ class ParseTest extends TestCase
     {
         $parse = new Parse(
             new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, '127.0.0.1'), 'foo1234He$$llo56'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -36,7 +36,7 @@ class ParseTest extends TestCase
     {
         $parse = new Parse(
             new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -47,9 +47,13 @@ class ParseTest extends TestCase
 
     public function testParseSplitToken()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c', 'foo1234He$$llo56'),
-            new Validate,
+            new Jwt($token, 'foo1234He$$llo56'),
+            new Validate(),
             new Encode()
         );
 
@@ -69,7 +73,7 @@ class ParseTest extends TestCase
 
         $parse = new Parse(
             $token,
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -83,11 +87,15 @@ class ParseTest extends TestCase
 
     public function testParseGetHeader()
     {
-        $token = new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', 'foo1234He$$llo56');
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        '--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s';
+
+        $token = new Jwt($token, 'foo1234He$$llo56');
 
         $parse = new Parse(
             $token,
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -103,7 +111,7 @@ class ParseTest extends TestCase
     {
         $parse = new Parse(
             new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -119,7 +127,7 @@ class ParseTest extends TestCase
     {
         $parse = new Parse(
             new Jwt('hello', 'foo1234He$$llo56'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -135,7 +143,7 @@ class ParseTest extends TestCase
     {
         $parse = new Parse(
             new Jwt('hello.hello.hello', 'foo1234He$$llo56'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -149,9 +157,13 @@ class ParseTest extends TestCase
      */
     public function testParseValidateInvalidSignature()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbT';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbT', 'foo1234He$$llo56'),
-            new Validate,
+            new Jwt($token, 'foo1234He$$llo56'),
+            new Validate(),
             new Encode()
         );
 
@@ -160,9 +172,13 @@ class ParseTest extends TestCase
 
     public function testGetSignature()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        '--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', 'foo1234He$$llo56'),
-            new Validate,
+            new Jwt($token, 'foo1234He$$llo56'),
+            new Validate(),
             new Encode()
         );
 
@@ -178,7 +194,7 @@ class ParseTest extends TestCase
     {
         $parse = new Parse(
             new Jwt(Token::create(1, 'Hoo1234%&HePPo99', time() + 300, 'localhost'), 'Hoo1234%&HePPo99'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -192,9 +208,13 @@ class ParseTest extends TestCase
      */
     public function testParseValidateExpirationInvalid()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyMzkwMjJ9.' .
+        'FruqGMjzi7Ql7a8WJeMz6f6G5UeUQcy5kauLmeO8Ksc';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyMzkwMjJ9.FruqGMjzi7Ql7a8WJeMz6f6G5UeUQcy5kauLmeO8Ksc', 'Hoo1234%&HePPo99'),
-            new Validate,
+            new Jwt($token, 'Hoo1234%&HePPo99'),
+            new Validate(),
             new Encode()
         );
 
@@ -208,9 +228,13 @@ class ParseTest extends TestCase
      */
     public function testParseValidateExpirationInvalidTwo()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        '--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', 'Hoo1234%&HePPo99'),
-            new Validate,
+            new Jwt($token, 'Hoo1234%&HePPo99'),
+            new Validate(),
             new Encode()
         );
 
@@ -223,7 +247,7 @@ class ParseTest extends TestCase
 
         $parse = new Parse(
             new Jwt(Token::create(1, 'Hoo1234%&HePPo99', $timestamp, 'localhost'), 'Hoo1234%&HePPo99'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -247,7 +271,7 @@ class ParseTest extends TestCase
 
         $parse = new Parse(
             $token,
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -269,7 +293,7 @@ class ParseTest extends TestCase
 
         $parse = new Parse(
             $token,
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -291,7 +315,7 @@ class ParseTest extends TestCase
 
         $parse = new Parse(
             $token,
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -313,7 +337,7 @@ class ParseTest extends TestCase
 
         $parse = new Parse(
             $token,
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -335,7 +359,7 @@ class ParseTest extends TestCase
 
         $parse = new Parse(
             $token,
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -354,7 +378,7 @@ class ParseTest extends TestCase
 
         $parse = new Parse(
             $token,
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -378,7 +402,7 @@ class ParseTest extends TestCase
 
         $parse = new Parse(
             $token,
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -394,7 +418,7 @@ class ParseTest extends TestCase
     {
         $parse = new Parse(
             new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -413,7 +437,7 @@ class ParseTest extends TestCase
     {
         $parse = new Parse(
             new Jwt('hello.hello.hello', 'foo1234He$$llo56'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -432,7 +456,7 @@ class ParseTest extends TestCase
     {
         $parse = new Parse(
             new Jwt('', 'foo1234He$$llo56'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -451,7 +475,7 @@ class ParseTest extends TestCase
     {
         $parse = new Parse(
             new Jwt('car', 'foo1234He$$llo56'),
-            new Validate,
+            new Validate(),
             new Encode()
         );
 
@@ -468,9 +492,13 @@ class ParseTest extends TestCase
      */
     public function testValidateSignatureInvalidSignature()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbT';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbT', 'foo1234He$$llo56'),
-            new Validate,
+            new Jwt($token, 'foo1234He$$llo56'),
+            new Validate(),
             new Encode()
         );
 
@@ -482,9 +510,13 @@ class ParseTest extends TestCase
 
     public function testParseRandomTokenNoSecret()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkphbWVzIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        'BtrZtcOwhxY9BuV0-Eqc7CybKiWqgr6Y5jFVr15zcFk';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkphbWVzIiwiaWF0IjoxNTE2MjM5MDIyfQ.BtrZtcOwhxY9BuV0-Eqc7CybKiWqgr6Y5jFVr15zcFk', ''),
-            new Validate,
+            new Jwt($token, ''),
+            new Validate(),
             new Encode()
         );
 
@@ -500,9 +532,13 @@ class ParseTest extends TestCase
 
     public function testParseRandomTokenInvalidSecret()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJqdGkiOiJSVzg0LTIwMTkwMTA5IiwibmFtZSI6IlJvYiIsImlhdCI6MTUxNjIzOTAyMn0.' .
+        'JojSqQXc-nsiongo1I33lsd7eJZ9WbMoZn65_LL1U8A';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJSVzg0LTIwMTkwMTA5IiwibmFtZSI6IlJvYiIsImlhdCI6MTUxNjIzOTAyMn0.JojSqQXc-nsiongo1I33lsd7eJZ9WbMoZn65_LL1U8A', 'hello'),
-            new Validate,
+            new Jwt($token, 'hello'),
+            new Validate(),
             new Encode()
         );
 
@@ -518,9 +554,13 @@ class ParseTest extends TestCase
 
     public function testParseRandomTokenValidSecret()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
+        'dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio', '123$car*PARK456'),
-            new Validate,
+            new Jwt($token, '123$car*PARK456'),
+            new Validate(),
             new Encode()
         );
 
@@ -541,9 +581,13 @@ class ParseTest extends TestCase
      */
     public function testParseRandomTokenExpirationException()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJleHAiOjE1MTYyMzkwMjJ9.' .
+        'Pzio_7YdNC2NCcBBmVjRlTTgC4RNofEGYWm9ygx41JQ';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJleHAiOjE1MTYyMzkwMjJ9.Pzio_7YdNC2NCcBBmVjRlTTgC4RNofEGYWm9ygx41JQ', '123$car*PARK456'),
-            new Validate,
+            new Jwt($token, '123$car*PARK456'),
+            new Validate(),
             new Encode()
         );
 
@@ -558,9 +602,13 @@ class ParseTest extends TestCase
      */
     public function testParseRandomTokenExpirationNotSetException()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
+        'dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio', '123$car*PARK456'),
-            new Validate,
+            new Jwt($token, '123$car*PARK456'),
+            new Validate(),
             new Encode()
         );
 
@@ -575,9 +623,13 @@ class ParseTest extends TestCase
      */
     public function testParseRandomTokenNotBeforeNotSetException()
     {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+        'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
+        'dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio';
+
         $parse = new Parse(
-            new Jwt('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio', '123$car*PARK456'),
-            new Validate,
+            new Jwt($token, '123$car*PARK456'),
+            new Validate(),
             new Encode()
         );
 
