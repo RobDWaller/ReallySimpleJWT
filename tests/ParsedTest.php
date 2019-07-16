@@ -443,8 +443,6 @@ class ParsedTest extends TestCase
             'hello'
         );
 
-        $result = $parsed->getExpiresIn();
-
-        $this->assertTrue(-100 === $result || -99 === $result);
+        $this->assertSame(0, $parsed->getExpiresIn());
     }
 }
