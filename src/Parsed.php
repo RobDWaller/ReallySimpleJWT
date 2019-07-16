@@ -187,6 +187,12 @@ class Parsed
         return $this->payload['nbf'] ?? 0;
     }
 
+    public function getUsableIn(): int
+    {
+        $usableIn = $this->getNotBefore() - time();
+        return $usableIn > 0 ? $usableIn : 0;
+    }
+
     /**
      * Helper method to quickly access the issued at claim from the payload.
      * Will return zero if not set.
