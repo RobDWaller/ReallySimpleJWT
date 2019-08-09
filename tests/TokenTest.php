@@ -66,6 +66,35 @@ class TokenTest extends TestCase
         $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
+    public function testValidateCustomPayloadBadStructure()
+    {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+            'eyJpYXQiOjE1NjUzNDYyNDcsInVpZCI6MSwiaXNzIjoibG9jYWxob3N0In0';
+
+        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
+    public function testValidateCustomPayloadBadSignature()
+    {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+            'eyJpYXQiOjE1NjUzNDYyNDcsInVpZCI6MSwiaXNzIjoibG9jYWxob3N0In0.' .
+            'Z1qtnsznCGB8vDaZKb5h9A0swhyD_Vt5DhFPkL43Kq';
+
+        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
+    public function testValidateCustomPayloadExpired()
+    {
+        $token = Token::customPayload([
+            'iat' => time(),
+            'uid' => 1,
+            'exp' => time() - 20,
+            'iss' => 'localhost'
+        ], 'Hello&MikeFooBar123');
+
+        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
     public function testValidateCustomPayloadWithNotBefore()
     {
         $token = Token::customPayload([
