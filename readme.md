@@ -4,7 +4,9 @@
 A simple PHP library for creating JSON Web Tokens that uses HMAC SHA256 to sign
 signatures. For basic usage the library exposes a static interface to allow developers to create a token that stores a user identifier and expiration time.
 
-The library is also open to extension, developers can define their own encoding standard, set all the [RFC standard](https://tools.ietf.org/html/rfc7519) JWT claims and set their own private claims.  
+The library is also open to extension, developers can define their own encoding standard, set all the [RFC standard](https://tools.ietf.org/html/rfc7519) JWT claims and set their own private claims.
+
+You can easily integrate ReallySimpleJWT with PSR-7 / PSR-15 compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) and Zend Expressive by using the [PSR-JWT library](https://github.com/RobDWaller/psr-jwt).
 
 **Note:** This library only supports PHP 7.1 and above.
 
@@ -26,6 +28,7 @@ The library is also open to extension, developers can define their own encoding 
 - [Error Messages and Codes](#error-messages-and-codes)
 - [Token Security](#token-security)
     - [Signature Secret](#signature-secret)
+- [Easy Integration With PSR-JWT](#easy-integration-with-psr-jwt)
 - [Version One Support](#version-one-support)
 
 ## What is a JSON Web Token?
@@ -350,9 +353,28 @@ sec!ReT423*&
 
 The reason for this is that there are lots of [JWT Crackers](https://github.com/lmammino/jwt-cracker) available meaning weak secrets are easy to crack thus rendering the security JWT offers useless.
 
+## Easy Integration With PSR-JWT
+
+You can easily integrate ReallySimpleJWT with [PSR-7 / PSR-15](https://www.php-fig.org/psr/psr-15/) compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) and Zend Expressive by using the [PSR-JWT library](https://github.com/RobDWaller/psr-jwt).
+
+For example integration with Slim PHP only requires a few lines of code:
+
+```php
+// Can be added to any routes file in Slim, often index.php.
+require '../../vendor/autoload.php';
+
+$app->get('/jwt', function (Request $request, Response $response) {
+    $response->getBody()->write("JSON Web Token is Valid!");
+
+    return $response;
+})->add(\PsrJwt\Factory\JwtAuth::middleware('Secret123!456$', 'jwt', 'Authentication Failed'));
+```
+
+Please read the [PSR-JWT documentation](https://github.com/RobDWaller/psr-jwt) to learn more about integration options for ReallySimpleJWT.
+
 ## Version One Support
 
-Support for version one of this library will continue until July 2019. No new features will be added to the version, just bug fixes and security patches.
+Version One of this library is no longer supported, please upgrade to Version Two.
 
 ## License
 
