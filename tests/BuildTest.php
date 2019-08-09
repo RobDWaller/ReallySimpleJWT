@@ -389,7 +389,7 @@ class BuildTest extends TestCase
     /**
      * @expectedException ReallySimpleJWT\Exception\ValidateException
      * @expectedExceptionMessage Invalid Audience claim.
-     * @expectedException 10
+     * @expectedExceptionCode 10
      */
     public function testSetAudienceIntFail()
     {
