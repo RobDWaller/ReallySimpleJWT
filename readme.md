@@ -296,6 +296,8 @@ Alternatively a developer can call one of the [RFC](https://tools.ietf.org/html/
 - `getNotBefore()`
 - `getIssuedAt()`
 - `getJwtId()`
+- `getExpiresIn()`
+- `getUsableIn()`
 
 ### Customised Encoding
 
