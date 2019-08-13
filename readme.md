@@ -6,7 +6,7 @@ signatures. For basic usage the library exposes a static interface to allow deve
 
 The library is also open to extension, developers can define their own encoding standard, set all the [RFC standard](https://tools.ietf.org/html/rfc7519) JWT claims and set their own private claims.
 
-You can easily integrate ReallySimpleJWT with PSR-7 / PSR-15 compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) and Zend Expressive by using the [PSR-JWT library](https://github.com/RobDWaller/psr-jwt).
+You can easily integrate ReallySimpleJWT with PSR-7 / PSR-15 compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) and Zend Expressive by using the [PSR-JWT library](https://github.com/RobDWaller/psr-jwt). Please read the [framework integration documentation](#framework-integration-with-psr-jwt) to learn more.
 
 **Note:** This library only supports PHP 7.1 and above.
 
@@ -28,7 +28,7 @@ You can easily integrate ReallySimpleJWT with PSR-7 / PSR-15 compliant framework
 - [Error Messages and Codes](#error-messages-and-codes)
 - [Token Security](#token-security)
     - [Signature Secret](#signature-secret)
-- [Easy Integration With PSR-JWT](#easy-integration-with-psr-jwt)
+- [Framework Integration With PSR-JWT](#framework-integration-with-psr-jwt)
 - [Version One Support](#version-one-support)
 
 ## What is a JSON Web Token?
@@ -355,7 +355,7 @@ sec!ReT423*&
 
 The reason for this is that there are lots of [JWT Crackers](https://github.com/lmammino/jwt-cracker) available meaning weak secrets are easy to crack thus rendering the security JWT offers useless.
 
-## Easy Integration With PSR-JWT
+## Framework Integration With PSR-JWT
 
 You can easily integrate ReallySimpleJWT with [PSR-7 / PSR-15](https://www.php-fig.org/psr/psr-15/) compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) and Zend Expressive by using the [PSR-JWT library](https://github.com/RobDWaller/psr-jwt).
 
