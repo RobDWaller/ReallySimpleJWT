@@ -171,6 +171,17 @@ class Parsed
     }
 
     /**
+     * Helper method to calculate how long the token has until it expires.
+     *
+     * @return int
+     */
+    public function getExpiresIn(): int
+    {
+        $expiresIn = $this->getExpiration() - time();
+        return $expiresIn > 0 ? $expiresIn : 0;
+    }
+
+    /**
      * Helper method to quickly access the not before claim from the payload.
      * Will return zero if not set.
      *
@@ -179,6 +190,18 @@ class Parsed
     public function getNotBefore(): int
     {
         return $this->payload['nbf'] ?? 0;
+    }
+
+    /**
+     * Helper method to calculate how long until the Not Before claim expires
+     * and the token is usable.
+     *
+     * @return int
+     */
+    public function getUsableIn(): int
+    {
+        $usableIn = $this->getNotBefore() - time();
+        return $usableIn > 0 ? $usableIn : 0;
     }
 
     /**

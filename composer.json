@@ -19,12 +19,24 @@
         "phpmd/phpmd": "2.6.*",
         "squizlabs/php_codesniffer": "^3.0",
         "infection/infection": "^0.12.2",
-        "phploc/phploc": "^4.0"
+        "phploc/phploc": "^4.0",
+        "sebastian/phpcpd": "^4.0"
     },
     "autoload": {
         "psr-4": {
             "ReallySimpleJWT\\": "src",
             "Tests\\": "tests"
         }
+    },
+    "scripts" : {
+        "pipeline": [
+            "vendor/bin/phpcs --standard=psr12 src tests",
+            "vendor/bin/phpstan analyse -l 7 src tests",
+            "vendor/bin/phpmd src text ruleset.xml",
+            "vendor/bin/phpunit --coverage-clover=coverage.xml",
+            "vendor/bin/infection -s --min-msi=90",
+            "vendor/bin/phpcpd --min-lines=2 --min-tokens=35 src",
+            "vendor/bin/phploc src"
+        ]
     }
 }

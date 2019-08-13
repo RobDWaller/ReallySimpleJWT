@@ -189,8 +189,14 @@ class EncodeTest extends TestCase
         $method = new ReflectionMethod(Encode::class, 'addPadding');
         $method->setAccessible(true);
 
-        $result = $method->invokeArgs($encode, ['QFDvv71ZLO-_ve-_vVF777-92I10XO-_ve-_ve-_vRnvv73vv70r77-9bQQDTzvvv73vv73vv704Ww']);
+        $result = $method->invokeArgs(
+            $encode,
+            ['QFDvv71ZLO-_ve-_vVF777-92I10XO-_ve-_ve-_vRnvv73vv70r77-9bQQDTzvvv73vv73vv704Ww']
+        );
 
-        $this->assertSame('QFDvv71ZLO-_ve-_vVF777-92I10XO-_ve-_ve-_vRnvv73vv70r77-9bQQDTzvvv73vv73vv704Ww==', $result);
+        $this->assertSame(
+            'QFDvv71ZLO-_ve-_vVF777-92I10XO-_ve-_ve-_vRnvv73vv70r77-9bQQDTzvvv73vv73vv704Ww==',
+            $result
+        );
     }
 }

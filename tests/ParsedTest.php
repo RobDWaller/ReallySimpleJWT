@@ -407,4 +407,80 @@ class ParsedTest extends TestCase
 
         $this->assertSame('', $parsed->getContentType());
     }
+
+    public function testGetExpiresIn()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+
+        $time = time() + 300;
+
+        $parsed = new Parsed(
+            $token,
+            ["typ" => "JWT"],
+            ["exp" => $time],
+            'hello'
+        );
+
+        $result = $parsed->getExpiresIn();
+
+        $this->assertTrue(300 === $result || 299 === $result);
+    }
+
+    public function testGetExpiresInNegative()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+
+        $time = time() - 100;
+
+        $parsed = new Parsed(
+            $token,
+            ["typ" => "JWT"],
+            ["exp" => $time],
+            'hello'
+        );
+
+        $this->assertSame(0, $parsed->getExpiresIn());
+    }
+
+    public function testGetUsableIn()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+
+        $time = time() + 200;
+
+        $parsed = new Parsed(
+            $token,
+            ["typ" => "JWT"],
+            ["nbf" => $time],
+            'hello'
+        );
+
+        $result = $parsed->getUsableIn();
+
+        $this->assertTrue(200 === $result || 199 === $result);
+    }
+
+    public function testGetUsableInNegative()
+    {
+        $build = new Build('JWT', new Validate(), new Encode());
+
+        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+
+        $time = time() - 100;
+
+        $parsed = new Parsed(
+            $token,
+            ["typ" => "JWT"],
+            ["nbf" => $time],
+            'hello'
+        );
+
+        $this->assertSame(0, $parsed->getUsableIn());
+    }
 }
