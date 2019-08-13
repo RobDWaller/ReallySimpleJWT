@@ -172,6 +172,8 @@ class Parsed
 
     /**
      * Helper method to calculate how long the token has until it expires.
+     *
+     * @return int
      */
     public function getExpiresIn(): int
     {
@@ -193,6 +195,8 @@ class Parsed
     /**
      * Helper method to calculate how long until the Not Before claim expires
      * and the token is usable.
+     *
+     * @return int
      */
     public function getUsableIn(): int
     {
