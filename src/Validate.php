@@ -87,10 +87,12 @@ class Validate
      */
     public function secret(string $secret): bool
     {
-        if (!preg_match(
-            '/^.*(?=.{12,}+)(?=.*[0-9]+)(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\*&!@%\^#\$]+).*$/',
-            $secret
-        )) {
+        if (
+            !preg_match(
+                '/^.*(?=.{12,}+)(?=.*[0-9]+)(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\*&!@%\^#\$]+).*$/',
+                $secret
+            )
+        ) {
             return false;
         }
 
