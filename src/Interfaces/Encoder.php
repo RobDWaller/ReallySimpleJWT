@@ -9,7 +9,7 @@ namespace ReallySimpleJWT\Interfaces;
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>
  */
-interface EncodeInterface
+interface Encoder
 {
     /**
      * Get the algorithm used to encode the signature string. This will also

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Interfaces\EncodeInterface;
+use ReallySimpleJWT\Interfaces\Encoder;
 
 /**
  * Class used to encode the JSON Web Token signature. Also defines the
@@ -15,7 +15,7 @@ use ReallySimpleJWT\Interfaces\EncodeInterface;
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>
  */
-class Encode implements EncodeInterface
+class Encode implements Encoder
 {
     /**
      * The Algorithm which was used to hash the token signature. This is what
