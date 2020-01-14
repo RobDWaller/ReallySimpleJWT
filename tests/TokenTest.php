@@ -3,6 +3,7 @@
 namespace Tests;
 
 use ReallySimpleJWT\Token;
+use ReallySimpleJWT\Exception\ValidateException;
 use PHPUnit\Framework\TestCase;
 
 class TokenTest extends TestCase
@@ -120,14 +121,13 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Invalid payload claim.
-     * @expectedExceptionCode 8
-     */
     public function testCustomPayloadBadArray()
     {
-        $token = Token::customPayload([
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Invalid payload claim.');
+        $this->expectExceptionCode(8);
+
+        Token::customPayload([
             time(),
             1,
             time() + 10,
@@ -174,12 +174,12 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate('World', 'FooBar'));
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedException Token string has invalid structure, ensure three strings seperated by dots.
-     */
     public function testGetPayloadFail()
     {
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Token is invalid.');
+        $this->expectExceptionCode(1);
+
         Token::getPayload('Hello', 'CarPark');
     }
 }

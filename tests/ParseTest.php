@@ -10,6 +10,7 @@ use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Token;
 use ReallySimpleJWT\Build;
+use ReallySimpleJWT\Exception\ValidateException;
 use ReflectionMethod;
 
 class ParseTest extends TestCase
@@ -118,11 +119,6 @@ class ParseTest extends TestCase
         $this->assertInstanceOf(Parse::class, $parse->validate());
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Token is invalid.
-     * @expectedExceptionCode 1
-     */
     public function testParseValidateInvalidStructure()
     {
         $parse = new Parse(
@@ -131,14 +127,13 @@ class ParseTest extends TestCase
             new Encode()
         );
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Token is invalid.');
+        $this->expectExceptionCode(1);
+
         $parse->validate();
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Signature is invalid.
-     * @expectedExceptionCode 3
-     */
     public function testParseValidateBadTokenGoodStructure()
     {
         $parse = new Parse(
@@ -147,14 +142,13 @@ class ParseTest extends TestCase
             new Encode()
         );
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Signature is invalid.');
+        $this->expectExceptionCode(3);
+
         $parse->validate();
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Signature is invalid.
-     * @expectedExceptionCode 3
-     */
     public function testParseValidateInvalidSignature()
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
@@ -166,6 +160,10 @@ class ParseTest extends TestCase
             new Validate(),
             new Encode()
         );
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Signature is invalid.');
+        $this->expectExceptionCode(3);
 
         $parse->validate();
     }
@@ -201,11 +199,6 @@ class ParseTest extends TestCase
         $this->assertInstanceOf(Parse::class, $parse->validateExpiration());
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Expiration claim has expired.
-     * @expectedExceptionCode 4
-     */
     public function testParseValidateExpirationInvalid()
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
@@ -218,14 +211,13 @@ class ParseTest extends TestCase
             new Encode()
         );
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Expiration claim has expired.');
+        $this->expectExceptionCode(4);
+
         $parse->validateExpiration();
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Expiration claim is not set.
-     * @expectedExceptionCode 6
-     */
     public function testParseValidateExpirationInvalidTwo()
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
@@ -237,6 +229,10 @@ class ParseTest extends TestCase
             new Validate(),
             new Encode()
         );
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Expiration claim is not set.');
+        $this->expectExceptionCode(6);
 
         $parse->validateExpiration();
     }
@@ -300,11 +296,6 @@ class ParseTest extends TestCase
         $this->assertInstanceOf(Parse::class, $parse->validateNotBefore());
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Not Before claim has not elapsed.
-     * @expectedExceptionCode 5
-     */
     public function testParseValidateNotBeforeInvalid()
     {
         $build = new Build('JWT', new Validate(), new Encode());
@@ -319,14 +310,13 @@ class ParseTest extends TestCase
             new Encode()
         );
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Not Before claim has not elapsed.');
+        $this->expectExceptionCode(5);
+
         $parse->validateNotBefore();
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Not Before claim is not set.
-     * @expectedExceptionCode 7
-     */
     public function testParseValidateNotBeforeNotSet()
     {
         $build = new Build('JWT', new Validate(), new Encode());
@@ -341,14 +331,13 @@ class ParseTest extends TestCase
             new Encode()
         );
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Not Before claim is not set.');
+        $this->expectExceptionCode(7);
+
         $parse->validateNotBefore();
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Expiration claim is not set.
-     * @expectedExceptionCode 6
-     */
     public function testParseValidateExpirationNotSet()
     {
         $build = new Build('JWT', new Validate(), new Encode());
@@ -362,6 +351,10 @@ class ParseTest extends TestCase
             new Validate(),
             new Encode()
         );
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Expiration claim is not set.');
+        $this->expectExceptionCode(6);
 
         $parse->validateExpiration();
     }
@@ -428,11 +421,6 @@ class ParseTest extends TestCase
         $this->assertNull($method->invoke($parse));
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Signature is invalid.
-     * @expectedExceptionCode 3
-     */
     public function testValidateSignatureBadTokenGoodStructure()
     {
         $parse = new Parse(
@@ -444,14 +432,13 @@ class ParseTest extends TestCase
         $method = new ReflectionMethod(Parse::class, 'validateSignature');
         $method->setAccessible(true);
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Signature is invalid.');
+        $this->expectExceptionCode(3);
+
         $method->invoke($parse);
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Signature is invalid.
-     * @expectedExceptionCode 3
-     */
     public function testValidateSignatureEmptyToken()
     {
         $parse = new Parse(
@@ -463,14 +450,13 @@ class ParseTest extends TestCase
         $method = new ReflectionMethod(Parse::class, 'validateSignature');
         $method->setAccessible(true);
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Signature is invalid.');
+        $this->expectExceptionCode(3);
+
         $method->invoke($parse);
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Signature is invalid.
-     * @expectedExceptionCode 3
-     */
     public function testValidateSignatureBadTokenStructure()
     {
         $parse = new Parse(
@@ -482,14 +468,13 @@ class ParseTest extends TestCase
         $method = new ReflectionMethod(Parse::class, 'validateSignature');
         $method->setAccessible(true);
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Signature is invalid.');
+        $this->expectExceptionCode(3);
+
         $method->invoke($parse);
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Signature is invalid.
-     * @expectedExceptionCode 3
-     */
     public function testValidateSignatureInvalidSignature()
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
@@ -504,6 +489,10 @@ class ParseTest extends TestCase
 
         $method = new ReflectionMethod(Parse::class, 'validateSignature');
         $method->setAccessible(true);
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Signature is invalid.');
+        $this->expectExceptionCode(3);
 
         $method->invoke($parse);
     }
@@ -574,11 +563,6 @@ class ParseTest extends TestCase
         $this->assertSame($parsed->getIssuedAt(), 1516239022);
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Expiration claim has expired.
-     * @expectedExceptionCode 4
-     */
     public function testParseRandomTokenExpirationException()
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
@@ -591,15 +575,14 @@ class ParseTest extends TestCase
             new Encode()
         );
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Expiration claim has expired.');
+        $this->expectExceptionCode(4);
+
         $parse->validate()
             ->validateExpiration();
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Expiration claim is not set.
-     * @expectedExceptionCode 6
-     */
     public function testParseRandomTokenExpirationNotSetException()
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
@@ -612,15 +595,14 @@ class ParseTest extends TestCase
             new Encode()
         );
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Expiration claim is not set.');
+        $this->expectExceptionCode(6);
+
         $parse->validate()
             ->validateExpiration();
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Not Before claim is not set.
-     * @expectedExceptionCode 7
-     */
     public function testParseRandomTokenNotBeforeNotSetException()
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
@@ -632,6 +614,10 @@ class ParseTest extends TestCase
             new Validate(),
             new Encode()
         );
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Not Before claim is not set.');
+        $this->expectExceptionCode(7);
 
         $parse->validate()
             ->validateNotBefore();

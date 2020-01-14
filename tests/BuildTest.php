@@ -7,6 +7,7 @@ use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Exception\ValidateException;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 
@@ -26,15 +27,13 @@ class BuildTest extends TestCase
         $this->assertInstanceOf(Build::class, $build->setSecret('Hello123$$Abc!!4538'));
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Invalid secret.
-     * @expectedExceptionCode 9
-     */
     public function testBuildSetSecretInvalid()
     {
         $build = new Build('JWT', new Validate(), new Encode());
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Invalid secret.');
+        $this->expectExceptionCode(9);
         $this->assertInstanceOf(Build::class, $build->setSecret('Hello'));
     }
 
@@ -45,15 +44,13 @@ class BuildTest extends TestCase
         $this->assertInstanceOf(Build::class, $build->setExpiration(time() + 300));
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Expiration claim has expired.
-     * @expectedExceptionCode 4
-     */
     public function testSetExpirationInvalid()
     {
         $build = new Build('JWT', new Validate(), new Encode());
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Expiration claim has expired.');
+        $this->expectExceptionCode(4);
         $this->assertInstanceOf(Build::class, $build->setExpiration(time() - 300));
     }
 
@@ -296,7 +293,7 @@ class BuildTest extends TestCase
 
         $result = $method->invoke($build);
 
-        $this->assertInternalType('string', $result);
+        $this->assertIsString($result);
     }
 
     public function testGetSignatureOddSpecialCharacters()
@@ -313,14 +310,9 @@ class BuildTest extends TestCase
 
         $result = $method->invoke($build);
 
-        $this->assertInternalType('string', $result);
+        $this->assertIsString($result);
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Invalid secret.
-     * @expectedExceptionCode 9
-     */
     public function testGetSignatureNoSecret()
     {
         $build = new Build('JWT', new Validate(), new Encode());
@@ -332,6 +324,9 @@ class BuildTest extends TestCase
         $method = new ReflectionMethod(Build::class, 'getSignature');
         $method->setAccessible(true);
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Invalid secret');
+        $this->expectExceptionCode(9);
         $result = $method->invoke($build);
     }
 
@@ -386,16 +381,14 @@ class BuildTest extends TestCase
         $this->assertSame($result['aud'][1], 'Sarah');
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Invalid Audience claim.
-     * @expectedExceptionCode 10
-     */
     public function testSetAudienceIntFail()
     {
         $build = new Build('JWT', new Validate(), new Encode());
 
-        $result = $build->setAudience(123);
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Invalid Audience claim.');
+        $this->expectExceptionCode(10);
+        $build->setAudience(123);
     }
 
     public function testSetNotBefore()
@@ -432,15 +425,13 @@ class BuildTest extends TestCase
         $this->assertSame($result['jti'], 'helLo123');
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Invalid secret.
-     * @expectedExceptionCode 9
-     */
     public function testImmediateBuild()
     {
         $build = new Build('JWT', new Validate(), new Encode());
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Invalid secret');
+        $this->expectExceptionCode(9);
         $build->build();
     }
 }
