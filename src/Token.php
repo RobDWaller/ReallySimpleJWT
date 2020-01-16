@@ -8,6 +8,7 @@ use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Exception\ValidateException;
 
@@ -134,7 +135,7 @@ class Token
      */
     public static function builder(): Build
     {
-        return new Build('JWT', new Validate(), new Encode());
+        return new Build('JWT', new Validate(), new Secret(), new Encode());
     }
 
     /**
