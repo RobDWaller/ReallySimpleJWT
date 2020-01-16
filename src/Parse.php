@@ -43,7 +43,7 @@ class Parse
     /**
      * A class to decode JWT tokens.
      *
-     * @var Interfaces\EncodeInterface
+     * @var Interfaces\Encoder
      */
     private $encode;
 
@@ -52,7 +52,7 @@ class Parse
      *
      * @param Jwt $jwt
      * @param Validate $validate
-     * @param Interfaces\EncodeInterface $encode
+     * @param Interfaces\Encoder $encode
      */
     public function __construct(Jwt $jwt, Validate $validate, Encoder $encode)
     {

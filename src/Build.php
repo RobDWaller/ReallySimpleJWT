@@ -8,6 +8,7 @@ use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Interfaces\Encoder;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Helper\JsonEncoder;
+use ReallySimpleJWT\Interfaces\Secret;
 use ReallySimpleJWT\Exception\ValidateException;
 
 /**
@@ -57,16 +58,21 @@ class Build
     private $secret;
 
     /**
-     * A class of validate helper methods.
+     * A class of validation helper methods.
      *
      * @var Validate
      */
     private $validate;
 
     /**
+     * Validate token signature secret.
+     */
+    private $secretValidator;
+
+    /**
      * A class to encode JWT tokens.
      *
-     * @var Interfaces\EncodeInterface
+     * @var Interfaces\Encoder
      */
     private $encode;
 
@@ -75,13 +81,15 @@ class Build
      *
      * @param string $type
      * @param Validate $validate
-     * @param Interfaces\EncodeInterface $encode
+     * @param Interfaces\Encoder $encode
      */
-    public function __construct(string $type, Validate $validate, Encoder $encode)
+    public function __construct(string $type, Validate $validate, Secret $secretValidator, Encoder $encode)
     {
         $this->type = $type;
 
         $this->validate = $validate;
+
+        $this->secretValidator =  $secretValidator;
 
         $this->encode = $encode;
     }
@@ -141,7 +149,7 @@ class Build
      */
     public function setSecret(string $secret): self
     {
-        if (!$this->validate->secret($secret)) {
+        if (!$this->secretValidator->validate($secret)) {
             throw new ValidateException('Invalid secret.', 9);
         }
 

@@ -74,28 +74,4 @@ class Validate
     {
         return hash_equals($signature, $comparison);
     }
-
-    /**
-     * Validate the secret used to secure the token signature is strong enough.
-     * It should contain a number, a upper and a lowercase letter, and a special
-     * character *&!@%^#$. It should be at least 12 characters in length.
-     *
-     * The regex here uses Lookahead Assertions.
-     *
-     * @param string $secret
-     * @return bool
-     */
-    public function secret(string $secret): bool
-    {
-        if (
-            !preg_match(
-                '/^.*(?=.{12,}+)(?=.*[0-9]+)(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\*&!@%\^#\$]+).*$/',
-                $secret
-            )
-        ) {
-            return false;
-        }
-
-        return true;
-    }
 }
