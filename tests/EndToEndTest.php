@@ -7,6 +7,7 @@ use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Exception\ValidateException;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +15,7 @@ class EndToEndTest extends TestCase
 {
     public function testEndToEnd()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 10;
         $notBefore = time() - 10;
@@ -58,7 +59,7 @@ class EndToEndTest extends TestCase
 
     public function testEndToEndMultiToken()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 10;
         $notBefore = time() - 10;
@@ -77,7 +78,7 @@ class EndToEndTest extends TestCase
             ->setPayloadClaim('uid', 2)
             ->build();
 
-        $build1 = new Build('JWT', new Validate(), new Encode());
+        $build1 = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration1 = time() + 20;
         $notBefore1 = time() - 20;
@@ -148,7 +149,7 @@ class EndToEndTest extends TestCase
 
     public function testEndToEndMultiTokenWithReset()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 10;
         $notBefore = time() - 10;
@@ -237,7 +238,7 @@ class EndToEndTest extends TestCase
 
     public function testEndToEndMultiTokenRemovedFields()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 10;
         $notBefore = time() - 10;
@@ -256,7 +257,7 @@ class EndToEndTest extends TestCase
             ->setPayloadClaim('uid', 2)
             ->build();
 
-        $build1 = new Build('JWT', new Validate(), new Encode());
+        $build1 = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration1 = time() + 20;
         $issuedAt1 = time() + 10;
@@ -323,7 +324,7 @@ class EndToEndTest extends TestCase
 
     public function testEndToEndMultiTokenWithResetRemoveFields()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 10;
         $notBefore = time() - 10;
@@ -409,7 +410,7 @@ class EndToEndTest extends TestCase
 
     public function testEndToEndBadExpiration()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() - 20;
         $notBefore = time() - 10;
@@ -430,7 +431,7 @@ class EndToEndTest extends TestCase
 
     public function testEndToEndBadNotBefore()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 20;
         $notBefore = time() + 20;
