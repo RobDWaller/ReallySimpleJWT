@@ -10,6 +10,7 @@ use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Token;
 use ReallySimpleJWT\Build;
+use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReflectionMethod;
 
@@ -257,7 +258,7 @@ class ParseTest extends TestCase
 
     public function testGetNotBefore()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $time = time() - 10;
 
@@ -281,7 +282,7 @@ class ParseTest extends TestCase
 
     public function testParseValidateNotBefore()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('Hoo1234%&HePPo99')
             ->setNotBefore(time() - 10)
@@ -298,7 +299,7 @@ class ParseTest extends TestCase
 
     public function testParseValidateNotBeforeInvalid()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('Hoo1234%&HePPo99')
             ->setNotBefore(time() + 100)
@@ -319,7 +320,7 @@ class ParseTest extends TestCase
 
     public function testParseValidateNotBeforeNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('Hoo1234%&HePPo99')
             ->setExpiration(time() + 100)
@@ -340,7 +341,7 @@ class ParseTest extends TestCase
 
     public function testParseValidateExpirationNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('Hoo1234%&HePPo99')
             ->setNotBefore(time() + 100)
@@ -361,7 +362,7 @@ class ParseTest extends TestCase
 
     public function testDecodePayload()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $time = time() - 10;
 
@@ -385,7 +386,7 @@ class ParseTest extends TestCase
 
     public function testDecodeHeader()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $time = time() - 10;
 
