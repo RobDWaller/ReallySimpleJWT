@@ -65,7 +65,12 @@ class Validate
         return $notBefore < time();
     }
 
-    public function audience($audience, $check): bool
+    /**
+     * Check the validity of the JWT's audience claim. The audience claim 
+     * defines the recipient or recipients allowed to process the token. This 
+     * claim can either be a StringOrURI or an array of StringOrURIs.
+     */
+    public function audience($audience, string $check): bool
     {
         if (is_array($audience)) {
             return in_array($check, $audience);
