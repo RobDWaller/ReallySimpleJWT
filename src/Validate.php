@@ -10,7 +10,6 @@ namespace ReallySimpleJWT;
  *
  * Error codes and messages:
  * 1: Token is invalid: Token must have three parts separated by dots.
- * 2: Token could not be parsed: Something weird happened ;)
  * 3: Signature is invalid: Signature does not match header / payload content.
  * 4: Expiration claim has expired.
  * 5: Not Before claim has not elapsed.
@@ -66,8 +65,8 @@ class Validate
     }
 
     /**
-     * Check the validity of the JWT's audience claim. The audience claim 
-     * defines the recipient or recipients allowed to process the token. This 
+     * Check the validity of the JWT's audience claim. The audience claim
+     * defines the recipient or recipients allowed to process the token. This
      * claim can either be a StringOrURI or an array of StringOrURIs.
      */
     public function audience($audience, string $check): bool
