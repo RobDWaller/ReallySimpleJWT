@@ -109,4 +109,44 @@ class ValidateTest extends TestCase
 
         $this->assertFalse($validate->notBefore(time() + 10));
     }
+
+    public function testValidateAudience()
+    {
+        $validate = new Validate();
+
+        $audience = 'https://example.com';
+        $check = 'https://example.com';
+
+        $this->assertTrue($validate->audience($audience, $check));
+    }
+
+    public function testValidateAudienceFalse()
+    {
+        $validate = new Validate();
+
+        $audience = 'https://example.com';
+        $check = 'example.com';
+
+        $this->assertFalse($validate->audience($audience, $check));
+    }
+
+    public function testValidateAudienceArray()
+    {
+        $validate = new Validate();
+
+        $audience = ['https://example.com', 'https://test.com'];
+        $check = 'https://example.com';
+
+        $this->assertTrue($validate->audience($audience, $check));
+    }
+
+    public function testValidateAudienceArrayFalse()
+    {
+        $validate = new Validate();
+
+        $audience = ['https://example.com', 'https://test.com'];
+        $check = 'example.com';
+
+        $this->assertFalse($validate->audience($audience, $check));
+    }
 }

@@ -65,6 +65,15 @@ class Validate
         return $notBefore < time();
     }
 
+    public function audience($audience, $check): bool
+    {
+        if (is_array($audience)) {
+            return in_array($check, $audience);
+        }
+
+        return $audience === $check;
+    }
+
     /**
      * Check two signature hashes match. One signature is supplied by the token.
      * The other is newly gernated from the token's header and payload. They
