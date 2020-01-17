@@ -11,7 +11,7 @@ use ReallySimpleJWT\Jwt;
 
 class ReallySimpleJWTBench
 {
-    /** 
+    /**
      * @Revs(2500)
      * @Iterations(20)
      */
@@ -37,7 +37,7 @@ class ReallySimpleJWTBench
             ->build();
     }
 
-    /** 
+    /**
      * @Revs(2500)
      * @Iterations(20)
      */
@@ -56,7 +56,7 @@ class ReallySimpleJWTBench
         $parse->validate()->parse();
     }
 
-    /** 
+    /**
      * @Revs(1250)
      * @Iterations(10)
      */
