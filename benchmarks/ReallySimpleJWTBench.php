@@ -7,7 +7,7 @@ use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Parse;
-use ReallySimpleJWT\JWT;
+use ReallySimpleJWT\Jwt;
 
 class ReallySimpleJWTBench
 {
