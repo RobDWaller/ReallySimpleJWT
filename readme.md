@@ -6,9 +6,9 @@ signatures. For basic usage the library exposes a static interface to allow deve
 
 The library is also open to extension, developers can define their own encoding standard, set all the [RFC standard](https://tools.ietf.org/html/rfc7519) JWT claims and set their own private claims.
 
-You can easily integrate ReallySimpleJWT with PSR-7 / PSR-15 compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) and Zend Expressive by using the [PSR-JWT library](https://github.com/RobDWaller/psr-jwt). Please read the [framework integration documentation](#framework-integration-with-psr-jwt) to learn more.
+You can easily integrate ReallySimpleJWT with PSR-7 / PSR-15 compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) with the [PSR-JWT middleware library](https://github.com/RobDWaller/psr-jwt). Please read the [framework integration documentation](#framework-integration-with-psr-jwt) to learn more.
 
-**Note:** This library only supports PHP 7.1 and above.
+If you need to read tokens in the browser please take a look at our JavaScript / Typescript library [RS-JWT](https://github.com/RobDWaller/rs-jwt).
 
 ## Contents
 
@@ -18,18 +18,19 @@ You can easily integrate ReallySimpleJWT with PSR-7 / PSR-15 compliant framework
     - [Create Token](#create-token)
     - [Validate Token](#validate-token)
     - [Get Header and Payload Claims Data](#get-header-and-payload-claims-data)
-    - [Factory Methods](#factory-methods)
+    - [Build and Parse Factory Methods](#build-and-parse-factory-methods)
 - [Advanced Usage](#advanced-usage)
     - [Create Custom Token](#create-custom-token)
     - [Access the Token](#access-the-token)
     - [Parse and Validate Token](#parse-and-validate-token)
     - [Access Token Claims Data](#access-token-claims-data)
     - [Customised Encoding](#customised-encoding)
+    - [Custom Signature Secrets](#custom-signature-secrets)
 - [Error Messages and Codes](#error-messages-and-codes)
 - [Token Security](#token-security)
     - [Signature Secret](#signature-secret)
-- [Framework Integration With PSR-JWT](#framework-integration-with-psr-jwt)
-- [Version One Support](#version-one-support)
+- [Framework Integration With PSR-JWT Middleware](#framework-integration-with-psr-jwt-middleware)
+- [Browser Integration With RS-JWT](#browser-integration-with-rs-jwt)
 
 ## What is a JSON Web Token?
 
@@ -64,7 +65,7 @@ A claim is a key value pair, eg `"typ": "JWT"`, please read [RFC 7519](https://t
 
 Token security is achieved via the signature which is made up of the header, payload and a secret known only to the token author. This information is hashed and then base64url encoded.
 
-If a malicious user attempts to edit the header or payload claims they will be unable to replicate the signature so long as you use a strong key. See [Token Security](#token-security) for more information on this.
+If a malicious user attempts to edit the header or payload claims they will be unable to replicate the signature so long as you use a strong secret. See [Token Security](#token-security) for more information on this.
 
 ## Setup
 
@@ -168,9 +169,9 @@ Token::getHeader($token, $secret);
 Token::getPayload($token, $secret);
 ```
 
-### Factory Methods
+### Build and Parse Factory Methods
 
-The `ReallySimpleJWT\Token` class also provides two factory methods to gain access to the core `ReallySimpleJWT\Build` and `ReallySimpleJWT\Parse` classes.
+The `ReallySimpleJWT\Token` class also provides two factory methods to gain access to the core `ReallySimpleJWT\Build` and `ReallySimpleJWT\Parse` classes. These classes allow you to build custom tokens and parse and validate tokens as you see fit.
 
 ```php
 Token::builder(); // Returns an instance of ReallySimpleJWT\Build
@@ -238,11 +239,12 @@ $jwt->getSecret();
 
 ### Parse and Validate Token
 
-The `ReallySimpleJWT\Parse` class allows a developer to parse and validate a JSON Web Token. Three validation methods are available which can all be chained:
+The `ReallySimpleJWT\Parse` class allows a developer to parse and validate a JSON Web Token. Four validation methods are available which can all be chained:
 
 - `validate()` confirms the structure of the token and the validity of the signature.
 - `validateExpiration()` confirms the token expiration claim (`exp`) has not expired.
 - `validateNotBefore()` confirms the token not before claim (`nbf`) has elapsed.
+- `validateAudience()` confirms the token audiuence claim (`aud`) matches what is expected.
 
 Each validation method will throw a `ReallySimpleJWT\Exception\ValidateException` if there is anything wrong with the supplied token.
 
@@ -266,6 +268,8 @@ $parse = new Parse($jwt, new Validate(), new Encode());
 $parsed = $parse->validate()
     ->validateExpiration()
     ->validateNotBefore()
+    ->validateAudience('https://example.com')
+    ->validateAudience('https://test.com')
     ->parse();
 
 // Return the token header claims as an associative array.
@@ -355,7 +359,7 @@ sec!ReT423*&
 
 The reason for this is that there are lots of [JWT Crackers](https://github.com/lmammino/jwt-cracker) available meaning weak secrets are easy to crack thus rendering the security JWT offers useless.
 
-## Framework Integration With PSR-JWT
+## Framework Integration With PSR-JWT Middleware
 
 You can easily integrate ReallySimpleJWT with [PSR-7 / PSR-15](https://www.php-fig.org/psr/psr-15/) compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) and Zend Expressive by using the [PSR-JWT library](https://github.com/RobDWaller/psr-jwt).
 
@@ -373,10 +377,6 @@ $app->get('/jwt', function (Request $request, Response $response) {
 ```
 
 Please read the [PSR-JWT documentation](https://github.com/RobDWaller/psr-jwt) to learn more about integration options for ReallySimpleJWT.
-
-## Version One Support
-
-Version One of this library is no longer supported, please upgrade to Version Two.
 
 ## License
 
