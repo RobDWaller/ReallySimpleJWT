@@ -113,10 +113,10 @@ class Parse
         return $this;
     }
     
-    /** 
-     * Validate the audience claim exists and is a string or an array 
+    /**
+     * Validate the audience claim exists and is a string or an array
      * of strings.
-     * 
+     *
      * @return Parse
      * @throws ValidateException
      */
@@ -124,7 +124,7 @@ class Parse
     {
         if (!$this->validate->audience($this->getAudience(), $check)) {
             throw new ValidateException(
-                'Audience claim is not a valid StringOrURI or array of StringOrURIs.', 
+                'Audience claim is not a valid StringOrURI or array of StringOrURIs.',
                 11
             );
         }
@@ -241,9 +241,9 @@ class Parse
         throw new ValidateException('Not Before claim is not set.', 7);
     }
 
-    /**  
+    /**
      * Retireve the audience claim from the JWT.
-     * 
+     *
      * @return string|array
      * @throws ValidateException
      */
