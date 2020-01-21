@@ -219,6 +219,15 @@ class Parse
         throw new ValidateException('Not Before claim is not set.', 7);
     }
 
+    private function getAudience()
+    {
+        if (isset($this->decodePayload()['aud'])) {
+            return $this->decodePayload()['aud'];
+        }
+
+        throw new ValidateException('Audience claim is not set.', 2);
+    }
+
     /**
      * Decode the JWT header string to json and then decode it to an
      * associative array.

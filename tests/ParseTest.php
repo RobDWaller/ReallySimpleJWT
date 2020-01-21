@@ -623,4 +623,70 @@ class ParseTest extends TestCase
         $parse->validate()
             ->validateNotBefore();
     }
+
+    public function testGetAudience()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setAudience('https://example.com')
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'getAudience');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame($result, 'https://example.com');
+    }
+
+    public function testGetAudienceArray()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setAudience(['https://example.com', 'https://test.com'])
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'getAudience');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame($result, ['https://example.com', 'https://test.com']);
+    }
+
+    public function testGetAudienceFail()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'getAudience');
+        $method->setAccessible(true);
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Audience claim is not set.');
+        $this->expectExceptionCode(2);
+        $method->invoke($parse);
+    }
 }
