@@ -52,7 +52,7 @@ class Parse
      *
      * @param Jwt $jwt
      * @param Validate $validate
-     * @param Interfaces\Encoder $encode
+     * @param Encoder $encode
      */
     public function __construct(Jwt $jwt, Validate $validate, Encoder $encode)
     {
@@ -68,6 +68,7 @@ class Parse
      * is valid and has not been tampered with.
      *
      * @return Parse
+     * @throws ValidateException
      */
     public function validate(): self
     {
@@ -85,6 +86,7 @@ class Parse
      * expiration has expired it will throw an exception.
      *
      * @return Parse
+     * @throws ValidateException
      */
     public function validateExpiration(): self
     {
@@ -100,11 +102,31 @@ class Parse
      * not before time has not elapsed it will throw an exception.
      *
      * @return Parse
+     * @throws ValidateException
      */
     public function validateNotBefore(): self
     {
         if (!$this->validate->notBefore($this->getNotBefore())) {
             throw new ValidateException('Not Before claim has not elapsed.', 5);
+        }
+
+        return $this;
+    }
+    
+    /** 
+     * Validate the audience claim exists and is a string or an array 
+     * of strings.
+     * 
+     * @return Parse
+     * @throws ValidateException
+     */
+    public function validateAudience(string $check): self
+    {
+        if (!$this->validate->audience($this->getAudience(), $check)) {
+            throw new ValidateException(
+                'Audience claim is not a valid StringOrURI or array of StringOrURIs.', 
+                11
+            );
         }
 
         return $this;
@@ -130,7 +152,7 @@ class Parse
      * Validate the JWT's signature. The provided signature taken from the JWT
      * should match one newly generated from the JWT header and payload.
      *
-     * @throws Exception\ValidateException
+     * @throws ValidateException
      */
     private function validateSignature(): void
     {
@@ -190,10 +212,10 @@ class Parse
     }
 
     /**
-     * Decode the JWT payload and retireve the expiration claim. If it is not
-     * set throw an exception.
+     * Retireve the expiration claim from the JWT.
      *
      * @return int
+     * @throws ValidateException
      */
     private function getExpiration(): int
     {
@@ -205,10 +227,10 @@ class Parse
     }
 
     /**
-     * Decode the JWT payload and retireve the not before claim. If it is not
-     * set throw an exception.
+     * Retireve the not before claim from the JWT.
      *
      * @return int
+     * @throws ValidateException
      */
     private function getNotBefore(): int
     {
@@ -219,6 +241,12 @@ class Parse
         throw new ValidateException('Not Before claim is not set.', 7);
     }
 
+    /**  
+     * Retireve the audience claim from the JWT.
+     * 
+     * @return string|array
+     * @throws ValidateException
+     */
     private function getAudience()
     {
         if (isset($this->decodePayload()['aud'])) {
@@ -229,8 +257,7 @@ class Parse
     }
 
     /**
-     * Decode the JWT header string to json and then decode it to an
-     * associative array.
+     * Decode the JWT header string to an associative array.
      *
      * @return array
      */
@@ -242,8 +269,7 @@ class Parse
     }
 
     /**
-     * Decode the JWT payload string to json and then decode it to an
-     * associative array.
+     * Decode the JWT payload string to an associative array.
      *
      * @return array
      */

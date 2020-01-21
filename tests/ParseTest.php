@@ -689,4 +689,78 @@ class ParseTest extends TestCase
         $this->expectExceptionCode(2);
         $method->invoke($parse);
     }
+
+    public function testParseValidateAudience()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setAudience('https://example.com')
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $this->assertInstanceOf(Parse::class, $parse->validateAudience('https://example.com'));
+    }
+
+    public function testParseValidateAudienceArray()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setAudience(['https://example.com', 'https://test.com'])
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $this->assertInstanceOf(Parse::class, $parse->validateAudience('https://test.com'));
+    }
+
+    public function testParseValidateAudienceFail()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setAudience('https://example.com')
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Audience claim is not a valid StringOrURI or array of StringOrURIs.');
+        $this->expectExceptionCode(11);
+        $parse->validateAudience('https://example.co.uk');
+    }
+
+    public function testParseValidateAudienceArrayFail()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setAudience(['https://example.com', 'https://test.com'])
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Audience claim is not a valid StringOrURI or array of StringOrURIs.');
+        $this->expectExceptionCode(11);
+        $parse->validateAudience('https://google.co.uk');
+    }
 }
