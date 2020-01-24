@@ -10,6 +10,7 @@ namespace ReallySimpleJWT;
  *
  * Error codes and messages:
  * 1: Token is invalid: Token must have three parts separated by dots.
+ * 2: Audience claim does not contain provided StringOrURI.
  * 3: Signature is invalid: Signature does not match header / payload content.
  * 4: Expiration claim has expired.
  * 5: Not Before claim has not elapsed.
