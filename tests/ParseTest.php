@@ -739,8 +739,8 @@ class ParseTest extends TestCase
         );
 
         $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Audience claim is not a valid StringOrURI or array of StringOrURIs.');
-        $this->expectExceptionCode(11);
+        $this->expectExceptionMessage('Audience claim does not contain provided StringOrURI.');
+        $this->expectExceptionCode(2);
         $parse->validateAudience('https://example.co.uk');
     }
 
@@ -759,8 +759,8 @@ class ParseTest extends TestCase
         );
 
         $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Audience claim is not a valid StringOrURI or array of StringOrURIs.');
-        $this->expectExceptionCode(11);
+        $this->expectExceptionMessage('Audience claim does not contain provided StringOrURI.');
+        $this->expectExceptionCode(2);
         $parse->validateAudience('https://google.co.uk');
     }
 }
