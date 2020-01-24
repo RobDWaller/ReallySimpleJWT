@@ -124,8 +124,8 @@ class Parse
     {
         if (!$this->validate->audience($this->getAudience(), $check)) {
             throw new ValidateException(
-                'Audience claim is not a valid StringOrURI or array of StringOrURIs.',
-                11
+                'Audience claim does not contain provided StringOrURI.',
+                2
             );
         }
 
