@@ -24,11 +24,11 @@ If you need to read tokens in the browser please take a look at our JavaScript /
     - [Access the Token](#access-the-token)
     - [Parse and Validate Token](#parse-and-validate-token)
     - [Access Token Claims Data](#access-token-claims-data)
-    - [Customised Encoding](#customised-encoding)
-    - [Custom Signature Secrets](#custom-signature-secrets)
+    - [Custom Encoding](#custom-encoding)
 - [Error Messages and Codes](#error-messages-and-codes)
 - [Token Security](#token-security)
     - [Signature Secret](#signature-secret)
+    - [Custom Secrets](#custom-secrets)
 - [Framework Integration With PSR-JWT Middleware](#framework-integration-with-psr-jwt-middleware)
 - [Browser Integration With RS-JWT](#browser-integration-with-rs-jwt)
 
@@ -303,7 +303,7 @@ Alternatively a developer can call one of the [RFC](https://tools.ietf.org/html/
 - `getExpiresIn()`
 - `getUsableIn()`
 
-### Customised Encoding
+### Custom Encoding
 
 By default this library hashes and encodes the JWT signature via `hash_hmac()` using the sha256 algorithm. If a developer would like to use a customised form of encoding they just need to generate a custom encode class which complies with the `ReallySimpleJWT\Interfaces\EncodeInterface`.
 
@@ -327,7 +327,7 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | Code | Message                           | Explanation                                |
 |:----:| --------------------------------- | ------------------------------------------ |
 | 1    | Token is invalid.                 | Token must have three parts separated by dots. |
-| 2*    | Token could not be parsed.        | Something weird happened ;) undefined problem with the token. |
+| 2    | Audience claim does not contain provided StringOrURI.        | The aud claim must contain the provided string or URI string provided. |
 | 3    | Signature is invalid.             | Signature does not match header / payload content. Could not replicate signature with provided header and payload. |
 | 4    | Expiration claim has expired.     | The exp claim must be a valid date time number in the future. |
 | 5    | Not Before claim has not elapsed. | The nbf claim must be a valid date time number in the past. |
@@ -337,13 +337,11 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$`` |
 | 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
 
-\* No longer in use, library will not generate this error code.
-
 ## Token Security
 
 The JWT [RFC 7519](https://tools.ietf.org/html/rfc7519#section-7) allows for the creation of tokens without signatures and without secured / hashed signatures. The ReallySimpleJWT library however imposes security by default as there is no logical reason not to. All created tokens must have a signature and a strong secret, but the library will validate tokens without a secret or a strong secret. The library will not validate tokens without a signature.
 
-It is possible to edit and enhance the implementation of the signature and its security level by creating a custom encode class that implements the `ReallySimpleJWT\Interfaces\EncodeInterface`. See section [Customised Encoding](#customised-encoding)
+It is possible to edit and enhance the implementation of the signature and its security level by creating a custom encode class that implements the `ReallySimpleJWT\Interfaces\Encode` interface, or a custom secret class which implements the `ReallySimpleJWT\Interfaces\Secret` interface. See sections [Custom Encoding](#custom-encoding) and [Custom Secrets](#custom-secret)
 
 ### Signature Secret
 
@@ -358,6 +356,41 @@ sec!ReT423*&
 ```
 
 The reason for this is that there are lots of [JWT Crackers](https://github.com/lmammino/jwt-cracker) available meaning weak secrets are easy to crack thus rendering the security JWT offers useless.
+
+### Custom Secrets
+
+While we advise **strongly against** using weak secrets for JWT signatures we do accept there are systems on the internets which for one reason or another impose weak secrets on developers.
+
+You can setup custom secret validation by creating your own secret class which implements the `ReallySimpleJWT\Interfaces\Secret` interface. You can then pass this custom secret class to the `ReallySimpleJWT\Build` class.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace ReallySimpleJWT;
+
+use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Interfaces\Secret;
+
+class CustomSecret implements Secret
+{
+    public function validate(string $secret): bool
+    {
+        // Please do not copy this code, it is an example and bad code.
+        return (bool) preg_match('/[a-z]+/', $secret);
+    }
+}
+
+// Create JWT Builder with Custom Secret Class.
+$build = new Build(
+    'JWT', 
+    new Validate(), 
+    new CustomSecret(), 
+    new Encode()
+);
+```
 
 ## Framework Integration With PSR-JWT Middleware
 
@@ -377,6 +410,34 @@ $app->get('/jwt', function (Request $request, Response $response) {
 ```
 
 Please read the [PSR-JWT documentation](https://github.com/RobDWaller/psr-jwt) to learn more about integration options for ReallySimpleJWT.
+
+## Browser Integration With RS-JWT
+
+When you create JSON Web Tokens you may wish to read some of the imformation contained in the header and payload claims in the browser.
+
+If you do, we have an NPM packages for that called [RS-JWT]().
+
+**Install:**
+```bash
+npm install --save rs-jwt
+```
+
+**Usage:**
+```js
+import { RSJwt } from 'rs-jwt'
+
+const jwt = new RSJwt()
+
+const result = jwt.parse('json.web.token')
+
+// Return the header claims as an object.
+result.getHeader()
+
+// Return the payload claims as an object.
+result.getPayload()
+```
+
+For more information read the project [README](https://github.com/RobDWaller/rs-jwt/blob/master/README.md) or visit the [NPM Page](https://www.npmjs.com/package/rs-jwt).
 
 ## License
 
