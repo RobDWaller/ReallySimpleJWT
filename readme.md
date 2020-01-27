@@ -370,8 +370,6 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Interfaces\Secret;
 
 class CustomSecret implements Secret
