@@ -3,7 +3,7 @@
 namespace ReallySimpleJWT\Interfaces;
 
 /**
- * Enable the validation of JSON Web Token signature secrets. It is
+ * Enable custom validation of JSON Web Token signature secrets. It is
  * advised secrets are as strong as possible to make sure the token
  * is as secure as possible.
  */

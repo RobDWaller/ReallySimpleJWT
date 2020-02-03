@@ -8,10 +8,8 @@ use Exception;
 use Throwable;
 
 /**
- * Simple PHP exception extension class for all token validation exceptions to
- * make exceptions more specific and obvious.
- *
- * @author Rob Waller <rdwaller1984@gmail.com>
+ * Simple PHP exception class for all validation exceptions so exceptions are
+ * more specific and obvious.
  */
 class ValidateException extends Exception
 {

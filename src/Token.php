@@ -152,7 +152,6 @@ class Token
 
     /**
      * Run standard validation and expiration validation against the token.
-     * Will not return false if the expiration claim is not set.
      *
      * @param Parse $parse
      * @return bool
@@ -172,8 +171,7 @@ class Token
     }
 
     /**
-     * Run not before validation against token. Will not return false if the
-     * not before claim is not set.
+     * Run not before validation against token.
      *
      * @param Parse $parse
      * @return bool

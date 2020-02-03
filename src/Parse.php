@@ -14,9 +14,11 @@ use ReallySimpleJWT\Helper\JsonEncoder;
 /**
  * This class parses and validates a JSON Web Token. The token is housed in
  * the JWT value object. The class outputs a Parsed value object to give
- * access to the data held within the JSON Web Token.
+ * access to the data held within the JSON Web Token header and payload.
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>
+ * @todo JsonEncoder trait should probably be part of the encode class. 4.0.0 fix.
+ * @todo Separate the split token functionality out into it's own class. 4.0.0 fix.
  */
 class Parse
 {
@@ -82,8 +84,8 @@ class Parse
     }
 
     /**
-     * Validate the JWT's expiration claim in the payload is valid, if the
-     * expiration has expired it will throw an exception.
+     * Validate the JWT's expiration claim (exp). This claim defines when a
+     * token can be used until.
      *
      * @return Parse
      * @throws ValidateException
@@ -98,8 +100,8 @@ class Parse
     }
 
     /**
-     * Validate the JWT's not before claim in the payload is valid, if the
-     * not before time has not elapsed it will throw an exception.
+     * Validate the JWT's not before claim (nbf). This claim defines when a
+     * token can be used from.
      *
      * @return Parse
      * @throws ValidateException
@@ -149,8 +151,8 @@ class Parse
     }
 
     /**
-     * Validate the JWT's signature. The provided signature taken from the JWT
-     * should match one newly generated from the JWT header and payload.
+     * Validate the JWT's signature. The signature taken from the JWT should
+     * match a new one generated from the JWT header and payload, and secret.
      *
      * @throws ValidateException
      */
@@ -212,7 +214,7 @@ class Parse
     }
 
     /**
-     * Retireve the expiration claim from the JWT.
+     * Retrieve the expiration claim from the JWT.
      *
      * @return int
      * @throws ValidateException
@@ -227,7 +229,7 @@ class Parse
     }
 
     /**
-     * Retireve the not before claim from the JWT.
+     * Retrieve the not before claim from the JWT.
      *
      * @return int
      * @throws ValidateException
@@ -242,7 +244,7 @@ class Parse
     }
 
     /**
-     * Retireve the audience claim from the JWT.
+     * Retrieve the audience claim from the JWT.
      *
      * @return string|array
      * @throws ValidateException

@@ -3,27 +3,24 @@
 namespace ReallySimpleJWT\Interfaces;
 
 /**
- * This is an interface for the ReallySimpleJWT\Encode class, it defines what
- * public methods must be available and what they must return. Custom encoding
- * classes must implement this interface to work with this library.
+ * Enable the custom encoding and decoding of JSON Web Tokens.
  *
- * @author Rob Waller <rdwaller1984@googlemail.com>
+ * @todo remove decode method and separate into own decode class. 4.0.0 fix.
  */
 interface Encoder
 {
     /**
-     * Get the algorithm used to encode the signature string. This will also
-     * act as the alg claim in the token header.
+     * Get the algorithm used to encode the signature string.
      */
     public function getAlgorithm(): string;
 
     /**
-     * Encode a JSON string so it is base64 URL compliant.
+     * Encode a JSON string so it is base64URL compliant.
      */
     public function encode(string $toEncode): string;
 
     /**
-     * Decode a base64 URL string to a JSON string.
+     * Decode a base64URL string to a JSON string.
      */
     public function decode(string $toDecode): string;
 

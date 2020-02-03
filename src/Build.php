@@ -20,7 +20,7 @@ use ReallySimpleJWT\Exception\ValidateException;
  * JWT payload.
  *
  * For more information on JSON Web Tokens please refer to the RFC. This
- * library attemtps to comply with the RFC as closely as possible.
+ * library attempts to comply with the JWT RFC as closely as possible.
  * https://tools.ietf.org/html/rfc7519
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>

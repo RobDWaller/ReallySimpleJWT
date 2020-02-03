@@ -7,8 +7,6 @@ namespace ReallySimpleJWT;
 /**
  * Value object for the generated JSON Web Token, takes the token and
  * the secret.
- *
- * @author Rob Waller <rdwaller1984@googlemail.com>
  */
 class Jwt
 {
