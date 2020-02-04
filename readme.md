@@ -1,10 +1,9 @@
 # Really Simple JSON Web Tokens
 [![Build Status](https://travis-ci.org/RobDWaller/ReallySimpleJWT.svg?branch=master)](https://travis-ci.org/RobDWaller/ReallySimpleJWT) [![codecov](https://codecov.io/gh/RobDWaller/ReallySimpleJWT/branch/master/graph/badge.svg)](https://codecov.io/gh/RobDWaller/ReallySimpleJWT) [![Infection MSI](https://badge.stryker-mutator.io/github.com/RobDWaller/ReallySimpleJWT/master)](https://infection.github.io) [![StyleCI](https://styleci.io/repos/82379868/shield?branch=master)](https://styleci.io/repos/82379868) [![Latest Stable Version](https://poser.pugx.org/rbdwllr/reallysimplejwt/v/stable)](https://packagist.org/packages/rbdwllr/reallysimplejwt) ![PHP Version Support](https://img.shields.io/travis/php-v/RobDWaller/ReallySimpleJWT/master) [![Total Downloads](https://poser.pugx.org/rbdwllr/reallysimplejwt/downloads)](https://packagist.org/packages/rbdwllr/reallysimplejwt)
 
-A simple PHP library for creating JSON Web Tokens that uses HMAC SHA256 to sign
-signatures. For basic usage the library exposes a static interface to allow developers to create a token that stores a user identifier and expiration time.
+A simple PHP library for creating JSON Web Tokens that uses HMAC SHA256 to sign signatures. For basic usage the library exposes a static interface to allow developers to create a token that stores a user identifier and expiration time.
 
-The library is also open to extension, developers can define their own encoding standard, set all the [RFC standard](https://tools.ietf.org/html/rfc7519) JWT claims and set their own private claims.
+The library is also open to extension, developers can define their own encoding standard, their own secret validation, set all the [RFC standard](https://tools.ietf.org/html/rfc7519) JWT claims, and set their own private claims.
 
 You can easily integrate ReallySimpleJWT with PSR-7 / PSR-15 compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) with the [PSR-JWT middleware library](https://github.com/RobDWaller/psr-jwt). Please read the [framework integration documentation](#framework-integration-with-psr-jwt) to learn more.
 
@@ -36,7 +35,7 @@ If you need to read tokens in the browser please take a look at our JavaScript /
 
 JSON Web Tokens is a standard for creating URL friendly access tokens that assert claims about a user or system.
 
-A token is broken down into three parts; the header, the payload and the signature; with each part separated by a dot. Each part is encoded using the base64url standard, see the [RFC](https://tools.ietf.org/html/rfc4648#page-7).
+A token is broken down into three parts; the header, the payload and the signature; with each part separated by a dot. Each part is encoded using the base64URL standard, see the [RFC](https://tools.ietf.org/html/rfc4648#page-7).
 
 An example JWT:
 
@@ -47,13 +46,13 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
 The header and payload are both encoded JSON strings that contain a number of claims:
 
 ```javascript
-// Header
+// Example Header
 {
   "alg": "HS256",
   "typ": "JWT"
 }
 
-// Payload
+// Example Payload
 {
   "sub": "1234567890",
   "name": "John Doe",
@@ -63,7 +62,7 @@ The header and payload are both encoded JSON strings that contain a number of cl
 
 A claim is a key value pair, eg `"typ": "JWT"`, please read [RFC 7519](https://tools.ietf.org/html/rfc7519#section-4) to learn more about JSON Web Token claims.
 
-Token security is achieved via the signature which is made up of the header, payload and a secret known only to the token author. This information is hashed and then base64url encoded.
+Token security is achieved via the signature which is made up of the header, payload and a secret known only to the token author. This information is hashed and then base64URL encoded.
 
 If a malicious user attempts to edit the header or payload claims they will be unable to replicate the signature so long as you use a strong secret. See [Token Security](#token-security) for more information on this.
 
@@ -81,10 +80,18 @@ composer require rbdwllr/reallysimplejwt
 
 **Install via the composer.json file:**
 
+Add the following to your composer.json file:
+
 ```javascript
 "require": {
     "rbdwllr/reallysimplejwt": "^2.0"
 }
+```
+
+Then run:
+
+```bash
+composer update
 ```
 
 ## Basic Usage
@@ -244,7 +251,7 @@ The `ReallySimpleJWT\Parse` class allows a developer to parse and validate a JSO
 - `validate()` confirms the structure of the token and the validity of the signature.
 - `validateExpiration()` confirms the token expiration claim (`exp`) has not expired.
 - `validateNotBefore()` confirms the token not before claim (`nbf`) has elapsed.
-- `validateAudience()` confirms the token audiuence claim (`aud`) matches what is expected.
+- `validateAudience()` confirms the token audience claim (`aud`) matches what is expected.
 
 Each validation method will throw a `ReallySimpleJWT\Exception\ValidateException` if there is anything wrong with the supplied token.
 
@@ -305,7 +312,7 @@ Alternatively a developer can call one of the [RFC](https://tools.ietf.org/html/
 
 ### Custom Encoding
 
-By default this library hashes and encodes the JWT signature via `hash_hmac()` using the sha256 algorithm. If a developer would like to use a customised form of encoding they just need to generate a custom encode class which complies with the `ReallySimpleJWT\Interfaces\EncodeInterface`.
+By default this library hashes and encodes the JWT signature via `hash_hmac()` using the sha256 algorithm. If a developer would like to use a customised form of encoding they just need to generate a custom encode class which complies with the `ReallySimpleJWT\Interfaces\Encoder` interface.
 
 ```php
 interface EncodeInterface
@@ -328,12 +335,12 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 |:----:| --------------------------------- | ------------------------------------------ |
 | 1    | Token is invalid.                 | Token must have three parts separated by dots. |
 | 2    | Audience claim does not contain provided StringOrURI.        | The aud claim must contain the provided string or URI string provided. |
-| 3    | Signature is invalid.             | Signature does not match header / payload content. Could not replicate signature with provided header and payload. |
+| 3    | Signature is invalid.             | Signature does not match header / payload content. Could not replicate signature with provided header, payload and secret. |
 | 4    | Expiration claim has expired.     | The exp claim must be a valid date time number in the future. |
 | 5    | Not Before claim has not elapsed. | The nbf claim must be a valid date time number in the past. |
 | 6    | Expiration claim is not set.      | Attempt was made to validate an Expiration claim which does not exist. |
 | 7    | Not Before claim is not set.      | Attempt was made to validate a Not Before claim which does not exist. |
-| 8    | Invalid payload claim.            | Payload claims must be key value pairs of the format string:mixed. |
+| 8    | Invalid payload claim.            | Payload claims must be key value pairs of the format string: mixed. |
 | 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$`` |
 | 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
 
@@ -359,7 +366,7 @@ The reason for this is that there are lots of [JWT Crackers](https://github.com/
 
 ### Custom Secrets
 
-While we advise **strongly against** using weak secrets for JWT signatures we do accept there are systems on the internets which for one reason or another impose weak secrets on developers.
+While we advise **strongly against** using weak secrets for JWT signatures we do accept there are systems on the 'internets' which for one reason or another impose weak secrets on developers.
 
 You can setup custom secret validation by creating your own secret class which implements the `ReallySimpleJWT\Interfaces\Secret` interface. You can then pass this custom secret class to the `ReallySimpleJWT\Build` class.
 
@@ -376,7 +383,7 @@ class CustomSecret implements Secret
 {
     public function validate(string $secret): bool
     {
-        // Please do not copy this code, it is an example and bad code.
+        // Please do not copy this code, it is an example of weak secret validation.
         return (bool) preg_match('/[a-z]+/', $secret);
     }
 }
@@ -411,7 +418,7 @@ Please read the [PSR-JWT documentation](https://github.com/RobDWaller/psr-jwt) t
 
 ## Browser Integration With RS-JWT
 
-When you create JSON Web Tokens you may wish to read some of the imformation contained in the header and payload claims in the browser.
+When you create JSON Web Tokens you may wish to read some of the information contained in the header and payload claims in the browser.
 
 If you do, we have an NPM packages for that called [RS-JWT]().
 
