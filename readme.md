@@ -5,7 +5,7 @@ A simple PHP library for creating JSON Web Tokens that uses HMAC SHA256 to sign 
 
 The library is also open to extension, developers can define their own encoding standard, their own secret validation, set all the [RFC standard](https://tools.ietf.org/html/rfc7519) JWT claims, and set their own private claims.
 
-You can easily integrate ReallySimpleJWT with PSR-7 / PSR-15 compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) with the [PSR-JWT middleware library](https://github.com/RobDWaller/psr-jwt). Please read the [framework integration documentation](#framework-integration-with-psr-jwt) to learn more.
+You can easily integrate ReallySimpleJWT with PSR-7 / PSR-15 compliant frameworks such as [Slim PHP](https://packagist.org/packages/slim/slim) with the [PSR-JWT middleware library](https://github.com/RobDWaller/psr-jwt). Please read the [framework integration documentation](#framework-integration-with-psr-jwt-middleware) to learn more.
 
 If you need to read tokens in the browser please take a look at our JavaScript / Typescript library [RS-JWT](https://github.com/RobDWaller/rs-jwt).
 
@@ -348,7 +348,7 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 
 The JWT [RFC 7519](https://tools.ietf.org/html/rfc7519#section-7) allows for the creation of tokens without signatures and without secured / hashed signatures. The ReallySimpleJWT library however imposes security by default as there is no logical reason not to. All created tokens must have a signature and a strong secret, but the library will validate tokens without a secret or a strong secret. The library will not validate tokens without a signature.
 
-It is possible to edit and enhance the implementation of the signature and its security level by creating a custom encode class that implements the `ReallySimpleJWT\Interfaces\Encode` interface, or a custom secret class which implements the `ReallySimpleJWT\Interfaces\Secret` interface. See sections [Custom Encoding](#custom-encoding) and [Custom Secrets](#custom-secret)
+It is possible to edit and enhance the implementation of the signature and its security level by creating a custom encode class that implements the `ReallySimpleJWT\Interfaces\Encode` interface, or a custom secret class which implements the `ReallySimpleJWT\Interfaces\Secret` interface. See sections [Custom Encoding](#custom-encoding) and [Custom Secrets](#custom-secrets)
 
 ### Signature Secret
 
@@ -420,7 +420,7 @@ Please read the [PSR-JWT documentation](https://github.com/RobDWaller/psr-jwt) t
 
 When you create JSON Web Tokens you may wish to read some of the information contained in the header and payload claims in the browser.
 
-If you do, we have an NPM packages for that called [RS-JWT]().
+If you do, we have an NPM packages for that called [RS-JWT](https://github.com/RobDWaller/rs-jwt).
 
 **Install:**
 ```bash
