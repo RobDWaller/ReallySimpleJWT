@@ -7,13 +7,15 @@ use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Secret;
+use ReallySimpleJWT\Exception\ValidateException;
 use PHPUnit\Framework\TestCase;
 
 class EndToEndTest extends TestCase
 {
     public function testEndToEnd()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 10;
         $notBefore = time() - 10;
@@ -57,7 +59,7 @@ class EndToEndTest extends TestCase
 
     public function testEndToEndMultiToken()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 10;
         $notBefore = time() - 10;
@@ -76,7 +78,7 @@ class EndToEndTest extends TestCase
             ->setPayloadClaim('uid', 2)
             ->build();
 
-        $build1 = new Build('JWT', new Validate(), new Encode());
+        $build1 = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration1 = time() + 20;
         $notBefore1 = time() - 20;
@@ -147,7 +149,7 @@ class EndToEndTest extends TestCase
 
     public function testEndToEndMultiTokenWithReset()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 10;
         $notBefore = time() - 10;
@@ -236,7 +238,7 @@ class EndToEndTest extends TestCase
 
     public function testEndToEndMultiTokenRemovedFields()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 10;
         $notBefore = time() - 10;
@@ -255,7 +257,7 @@ class EndToEndTest extends TestCase
             ->setPayloadClaim('uid', 2)
             ->build();
 
-        $build1 = new Build('JWT', new Validate(), new Encode());
+        $build1 = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration1 = time() + 20;
         $issuedAt1 = time() + 10;
@@ -322,7 +324,7 @@ class EndToEndTest extends TestCase
 
     public function testEndToEndMultiTokenWithResetRemoveFields()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 10;
         $notBefore = time() - 10;
@@ -406,18 +408,17 @@ class EndToEndTest extends TestCase
         $this->assertSame($parsed1->getSignature(), explode('.', $token1->getToken())[2]);
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Expiration claim has expired.
-     * @expectedExceptionCode 4
-     */
     public function testEndToEndBadExpiration()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() - 20;
         $notBefore = time() - 10;
         $issuedAt = time();
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Expiration claim has expired.');
+        $this->expectExceptionCode(4);
 
         $token = $build->setContentType('JWT')
             ->setHeaderClaim('info', 'Hello World')
@@ -425,27 +426,12 @@ class EndToEndTest extends TestCase
             ->setIssuer('localhost')
             ->setSubject('users')
             ->setAudience('https://google.com')
-            ->setExpiration($expiration)
-            ->setNotBefore($notBefore)
-            ->setIssuedAt($issuedAt)
-            ->setJwtId('123ABC')
-            ->setPayloadClaim('uid', 2)
-            ->build();
-
-        $parse = new Parse($token, new Validate(), new Encode());
-
-        $parsed = $parse->validate()
-            ->validateExpiration();
+            ->setExpiration($expiration);
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Not Before claim has not elapsed.
-     * @expectedExceptionCode 5
-     */
     public function testEndToEndBadNotBefore()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $expiration = time() + 20;
         $notBefore = time() + 20;
@@ -466,15 +452,14 @@ class EndToEndTest extends TestCase
 
         $parse = new Parse($token, new Validate(), new Encode());
 
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Not Before claim has not elapsed.');
+        $this->expectExceptionCode(5);
+
         $parsed = $parse->validate()
             ->validateNotBefore();
     }
 
-    /**
-     * @expectedException ReallySimpleJWT\Exception\ValidateException
-     * @expectedExceptionMessage Signature is invalid.
-     * @expectedExceptionCode 3
-     */
     public function testEndToEndBadSignature()
     {
         $token = 'eyJjdHkiOiJKV1QiLCJpbmZvIjoiSGVsbG8gV29ybGQiLCJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
@@ -488,6 +473,10 @@ class EndToEndTest extends TestCase
         );
 
         $parse = new Parse($token, new Validate(), new Encode());
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Signature is invalid.');
+        $this->expectExceptionCode(3);
 
         $parsed = $parse->validate();
     }

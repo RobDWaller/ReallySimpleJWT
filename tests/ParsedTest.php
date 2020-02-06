@@ -9,6 +9,7 @@ use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Token;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Secret;
 
 class ParsedTest extends TestCase
 {
@@ -89,7 +90,7 @@ class ParsedTest extends TestCase
 
     public function testGetIssuer()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -105,7 +106,7 @@ class ParsedTest extends TestCase
 
     public function testGetIssuerNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -121,7 +122,7 @@ class ParsedTest extends TestCase
 
     public function testGetSubject()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -137,7 +138,7 @@ class ParsedTest extends TestCase
 
     public function testGetSubjectNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -153,7 +154,7 @@ class ParsedTest extends TestCase
 
     public function testGetAudience()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -169,7 +170,7 @@ class ParsedTest extends TestCase
 
     public function testGetAudienceIsArray()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -186,7 +187,7 @@ class ParsedTest extends TestCase
 
     public function testGetAudienceNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -202,7 +203,7 @@ class ParsedTest extends TestCase
 
     public function testGetExpiration()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -218,7 +219,7 @@ class ParsedTest extends TestCase
 
     public function testGetExpirationNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -234,7 +235,7 @@ class ParsedTest extends TestCase
 
     public function testGetNotBefore()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -250,7 +251,7 @@ class ParsedTest extends TestCase
 
     public function testGetNotBeforeNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -266,7 +267,7 @@ class ParsedTest extends TestCase
 
     public function testGetIssuedAt()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -282,7 +283,7 @@ class ParsedTest extends TestCase
 
     public function testGetIssuedAtNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -298,7 +299,7 @@ class ParsedTest extends TestCase
 
     public function testGetJwtId()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -314,7 +315,7 @@ class ParsedTest extends TestCase
 
     public function testGetJwtIdNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -330,7 +331,7 @@ class ParsedTest extends TestCase
 
     public function testGetAlgorithm()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -346,7 +347,7 @@ class ParsedTest extends TestCase
 
     public function testGetType()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -362,7 +363,7 @@ class ParsedTest extends TestCase
 
     public function testGetTypeNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -378,7 +379,7 @@ class ParsedTest extends TestCase
 
     public function testGetContentType()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -394,7 +395,7 @@ class ParsedTest extends TestCase
 
     public function testGetContentTypeNotSet()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -410,7 +411,7 @@ class ParsedTest extends TestCase
 
     public function testGetExpiresIn()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -430,7 +431,7 @@ class ParsedTest extends TestCase
 
     public function testGetExpiresInNegative()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -448,7 +449,7 @@ class ParsedTest extends TestCase
 
     public function testGetUsableIn()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 
@@ -468,7 +469,7 @@ class ParsedTest extends TestCase
 
     public function testGetUsableInNegative()
     {
-        $build = new Build('JWT', new Validate(), new Encode());
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
 

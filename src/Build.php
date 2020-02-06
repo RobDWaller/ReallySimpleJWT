@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Interfaces\EncodeInterface;
+use ReallySimpleJWT\Interfaces\Encoder;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Helper\JsonEncoder;
+use ReallySimpleJWT\Interfaces\Secret;
 use ReallySimpleJWT\Exception\ValidateException;
 
 /**
@@ -19,7 +20,7 @@ use ReallySimpleJWT\Exception\ValidateException;
  * JWT payload.
  *
  * For more information on JSON Web Tokens please refer to the RFC. This
- * library attemtps to comply with the RFC as closely as possible.
+ * library attempts to comply with the JWT RFC as closely as possible.
  * https://tools.ietf.org/html/rfc7519
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>
@@ -57,16 +58,21 @@ class Build
     private $secret;
 
     /**
-     * A class of validate helper methods.
+     * A class of validation helper methods.
      *
      * @var Validate
      */
     private $validate;
 
     /**
+     * Validate token signature secret.
+     */
+    private $secretValidator;
+
+    /**
      * A class to encode JWT tokens.
      *
-     * @var Interfaces\EncodeInterface
+     * @var Interfaces\Encoder
      */
     private $encode;
 
@@ -75,13 +81,15 @@ class Build
      *
      * @param string $type
      * @param Validate $validate
-     * @param Interfaces\EncodeInterface $encode
+     * @param Interfaces\Encoder $encode
      */
-    public function __construct(string $type, Validate $validate, EncodeInterface $encode)
+    public function __construct(string $type, Validate $validate, Secret $secretValidator, Encoder $encode)
     {
         $this->type = $type;
 
         $this->validate = $validate;
+
+        $this->secretValidator =  $secretValidator;
 
         $this->encode = $encode;
     }
@@ -141,7 +149,7 @@ class Build
      */
     public function setSecret(string $secret): self
     {
-        if (!$this->validate->secret($secret)) {
+        if (!$this->secretValidator->validate($secret)) {
             throw new ValidateException('Invalid secret.', 9);
         }
 

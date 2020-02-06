@@ -96,62 +96,6 @@ class ValidateTest extends TestCase
         $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }
 
-    public function testValidateSecret()
-    {
-        $validate = new Validate();
-
-        $this->assertTrue($validate->secret('Hello123$$Abc!!4538'));
-    }
-
-    public function testValidateSecretAllSpecialCharacters()
-    {
-        $validate = new Validate();
-
-        $this->assertTrue($validate->secret('Hello123*&!@%^#$4538'));
-    }
-
-    public function testValidateSecretOtherSpecialCharacters()
-    {
-        $validate = new Validate();
-
-        $this->assertTrue($validate->secret('Hello123*&£~!@%^#$4538'));
-    }
-
-    public function testValidateSecretInvalidLength()
-    {
-        $validate = new Validate();
-
-        $this->assertFalse($validate->secret('hello'));
-    }
-
-    public function testValidateSecretInvalidNumbers()
-    {
-        $validate = new Validate();
-
-        $this->assertFalse($validate->secret('helloworldfoobar'));
-    }
-
-    public function testValidateSecretInvalidUppercase()
-    {
-        $validate = new Validate();
-
-        $this->assertFalse($validate->secret('helloworldfoobar123'));
-    }
-
-    public function testValidateSecretInvalidLowercase()
-    {
-        $validate = new Validate();
-
-        $this->assertFalse($validate->secret('HELLOWORLDFOOBAR123'));
-    }
-
-    public function testValidateSecretSpecialCharacters()
-    {
-        $validate = new Validate();
-
-        $this->assertFalse($validate->secret('HELLOworldFOOBAR123'));
-    }
-
     public function testValidateNotBefore()
     {
         $validate = new Validate();
@@ -164,5 +108,55 @@ class ValidateTest extends TestCase
         $validate = new Validate();
 
         $this->assertFalse($validate->notBefore(time() + 10));
+    }
+
+    public function testValidateAudience()
+    {
+        $validate = new Validate();
+
+        $audience = 'https://example.com';
+        $check = 'https://example.com';
+
+        $this->assertTrue($validate->audience($audience, $check));
+    }
+
+    public function testValidateAudienceFalse()
+    {
+        $validate = new Validate();
+
+        $audience = 'https://example.com';
+        $check = 'example.com';
+
+        $this->assertFalse($validate->audience($audience, $check));
+    }
+
+    public function testValidateAudienceArray()
+    {
+        $validate = new Validate();
+
+        $audience = ['https://example.com', 'https://test.com'];
+        $check = 'https://example.com';
+
+        $this->assertTrue($validate->audience($audience, $check));
+    }
+
+    public function testValidateAudienceArrayFalse()
+    {
+        $validate = new Validate();
+
+        $audience = ['https://example.com', 'https://test.com'];
+        $check = 'example.com';
+
+        $this->assertFalse($validate->audience($audience, $check));
+    }
+
+    public function testValidateAudienceIntFalse()
+    {
+        $validate = new Validate();
+
+        $audience = 2;
+        $check = 'example.com';
+
+        $this->assertFalse($validate->audience($audience, $check));
     }
 }

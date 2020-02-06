@@ -6,8 +6,6 @@ namespace ReallySimpleJWT\Helper;
 
 /**
  * A helper trait to encode and decode json.
- *
- * @author Rob Waller <rdwaller1984@googlemail.com>
  */
 trait JsonEncoder
 {

@@ -8,6 +8,7 @@ use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Exception\ValidateException;
 
@@ -134,7 +135,7 @@ class Token
      */
     public static function builder(): Build
     {
-        return new Build('JWT', new Validate(), new Encode());
+        return new Build('JWT', new Validate(), new Secret(), new Encode());
     }
 
     /**
@@ -151,7 +152,6 @@ class Token
 
     /**
      * Run standard validation and expiration validation against the token.
-     * Will not return false if the expiration claim is not set.
      *
      * @param Parse $parse
      * @return bool
@@ -171,8 +171,7 @@ class Token
     }
 
     /**
-     * Run not before validation against token. Will not return false if the
-     * not before claim is not set.
+     * Run not before validation against token.
      *
      * @param Parse $parse
      * @return bool

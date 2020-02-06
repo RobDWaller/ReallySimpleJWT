@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Interfaces\EncodeInterface;
+use ReallySimpleJWT\Interfaces\Encoder;
 
 /**
- * Class used to encode the JSON Web Token signature. Also defines the
- * hash / algorithm to be used.
+ * Class used to encode the JSON Web Token and signature.
  *
  * This class is written so it is replaceable with a custom encoding. See
- * the encode interface.
- *
- * @author Rob Waller <rdwaller1984@googlemail.com>
+ * the encoder interface.
  */
-class Encode implements EncodeInterface
+class Encode implements Encoder
 {
     /**
      * The Algorithm which was used to hash the token signature. This is what

@@ -3,5 +3,9 @@ Vagrantfile
 vendor/
 composer.lock
 build
-coverage
+coverage/
 infection.log
+docker-compose.yml
+Dockerfile
+.phpunit.result.cache
+coverage.xml

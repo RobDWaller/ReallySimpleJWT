@@ -8,15 +8,17 @@ use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Exception\ValidateException;
-use ReallySimpleJWT\Interfaces\EncodeInterface;
+use ReallySimpleJWT\Interfaces\Encoder;
 use ReallySimpleJWT\Helper\JsonEncoder;
 
 /**
  * This class parses and validates a JSON Web Token. The token is housed in
  * the JWT value object. The class outputs a Parsed value object to give
- * access to the data held within the JSON Web Token.
+ * access to the data held within the JSON Web Token header and payload.
  *
  * @author Rob Waller <rdwaller1984@googlemail.com>
+ * @todo JsonEncoder trait should probably be part of the encode class. 4.0.0 fix.
+ * @todo Separate the split token functionality out into it's own class. 4.0.0 fix.
  */
 class Parse
 {
@@ -43,7 +45,7 @@ class Parse
     /**
      * A class to decode JWT tokens.
      *
-     * @var Interfaces\EncodeInterface
+     * @var Interfaces\Encoder
      */
     private $encode;
 
@@ -52,9 +54,9 @@ class Parse
      *
      * @param Jwt $jwt
      * @param Validate $validate
-     * @param Interfaces\EncodeInterface $encode
+     * @param Encoder $encode
      */
-    public function __construct(Jwt $jwt, Validate $validate, EncodeInterface $encode)
+    public function __construct(Jwt $jwt, Validate $validate, Encoder $encode)
     {
         $this->jwt = $jwt;
 
@@ -68,6 +70,7 @@ class Parse
      * is valid and has not been tampered with.
      *
      * @return Parse
+     * @throws ValidateException
      */
     public function validate(): self
     {
@@ -81,10 +84,11 @@ class Parse
     }
 
     /**
-     * Validate the JWT's expiration claim in the payload is valid, if the
-     * expiration has expired it will throw an exception.
+     * Validate the JWT's expiration claim (exp). This claim defines when a
+     * token can be used until.
      *
      * @return Parse
+     * @throws ValidateException
      */
     public function validateExpiration(): self
     {
@@ -96,15 +100,35 @@ class Parse
     }
 
     /**
-     * Validate the JWT's not before claim in the payload is valid, if the
-     * not before time has not elapsed it will throw an exception.
+     * Validate the JWT's not before claim (nbf). This claim defines when a
+     * token can be used from.
      *
      * @return Parse
+     * @throws ValidateException
      */
     public function validateNotBefore(): self
     {
         if (!$this->validate->notBefore($this->getNotBefore())) {
             throw new ValidateException('Not Before claim has not elapsed.', 5);
+        }
+
+        return $this;
+    }
+    
+    /**
+     * Validate the audience claim exists and is a string or an array
+     * of strings.
+     *
+     * @return Parse
+     * @throws ValidateException
+     */
+    public function validateAudience(string $check): self
+    {
+        if (!$this->validate->audience($this->getAudience(), $check)) {
+            throw new ValidateException(
+                'Audience claim does not contain provided StringOrURI.',
+                2
+            );
         }
 
         return $this;
@@ -127,10 +151,10 @@ class Parse
     }
 
     /**
-     * Validate the JWT's signature. The provided signature taken from the JWT
-     * should match one newly generated from the JWT header and payload.
+     * Validate the JWT's signature. The signature taken from the JWT should
+     * match a new one generated from the JWT header and payload, and secret.
      *
-     * @throws Exception\ValidateException
+     * @throws ValidateException
      */
     private function validateSignature(): void
     {
@@ -190,10 +214,10 @@ class Parse
     }
 
     /**
-     * Decode the JWT payload and retireve the expiration claim. If it is not
-     * set throw an exception.
+     * Retrieve the expiration claim from the JWT.
      *
      * @return int
+     * @throws ValidateException
      */
     private function getExpiration(): int
     {
@@ -205,10 +229,10 @@ class Parse
     }
 
     /**
-     * Decode the JWT payload and retireve the not before claim. If it is not
-     * set throw an exception.
+     * Retrieve the not before claim from the JWT.
      *
      * @return int
+     * @throws ValidateException
      */
     private function getNotBefore(): int
     {
@@ -220,8 +244,22 @@ class Parse
     }
 
     /**
-     * Decode the JWT header string to json and then decode it to an
-     * associative array.
+     * Retrieve the audience claim from the JWT.
+     *
+     * @return string|array
+     * @throws ValidateException
+     */
+    private function getAudience()
+    {
+        if (isset($this->decodePayload()['aud'])) {
+            return $this->decodePayload()['aud'];
+        }
+
+        throw new ValidateException('Audience claim is not set.', 2);
+    }
+
+    /**
+     * Decode the JWT header string to an associative array.
      *
      * @return array
      */
@@ -233,8 +271,7 @@ class Parse
     }
 
     /**
-     * Decode the JWT payload string to json and then decode it to an
-     * associative array.
+     * Decode the JWT payload string to an associative array.
      *
      * @return array
      */
