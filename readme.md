@@ -429,20 +429,24 @@ npm install --save rs-jwt
 
 **Usage:**
 ```js
-import { RSJwt } from 'rs-jwt'
+import { parseJwt } from 'rs-jwt'
 
-const jwt = new RSJwt()
-
-const result = jwt.parse('json.web.token')
+const result = parseJwt('json.web.token')
 
 // Return the header claims as an object.
-result.getHeader()
+const header = result.getHeader()
+
+// Access the type claim.
+console.log(header.typ)
 
 // Return the payload claims as an object.
-result.getPayload()
+const payload = result.getPayload()
+
+// Access the expiry claim.
+console.log(payload.exp)
 ```
 
-For more information read the project [README](https://github.com/RobDWaller/rs-jwt/blob/master/README.md) or visit the [NPM Page](https://www.npmjs.com/package/rs-jwt).
+For more information see the project [README](https://github.com/RobDWaller/rs-jwt/blob/master/README.md) or visit the [NPM Page](https://www.npmjs.com/package/rs-jwt).
 
 ## License
 
