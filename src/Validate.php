@@ -86,4 +86,11 @@ class Validate
     {
         return hash_equals($signature, $comparison);
     }
+
+    public function algorithm(string $algorithm, array $additional): bool
+    {
+        $base = ["none", "HS256"];
+
+        return in_array($algorithm, $base);
+    }
 }

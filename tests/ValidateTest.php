@@ -159,4 +159,31 @@ class ValidateTest extends TestCase
 
         $this->assertFalse($validate->audience($audience, $check));
     }
+
+    public function testValidateAlgorithm()
+    {
+        $validate = new Validate();
+
+        $algorithm = "HS256";
+
+        $this->assertTrue($validate->algorithm($algorithm, []));
+    }
+
+    public function testValidateAlgorithmNone()
+    {
+        $validate = new Validate();
+
+        $algorithm = "none";
+
+        $this->assertTrue($validate->algorithm($algorithm, []));
+    }
+
+    public function testValidateAlgorithmFail()
+    {
+        $validate = new Validate();
+
+        $algorithm = "HB256";
+
+        $this->assertFalse($validate->algorithm($algorithm, []));
+    }
 }
