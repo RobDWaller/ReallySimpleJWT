@@ -91,6 +91,6 @@ class Validate
     {
         $base = ["none", "HS256"];
 
-        return in_array($algorithm, $base);
+        return in_array($algorithm, array_merge($base, $additional));
     }
 }
