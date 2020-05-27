@@ -801,7 +801,7 @@ class ParseTest extends TestCase
         $parse->validateAlgorithm();
     }
 
-    public function testGetAlgorithm()
+    public function testParseGetAlgorithm()
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -821,5 +821,27 @@ class ParseTest extends TestCase
         $result = $method->invoke($parse);
 
         $this->assertSame($result, "HS256");
+    }
+
+    public function testParseGetAlgorithmFail()
+    {
+        $token = new Jwt(
+            "ewogICJ0eXAiOiAiSldUIgp9.ewogICJleHAiOiAxMjM0NQp9.ewogICJ0eXAiOiAiSldUIgp9",
+            "Hello"
+        );
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'getAlgorithm');
+        $method->setAccessible(true);
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Algorithm claim is not set.');
+        $this->expectExceptionCode(13);
+        $method->invoke($parse);
     }
 }
