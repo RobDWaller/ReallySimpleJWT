@@ -763,4 +763,21 @@ class ParseTest extends TestCase
         $this->expectExceptionCode(2);
         $parse->validateAudience('https://google.co.uk');
     }
+
+    public function testParseValidateAlgorithm()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setAudience(['https://example.com', 'https://test.com'])
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $this->assertInstanceOf(Parse::class, $parse->validateAlgorithm());
+    }
 }

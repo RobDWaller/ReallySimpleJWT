@@ -134,6 +134,11 @@ class Parse
         return $this;
     }
 
+    public function validateAlgorithm(): self
+    {
+        return $this;
+    }
+
     /**
      * Generate the Parsed Value Object. This method should be called last
      * after the relevant validate methods have been called.
