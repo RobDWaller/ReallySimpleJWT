@@ -784,8 +784,8 @@ class ParseTest extends TestCase
     public function testParseValidateAlgorithmFail()
     {
         $token = new Jwt(
-            "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5".
-            "MDIyfQ.Brp7tDCUj3wlZtF6a15KW0A7wLJbnDLOFky03GY9vSdEYo-RlwFCIqpzFV0hHsH5_A7pA28yrRFPqyTSsumZfQ",
+            "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM" .
+            "5MDIyfQ.Brp7tDCUj3wlZtF6a15KW0A7wLJbnDLOFky03GY9vSdEYo-RlwFCIqpzFV0hHsH5_A7pA28yrRFPqyTSsumZfQ",
             "Hello"
         );
 

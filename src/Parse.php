@@ -273,7 +273,7 @@ class Parse
     /**
      * Retrieve the algorithm claim from the JWT.
      *
-     * @return string|array
+     * @return string
      * @throws ValidateException
      */
     private function getAlgorithm(): string
