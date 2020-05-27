@@ -780,4 +780,46 @@ class ParseTest extends TestCase
 
         $this->assertInstanceOf(Parse::class, $parse->validateAlgorithm());
     }
+
+    public function testParseValidateAlgorithmFail()
+    {
+        $token = new Jwt(
+            "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5".
+            "MDIyfQ.Brp7tDCUj3wlZtF6a15KW0A7wLJbnDLOFky03GY9vSdEYo-RlwFCIqpzFV0hHsH5_A7pA28yrRFPqyTSsumZfQ",
+            "Hello"
+        );
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Algorithm claim is not valid.');
+        $this->expectExceptionCode(12);
+        $parse->validateAlgorithm();
+    }
+
+    public function testGetAlgorithm()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setAudience(['https://example.com', 'https://test.com'])
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $method = new ReflectionMethod(Parse::class, 'getAlgorithm');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($parse);
+
+        $this->assertSame($result, "HS256");
+    }
 }

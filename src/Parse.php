@@ -136,6 +136,13 @@ class Parse
 
     public function validateAlgorithm(): self
     {
+        if (!$this->validate->algorithm($this->getAlgorithm(), [])) {
+            throw new ValidateException(
+                'Algorithm claim is not valid.',
+                12
+            );
+        }
+
         return $this;
     }
 
@@ -261,6 +268,21 @@ class Parse
         }
 
         throw new ValidateException('Audience claim is not set.', 2);
+    }
+
+    /**
+     * Retrieve the algorithm claim from the JWT.
+     *
+     * @return string|array
+     * @throws ValidateException
+     */
+    private function getAlgorithm(): string
+    {
+        if (isset($this->decodeHeader()['alg'])) {
+            return $this->decodeHeader()['alg'];
+        }
+
+        throw new ValidateException('Algorithm claim is not set.', 13);
     }
 
     /**
