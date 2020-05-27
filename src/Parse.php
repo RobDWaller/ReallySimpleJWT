@@ -255,7 +255,7 @@ class Parse
             return $this->decodePayload()['aud'];
         }
 
-        throw new ValidateException('Audience claim is not set.', 2);
+        throw new ValidateException('Audience claim is not set.', 11);
     }
 
     /**
