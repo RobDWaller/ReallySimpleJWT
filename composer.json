@@ -25,9 +25,13 @@
     },
     "autoload": {
         "psr-4": {
-            "ReallySimpleJWT\\": "src",
-            "Tests\\": "tests",
-            "Benchmarks\\": "benchmarks"
+            "ReallySimpleJWT\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "Benchmarks\\": "benchmarks/"
         }
     },
     "scripts" : {
