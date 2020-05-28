@@ -343,6 +343,7 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | 8    | Invalid payload claim.            | Payload claims must be key value pairs of the format string: mixed. |
 | 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$`` |
 | 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
+| 11   | Audience claim is not set.      | Attempt was made to validate an Audience claim which does not exist. |
 
 ## Token Security
 
