@@ -134,6 +134,10 @@ class Parse
         return $this;
     }
 
+    /**
+     * Validate the tokens alg claim is a valid digital signature or MAC
+     * algorithm. Value can also be "none". See RFC 7518 for more details.
+     */
     public function validateAlgorithm(): self
     {
         if (!$this->validate->algorithm($this->getAlgorithm(), [])) {

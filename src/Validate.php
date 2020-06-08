@@ -87,6 +87,11 @@ class Validate
         return hash_equals($signature, $comparison);
     }
 
+    /** 
+     * Check the alg claim is in the list of valid algorithms. These are the
+     * valid digital signatures, MAC algorithms or "none" as
+     * defined in RFC 7518.
+     */
     public function algorithm(string $algorithm, array $additional): bool
     {
         $base = ["none", "HS256"];
