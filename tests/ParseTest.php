@@ -686,7 +686,7 @@ class ParseTest extends TestCase
 
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Audience claim is not set.');
-        $this->expectExceptionCode(2);
+        $this->expectExceptionCode(11);
         $method->invoke($parse);
     }
 
