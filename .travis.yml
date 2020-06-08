@@ -5,7 +5,7 @@ php:
 - 7.4
 before_script:
 - composer validate --strict
-- travis_retry composer install --no-interaction --prefer-source --dev
+- travis_retry composer install --no-interaction --prefer-source
 script:
 - composer pipeline
 after_success:
