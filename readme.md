@@ -344,6 +344,8 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$`` |
 | 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
 | 11   | Audience claim is not set.      | Attempt was made to validate an Audience claim which does not exist. |
+| 12   | Algorithm claim is not valid.   | Algorithm should be a valid Digital Signature or MAC Algorithm, or none. See RFC 7518. |
+| 13   | Algorithm claim is not set.      | Attempt was made to validate an Algorithm claim which does not exist. |
 
 ## Token Security
 
