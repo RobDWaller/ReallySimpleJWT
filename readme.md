@@ -252,6 +252,7 @@ The `ReallySimpleJWT\Parse` class allows a developer to parse and validate a JSO
 - `validateExpiration()` confirms the token expiration claim (`exp`) has not expired.
 - `validateNotBefore()` confirms the token not before claim (`nbf`) has elapsed.
 - `validateAudience()` confirms the token audience claim (`aud`) matches what is expected.
+- `validateAlgorithm()` confirms the token algorithm claim (`alg`) matches what is expected and is valid (See: [RFC 7518](https://www.rfc-editor.org/rfc/rfc7518.html)).
 
 Each validation method will throw a `ReallySimpleJWT\Exception\ValidateException` if there is anything wrong with the supplied token.
 
