@@ -19,7 +19,7 @@ jobs:
         php-version: ${{ matrix.php-versions }}
         extensions: mbstring
         coverage: xdebug
-        
+
     - name: Run Tests
-        run: composer install --no-interaction --prefer-source
-        run: composer pipeline
+      - run: composer install --no-interaction --prefer-source
+      - run: composer pipeline
