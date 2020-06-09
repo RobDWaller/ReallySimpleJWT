@@ -1,0 +1,35 @@
+name: ci
+
+on: [push, pull_request, release]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['7.2', '7.3', '7.4']
+    name: PHP ${{ matrix.php-versions }} Test
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        extensions: mbstring
+        coverage: xdebug
+
+    - name: Validate Composer
+      run: composer validate --strict
+
+    - name: Install Composer Dependencies 
+      run: composer install --no-interaction --prefer-source
+    
+    - name: Run Tests
+      run: composer pipeline
+      env: 
+        STRYKER_DASHBOARD_API_KEY: lJAzrHHepD211fklc+gybHUpa+HaDOmUoENRsQZkjSF0iC2qQu3gQut4vphI/pDHqrEFat8sQacuy5brOaenbfboGhYEBwhJe4pYarSWUhZrwtroyJKGeM7HWbeB2JsjtHjsCdyQMP3fWv53KG84EcoZcEte/5HyabED+ksKg4VlSkhzPsxcnrStNooihL5zKxp+a1/HcrUVWY1TnbwREHlhK1NiaPBpH6aR90QNBD0M++JNEiQ4B/9kvYQJv1MxjIsC3RD8gJXdCIxDw5d9Qn+zLJ4oL9yGW86wP9x0WMEZaJ26yj5Qx9F2MBJ8fuptHqAbeaJGpvH8dTKoSwN7lZ9MO5ylN5yh7O5PL10dLHqXBUDRaxbd1Y0vzMoe3YHDck8+M7PvUXYveiVQGnT81/QOsbpsby7Wq05zWtYTTDMdhEf1Oafpu0GRynsCQ1NJ2uVvAegG+DQdvbAwmHooGNADMXwIKM3m+JQF2JQaFmplffIjWCJrAjdW7rlxaS3S/pQPYwoiBnD9l/qzu/bq+KNQpyrxplmaYS5N/O53/kfDt7Sn9OvyV+M/sZ8PZxoRKcoDr9OZltZ+Yo5O269xJ+Qif0q8pDSz96jknzEaUyNNQwKmaHfxU2j4V/lJT1R8e5ExeXM55kSIO5Y8g4DEqyi8A1SOv42cqvQUG3uUJzU=
+
+    - name: Code Coverage
+      run: bash <(curl -s https://codecov.io/bash)

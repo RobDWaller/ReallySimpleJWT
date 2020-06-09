@@ -135,6 +135,22 @@ class Parse
     }
 
     /**
+     * Validate the tokens alg claim is a valid digital signature or MAC
+     * algorithm. Value can also be "none". See RFC 7518 for more details.
+     */
+    public function validateAlgorithm(): self
+    {
+        if (!$this->validate->algorithm($this->getAlgorithm(), [])) {
+            throw new ValidateException(
+                'Algorithm claim is not valid.',
+                12
+            );
+        }
+
+        return $this;
+    }
+
+    /**
      * Generate the Parsed Value Object. This method should be called last
      * after the relevant validate methods have been called.
      *
@@ -256,6 +272,21 @@ class Parse
         }
 
         throw new ValidateException('Audience claim is not set.', 11);
+    }
+
+    /**
+     * Retrieve the algorithm claim from the JWT.
+     *
+     * @return string
+     * @throws ValidateException
+     */
+    private function getAlgorithm(): string
+    {
+        if (isset($this->decodeHeader()['alg'])) {
+            return $this->decodeHeader()['alg'];
+        }
+
+        throw new ValidateException('Algorithm claim is not set.', 13);
     }
 
     /**

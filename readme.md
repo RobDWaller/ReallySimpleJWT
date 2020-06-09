@@ -1,5 +1,5 @@
 # Really Simple JSON Web Tokens
-[![Build Status](https://travis-ci.org/RobDWaller/ReallySimpleJWT.svg?branch=master)](https://travis-ci.org/RobDWaller/ReallySimpleJWT) [![codecov](https://codecov.io/gh/RobDWaller/ReallySimpleJWT/branch/master/graph/badge.svg)](https://codecov.io/gh/RobDWaller/ReallySimpleJWT) [![Infection MSI](https://badge.stryker-mutator.io/github.com/RobDWaller/ReallySimpleJWT/master)](https://infection.github.io) [![StyleCI](https://styleci.io/repos/82379868/shield?branch=master)](https://styleci.io/repos/82379868) [![Latest Stable Version](https://poser.pugx.org/rbdwllr/reallysimplejwt/v/stable)](https://packagist.org/packages/rbdwllr/reallysimplejwt) ![PHP Version Support](https://img.shields.io/travis/php-v/RobDWaller/ReallySimpleJWT/master) [![Total Downloads](https://poser.pugx.org/rbdwllr/reallysimplejwt/downloads)](https://packagist.org/packages/rbdwllr/reallysimplejwt)
+[![Actions Status](https://github.com/robdwaller/reallysimplejwt/workflows/ci/badge.svg)](https://github.com/robdwaller/reallysimplejwt/actions) [![codecov](https://codecov.io/gh/RobDWaller/ReallySimpleJWT/branch/master/graph/badge.svg)](https://codecov.io/gh/RobDWaller/ReallySimpleJWT) [![Infection MSI](https://badge.stryker-mutator.io/github.com/RobDWaller/ReallySimpleJWT/master)](https://infection.github.io) [![StyleCI](https://styleci.io/repos/82379868/shield?branch=master)](https://styleci.io/repos/82379868) [![Latest Stable Version](https://poser.pugx.org/rbdwllr/reallysimplejwt/v/stable)](https://packagist.org/packages/rbdwllr/reallysimplejwt) ![PHP Version Support](https://img.shields.io/travis/php-v/RobDWaller/ReallySimpleJWT/master) [![Total Downloads](https://poser.pugx.org/rbdwllr/reallysimplejwt/downloads)](https://packagist.org/packages/rbdwllr/reallysimplejwt)
 
 A simple PHP library for creating JSON Web Tokens that uses HMAC SHA256 to sign signatures. For basic usage the library exposes a static interface to allow developers to create a token that stores a user identifier and expiration time.
 
@@ -252,6 +252,7 @@ The `ReallySimpleJWT\Parse` class allows a developer to parse and validate a JSO
 - `validateExpiration()` confirms the token expiration claim (`exp`) has not expired.
 - `validateNotBefore()` confirms the token not before claim (`nbf`) has elapsed.
 - `validateAudience()` confirms the token audience claim (`aud`) matches what is expected.
+- `validateAlgorithm()` confirms the token algorithm claim (`alg`) matches what is expected and is valid (See: [RFC 7518](https://www.rfc-editor.org/rfc/rfc7518.html)).
 
 Each validation method will throw a `ReallySimpleJWT\Exception\ValidateException` if there is anything wrong with the supplied token.
 
@@ -344,6 +345,8 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$`` |
 | 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
 | 11   | Audience claim is not set.      | Attempt was made to validate an Audience claim which does not exist. |
+| 12   | Algorithm claim is not valid.   | Algorithm should be a valid Digital Signature or MAC Algorithm, or none. See RFC 7518. |
+| 13   | Algorithm claim is not set.      | Attempt was made to validate an Algorithm claim which does not exist. |
 
 ## Token Security
 
