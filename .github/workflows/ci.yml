@@ -20,6 +20,8 @@ jobs:
         extensions: mbstring
         coverage: xdebug
 
+    - name: Install Composer Dependencies 
+      run: composer install --no-interaction --prefer-source
+    
     - name: Run Tests
-      - run: composer install --no-interaction --prefer-source
-      - run: composer pipeline
+      run: composer pipeline
