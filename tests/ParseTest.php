@@ -16,14 +16,14 @@ use ReflectionMethod;
 
 class ParseTest extends TestCase
 {
-    public function testParse()
+    public function testParse(): void
     {
         $parse = new Parse(new JWT('Hello', 'secret'), new Validate(), new Encode());
 
         $this->assertInstanceOf(Parse::class, $parse);
     }
 
-    public function testParseParse()
+    public function testParseParse(): void
     {
         $parse = new Parse(
             new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, '127.0.0.1'), 'foo1234He$$llo56'),
@@ -34,7 +34,7 @@ class ParseTest extends TestCase
         $this->assertInstanceOf(Parsed::class, $parse->parse());
     }
 
-    public function testParseIssuer()
+    public function testParseIssuer(): void
     {
         $parse = new Parse(
             new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56'),
@@ -47,7 +47,7 @@ class ParseTest extends TestCase
         $this->assertSame('localhost', $result->getPayload()['iss']);
     }
 
-    public function testParseSplitToken()
+    public function testParseSplitToken(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
@@ -69,7 +69,7 @@ class ParseTest extends TestCase
         $this->assertSame($result[2], 'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c');
     }
 
-    public function testParseGetPayload()
+    public function testParseGetPayload(): void
     {
         $token = new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56');
 
@@ -87,7 +87,7 @@ class ParseTest extends TestCase
         $this->assertSame(explode('.', $token->getToken())[1], $result);
     }
 
-    public function testParseGetHeader()
+    public function testParseGetHeader(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
@@ -109,7 +109,7 @@ class ParseTest extends TestCase
         $this->assertSame(explode('.', $token->getToken())[0], $result);
     }
 
-    public function testParseValidate()
+    public function testParseValidate(): void
     {
         $parse = new Parse(
             new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56'),
@@ -120,7 +120,7 @@ class ParseTest extends TestCase
         $this->assertInstanceOf(Parse::class, $parse->validate());
     }
 
-    public function testParseValidateInvalidStructure()
+    public function testParseValidateInvalidStructure(): void
     {
         $parse = new Parse(
             new Jwt('hello', 'foo1234He$$llo56'),
@@ -135,7 +135,7 @@ class ParseTest extends TestCase
         $parse->validate();
     }
 
-    public function testParseValidateBadTokenGoodStructure()
+    public function testParseValidateBadTokenGoodStructure(): void
     {
         $parse = new Parse(
             new Jwt('hello.hello.hello', 'foo1234He$$llo56'),
@@ -150,7 +150,7 @@ class ParseTest extends TestCase
         $parse->validate();
     }
 
-    public function testParseValidateInvalidSignature()
+    public function testParseValidateInvalidSignature(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
@@ -169,7 +169,7 @@ class ParseTest extends TestCase
         $parse->validate();
     }
 
-    public function testGetSignature()
+    public function testGetSignature(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
@@ -189,7 +189,7 @@ class ParseTest extends TestCase
         $this->assertSame('--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', $result);
     }
 
-    public function testParseValidateExpiration()
+    public function testParseValidateExpiration(): void
     {
         $parse = new Parse(
             new Jwt(Token::create(1, 'Hoo1234%&HePPo99', time() + 300, 'localhost'), 'Hoo1234%&HePPo99'),
@@ -200,7 +200,7 @@ class ParseTest extends TestCase
         $this->assertInstanceOf(Parse::class, $parse->validateExpiration());
     }
 
-    public function testParseValidateExpirationInvalid()
+    public function testParseValidateExpirationInvalid(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyMzkwMjJ9.' .
@@ -219,7 +219,7 @@ class ParseTest extends TestCase
         $parse->validateExpiration();
     }
 
-    public function testParseValidateExpirationInvalidTwo()
+    public function testParseValidateExpirationInvalidTwo(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
@@ -238,7 +238,7 @@ class ParseTest extends TestCase
         $parse->validateExpiration();
     }
 
-    public function testGetExpiration()
+    public function testGetExpiration(): void
     {
         $timestamp = time() + 300;
 
@@ -256,7 +256,7 @@ class ParseTest extends TestCase
         $this->assertSame($timestamp, $result);
     }
 
-    public function testGetNotBefore()
+    public function testGetNotBefore(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -280,7 +280,7 @@ class ParseTest extends TestCase
         $this->assertSame($time, $result);
     }
 
-    public function testParseValidateNotBefore()
+    public function testParseValidateNotBefore(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -297,7 +297,7 @@ class ParseTest extends TestCase
         $this->assertInstanceOf(Parse::class, $parse->validateNotBefore());
     }
 
-    public function testParseValidateNotBeforeInvalid()
+    public function testParseValidateNotBeforeInvalid(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -318,7 +318,7 @@ class ParseTest extends TestCase
         $parse->validateNotBefore();
     }
 
-    public function testParseValidateNotBeforeNotSet()
+    public function testParseValidateNotBeforeNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -339,7 +339,7 @@ class ParseTest extends TestCase
         $parse->validateNotBefore();
     }
 
-    public function testParseValidateExpirationNotSet()
+    public function testParseValidateExpirationNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -360,7 +360,7 @@ class ParseTest extends TestCase
         $parse->validateExpiration();
     }
 
-    public function testDecodePayload()
+    public function testDecodePayload(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -384,7 +384,7 @@ class ParseTest extends TestCase
         $this->assertSame($time, $result['nbf']);
     }
 
-    public function testDecodeHeader()
+    public function testDecodeHeader(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -408,7 +408,7 @@ class ParseTest extends TestCase
         $this->assertSame('JWT', $result['typ']);
     }
 
-    public function testValidateSignature()
+    public function testValidateSignature(): void
     {
         $parse = new Parse(
             new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56'),
@@ -422,7 +422,7 @@ class ParseTest extends TestCase
         $this->assertNull($method->invoke($parse));
     }
 
-    public function testValidateSignatureBadTokenGoodStructure()
+    public function testValidateSignatureBadTokenGoodStructure(): void
     {
         $parse = new Parse(
             new Jwt('hello.hello.hello', 'foo1234He$$llo56'),
@@ -440,7 +440,7 @@ class ParseTest extends TestCase
         $method->invoke($parse);
     }
 
-    public function testValidateSignatureEmptyToken()
+    public function testValidateSignatureEmptyToken(): void
     {
         $parse = new Parse(
             new Jwt('', 'foo1234He$$llo56'),
@@ -458,7 +458,7 @@ class ParseTest extends TestCase
         $method->invoke($parse);
     }
 
-    public function testValidateSignatureBadTokenStructure()
+    public function testValidateSignatureBadTokenStructure(): void
     {
         $parse = new Parse(
             new Jwt('car', 'foo1234He$$llo56'),
@@ -476,7 +476,7 @@ class ParseTest extends TestCase
         $method->invoke($parse);
     }
 
-    public function testValidateSignatureInvalidSignature()
+    public function testValidateSignatureInvalidSignature(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
@@ -498,7 +498,7 @@ class ParseTest extends TestCase
         $method->invoke($parse);
     }
 
-    public function testParseRandomTokenNoSecret()
+    public function testParseRandomTokenNoSecret(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkphbWVzIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
@@ -520,7 +520,7 @@ class ParseTest extends TestCase
         $this->assertSame($parsed->getIssuedAt(), 1516239022);
     }
 
-    public function testParseRandomTokenInvalidSecret()
+    public function testParseRandomTokenInvalidSecret(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJqdGkiOiJSVzg0LTIwMTkwMTA5IiwibmFtZSI6IlJvYiIsImlhdCI6MTUxNjIzOTAyMn0.' .
@@ -542,7 +542,7 @@ class ParseTest extends TestCase
         $this->assertSame($parsed->getIssuedAt(), 1516239022);
     }
 
-    public function testParseRandomTokenValidSecret()
+    public function testParseRandomTokenValidSecret(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
@@ -564,7 +564,7 @@ class ParseTest extends TestCase
         $this->assertSame($parsed->getIssuedAt(), 1516239022);
     }
 
-    public function testParseRandomTokenExpirationException()
+    public function testParseRandomTokenExpirationException(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJleHAiOjE1MTYyMzkwMjJ9.' .
@@ -584,7 +584,7 @@ class ParseTest extends TestCase
             ->validateExpiration();
     }
 
-    public function testParseRandomTokenExpirationNotSetException()
+    public function testParseRandomTokenExpirationNotSetException(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
@@ -604,7 +604,7 @@ class ParseTest extends TestCase
             ->validateExpiration();
     }
 
-    public function testParseRandomTokenNotBeforeNotSetException()
+    public function testParseRandomTokenNotBeforeNotSetException(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
@@ -624,7 +624,7 @@ class ParseTest extends TestCase
             ->validateNotBefore();
     }
 
-    public function testGetAudience()
+    public function testGetAudience(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -646,7 +646,7 @@ class ParseTest extends TestCase
         $this->assertSame($result, 'https://example.com');
     }
 
-    public function testGetAudienceArray()
+    public function testGetAudienceArray(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -668,7 +668,7 @@ class ParseTest extends TestCase
         $this->assertSame($result, ['https://example.com', 'https://test.com']);
     }
 
-    public function testGetAudienceFail()
+    public function testGetAudienceFail(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -690,7 +690,7 @@ class ParseTest extends TestCase
         $method->invoke($parse);
     }
 
-    public function testParseValidateAudience()
+    public function testParseValidateAudience(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -707,7 +707,7 @@ class ParseTest extends TestCase
         $this->assertInstanceOf(Parse::class, $parse->validateAudience('https://example.com'));
     }
 
-    public function testParseValidateAudienceArray()
+    public function testParseValidateAudienceArray(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -724,7 +724,7 @@ class ParseTest extends TestCase
         $this->assertInstanceOf(Parse::class, $parse->validateAudience('https://test.com'));
     }
 
-    public function testParseValidateAudienceFail()
+    public function testParseValidateAudienceFail(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -744,7 +744,7 @@ class ParseTest extends TestCase
         $parse->validateAudience('https://example.co.uk');
     }
 
-    public function testParseValidateAudienceArrayFail()
+    public function testParseValidateAudienceArrayFail(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -764,7 +764,7 @@ class ParseTest extends TestCase
         $parse->validateAudience('https://google.co.uk');
     }
 
-    public function testParseValidateAlgorithm()
+    public function testParseValidateAlgorithm(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -781,7 +781,7 @@ class ParseTest extends TestCase
         $this->assertInstanceOf(Parse::class, $parse->validateAlgorithm());
     }
 
-    public function testParseValidateAlgorithmFail()
+    public function testParseValidateAlgorithmFail(): void
     {
         $token = new Jwt(
             "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM" .
@@ -801,7 +801,7 @@ class ParseTest extends TestCase
         $parse->validateAlgorithm();
     }
 
-    public function testParseGetAlgorithm()
+    public function testParseGetAlgorithm(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -823,7 +823,7 @@ class ParseTest extends TestCase
         $this->assertSame($result, "HS256");
     }
 
-    public function testParseGetAlgorithmFail()
+    public function testParseGetAlgorithmFail(): void
     {
         $token = new Jwt(
             "ewogICJ0eXAiOiAiSldUIgp9.ewogICJleHAiOiAxMjM0NQp9.ewogICJ0eXAiOiAiSldUIgp9",

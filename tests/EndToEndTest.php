@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class EndToEndTest extends TestCase
 {
-    public function testEndToEnd()
+    public function testEndToEnd(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -57,7 +57,7 @@ class EndToEndTest extends TestCase
         $this->assertSame($parsed->getSignature(), explode('.', $token->getToken())[2]);
     }
 
-    public function testEndToEndMultiToken()
+    public function testEndToEndMultiToken(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -147,7 +147,7 @@ class EndToEndTest extends TestCase
         $this->assertSame($parsed1->getSignature(), explode('.', $token1->getToken())[2]);
     }
 
-    public function testEndToEndMultiTokenWithReset()
+    public function testEndToEndMultiTokenWithReset(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -236,7 +236,7 @@ class EndToEndTest extends TestCase
         $this->assertSame($parsed1->getSignature(), explode('.', $token1->getToken())[2]);
     }
 
-    public function testEndToEndMultiTokenRemovedFields()
+    public function testEndToEndMultiTokenRemovedFields(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -322,7 +322,7 @@ class EndToEndTest extends TestCase
         $this->assertSame($parsed1->getSignature(), explode('.', $token1->getToken())[2]);
     }
 
-    public function testEndToEndMultiTokenWithResetRemoveFields()
+    public function testEndToEndMultiTokenWithResetRemoveFields(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -408,7 +408,7 @@ class EndToEndTest extends TestCase
         $this->assertSame($parsed1->getSignature(), explode('.', $token1->getToken())[2]);
     }
 
-    public function testEndToEndBadExpiration()
+    public function testEndToEndBadExpiration(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -429,7 +429,7 @@ class EndToEndTest extends TestCase
             ->setExpiration($expiration);
     }
 
-    public function testEndToEndBadNotBefore()
+    public function testEndToEndBadNotBefore(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -460,7 +460,7 @@ class EndToEndTest extends TestCase
             ->validateNotBefore();
     }
 
-    public function testEndToEndBadSignature()
+    public function testEndToEndBadSignature(): void
     {
         $token = 'eyJjdHkiOiJKV1QiLCJpbmZvIjoiSGVsbG8gV29ybGQiLCJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJpc3MiOiJsb2NhbGhvc3QiLCJzdWIiOiJ1c2VycyIsImF1ZCI6Imh0dHBzOi8vZ29vZ2xlLmNvbSIsImV4cCI6MTU0N' .

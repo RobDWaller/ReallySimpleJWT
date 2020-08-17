@@ -9,14 +9,14 @@ use ReallySimpleJWT\Token;
 
 class ValidateTest extends TestCase
 {
-    public function testValidate()
+    public function testValidate(): void
     {
         $validate = new Validate();
 
         $this->assertInstanceOf(Validate::class, $validate);
     }
 
-    public function testValidateStructure()
+    public function testValidateStructure(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvZSBCbG9ncyIsImlhdCI6MTUxNjIzOTAyMn0.' .
@@ -27,7 +27,7 @@ class ValidateTest extends TestCase
         $this->assertTrue($validate->structure($token));
     }
 
-    public function testValidateStructureWithRSJWT()
+    public function testValidateStructureWithRSJWT(): void
     {
         $token = Token::create(1, 'foo1234He$$llo56', time() + 300, '127.0.0.1');
 
@@ -36,28 +36,28 @@ class ValidateTest extends TestCase
         $this->assertTrue($validate->structure($token));
     }
 
-    public function testValidateStructureInvalid()
+    public function testValidateStructureInvalid(): void
     {
         $validate = new Validate();
 
         $this->assertFalse($validate->structure('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'));
     }
 
-    public function testValidateExpiration()
+    public function testValidateExpiration(): void
     {
         $validate = new Validate();
 
         $this->assertTrue($validate->expiration(time() + 10));
     }
 
-    public function testValidateExpirationOld()
+    public function testValidateExpirationOld(): void
     {
         $validate = new Validate();
 
         $this->assertFalse($validate->expiration(time() - 10));
     }
 
-    public function testValidateSignature()
+    public function testValidateSignature(): void
     {
         $validate = new Validate();
         $encode = new Encode();
@@ -70,7 +70,7 @@ class ValidateTest extends TestCase
         $this->assertTrue($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }
 
-    public function testValidateSignatureInvalid()
+    public function testValidateSignatureInvalid(): void
     {
         $validate = new Validate();
         $encode = new Encode();
@@ -83,7 +83,7 @@ class ValidateTest extends TestCase
         $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hVZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }
 
-    public function testValidateSignatureInvalidTwo()
+    public function testValidateSignatureInvalidTwo(): void
     {
         $validate = new Validate();
         $encode = new Encode();
@@ -96,21 +96,21 @@ class ValidateTest extends TestCase
         $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
     }
 
-    public function testValidateNotBefore()
+    public function testValidateNotBefore(): void
     {
         $validate = new Validate();
 
         $this->assertTrue($validate->notBefore(time() - 10));
     }
 
-    public function testValidateNotFalse()
+    public function testValidateNotFalse(): void
     {
         $validate = new Validate();
 
         $this->assertFalse($validate->notBefore(time() + 10));
     }
 
-    public function testValidateAudience()
+    public function testValidateAudience(): void
     {
         $validate = new Validate();
 
@@ -120,7 +120,7 @@ class ValidateTest extends TestCase
         $this->assertTrue($validate->audience($audience, $check));
     }
 
-    public function testValidateAudienceFalse()
+    public function testValidateAudienceFalse(): void
     {
         $validate = new Validate();
 
@@ -130,7 +130,7 @@ class ValidateTest extends TestCase
         $this->assertFalse($validate->audience($audience, $check));
     }
 
-    public function testValidateAudienceArray()
+    public function testValidateAudienceArray(): void
     {
         $validate = new Validate();
 
@@ -140,7 +140,7 @@ class ValidateTest extends TestCase
         $this->assertTrue($validate->audience($audience, $check));
     }
 
-    public function testValidateAudienceArrayFalse()
+    public function testValidateAudienceArrayFalse(): void
     {
         $validate = new Validate();
 
@@ -150,7 +150,7 @@ class ValidateTest extends TestCase
         $this->assertFalse($validate->audience($audience, $check));
     }
 
-    public function testValidateAudienceIntFalse()
+    public function testValidateAudienceIntFalse(): void
     {
         $validate = new Validate();
 
@@ -160,7 +160,7 @@ class ValidateTest extends TestCase
         $this->assertFalse($validate->audience($audience, $check));
     }
 
-    public function testValidateAlgorithm()
+    public function testValidateAlgorithm(): void
     {
         $validate = new Validate();
 
@@ -169,7 +169,7 @@ class ValidateTest extends TestCase
         $this->assertTrue($validate->algorithm($algorithm, []));
     }
 
-    public function testValidateAlgorithmNone()
+    public function testValidateAlgorithmNone(): void
     {
         $validate = new Validate();
 
@@ -178,7 +178,7 @@ class ValidateTest extends TestCase
         $this->assertTrue($validate->algorithm($algorithm, []));
     }
 
-    public function testValidateAlgorithmFail()
+    public function testValidateAlgorithmFail(): void
     {
         $validate = new Validate();
 
@@ -187,7 +187,7 @@ class ValidateTest extends TestCase
         $this->assertFalse($validate->algorithm($algorithm, []));
     }
 
-    public function testValidateAlgorithmCustom()
+    public function testValidateAlgorithmCustom(): void
     {
         $validate = new Validate();
 
@@ -196,7 +196,7 @@ class ValidateTest extends TestCase
         $this->assertTrue($validate->algorithm($algorithm, ["HS384"]));
     }
 
-    public function testValidateAlgorithmCustomFail()
+    public function testValidateAlgorithmCustomFail(): void
     {
         $validate = new Validate();
 
@@ -205,7 +205,7 @@ class ValidateTest extends TestCase
         $this->assertFalse($validate->algorithm($algorithm, ["HS384"]));
     }
 
-    public function testValidateAlgorithmCustomStandard()
+    public function testValidateAlgorithmCustomStandard(): void
     {
         $validate = new Validate();
 

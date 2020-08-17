@@ -8,7 +8,7 @@ use ReallySimpleJWT\Interfaces\Secret as SecretInterface;
 
 class SecretTest extends TestCase
 {
-    public function testSecret()
+    public function testSecret(): void
     {
         $secret = new Secret();
 
@@ -16,56 +16,56 @@ class SecretTest extends TestCase
         $this->assertInstanceOf(SecretInterface::class, $secret);
     }
 
-    public function testValidateSecret()
+    public function testValidateSecret(): void
     {
         $secret = new Secret();
 
         $this->assertTrue($secret->validate('Hello123$$Abc!!4538'));
     }
 
-    public function testValidateSecretAllSpecialCharacters()
+    public function testValidateSecretAllSpecialCharacters(): void
     {
         $secret = new Secret();
 
         $this->assertTrue($secret->validate('Hello123*&!@%^#$4538'));
     }
 
-    public function testValidateSecretOtherSpecialCharacters()
+    public function testValidateSecretOtherSpecialCharacters(): void
     {
         $secret = new Secret();
 
         $this->assertTrue($secret->validate('Hello123*&£~!@%^#$4538'));
     }
 
-    public function testValidateSecretInvalidLength()
+    public function testValidateSecretInvalidLength(): void
     {
         $secret = new Secret();
 
         $this->assertFalse($secret->validate('hello'));
     }
 
-    public function testValidateSecretInvalidNumbers()
+    public function testValidateSecretInvalidNumbers(): void
     {
         $secret = new Secret();
 
         $this->assertFalse($secret->validate('helloworldfoobar'));
     }
 
-    public function testValidateSecretInvalidUppercase()
+    public function testValidateSecretInvalidUppercase(): void
     {
         $secret = new Secret();
 
         $this->assertFalse($secret->validate('helloworldfoobar123'));
     }
 
-    public function testValidateSecretInvalidLowercase()
+    public function testValidateSecretInvalidLowercase(): void
     {
         $secret = new Secret();
 
         $this->assertFalse($secret->validate('HELLOWORLDFOOBAR123'));
     }
 
-    public function testValidateSecretSpecialCharacters()
+    public function testValidateSecretSpecialCharacters(): void
     {
         $secret = new Secret();
 

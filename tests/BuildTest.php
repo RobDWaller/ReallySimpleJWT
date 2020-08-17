@@ -14,21 +14,21 @@ use ReflectionMethod;
 
 class BuildTest extends TestCase
 {
-    public function testBuild()
+    public function testBuild(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $this->assertInstanceOf(Build::class, $build);
     }
 
-    public function testBuildSetSecret()
+    public function testBuildSetSecret(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $this->assertInstanceOf(Build::class, $build->setSecret('Hello123$$Abc!!4538'));
     }
 
-    public function testBuildSetSecretInvalid()
+    public function testBuildSetSecretInvalid(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -38,14 +38,14 @@ class BuildTest extends TestCase
         $this->assertInstanceOf(Build::class, $build->setSecret('Hello'));
     }
 
-    public function testSetExpiration()
+    public function testSetExpiration(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $this->assertInstanceOf(Build::class, $build->setExpiration(time() + 300));
     }
 
-    public function testSetExpirationInvalid()
+    public function testSetExpirationInvalid(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -55,7 +55,7 @@ class BuildTest extends TestCase
         $this->assertInstanceOf(Build::class, $build->setExpiration(time() - 300));
     }
 
-    public function testSetExpirationCheckPayload()
+    public function testSetExpirationCheckPayload(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -66,7 +66,7 @@ class BuildTest extends TestCase
         $this->assertSame($build->getPayload()['exp'], $timestamp);
     }
 
-    public function testGetPayload()
+    public function testGetPayload(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -75,14 +75,14 @@ class BuildTest extends TestCase
         $this->assertArrayHasKey('exp', $build->getPayload());
     }
 
-    public function testSetIssuer()
+    public function testSetIssuer(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $this->assertInstanceOf(Build::class, $build->setIssuer('127.0.0.1'));
     }
 
-    public function testSetIssuerCheckPayload()
+    public function testSetIssuerCheckPayload(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -91,14 +91,14 @@ class BuildTest extends TestCase
         $this->assertSame($build->getPayload()['iss'], '127.0.0.1');
     }
 
-    public function testSetPrivateClaim()
+    public function testSetPrivateClaim(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
         $this->assertInstanceOf(Build::class, $build->setPayloadClaim('user_id', 1));
     }
 
-    public function testSetPrivateClaimCheckPayload()
+    public function testSetPrivateClaimCheckPayload(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -107,7 +107,7 @@ class BuildTest extends TestCase
         $this->assertSame($build->getPayload()['user_id'], 1);
     }
 
-    public function testBuildMethod()
+    public function testBuildMethod(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -120,7 +120,7 @@ class BuildTest extends TestCase
         $this->assertInstanceOf(Jwt::class, $token);
     }
 
-    public function testBuildMethodCheckJwt()
+    public function testBuildMethodCheckJwt(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -134,7 +134,7 @@ class BuildTest extends TestCase
         $this->assertRegExp('/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/', $token->getToken());
     }
 
-    public function testBuildMethodParse()
+    public function testBuildMethodParse(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -153,7 +153,7 @@ class BuildTest extends TestCase
         $this->assertSame($parsed->getPayload()['user_id'], 3);
     }
 
-    public function testGetHeader()
+    public function testGetHeader(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -163,7 +163,7 @@ class BuildTest extends TestCase
         $this->assertSame('HS256', $result['alg']);
     }
 
-    public function testGetHeaderSetContentType()
+    public function testGetHeaderSetContentType(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -174,7 +174,7 @@ class BuildTest extends TestCase
         $this->assertSame('JWT', $result['cty']);
     }
 
-    public function testTwoTokenGeneration()
+    public function testTwoTokenGeneration(): void
     {
         $build1 = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -195,7 +195,7 @@ class BuildTest extends TestCase
         $this->assertNotSame($token1->getToken(), $token2->getToken());
     }
 
-    public function testTwoTokenGenerationAndParse()
+    public function testTwoTokenGenerationAndParse(): void
     {
         $build1 = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -238,7 +238,7 @@ class BuildTest extends TestCase
         $this->assertSame($parsed2->getPayload()['iss'], 'https://facebook.com');
     }
 
-    public function testResetMethod()
+    public function testResetMethod(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -280,7 +280,7 @@ class BuildTest extends TestCase
         $this->assertSame($parsed2->getPayload()['iss'], 'https://facebook.com');
     }
 
-    public function testGetSignature()
+    public function testGetSignature(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -297,7 +297,7 @@ class BuildTest extends TestCase
         $this->assertIsString($result);
     }
 
-    public function testGetSignatureOddSpecialCharacters()
+    public function testGetSignatureOddSpecialCharacters(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -314,7 +314,7 @@ class BuildTest extends TestCase
         $this->assertIsString($result);
     }
 
-    public function testGetSignatureNoSecret()
+    public function testGetSignatureNoSecret(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -331,7 +331,7 @@ class BuildTest extends TestCase
         $result = $method->invoke($build);
     }
 
-    public function testSetHeaderClaim()
+    public function testSetHeaderClaim(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -341,7 +341,7 @@ class BuildTest extends TestCase
         $this->assertSame($result['enc'], 'A128CBC-HS256');
     }
 
-    public function testSetContentType()
+    public function testSetContentType(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -351,7 +351,7 @@ class BuildTest extends TestCase
         $this->assertSame($result['cty'], 'JWT');
     }
 
-    public function testSetSubject()
+    public function testSetSubject(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -361,7 +361,7 @@ class BuildTest extends TestCase
         $this->assertSame($result['sub'], 'Johnson');
     }
 
-    public function testSetAudienceString()
+    public function testSetAudienceString(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -371,7 +371,7 @@ class BuildTest extends TestCase
         $this->assertSame($result['aud'], 'Chris');
     }
 
-    public function testSetAudienceArray()
+    public function testSetAudienceArray(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -382,7 +382,7 @@ class BuildTest extends TestCase
         $this->assertSame($result['aud'][1], 'Sarah');
     }
 
-    public function testSetAudienceIntFail()
+    public function testSetAudienceIntFail(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -392,7 +392,7 @@ class BuildTest extends TestCase
         $build->setAudience(123);
     }
 
-    public function testSetNotBefore()
+    public function testSetNotBefore(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -404,7 +404,7 @@ class BuildTest extends TestCase
         $this->assertSame($result['nbf'], $time);
     }
 
-    public function testIssuedAt()
+    public function testIssuedAt(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -416,7 +416,7 @@ class BuildTest extends TestCase
         $this->assertSame($result['iat'], $time);
     }
 
-    public function testSetJwtId()
+    public function testSetJwtId(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -426,7 +426,7 @@ class BuildTest extends TestCase
         $this->assertSame($result['jti'], 'helLo123');
     }
 
-    public function testImmediateBuild()
+    public function testImmediateBuild(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 

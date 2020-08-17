@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class TokenTest extends TestCase
 {
-    public function testCreateToken()
+    public function testCreateToken(): void
     {
         $token = Token::create(
             1,
@@ -20,7 +20,7 @@ class TokenTest extends TestCase
         $this->assertNotEmpty($token);
     }
 
-    public function testValidateToken()
+    public function testValidateToken(): void
     {
         $token = Token::create(
             'abdY',
@@ -32,7 +32,7 @@ class TokenTest extends TestCase
         $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    public function testCustomPayload()
+    public function testCustomPayload(): void
     {
         $token = Token::customPayload([
             'iat' => time(),
@@ -44,7 +44,7 @@ class TokenTest extends TestCase
         $this->assertNotEmpty($token);
     }
 
-    public function testValidateCustomPayload()
+    public function testValidateCustomPayload(): void
     {
         $token = Token::customPayload([
             'iat' => time(),
@@ -56,7 +56,7 @@ class TokenTest extends TestCase
         $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    public function testValidateCustomPayloadWithoutExpiration()
+    public function testValidateCustomPayloadWithoutExpiration(): void
     {
         $token = Token::customPayload([
             'iat' => time(),
@@ -67,7 +67,7 @@ class TokenTest extends TestCase
         $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    public function testValidateCustomPayloadBadStructure()
+    public function testValidateCustomPayloadBadStructure(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
             'eyJpYXQiOjE1NjUzNDYyNDcsInVpZCI6MSwiaXNzIjoibG9jYWxob3N0In0';
@@ -75,7 +75,7 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    public function testValidateCustomPayloadBadSignature()
+    public function testValidateCustomPayloadBadSignature(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
             'eyJpYXQiOjE1NjUzNDYyNDcsInVpZCI6MSwiaXNzIjoibG9jYWxob3N0In0.' .
@@ -84,7 +84,7 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    public function testValidateCustomPayloadExpired()
+    public function testValidateCustomPayloadExpired(): void
     {
         $token = Token::customPayload([
             'iat' => time(),
@@ -96,7 +96,7 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    public function testValidateCustomPayloadWithNotBefore()
+    public function testValidateCustomPayloadWithNotBefore(): void
     {
         $token = Token::customPayload([
             'iat' => time(),
@@ -109,7 +109,7 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    public function testValidateCustomPayloadWithBadNotBeforeNoExpiration()
+    public function testValidateCustomPayloadWithBadNotBeforeNoExpiration(): void
     {
         $token = Token::customPayload([
             'iat' => time(),
@@ -121,7 +121,7 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    public function testCustomPayloadBadArray()
+    public function testCustomPayloadBadArray(): void
     {
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Invalid payload claim.');
@@ -135,17 +135,17 @@ class TokenTest extends TestCase
         ], 'Hello&MikeFooBar123');
     }
 
-    public function testBuilder()
+    public function testBuilder(): void
     {
         $this->assertInstanceOf('ReallySimpleJWT\Build', Token::builder());
     }
 
-    public function testValidator()
+    public function testValidator(): void
     {
         $this->assertInstanceOf('ReallySimpleJWT\Parse', Token::parser('Hello', '1234'));
     }
 
-    public function testGetPayload()
+    public function testGetPayload(): void
     {
         $token = Token::create(
             'abdY',
@@ -157,7 +157,7 @@ class TokenTest extends TestCase
         $this->assertSame('abdY', Token::getPayload($token, 'Hello*JamesFooBar$!3')['user_id']);
     }
 
-    public function testGetHeader()
+    public function testGetHeader(): void
     {
         $token = Token::create(
             'abdY',
@@ -169,12 +169,12 @@ class TokenTest extends TestCase
         $this->assertSame('JWT', Token::getHeader($token, 'Hello*JamesFooBar$!3')['typ']);
     }
 
-    public function testValidateTokenFail()
+    public function testValidateTokenFail(): void
     {
         $this->assertFalse(Token::validate('World', 'FooBar'));
     }
 
-    public function testGetPayloadFail()
+    public function testGetPayloadFail(): void
     {
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Token is invalid.');

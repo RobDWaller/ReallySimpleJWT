@@ -8,28 +8,28 @@ use ReflectionMethod;
 
 class EncodeTest extends TestCase
 {
-    public function testEncode()
+    public function testEncode(): void
     {
         $encode = new Encode();
 
         $this->assertInstanceOf(Encode::class, $encode);
     }
 
-    public function testEncodeMethod()
+    public function testEncodeMethod(): void
     {
         $encode = new Encode();
 
         $this->assertRegExp('/^[a-zA-Z0-9\-\_\=]+$/', $encode->encode('world'));
     }
 
-    public function testEncodeMethodIsBase64Url()
+    public function testEncodeMethodIsBase64Url(): void
     {
         $encode = new Encode();
 
         $this->assertRegExp('/^[a-zA-Z0-9\-\_\=]+$/', $encode->encode('crayon+/='));
     }
 
-    public function testEncodeMethodHasEncoded()
+    public function testEncodeMethodHasEncoded(): void
     {
         $encode = new Encode();
 
@@ -38,7 +38,7 @@ class EncodeTest extends TestCase
         $this->assertNotSame('world', $result);
     }
 
-    public function testEncodeExact()
+    public function testEncodeExact(): void
     {
         $encode = new Encode();
 
@@ -47,7 +47,7 @@ class EncodeTest extends TestCase
         $this->assertSame('ISLCoyQlXiYqKCkxMjM1Xy0rPXtQT3B9W106O0BhYkV-Iyw-PC4_L3xcwqw', $result);
     }
 
-    public function testEncodeExactTwo()
+    public function testEncodeExactTwo(): void
     {
         $encode = new Encode();
 
@@ -56,7 +56,7 @@ class EncodeTest extends TestCase
         $this->assertSame('SGVsbG8gV29ybGQ', $result);
     }
 
-    public function testToBase64Url()
+    public function testToBase64Url(): void
     {
         $encode = new Encode();
 
@@ -68,7 +68,7 @@ class EncodeTest extends TestCase
         $this->assertSame('hello-_', $result);
     }
 
-    public function testToBase64UrlTwo()
+    public function testToBase64UrlTwo(): void
     {
         $encode = new Encode();
 
@@ -80,7 +80,7 @@ class EncodeTest extends TestCase
         $this->assertSame('_Wor-_12-_', $result);
     }
 
-    public function testSignature()
+    public function testSignature(): void
     {
         $encode = new Encode();
 
@@ -89,7 +89,7 @@ class EncodeTest extends TestCase
         $this->assertRegExp('/^[a-zA-Z0-9\-\_\=]+$/', $result);
     }
 
-    public function testSignatureDoesNotEqualHello()
+    public function testSignatureDoesNotEqualHello(): void
     {
         $encode = new Encode();
 
@@ -98,7 +98,7 @@ class EncodeTest extends TestCase
         $this->assertNotSame('Hello', $result);
     }
 
-    public function testHash()
+    public function testHash(): void
     {
         $encode = new Encode();
 
@@ -110,14 +110,14 @@ class EncodeTest extends TestCase
         $this->assertNotSame('hello', $result);
     }
 
-    public function testGetAlgorithm()
+    public function testGetAlgorithm(): void
     {
         $encode = new Encode();
 
         $this->assertSame('HS256', $encode->getAlgorithm());
     }
 
-    public function testGetHash()
+    public function testGetHash(): void
     {
         $encode = new Encode();
 
@@ -129,28 +129,28 @@ class EncodeTest extends TestCase
         $this->assertSame('sha256', $result);
     }
 
-    public function testDecode()
+    public function testDecode(): void
     {
         $encode = new Encode();
 
         $this->assertSame('Hello World', $encode->decode('SGVsbG8gV29ybGQ='));
     }
 
-    public function testDecodeFooBar()
+    public function testDecodeFooBar(): void
     {
         $encode = new Encode();
 
         $this->assertSame('Foo Bar', $encode->decode('Rm9vIEJhcg=='));
     }
 
-    public function testDecodeFooBarTwo()
+    public function testDecodeFooBarTwo(): void
     {
         $encode = new Encode();
 
         $this->assertSame('Foo Bar', $encode->decode('Rm9vIEJhcg'));
     }
 
-    public function testDecodeSpecialCharacters()
+    public function testDecodeSpecialCharacters(): void
     {
         $encode = new Encode();
 
@@ -160,7 +160,7 @@ class EncodeTest extends TestCase
         );
     }
 
-    public function testDecodeComplexString()
+    public function testDecodeComplexString(): void
     {
         $encode = new Encode();
 
@@ -170,7 +170,7 @@ class EncodeTest extends TestCase
         );
     }
 
-    public function testToBase64()
+    public function testToBase64(): void
     {
         $encode = new Encode();
 
@@ -182,7 +182,7 @@ class EncodeTest extends TestCase
         $this->assertSame('QFDvv71ZLO+/ve+/vVF777', $result);
     }
 
-    public function testAddPadding()
+    public function testAddPadding(): void
     {
         $encode = new Encode();
 

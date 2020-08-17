@@ -13,7 +13,7 @@ use ReallySimpleJWT\Secret;
 
 class ParsedTest extends TestCase
 {
-    public function testParsed()
+    public function testParsed(): void
     {
         $parsed = new Parsed(
             new Jwt(
@@ -28,7 +28,7 @@ class ParsedTest extends TestCase
         $this->assertInstanceOf(Parsed::class, $parsed);
     }
 
-    public function testParsedGetJWT()
+    public function testParsedGetJWT(): void
     {
         $parsed = new Parsed(
             new Jwt(
@@ -43,7 +43,7 @@ class ParsedTest extends TestCase
         $this->assertInstanceOf(Jwt::class, $parsed->getJwt());
     }
 
-    public function testParsedGetHeader()
+    public function testParsedGetHeader(): void
     {
         $parsed = new Parsed(
             new Jwt(
@@ -58,7 +58,7 @@ class ParsedTest extends TestCase
         $this->assertSame('JWT', $parsed->getHeader()['typ']);
     }
 
-    public function testParsedGetPayload()
+    public function testParsedGetPayload(): void
     {
         $parsed = new Parsed(
             new Jwt(
@@ -73,7 +73,7 @@ class ParsedTest extends TestCase
         $this->assertSame('127.0.0.1', $parsed->getPayload()['iss']);
     }
 
-    public function testParsedGetSignature()
+    public function testParsedGetSignature(): void
     {
         $parsed = new Parsed(
             new Jwt(
@@ -88,7 +88,7 @@ class ParsedTest extends TestCase
         $this->assertSame('hello', $parsed->getSignature());
     }
 
-    public function testGetIssuer()
+    public function testGetIssuer(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -104,7 +104,7 @@ class ParsedTest extends TestCase
         $this->assertSame('localhost', $parsed->getIssuer());
     }
 
-    public function testGetIssuerNotSet()
+    public function testGetIssuerNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -120,7 +120,7 @@ class ParsedTest extends TestCase
         $this->assertSame('', $parsed->getIssuer());
     }
 
-    public function testGetSubject()
+    public function testGetSubject(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -136,7 +136,7 @@ class ParsedTest extends TestCase
         $this->assertSame('payments', $parsed->getSubject());
     }
 
-    public function testGetSubjectNotSet()
+    public function testGetSubjectNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -152,7 +152,7 @@ class ParsedTest extends TestCase
         $this->assertSame('', $parsed->getSubject());
     }
 
-    public function testGetAudience()
+    public function testGetAudience(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -168,7 +168,7 @@ class ParsedTest extends TestCase
         $this->assertSame('users', $parsed->getAudience());
     }
 
-    public function testGetAudienceIsArray()
+    public function testGetAudienceIsArray(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -185,7 +185,7 @@ class ParsedTest extends TestCase
         $this->assertSame('admins', $parsed->getAudience()[1]);
     }
 
-    public function testGetAudienceNotSet()
+    public function testGetAudienceNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -201,7 +201,7 @@ class ParsedTest extends TestCase
         $this->assertSame('', $parsed->getAudience());
     }
 
-    public function testGetExpiration()
+    public function testGetExpiration(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -217,7 +217,7 @@ class ParsedTest extends TestCase
         $this->assertSame(123456, $parsed->getExpiration());
     }
 
-    public function testGetExpirationNotSet()
+    public function testGetExpirationNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -233,7 +233,7 @@ class ParsedTest extends TestCase
         $this->assertSame(0, $parsed->getExpiration());
     }
 
-    public function testGetNotBefore()
+    public function testGetNotBefore(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -249,7 +249,7 @@ class ParsedTest extends TestCase
         $this->assertSame(123456, $parsed->getNotBefore());
     }
 
-    public function testGetNotBeforeNotSet()
+    public function testGetNotBeforeNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -265,7 +265,7 @@ class ParsedTest extends TestCase
         $this->assertSame(0, $parsed->getNotBefore());
     }
 
-    public function testGetIssuedAt()
+    public function testGetIssuedAt(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -281,7 +281,7 @@ class ParsedTest extends TestCase
         $this->assertSame(123456, $parsed->getIssuedAt());
     }
 
-    public function testGetIssuedAtNotSet()
+    public function testGetIssuedAtNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -297,7 +297,7 @@ class ParsedTest extends TestCase
         $this->assertSame(0, $parsed->getIssuedAt());
     }
 
-    public function testGetJwtId()
+    public function testGetJwtId(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -313,7 +313,7 @@ class ParsedTest extends TestCase
         $this->assertSame('he6236Yui', $parsed->getJwtId());
     }
 
-    public function testGetJwtIdNotSet()
+    public function testGetJwtIdNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -329,7 +329,7 @@ class ParsedTest extends TestCase
         $this->assertSame('', $parsed->getJwtId());
     }
 
-    public function testGetAlgorithm()
+    public function testGetAlgorithm(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -345,7 +345,7 @@ class ParsedTest extends TestCase
         $this->assertSame('HS256', $parsed->getAlgorithm());
     }
 
-    public function testGetType()
+    public function testGetType(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -361,7 +361,7 @@ class ParsedTest extends TestCase
         $this->assertSame('JWT', $parsed->getType());
     }
 
-    public function testGetTypeNotSet()
+    public function testGetTypeNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -377,7 +377,7 @@ class ParsedTest extends TestCase
         $this->assertSame('', $parsed->getType());
     }
 
-    public function testGetContentType()
+    public function testGetContentType(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -393,7 +393,7 @@ class ParsedTest extends TestCase
         $this->assertSame('nested', $parsed->getContentType());
     }
 
-    public function testGetContentTypeNotSet()
+    public function testGetContentTypeNotSet(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -409,7 +409,7 @@ class ParsedTest extends TestCase
         $this->assertSame('', $parsed->getContentType());
     }
 
-    public function testGetExpiresIn()
+    public function testGetExpiresIn(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -429,7 +429,7 @@ class ParsedTest extends TestCase
         $this->assertTrue(300 === $result || 299 === $result);
     }
 
-    public function testGetExpiresInNegative()
+    public function testGetExpiresInNegative(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -447,7 +447,7 @@ class ParsedTest extends TestCase
         $this->assertSame(0, $parsed->getExpiresIn());
     }
 
-    public function testGetUsableIn()
+    public function testGetUsableIn(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
@@ -467,7 +467,7 @@ class ParsedTest extends TestCase
         $this->assertTrue(200 === $result || 199 === $result);
     }
 
-    public function testGetUsableInNegative()
+    public function testGetUsableInNegative(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
