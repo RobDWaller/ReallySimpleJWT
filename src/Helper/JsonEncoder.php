@@ -13,7 +13,7 @@ trait JsonEncoder
      * Consumes an associative array of data and returns a json string. Will
      * return the string 'false' if it fails to encode.
      *
-     * @param array $jsonArray
+     * @param mixed[] $jsonArray
      * @return string
      */
     public function jsonEncode(array $jsonArray): string
@@ -26,7 +26,7 @@ trait JsonEncoder
      * associative array.
      *
      * @param string $json
-     * @return array
+     * @return mixed[]
      */
     public function jsonDecode(string $json): array
     {

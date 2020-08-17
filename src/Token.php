@@ -53,7 +53,7 @@ class Token
      * Create a JSON Web Token with a custom payload built from a key
      * value array.
      *
-     * @param array $payload
+     * @param mixed[] $payload
      *
      * @return string
      */
@@ -104,7 +104,7 @@ class Token
      *
      * @param string $token
      *
-     * @return array
+     * @return mixed[]
      */
     public static function getHeader(string $token, string $secret): array
     {
@@ -119,7 +119,7 @@ class Token
      *
      * @param string $token
      *
-     * @return array
+     * @return mixed[]
      */
     public static function getPayload(string $token, string $secret): array
     {

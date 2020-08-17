@@ -39,14 +39,14 @@ class Build
     /**
      * Holds the JWT header claims
      *
-     * @var array
+     * @var mixed[]
      */
     private $header = [];
 
     /**
      * Holds the JWT payload claims.
      *
-     * @var array
+     * @var mixed[]
      */
     private $payload = [];
 
@@ -66,6 +66,8 @@ class Build
 
     /**
      * Validate token signature secret.
+     *
+     * @var Interfaces\Secret
      */
     private $secretValidator;
 
@@ -128,7 +130,7 @@ class Build
      * the defined header claims. The JWT algorithm and typ are added
      * by default.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getHeader(): array
     {
@@ -288,7 +290,7 @@ class Build
      * Get the JWT payload. This will return an array of registered claims and
      * private claims which make up the JWT payload.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getPayload(): array
     {

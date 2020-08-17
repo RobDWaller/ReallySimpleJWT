@@ -189,7 +189,7 @@ class Parse
      * Split the JWT into it's component parts, the header, payload and
      * signature are all separated by a dot.
      *
-     * @return array
+     * @return string[]
      */
     private function splitToken(): array
     {
@@ -262,7 +262,7 @@ class Parse
     /**
      * Retrieve the audience claim from the JWT.
      *
-     * @return string|array
+     * @return string|string[]
      * @throws ValidateException
      */
     private function getAudience()
@@ -292,7 +292,7 @@ class Parse
     /**
      * Decode the JWT header string to an associative array.
      *
-     * @return array
+     * @return mixed[]
      */
     private function decodeHeader(): array
     {
@@ -304,7 +304,7 @@ class Parse
     /**
      * Decode the JWT payload string to an associative array.
      *
-     * @return array
+     * @return mixed[]
      */
     private function decodePayload(): array
     {

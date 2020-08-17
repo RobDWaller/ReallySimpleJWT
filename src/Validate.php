@@ -67,6 +67,8 @@ class Validate
      * Check the validity of the JWT's audience claim. The audience claim
      * defines the recipient or recipients allowed to process the token. This
      * claim can either be a StringOrURI or an array of StringOrURIs.
+     *
+     * @param string|string[] $audience
      */
     public function audience($audience, string $check): bool
     {
@@ -91,6 +93,8 @@ class Validate
      * Check the alg claim is in the list of valid algorithms. These are the
      * valid digital signatures, MAC algorithms or "none" as
      * defined in RFC 7518.
+     *
+     * @param string[] $additional
      */
     public function algorithm(string $algorithm, array $additional): bool
     {

@@ -24,14 +24,14 @@ class Parsed
     /**
      * Associative array of header claims
      *
-     * @var array
+     * @var mixed[]
      */
     private $header;
 
     /**
      * Associative array of payload claims
      *
-     * @var array
+     * @var mixed[]
      */
     private $payload;
 
@@ -46,8 +46,8 @@ class Parsed
      * The Parsed constructor
      *
      * @param Jwt $jwt
-     * @param array $header
-     * @param array $payload
+     * @param mixed[] $header
+     * @param mixed[] $payload
      * @param string $signature
      */
     public function __construct(Jwt $jwt, array $header, array $payload, string $signature)
@@ -74,7 +74,7 @@ class Parsed
     /**
      * Get the header claims data as an associative array.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getHeader(): array
     {
@@ -114,7 +114,7 @@ class Parsed
     /**
      * Get the payload claims data as an associative array.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getPayload(): array
     {
@@ -145,7 +145,7 @@ class Parsed
      * Access the audience claim from the payload. Can return a string or an
      * array. Will return an empty string if not set.
      *
-     * @return string|array
+     * @return string|string[]
      */
     public function getAudience()
     {
