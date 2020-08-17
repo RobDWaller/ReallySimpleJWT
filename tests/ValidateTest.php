@@ -150,16 +150,6 @@ class ValidateTest extends TestCase
         $this->assertFalse($validate->audience($audience, $check));
     }
 
-    public function testValidateAudienceIntFalse(): void
-    {
-        $validate = new Validate();
-
-        $audience = 2;
-        $check = 'example.com';
-
-        $this->assertFalse($validate->audience($audience, $check));
-    }
-
     public function testValidateAlgorithm(): void
     {
         $validate = new Validate();
