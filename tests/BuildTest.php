@@ -131,7 +131,10 @@ class BuildTest extends TestCase
             ->build();
 
         $this->assertSame($token->getSecret(), '!123$!456htHeLOOl!');
-        $this->assertRegExp('/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/', $token->getToken());
+        $this->assertMatchesRegularExpression(
+            '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
+            $token->getToken()
+        );
     }
 
     public function testBuildMethodParse(): void

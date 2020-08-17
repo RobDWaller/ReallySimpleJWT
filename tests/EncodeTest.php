@@ -19,14 +19,14 @@ class EncodeTest extends TestCase
     {
         $encode = new Encode();
 
-        $this->assertRegExp('/^[a-zA-Z0-9\-\_\=]+$/', $encode->encode('world'));
+        $this->assertMatchesRegularExpression('/^[a-zA-Z0-9\-\_\=]+$/', $encode->encode('world'));
     }
 
     public function testEncodeMethodIsBase64Url(): void
     {
         $encode = new Encode();
 
-        $this->assertRegExp('/^[a-zA-Z0-9\-\_\=]+$/', $encode->encode('crayon+/='));
+        $this->assertMatchesRegularExpression('/^[a-zA-Z0-9\-\_\=]+$/', $encode->encode('crayon+/='));
     }
 
     public function testEncodeMethodHasEncoded(): void
@@ -86,7 +86,7 @@ class EncodeTest extends TestCase
 
         $result = $encode->signature('header', 'footer', 'secret');
 
-        $this->assertRegExp('/^[a-zA-Z0-9\-\_\=]+$/', $result);
+        $this->assertMatchesRegularExpression('/^[a-zA-Z0-9\-\_\=]+$/', $result);
     }
 
     public function testSignatureDoesNotEqualHello(): void
