@@ -7,13 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class JwtTest extends TestCase
 {
-    public function testJwt(): void
-    {
-        $jwt = new Jwt('Hello', 'secret');
-
-        $this->assertInstanceOf(Jwt::class, $jwt);
-    }
-
     public function testgetToken(): void
     {
         $jwt = new Jwt('Hello', 'secret');

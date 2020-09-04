@@ -8,13 +8,6 @@ use ReflectionMethod;
 
 class EncodeTest extends TestCase
 {
-    public function testEncode(): void
-    {
-        $encode = new Encode();
-
-        $this->assertInstanceOf(Encode::class, $encode);
-    }
-
     public function testEncodeMethod(): void
     {
         $encode = new Encode();

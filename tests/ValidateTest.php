@@ -9,13 +9,6 @@ use ReallySimpleJWT\Token;
 
 class ValidateTest extends TestCase
 {
-    public function testValidate(): void
-    {
-        $validate = new Validate();
-
-        $this->assertInstanceOf(Validate::class, $validate);
-    }
-
     public function testValidateStructure(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .

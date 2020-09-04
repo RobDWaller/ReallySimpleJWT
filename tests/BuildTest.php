@@ -14,13 +14,6 @@ use ReflectionMethod;
 
 class BuildTest extends TestCase
 {
-    public function testBuild(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $this->assertInstanceOf(Build::class, $build);
-    }
-
     public function testBuildSetSecret(): void
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
@@ -35,7 +28,7 @@ class BuildTest extends TestCase
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Invalid secret.');
         $this->expectExceptionCode(9);
-        $this->assertInstanceOf(Build::class, $build->setSecret('Hello'));
+        $build->setSecret('Hello');
     }
 
     public function testSetExpiration(): void
@@ -52,7 +45,7 @@ class BuildTest extends TestCase
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Expiration claim has expired.');
         $this->expectExceptionCode(4);
-        $this->assertInstanceOf(Build::class, $build->setExpiration(time() - 300));
+        $build->setExpiration(time() - 300);
     }
 
     public function testSetExpirationCheckPayload(): void

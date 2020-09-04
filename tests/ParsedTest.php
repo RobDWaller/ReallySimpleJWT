@@ -13,21 +13,6 @@ use ReallySimpleJWT\Secret;
 
 class ParsedTest extends TestCase
 {
-    public function testParsed(): void
-    {
-        $parsed = new Parsed(
-            new Jwt(
-                Token::create(1, 'foo1234He$$llo56', time() + 300, '127.0.0.1'),
-                'foo1234He$$llo56'
-            ),
-            ["typ" => "JWT"],
-            ["iss" => "127.0.0.1"],
-            'hello'
-        );
-
-        $this->assertInstanceOf(Parsed::class, $parsed);
-    }
-
     public function testParsedGetJWT(): void
     {
         $parsed = new Parsed(

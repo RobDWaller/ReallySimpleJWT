@@ -16,13 +16,6 @@ use ReflectionMethod;
 
 class ParseTest extends TestCase
 {
-    public function testParse(): void
-    {
-        $parse = new Parse(new JWT('Hello', 'secret'), new Validate(), new Encode());
-
-        $this->assertInstanceOf(Parse::class, $parse);
-    }
-
     public function testParseParse(): void
     {
         $parse = new Parse(
