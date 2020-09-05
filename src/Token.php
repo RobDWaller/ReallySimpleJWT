@@ -11,6 +11,7 @@ use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Helper\Errors;
 
 /**
  * A simple Package for creating JSON Web Tokens that uses HMAC SHA256 to sign
@@ -25,6 +26,8 @@ use ReallySimpleJWT\Exception\ValidateException;
  */
 class Token
 {
+    use Errors;
+
     /**
      * Create a JSON Web Token that contains a user identifier and a basic
      * payload including issued at, expiration and issuer.
@@ -162,7 +165,7 @@ class Token
             $parse->validate()
                 ->validateExpiration();
         } catch (ValidateException $e) {
-            if (in_array($e->getCode(), [1, 2, 3, 4], true)) {
+            if (self::isExpirationError($e->getCode())) {
                 return false;
             }
         }
