@@ -3,197 +3,299 @@
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
+use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Helper\Validator;
+use ReallySimpleJWT\Signature;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Encode;
-use ReallySimpleJWT\Token;
+use ReallySimpleJWT\Exception\ValidateException;
 
 class ValidateTest extends TestCase
 {
-    public function testValidateStructure(): void
+    public function testValidateFail() 
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvZSBCbG9ncyIsImlhdCI6MTUxNjIzOTAyMn0.' .
-        '-wvw8Qad0enQkwNhG2j-GCT-7PbrMN_gtUwOKZTu54M';
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getToken')
+            ->willReturn('abc');
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('structure')
+            ->with('abc')
+            ->willReturn(false);
 
-        $validate = new Validate();
+        $signature = $this->createMock(Signature::class);
 
-        $this->assertTrue($validate->structure($token));
+        $validate = new Validate($parse, $signature, $validator);
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Token is invalid.');
+        $this->expectExceptionCode(1);
+        $validate->validate();
     }
 
-    public function testValidateStructureWithRSJWT(): void
+    public function testValidateSignatureFail() 
     {
-        $token = Token::create(1, 'foo1234He$$llo56', time() + 300, '127.0.0.1');
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getToken')
+            ->willReturn('abc.def.ghi');
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('structure')
+            ->with('abc.def.ghi')
+            ->willReturn(true);
 
-        $validate = new Validate();
+        $parse->expects($this->once())
+            ->method('getRawHeader')
+            ->willReturn('header');
 
-        $this->assertTrue($validate->structure($token));
+        $parse->expects($this->once())
+            ->method('getRawPayload')
+            ->willReturn('payload');
+        
+        $parse->expects($this->once())
+            ->method('getSecret')
+            ->willReturn('secret');
+
+        $signature = $this->createStub(Signature::class);
+        $signature->expects($this->once())
+            ->method('make')
+            ->with('header', 'payload', 'secret')
+            ->willReturn('jkl');
+
+        $parse->expects($this->once())
+            ->method('getSignature')
+            ->willReturn('ghi');
+
+        $validator->expects($this->once())
+            ->method('signature')
+            ->with('jkl', 'ghi')
+            ->willReturn(false);
+
+        $validate = new Validate($parse, $signature, $validator);
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Signature is invalid.');
+        $this->expectExceptionCode(3);
+        $validate->validate();
     }
 
-    public function testValidateStructureInvalid(): void
+    public function testValidateSuccess() 
     {
-        $validate = new Validate();
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getToken')
+            ->willReturn('abc.def.ghi');
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('structure')
+            ->with('abc.def.ghi')
+            ->willReturn(true);
 
-        $this->assertFalse($validate->structure('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'));
+        $parse->expects($this->once())
+            ->method('getRawHeader')
+            ->willReturn('header');
+
+        $parse->expects($this->once())
+            ->method('getRawPayload')
+            ->willReturn('payload');
+        
+        $parse->expects($this->once())
+            ->method('getSecret')
+            ->willReturn('secret');
+
+        $signature = $this->createStub(Signature::class);
+        $signature->expects($this->once())
+            ->method('make')
+            ->with('header', 'payload', 'secret')
+            ->willReturn('ghi');
+
+        $parse->expects($this->once())
+            ->method('getSignature')
+            ->willReturn('ghi');
+
+        $validator->expects($this->once())
+            ->method('signature')
+            ->with('ghi', 'ghi')
+            ->willReturn(true);
+
+        $validate = new Validate($parse, $signature, $validator);
+
+        $this->assertInstanceOf(Validate::class, $validate->validate());
     }
 
-    public function testValidateExpiration(): void
+    public function testValidateExpiration() 
     {
-        $validate = new Validate();
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getExpiration')
+            ->willReturn(1000);
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('expiration')
+            ->with(1000)
+            ->willReturn(true);
 
-        $this->assertTrue($validate->expiration(time() + 10));
+        $signature = $this->createMock(Signature::class);
+
+        $validate = new Validate($parse, $signature, $validator);
+
+        $this->assertInstanceOf(Validate::class, $validate->expiration());
     }
 
-    public function testValidateExpirationOld(): void
+    public function testValidateExpirationFail() 
     {
-        $validate = new Validate();
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getExpiration')
+            ->willReturn(-5);
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('expiration')
+            ->with(-5)
+            ->willReturn(false);
 
-        $this->assertFalse($validate->expiration(time() - 10));
+        $signature = $this->createMock(Signature::class);
+
+        $validate = new Validate($parse, $signature, $validator);
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Expiration claim has expired.');
+        $this->expectExceptionCode(4);
+        $validate->expiration();
     }
 
-    public function testValidateSignature(): void
+    public function testValidateNotBefore() 
     {
-        $validate = new Validate();
-        $encode = new Encode();
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getNotBefore')
+            ->willReturn(-5);
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('notBefore')
+            ->with(-5)
+            ->willReturn(true);
 
-        $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
-        $payload = json_encode(json_decode('{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}'));
+        $signature = $this->createMock(Signature::class);
 
-        $signature = $encode->signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56');
+        $validate = new Validate($parse, $signature, $validator);
 
-        $this->assertTrue($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
+        $this->assertInstanceOf(Validate::class, $validate->notBefore());
     }
 
-    public function testValidateSignatureInvalid(): void
+    public function testValidateNotBeforeFail() 
     {
-        $validate = new Validate();
-        $encode = new Encode();
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getNotBefore')
+            ->willReturn(500);
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('notBefore')
+            ->with(500)
+            ->willReturn(false);
 
-        $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
-        $payload = json_encode(json_decode('{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}'));
+        $signature = $this->createMock(Signature::class);
 
-        $signature = $encode->signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56');
+        $validate = new Validate($parse, $signature, $validator);
 
-        $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hVZxGDBe3YRPeH871_Cjs-h23jbTI'));
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Not Before claim has not elapsed.');
+        $this->expectExceptionCode(5);
+        $validate->notBefore();
     }
 
-    public function testValidateSignatureInvalidTwo(): void
+    public function testValidateAudience() 
     {
-        $validate = new Validate();
-        $encode = new Encode();
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getAudience')
+            ->willReturn('site.com');
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('audience')
+            ->with('site.com', 'site.com')
+            ->willReturn(true);
 
-        $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
-        $payload = json_encode(json_decode('{"sub": "1234567890", "name": "Jane Doe", "iat": 1516239022}'));
+        $signature = $this->createMock(Signature::class);
 
-        $signature = $encode->signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56');
+        $validate = new Validate($parse, $signature, $validator);
 
-        $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
+        $this->assertInstanceOf(Validate::class, $validate->audience('site.com'));
     }
 
-    public function testValidateNotBefore(): void
+    public function testValidateAudienceFail() 
     {
-        $validate = new Validate();
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getAudience')
+            ->willReturn('other.site.com');
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('audience')
+            ->with('other.site.com', 'site.com')
+            ->willReturn(false);
 
-        $this->assertTrue($validate->notBefore(time() - 10));
+        $signature = $this->createMock(Signature::class);
+
+        $validate = new Validate($parse, $signature, $validator);
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Audience claim does not contain provided StringOrURI.');
+        $this->expectExceptionCode(2);
+        $validate->audience('site.com');
     }
 
-    public function testValidateNotFalse(): void
+    public function testValidateAlgorithm() 
     {
-        $validate = new Validate();
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getAlgorithm')
+            ->willReturn('HS256');
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('algorithm')
+            ->with('HS256', [])
+            ->willReturn(true);
 
-        $this->assertFalse($validate->notBefore(time() + 10));
+        $signature = $this->createMock(Signature::class);
+
+        $validate = new Validate($parse, $signature, $validator);
+
+        $this->assertInstanceOf(Validate::class, $validate->algorithm());
     }
 
-    public function testValidateAudience(): void
+    public function testValidateAlgorithmFail() 
     {
-        $validate = new Validate();
+        $parse = $this->createStub(Parse::class);
+        $parse->expects($this->once())
+            ->method('getAlgorithm')
+            ->willReturn('RS256');
+        
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('algorithm')
+            ->with('RS256', [])
+            ->willReturn(false);
 
-        $audience = 'https://example.com';
-        $check = 'https://example.com';
+        $signature = $this->createMock(Signature::class);
 
-        $this->assertTrue($validate->audience($audience, $check));
-    }
+        $validate = new Validate($parse, $signature, $validator);
 
-    public function testValidateAudienceFalse(): void
-    {
-        $validate = new Validate();
-
-        $audience = 'https://example.com';
-        $check = 'example.com';
-
-        $this->assertFalse($validate->audience($audience, $check));
-    }
-
-    public function testValidateAudienceArray(): void
-    {
-        $validate = new Validate();
-
-        $audience = ['https://example.com', 'https://test.com'];
-        $check = 'https://example.com';
-
-        $this->assertTrue($validate->audience($audience, $check));
-    }
-
-    public function testValidateAudienceArrayFalse(): void
-    {
-        $validate = new Validate();
-
-        $audience = ['https://example.com', 'https://test.com'];
-        $check = 'example.com';
-
-        $this->assertFalse($validate->audience($audience, $check));
-    }
-
-    public function testValidateAlgorithm(): void
-    {
-        $validate = new Validate();
-
-        $algorithm = "HS256";
-
-        $this->assertTrue($validate->algorithm($algorithm, []));
-    }
-
-    public function testValidateAlgorithmNone(): void
-    {
-        $validate = new Validate();
-
-        $algorithm = "none";
-
-        $this->assertTrue($validate->algorithm($algorithm, []));
-    }
-
-    public function testValidateAlgorithmFail(): void
-    {
-        $validate = new Validate();
-
-        $algorithm = "HB256";
-
-        $this->assertFalse($validate->algorithm($algorithm, []));
-    }
-
-    public function testValidateAlgorithmCustom(): void
-    {
-        $validate = new Validate();
-
-        $algorithm = "HS384";
-
-        $this->assertTrue($validate->algorithm($algorithm, ["HS384"]));
-    }
-
-    public function testValidateAlgorithmCustomFail(): void
-    {
-        $validate = new Validate();
-
-        $algorithm = "HB384";
-
-        $this->assertFalse($validate->algorithm($algorithm, ["HS384"]));
-    }
-
-    public function testValidateAlgorithmCustomStandard(): void
-    {
-        $validate = new Validate();
-
-        $algorithm = "HS256";
-
-        $this->assertTrue($validate->algorithm($algorithm, ["HS384"]));
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Algorithm claim is not valid.');
+        $this->expectExceptionCode(12);
+        $validate->algorithm([]);
     }
 }
