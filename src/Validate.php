@@ -120,8 +120,8 @@ class Validate
     public function signature(): void
     {
         $signature = $this->signature->make(
-            $this->parse->getRawHeader(),
-            $this->parse->getRawPayload(),
+            $this->parse->getDecodedHeader(),
+            $this->parse->getDecodedPayload(),
             $this->parse->getSecret()
         );
 

@@ -8,6 +8,7 @@ use ReallySimpleJWT\Helper\Validator;
 use ReallySimpleJWT\Signature;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Exception\ValidateException;
+use Tests\Fixtures\Tokens;
 
 class ValidateTest extends TestCase
 {
@@ -39,39 +40,39 @@ class ValidateTest extends TestCase
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
             ->method('getToken')
-            ->willReturn('abc.def.ghi');
+            ->willReturn(Tokens::TOKEN);
         
         $validator = $this->createStub(Validator::class);
         $validator->expects($this->once())
             ->method('structure')
-            ->with('abc.def.ghi')
+            ->with(Tokens::TOKEN)
             ->willReturn(true);
 
         $parse->expects($this->once())
-            ->method('getRawHeader')
-            ->willReturn('header');
+            ->method('getDecodedHeader')
+            ->willReturn(Tokens::DECODED_HEADER);
 
         $parse->expects($this->once())
-            ->method('getRawPayload')
-            ->willReturn('payload');
+            ->method('getDecodedPayload')
+            ->willReturn(Tokens::DECODED_PAYLOAD);
         
         $parse->expects($this->once())
             ->method('getSecret')
-            ->willReturn('secret');
+            ->willReturn('hello');
 
         $signature = $this->createStub(Signature::class);
         $signature->expects($this->once())
             ->method('make')
-            ->with('header', 'payload', 'secret')
-            ->willReturn('jkl');
+            ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, 'hello')
+            ->willReturn('mX0_2dzFlPqR0fyh4J3PPmfQYBz9PlqUut5vXgJaSxY');
 
         $parse->expects($this->once())
             ->method('getSignature')
-            ->willReturn('ghi');
+            ->willReturn(Tokens::SIGNATURE);
 
         $validator->expects($this->once())
             ->method('signature')
-            ->with('jkl', 'ghi')
+            ->with('mX0_2dzFlPqR0fyh4J3PPmfQYBz9PlqUut5vXgJaSxY', Tokens::SIGNATURE)
             ->willReturn(false);
 
         $validate = new Validate($parse, $signature, $validator);
@@ -87,39 +88,39 @@ class ValidateTest extends TestCase
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
             ->method('getToken')
-            ->willReturn('abc.def.ghi');
+            ->willReturn(Tokens::TOKEN);
         
         $validator = $this->createStub(Validator::class);
         $validator->expects($this->once())
             ->method('structure')
-            ->with('abc.def.ghi')
+            ->with(Tokens::TOKEN)
             ->willReturn(true);
 
         $parse->expects($this->once())
-            ->method('getRawHeader')
-            ->willReturn('header');
+            ->method('getDecodedHeader')
+            ->willReturn(Tokens::DECODED_HEADER);
 
         $parse->expects($this->once())
-            ->method('getRawPayload')
-            ->willReturn('payload');
+            ->method('getDecodedPayload')
+            ->willReturn(Tokens::DECODED_PAYLOAD);
         
         $parse->expects($this->once())
             ->method('getSecret')
-            ->willReturn('secret');
+            ->willReturn(Tokens::SECRET);
 
         $signature = $this->createStub(Signature::class);
         $signature->expects($this->once())
             ->method('make')
-            ->with('header', 'payload', 'secret')
-            ->willReturn('ghi');
+            ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, Tokens::SECRET)
+            ->willReturn(Tokens::SIGNATURE);
 
         $parse->expects($this->once())
             ->method('getSignature')
-            ->willReturn('ghi');
+            ->willReturn(Tokens::SIGNATURE);
 
         $validator->expects($this->once())
             ->method('signature')
-            ->with('ghi', 'ghi')
+            ->with(Tokens::SIGNATURE, Tokens::SIGNATURE)
             ->willReturn(true);
 
         $validate = new Validate($parse, $signature, $validator);
