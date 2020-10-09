@@ -13,19 +13,4 @@ interface Encoder
      * Get the algorithm used to encode the signature string.
      */
     public function getAlgorithm(): string;
-
-    /**
-     * Encode a JSON string so it is base64URL compliant.
-     */
-    public function encode(string $toEncode): string;
-
-    /**
-     * Decode a base64URL string to a JSON string.
-     */
-    public function decode(string $toDecode): string;
-
-    /**
-     * Create the JSON Web Token signature string.
-     */
-    public function signature(string $header, string $payload, string $secret): string;
 }
