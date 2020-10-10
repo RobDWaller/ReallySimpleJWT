@@ -2,9 +2,10 @@
 
 namespace ReallySimpleJWT\Interfaces;
 
-use ReallySimpleJWT\Interfaces\Encoder;
+interface Encode
+{
+    public function getAlgorithm(): string;
 
-interface Encode extends Encoder {
     /**
      * Encode a JSON string so it is base64URL compliant.
      */
