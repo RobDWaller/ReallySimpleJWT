@@ -26,4 +26,6 @@ class Tokens {
         "nbf" => 1516239000,
         "aud" => "mysite.com"
     ];
+
+    const ALGORITHM = 'HS256';
 }
