@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Interfaces\Encoder;
+use ReallySimpleJWT\Helper\Validator;
+use ReallySimpleJWT\Interfaces\Encode;
 use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Helper\JsonEncoder;
 use ReallySimpleJWT\Interfaces\Secret;
-use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Exception\BuildException;
 
 /**
  * A class to build a JSON Web Token, returns the token as an instance of
@@ -27,7 +26,6 @@ use ReallySimpleJWT\Exception\ValidateException;
  */
 class Build
 {
-    use JsonEncoder;
 
     /**
      * Defines the type of JWT to be created, usually just JWT.
@@ -85,7 +83,7 @@ class Build
      * @param Validate $validate
      * @param Interfaces\Encoder $encode
      */
-    public function __construct(string $type, Validate $validate, Secret $secretValidator, Encoder $encode)
+    public function __construct(string $type, Validator $validate, Secret $secretValidator, Encode $encode)
     {
         $this->type = $type;
 
@@ -152,7 +150,7 @@ class Build
     public function setSecret(string $secret): self
     {
         if (!$this->secretValidator->validate($secret)) {
-            throw new ValidateException('Invalid secret.', 9);
+            throw new BuildException('Invalid secret.', 9);
         }
 
         $this->secret = $secret;
@@ -206,7 +204,7 @@ class Build
             return $this;
         }
 
-        throw new ValidateException('Invalid Audience claim.', 10);
+        throw new BuildException('Invalid Audience claim.', 10);
     }
 
     /**
@@ -220,7 +218,7 @@ class Build
     public function setExpiration(int $timestamp): self
     {
         if (!$this->validate->expiration($timestamp)) {
-            throw new ValidateException('Expiration claim has expired.', 4);
+            throw new BuildException('Expiration claim has expired.', 4);
         }
 
         $this->payload['exp'] = $timestamp;
@@ -311,8 +309,8 @@ class Build
     public function build(): Jwt
     {
         return new Jwt(
-            $this->encode->encode($this->jsonEncode($this->getHeader())) . "." .
-            $this->encode->encode($this->jsonEncode($this->getPayload())) . "." .
+            $this->encode->encode($this->getHeader()) . "." .
+            $this->encode->encode($this->getPayload()) . "." .
             $this->getSignature(),
             $this->secret
         );
@@ -343,10 +341,10 @@ class Build
      */
     private function getSignature(): string
     {
-        if (!empty($this->secret)) {
+        if ($this->secretValidator->validate($this->secret)) {
             return $this->encode->signature(
-                $this->jsonEncode($this->getHeader()),
-                $this->jsonEncode($this->getPayload()),
+                $this->getHeader(),
+                $this->getPayload(),
                 $this->secret
             );
         }

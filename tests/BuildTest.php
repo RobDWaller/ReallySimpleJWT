@@ -2,433 +2,298 @@
 
 namespace Tests;
 
-use ReallySimpleJWT\Build;
-use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Parse;
-use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Encode;
-use ReallySimpleJWT\Secret;
-use ReallySimpleJWT\Exception\ValidateException;
 use PHPUnit\Framework\TestCase;
+use Tests\Fixtures\Tokens;
+use ReallySimpleJWT\Build;
+use ReallySimpleJWT\Helper\Validator;
+use ReallySimpleJWT\Encoders\EncodeHs256;
+use ReallySimpleJWT\Secret;
+use ReallySimpleJWT\Exception\BuildException;
+use ReallySimpleJWT\Jwt;
 use ReflectionMethod;
 
 class BuildTest extends TestCase
 {
-    public function testBuildSetSecret(): void
+    public function testGetHeader()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createStub(EncodeHs256::class);
+        $encode->expects($this->once())
+            ->method('getAlgorithm')
+            ->willReturn(Tokens::ALGORITHM);
 
-        $this->assertInstanceOf(Build::class, $build->setSecret('Hello123$$Abc!!4538'));
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $header = $build->getHeader();
+        $this->assertSame($header['alg'], Tokens::ALGORITHM);
+        $this->assertSame($header['typ'], 'JWT');
     }
 
-    public function testBuildSetSecretInvalid(): void
+    public function testGetPayload()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Invalid secret.');
-        $this->expectExceptionCode(9);
-        $build->setSecret('Hello');
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $build->setPayloadClaim('exp', 123);
+        $payload = $build->getPayload();
+        $this->assertSame($payload['exp'], 123);
     }
 
-    public function testSetExpiration(): void
+    public function testSetContentType()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $this->assertInstanceOf(Build::class, $build->setExpiration(time() + 300));
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $result = $build->setContentType('JWT');
+        $this->assertInstanceOf(Build::class, $result);
+        $header = $build->getHeader();
+        $this->assertSame($header['cty'], 'JWT');
     }
 
-    public function testSetExpirationInvalid(): void
+    public function testSetHeaderClaim()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Expiration claim has expired.');
-        $this->expectExceptionCode(4);
-        $build->setExpiration(time() - 300);
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $result = $build->setHeaderClaim('lng', 'en-GB');
+        $this->assertInstanceOf(Build::class, $result);
+        $header = $build->getHeader();
+        $this->assertSame($header['lng'], 'en-GB');
     }
 
-    public function testSetExpirationCheckPayload(): void
+    public function testSetIssuer()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $timestamp = time() + 300;
-
-        $build->setExpiration($timestamp);
-
-        $this->assertSame($build->getPayload()['exp'], $timestamp);
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $result = $build->setIssuer('www.thesite.com');
+        $this->assertInstanceOf(Build::class, $result);
+        $payload = $build->getPayload();
+        $this->assertSame($payload['iss'], 'www.thesite.com');
     }
 
-    public function testGetPayload(): void
+    public function testSetSubject()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $build->setExpiration(time() + 300);
-
-        $this->assertArrayHasKey('exp', $build->getPayload());
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $result = $build->setSubject('admin');
+        $this->assertInstanceOf(Build::class, $result);
+        $payload = $build->getPayload();
+        $this->assertSame($payload['sub'], 'admin');
     }
 
-    public function testSetIssuer(): void
+    public function testSetAudienceString()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $this->assertInstanceOf(Build::class, $build->setIssuer('127.0.0.1'));
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $result = $build->setAudience('www.thesite.com');
+        $this->assertInstanceOf(Build::class, $result);
+        $payload = $build->getPayload();
+        $this->assertSame($payload['aud'], 'www.thesite.com');
     }
 
-    public function testSetIssuerCheckPayload(): void
+    public function testSetAudienceArray()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $build->setIssuer('127.0.0.1');
-
-        $this->assertSame($build->getPayload()['iss'], '127.0.0.1');
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $build->setAudience(['www.thesite.com', 'blog.thesite.com', 'payment.thesite.com']);
+        $payload = $build->getPayload();
+        $this->assertSame($payload['aud'][0], 'www.thesite.com');
+        $this->assertSame($payload['aud'][1], 'blog.thesite.com');
+        $this->assertSame($payload['aud'][2], 'payment.thesite.com');
     }
 
-    public function testSetPrivateClaim(): void
+    public function testSetAudienceFail()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $this->assertInstanceOf(Build::class, $build->setPayloadClaim('user_id', 1));
-    }
-
-    public function testSetPrivateClaimCheckPayload(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $build->setPayloadClaim('user_id', 1);
-
-        $this->assertSame($build->getPayload()['user_id'], 1);
-    }
-
-    public function testBuildMethod(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('helLLO123$!456ht')
-            ->setIssuer('127.0.0.1')
-            ->setExpiration(time() + 100)
-            ->setPayloadClaim('user_id', 2)
-            ->build();
-
-        $this->assertInstanceOf(Jwt::class, $token);
-    }
-
-    public function testBuildMethodCheckJwt(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('!123$!456htHeLOOl!')
-            ->setIssuer('https://google.com')
-            ->setExpiration(time() + 200)
-            ->setPayloadClaim('user_id', 3)
-            ->build();
-
-        $this->assertSame($token->getSecret(), '!123$!456htHeLOOl!');
-        $this->assertMatchesRegularExpression(
-            '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
-            $token->getToken()
-        );
-    }
-
-    public function testBuildMethodParse(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('!123$!456htHeLOOl!')
-            ->setIssuer('https://google.com')
-            ->setExpiration(time() + 200)
-            ->setPayloadClaim('user_id', 3)
-            ->build();
-
-        $parse = new Parse($token, new Validate(), new Encode());
-
-        $parsed = $parse->validate()
-            ->validateExpiration()
-            ->parse();
-
-        $this->assertSame($parsed->getPayload()['user_id'], 3);
-    }
-
-    public function testGetHeader(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $result = $build->getHeader();
-
-        $this->assertSame('JWT', $result['typ']);
-        $this->assertSame('HS256', $result['alg']);
-    }
-
-    public function testGetHeaderSetContentType(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $result = $build->setContentType('JWT')->getHeader();
-
-        $this->assertSame('JWT', $result['typ']);
-        $this->assertSame('HS256', $result['alg']);
-        $this->assertSame('JWT', $result['cty']);
-    }
-
-    public function testTwoTokenGeneration(): void
-    {
-        $build1 = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token1 = $build1->setSecret('$$$pdr432!456htHeLOOl!')
-            ->setIssuer('https://google.com')
-            ->setExpiration(time() + 10)
-            ->setPayloadClaim('user_id', 5)
-            ->build();
-
-        $build2 = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token2 = $build2->setSecret('!123$!9283htHeLOOl!')
-            ->setIssuer('https://facebook.com')
-            ->setExpiration(time() + 99)
-            ->setPayloadClaim('uid', 7)
-            ->build();
-
-        $this->assertNotSame($token1->getToken(), $token2->getToken());
-    }
-
-    public function testTwoTokenGenerationAndParse(): void
-    {
-        $build1 = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $time1 = time() + 10;
-
-        $token1 = $build1->setSecret('$$$pdr432!456htHeLOOl!')
-            ->setIssuer('https://google.com')
-            ->setExpiration($time1)
-            ->setPayloadClaim('user_id', 5)
-            ->build();
-
-        $build2 = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $time2 = time() + 99;
-
-        $token2 = $build2->setSecret('!123$!9283htHeLOOl!')
-            ->setIssuer('https://facebook.com')
-            ->setExpiration($time2)
-            ->setPayloadClaim('uid', 7)
-            ->build();
-
-        $parse1 = new Parse($token1, new Validate(), new Encode());
-
-        $parsed1 = $parse1->validate()
-            ->validateExpiration()
-            ->parse();
-
-        $parse2 = new Parse($token2, new Validate(), new Encode());
-
-        $parsed2 = $parse2->validate()
-            ->validateExpiration()
-            ->parse();
-
-        $this->assertSame($parsed1->getPayload()['user_id'], 5);
-        $this->assertSame($parsed1->getPayload()['exp'], $time1);
-        $this->assertSame($parsed1->getPayload()['iss'], 'https://google.com');
-
-        $this->assertSame($parsed2->getPayload()['uid'], 7);
-        $this->assertSame($parsed2->getPayload()['exp'], $time2);
-        $this->assertSame($parsed2->getPayload()['iss'], 'https://facebook.com');
-    }
-
-    public function testResetMethod(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $time1 = time() + 10;
-
-        $token1 = $build->setSecret('$$$pdr432!456htHeLOOl!')
-            ->setIssuer('https://google.com')
-            ->setExpiration($time1)
-            ->setPayloadClaim('user_id', 5)
-            ->build();
-
-        $time2 = time() + 99;
-
-        $token2 = $build->reset()
-            ->setSecret('!123$!9283htHeLOOl!')
-            ->setIssuer('https://facebook.com')
-            ->setExpiration($time2)
-            ->setPayloadClaim('uid', 7)
-            ->build();
-
-        $parse1 = new Parse($token1, new Validate(), new Encode());
-
-        $parsed1 = $parse1->validate()
-            ->validateExpiration()
-            ->parse();
-
-        $parse2 = new Parse($token2, new Validate(), new Encode());
-
-        $parsed2 = $parse2->validate()
-            ->validateExpiration()
-            ->parse();
-
-        $this->assertSame($parsed1->getPayload()['user_id'], 5);
-        $this->assertSame($parsed1->getPayload()['exp'], $time1);
-        $this->assertSame($parsed1->getPayload()['iss'], 'https://google.com');
-
-        $this->assertSame($parsed2->getPayload()['uid'], 7);
-        $this->assertSame($parsed2->getPayload()['exp'], $time2);
-        $this->assertSame($parsed2->getPayload()['iss'], 'https://facebook.com');
-    }
-
-    public function testGetSignature(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $build->setSecret('$$$pdr432!456htHeLOOl!')
-            ->setIssuer('https://google.com')
-            ->setExpiration(time() + 10)
-            ->setPayloadClaim('user_id', 5);
-
-        $method = new ReflectionMethod(Build::class, 'getSignature');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($build);
-
-        $this->assertIsString($result);
-    }
-
-    public function testGetSignatureOddSpecialCharacters(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $build->setSecret('$£~pdr432!456htHeLOOl!')
-            ->setIssuer('https://google.com')
-            ->setExpiration(time() + 10)
-            ->setPayloadClaim('user_id', 5);
-
-        $method = new ReflectionMethod(Build::class, 'getSignature');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($build);
-
-        $this->assertIsString($result);
-    }
-
-    public function testGetSignatureNoSecret(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $build->setIssuer('https://google.com')
-            ->setExpiration(time() + 10)
-            ->setPayloadClaim('user_id', 5);
-
-        $method = new ReflectionMethod(Build::class, 'getSignature');
-        $method->setAccessible(true);
-
-        $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Invalid secret');
-        $this->expectExceptionCode(9);
-        $result = $method->invoke($build);
-    }
-
-    public function testSetHeaderClaim(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $result = $build->setHeaderClaim('enc', 'A128CBC-HS256')
-            ->getHeader();
-
-        $this->assertSame($result['enc'], 'A128CBC-HS256');
-    }
-
-    public function testSetContentType(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $result = $build->setContentType('JWT')
-            ->getHeader();
-
-        $this->assertSame($result['cty'], 'JWT');
-    }
-
-    public function testSetSubject(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $result = $build->setSubject('Johnson')
-            ->getPayload();
-
-        $this->assertSame($result['sub'], 'Johnson');
-    }
-
-    public function testSetAudienceString(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $result = $build->setAudience('Chris')
-            ->getPayload();
-
-        $this->assertSame($result['aud'], 'Chris');
-    }
-
-    public function testSetAudienceArray(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $result = $build->setAudience(['John', 'Sarah'])
-            ->getPayload();
-
-        $this->assertSame($result['aud'][0], 'John');
-        $this->assertSame($result['aud'][1], 'Sarah');
-    }
-
-    public function testSetAudienceIntFail(): void
-    {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $this->expectException(ValidateException::class);
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
+
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $this->expectException(BuildException::class);
         $this->expectExceptionMessage('Invalid Audience claim.');
         $this->expectExceptionCode(10);
-        $build->setAudience(123);
+        $build->setAudience(1);
     }
 
-    public function testSetNotBefore(): void
+    public function testSetExpiration()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $expiration = time() + 3600;
 
-        $time = time();
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('expiration')
+            ->with($expiration)
+            ->willReturn(true);
 
-        $result = $build->setNotBefore($time)
-            ->getPayload();
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $this->assertSame($result['nbf'], $time);
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $result = $build->setExpiration($expiration);
+        $this->assertInstanceOf(Build::class, $result);
+        $payload = $build->getPayload();
+        $this->assertSame($payload['exp'], $expiration);
     }
 
-    public function testIssuedAt(): void
+    public function testSetExpirationFail()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $expiration = time() - 3600;
 
-        $time = time();
+        $validator = $this->createStub(Validator::class);
+        $validator->expects($this->once())
+            ->method('expiration')
+            ->with($expiration)
+            ->willReturn(false);
 
-        $result = $build->setIssuedAt($time)
-            ->getPayload();
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $this->assertSame($result['iat'], $time);
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $this->expectException(BuildException::class);
+        $this->expectExceptionMessage('Expiration claim has expired.');
+        $this->expectExceptionCode(4);
+        $build->setExpiration($expiration);
     }
 
-    public function testSetJwtId(): void
+    public function testSetNotBefore()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $result = $build->setJwtId('helLo123')
-            ->getPayload();
-
-        $this->assertSame($result['jti'], 'helLo123');
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $nbf = time();
+        $result = $build->setNotBefore($nbf);
+        $this->assertInstanceOf(Build::class, $result);
+        $payload = $build->getPayload();
+        $this->assertSame($payload['nbf'], $nbf);
     }
 
-    public function testImmediateBuild(): void
+    public function testSetIssuedAt()
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Invalid secret');
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $iat = time();
+        $result = $build->setIssuedAt($iat);
+        $this->assertInstanceOf(Build::class, $result);
+        $payload = $build->getPayload();
+        $this->assertSame($payload['iat'], $iat);
+    }
+
+    public function testSetJwtId()
+    {
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
+
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $result = $build->setJwtId('123');
+        $this->assertInstanceOf(Build::class, $result);
+        $payload = $build->getPayload();
+        $this->assertSame($payload['jti'], '123');
+    }
+
+    public function testSetPayloadClaim()
+    {
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
+
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $result = $build->setPayloadClaim('uid', 4);
+        $this->assertInstanceOf(Build::class, $result);
+        $payload = $build->getPayload();
+        $this->assertSame($payload['uid'], 4);
+    }
+
+    public function testSetSecret()
+    {
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createStub(Secret::class);
+        $secret->expects($this->once())
+            ->method('validate')
+            ->with('ABC!123*def')
+            ->willReturn(true);
+        $encode = $this->createMock(EncodeHs256::class);
+
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $result = $build->setSecret('ABC!123*def');
+        $this->assertInstanceOf(Build::class, $result);
+    }
+
+    public function testSetSecretFail()
+    {
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createStub(Secret::class);
+        $secret->expects($this->once())
+            ->method('validate')
+            ->with('secret')
+            ->willReturn(false);
+        $encode = $this->createMock(EncodeHs256::class);
+
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $this->expectException(BuildException::class);
+        $this->expectExceptionMessage('Invalid secret.');
         $this->expectExceptionCode(9);
-        $build->build();
+        $build->setSecret('secret');
+    }
+
+    public function testBuild()
+    {
+        $validator = $this->createMock(Validator::class);
+
+        $secret = $this->createStub(Secret::class);
+        $secret->expects($this->exactly(2))
+            ->method('validate')
+            ->with(Tokens::SECRET)
+            ->willReturn(true);
+
+        $encode = $this->createMock(EncodeHs256::class);
+        $encode->expects($this->exactly(2))
+            ->method('getAlgorithm')
+            ->willReturn(Tokens::ALGORITHM);
+
+        $encode->expects($this->once())
+            ->method('signature')
+            ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, Tokens::SECRET)
+            ->willReturn(Tokens::SIGNATURE);
+
+        $encode->expects($this->exactly(2))
+            ->method('encode')
+            ->withConsecutive([Tokens::DECODED_HEADER], [Tokens::DECODED_PAYLOAD])
+            ->willReturn(Tokens::HEADER, Tokens::PAYLOAD);
+
+        $build = new Build('JWT', $validator, $secret, $encode);
+        $result = $build->setSecret(Tokens::SECRET)
+            ->setPayloadClaim('sub', Tokens::DECODED_PAYLOAD['sub'])
+            ->setPayloadClaim('name', Tokens::DECODED_PAYLOAD['name'])
+            ->setPayloadClaim('iat', Tokens::DECODED_PAYLOAD['iat'])
+            ->setPayloadClaim('exp', Tokens::DECODED_PAYLOAD['exp'])
+            ->setPayloadClaim('nbf', Tokens::DECODED_PAYLOAD['nbf'])
+            ->setPayloadClaim('aud', Tokens::DECODED_PAYLOAD['aud'])
+            ->build();
+
+        $this->assertInstanceOf(Jwt::class, $result);
     }
 }
