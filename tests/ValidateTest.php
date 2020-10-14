@@ -169,15 +169,6 @@ class ValidateTest extends TestCase
         $this->assertTrue($validate->algorithm($algorithm, []));
     }
 
-    public function testValidateAlgorithmNone()
-    {
-        $validate = new Validate();
-
-        $algorithm = "none";
-
-        $this->assertTrue($validate->algorithm($algorithm, []));
-    }
-
     public function testValidateAlgorithmFail()
     {
         $validate = new Validate();
