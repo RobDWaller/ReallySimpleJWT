@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Interfaces\Signature as SignatureInterface;
-use ReallySimpleJWT\Interfaces\Encoder;
+use ReallySimpleJWT\Interfaces\Encode;
 use ReallySimpleJWT\Helper\JsonEncoder;
 
 class Signature implements SignatureInterface
 {
     use JsonEncoder;
-    
-    private Encoder $encode;
 
-    public function __construct(Encoder $encode)
+    private Encode $encode;
+
+    public function __construct(Encode $encode)
     {
         $this->encode = $encode;
     }
