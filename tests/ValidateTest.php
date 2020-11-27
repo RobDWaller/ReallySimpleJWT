@@ -12,14 +12,14 @@ use Tests\Fixtures\Tokens;
 
 class ValidateTest extends TestCase
 {
-    public function testValidateFail()
+    public function testValidateFail(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getToken')
             ->willReturn('abc');
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('structure')
             ->with('abc')
@@ -35,14 +35,14 @@ class ValidateTest extends TestCase
         $validate->validate();
     }
 
-    public function testValidateSignatureFail()
+    public function testValidateSignatureFail(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('structure')
             ->with(Tokens::TOKEN)
@@ -55,12 +55,12 @@ class ValidateTest extends TestCase
         $parse->expects($this->once())
             ->method('getDecodedPayload')
             ->willReturn(Tokens::DECODED_PAYLOAD);
-        
+
         $parse->expects($this->once())
             ->method('getSecret')
             ->willReturn('hello');
 
-        $signature = $this->createStub(Signature::class);
+        $signature = $this->createMock(Signature::class);
         $signature->expects($this->once())
             ->method('make')
             ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, 'hello')
@@ -83,14 +83,14 @@ class ValidateTest extends TestCase
         $validate->validate();
     }
 
-    public function testValidateSuccess()
+    public function testValidateSuccess(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('structure')
             ->with(Tokens::TOKEN)
@@ -103,12 +103,12 @@ class ValidateTest extends TestCase
         $parse->expects($this->once())
             ->method('getDecodedPayload')
             ->willReturn(Tokens::DECODED_PAYLOAD);
-        
+
         $parse->expects($this->once())
             ->method('getSecret')
             ->willReturn(Tokens::SECRET);
 
-        $signature = $this->createStub(Signature::class);
+        $signature = $this->createMock(Signature::class);
         $signature->expects($this->once())
             ->method('make')
             ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, Tokens::SECRET)
@@ -128,14 +128,14 @@ class ValidateTest extends TestCase
         $this->assertInstanceOf(Validate::class, $validate->validate());
     }
 
-    public function testValidateExpiration()
+    public function testValidateExpiration(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getExpiration')
             ->willReturn(1000);
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('expiration')
             ->with(1000)
@@ -148,14 +148,14 @@ class ValidateTest extends TestCase
         $this->assertInstanceOf(Validate::class, $validate->expiration());
     }
 
-    public function testValidateExpirationFail()
+    public function testValidateExpirationFail(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getExpiration')
             ->willReturn(-5);
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('expiration')
             ->with(-5)
@@ -171,14 +171,14 @@ class ValidateTest extends TestCase
         $validate->expiration();
     }
 
-    public function testValidateNotBefore()
+    public function testValidateNotBefore(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getNotBefore')
             ->willReturn(-5);
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('notBefore')
             ->with(-5)
@@ -191,14 +191,14 @@ class ValidateTest extends TestCase
         $this->assertInstanceOf(Validate::class, $validate->notBefore());
     }
 
-    public function testValidateNotBeforeFail()
+    public function testValidateNotBeforeFail(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getNotBefore')
             ->willReturn(500);
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('notBefore')
             ->with(500)
@@ -214,14 +214,14 @@ class ValidateTest extends TestCase
         $validate->notBefore();
     }
 
-    public function testValidateAudience()
+    public function testValidateAudience(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getAudience')
             ->willReturn('site.com');
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('audience')
             ->with('site.com', 'site.com')
@@ -234,14 +234,14 @@ class ValidateTest extends TestCase
         $this->assertInstanceOf(Validate::class, $validate->audience('site.com'));
     }
 
-    public function testValidateAudienceFail()
+    public function testValidateAudienceFail(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getAudience')
             ->willReturn('other.site.com');
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('audience')
             ->with('other.site.com', 'site.com')
@@ -257,14 +257,14 @@ class ValidateTest extends TestCase
         $validate->audience('site.com');
     }
 
-    public function testValidateAlgorithm()
+    public function testValidateAlgorithm(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getAlgorithm')
             ->willReturn('HS256');
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('algorithm')
             ->with('HS256', [])
@@ -277,14 +277,14 @@ class ValidateTest extends TestCase
         $this->assertInstanceOf(Validate::class, $validate->algorithm());
     }
 
-    public function testValidateAlgorithmFail()
+    public function testValidateAlgorithmFail(): void
     {
-        $parse = $this->createStub(Parse::class);
+        $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
             ->method('getAlgorithm')
             ->willReturn('RS256');
-        
-        $validator = $this->createStub(Validator::class);
+
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('algorithm')
             ->with('RS256', [])

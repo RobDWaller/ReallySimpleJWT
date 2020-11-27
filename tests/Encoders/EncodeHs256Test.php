@@ -11,7 +11,7 @@ use ReflectionMethod;
 
 class EncodeHs256Test extends TestCase
 {
-    public function testEncode()
+    public function testEncode(): void
     {
         $encode = new EncodeHs256();
 
@@ -19,7 +19,7 @@ class EncodeHs256Test extends TestCase
         $this->assertSame(Tokens::PAYLOAD, $encode->encode(Tokens::DECODED_PAYLOAD));
     }
 
-    public function testSignature()
+    public function testSignature(): void
     {
         $encode = new EncodeHs256();
 

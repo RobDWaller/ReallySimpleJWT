@@ -16,12 +16,12 @@ class ParseTest extends TestCase
 {
     public function testParse(): void
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->exactly(3))
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createStub(DecodeHs256::class);
+        $decode = $this->createMock(DecodeHs256::class);
         $decode->expects($this->exactly(2))
             ->method('decode')
             ->withConsecutive([Tokens::HEADER], [Tokens::PAYLOAD])
@@ -41,7 +41,7 @@ class ParseTest extends TestCase
 
     public function testGetSignature()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
@@ -58,7 +58,7 @@ class ParseTest extends TestCase
 
     public function testGetSignatureEmpty()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn('abc');
@@ -75,12 +75,12 @@ class ParseTest extends TestCase
 
     public function testGetExpiration()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createStub(DecodeHs256::class);
+        $decode = $this->createMock(DecodeHs256::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::PAYLOAD)
@@ -96,7 +96,7 @@ class ParseTest extends TestCase
 
     public function testGetExpirationFail()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn('abc.def.hij');
@@ -120,12 +120,12 @@ class ParseTest extends TestCase
 
     public function testGetNotBefore()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createStub(DecodeHs256::class);
+        $decode = $this->createMock(DecodeHs256::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::PAYLOAD)
@@ -141,7 +141,7 @@ class ParseTest extends TestCase
 
     public function testGetNotBeforeFail()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn('abc.def.hij');
@@ -165,12 +165,12 @@ class ParseTest extends TestCase
 
     public function testGetAudience()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createStub(DecodeHs256::class);
+        $decode = $this->createMock(DecodeHs256::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::PAYLOAD)
@@ -186,7 +186,7 @@ class ParseTest extends TestCase
 
     public function testGetAudienceFail()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn('abc.def.hij');
@@ -210,12 +210,12 @@ class ParseTest extends TestCase
 
     public function testGetAlgorithm()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createStub(DecodeHs256::class);
+        $decode = $this->createMock(DecodeHs256::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::HEADER)
@@ -231,7 +231,7 @@ class ParseTest extends TestCase
 
     public function testGetAlgorithmFail()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn('abc.def.hij');
@@ -255,12 +255,12 @@ class ParseTest extends TestCase
 
     public function testGetDecodedHeader()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createStub(DecodeHs256::class);
+        $decode = $this->createMock(DecodeHs256::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::HEADER)
@@ -276,12 +276,12 @@ class ParseTest extends TestCase
 
     public function testGetDecodedPayload()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createStub(DecodeHs256::class);
+        $decode = $this->createMock(DecodeHs256::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::PAYLOAD)
@@ -297,7 +297,7 @@ class ParseTest extends TestCase
 
     public function testGetToken()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
@@ -314,7 +314,7 @@ class ParseTest extends TestCase
 
     public function testGetSecret()
     {
-        $jwt = $this->createStub(Jwt::class);
+        $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
             ->method('getSecret')
             ->willReturn(Tokens::SECRET);
