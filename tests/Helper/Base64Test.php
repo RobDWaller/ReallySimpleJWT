@@ -36,4 +36,3 @@ class Base64Test extends TestCase
         );
     }
 }
-

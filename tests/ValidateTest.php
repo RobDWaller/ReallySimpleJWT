@@ -12,7 +12,7 @@ use Tests\Fixtures\Tokens;
 
 class ValidateTest extends TestCase
 {
-    public function testValidateFail() 
+    public function testValidateFail()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
@@ -35,7 +35,7 @@ class ValidateTest extends TestCase
         $validate->validate();
     }
 
-    public function testValidateSignatureFail() 
+    public function testValidateSignatureFail()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
@@ -83,7 +83,7 @@ class ValidateTest extends TestCase
         $validate->validate();
     }
 
-    public function testValidateSuccess() 
+    public function testValidateSuccess()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
@@ -128,7 +128,7 @@ class ValidateTest extends TestCase
         $this->assertInstanceOf(Validate::class, $validate->validate());
     }
 
-    public function testValidateExpiration() 
+    public function testValidateExpiration()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
@@ -148,7 +148,7 @@ class ValidateTest extends TestCase
         $this->assertInstanceOf(Validate::class, $validate->expiration());
     }
 
-    public function testValidateExpirationFail() 
+    public function testValidateExpirationFail()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
@@ -171,7 +171,7 @@ class ValidateTest extends TestCase
         $validate->expiration();
     }
 
-    public function testValidateNotBefore() 
+    public function testValidateNotBefore()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
@@ -191,7 +191,7 @@ class ValidateTest extends TestCase
         $this->assertInstanceOf(Validate::class, $validate->notBefore());
     }
 
-    public function testValidateNotBeforeFail() 
+    public function testValidateNotBeforeFail()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
@@ -214,7 +214,7 @@ class ValidateTest extends TestCase
         $validate->notBefore();
     }
 
-    public function testValidateAudience() 
+    public function testValidateAudience()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
@@ -234,7 +234,7 @@ class ValidateTest extends TestCase
         $this->assertInstanceOf(Validate::class, $validate->audience('site.com'));
     }
 
-    public function testValidateAudienceFail() 
+    public function testValidateAudienceFail()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
@@ -257,7 +257,7 @@ class ValidateTest extends TestCase
         $validate->audience('site.com');
     }
 
-    public function testValidateAlgorithm() 
+    public function testValidateAlgorithm()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())
@@ -277,7 +277,7 @@ class ValidateTest extends TestCase
         $this->assertInstanceOf(Validate::class, $validate->algorithm());
     }
 
-    public function testValidateAlgorithmFail() 
+    public function testValidateAlgorithmFail()
     {
         $parse = $this->createStub(Parse::class);
         $parse->expects($this->once())

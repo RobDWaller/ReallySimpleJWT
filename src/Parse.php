@@ -175,7 +175,7 @@ class Parse
      */
     public function getAlgorithm(): string
     {
-        $header = $this->getDecodedHeader(); 
+        $header = $this->getDecodedHeader();
 
         if (isset($header['alg'])) {
             return $header['alg'];

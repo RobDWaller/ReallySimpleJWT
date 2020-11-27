@@ -8,7 +8,8 @@ use ReallySimpleJWT\Helper\JsonEncoder;
 
 class DecodeHs256 implements Decode
 {
-    use Base64, JsonEncoder;
+    use Base64;
+    use JsonEncoder;
 
     /**
      * Decode a Base64 Url string to a json string

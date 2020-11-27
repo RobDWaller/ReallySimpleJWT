@@ -8,7 +8,8 @@ use ReallySimpleJWT\Helper\Base64;
 
 class EncodeHs256 implements Encode
 {
-    use JsonEncoder, Base64;
+    use JsonEncoder;
+    use Base64;
 
     /**
      * The Algorithm which was used to hash the token signature. This is what
