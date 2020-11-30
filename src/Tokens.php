@@ -19,7 +19,7 @@ class Tokens
     public function builder(): Build
     {
         return new Build(
-            'JWT', 
+            'JWT',
             new Validator(),
             new Secret(),
             new EncodeHs256()
@@ -59,7 +59,7 @@ class Tokens
             ->setIssuer($issuer)
             ->setIssuedAt(time())
             ->build();
-    }   
+    }
 
     public function createCustomToken(array $payload, string $secret): Jwt
     {
@@ -97,9 +97,8 @@ class Tokens
         try {
             $validate->validate();
             return true;
-        }
-        catch (ValidateException $e) {
-            return false;    
+        } catch (ValidateException $e) {
+            return false;
         }
     }
 
@@ -110,9 +109,8 @@ class Tokens
         try {
             $validate->expiration();
             return true;
-        }
-        catch (ValidateException $e) {
-            return false;    
+        } catch (ValidateException $e) {
+            return false;
         }
     }
 
@@ -123,9 +121,8 @@ class Tokens
         try {
             $validate->notBefore();
             return true;
-        }
-        catch (ValidateException $e) {
-            return false;    
+        } catch (ValidateException $e) {
+            return false;
         }
     }
 }

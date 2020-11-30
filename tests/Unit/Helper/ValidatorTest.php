@@ -44,14 +44,14 @@ class ValidatorTest extends TestCase
     public function testValidateSignature(): void
     {
         $validate = new Validator();
-        
+
         $this->assertTrue($validate->signature('hello', 'hello'));
     }
 
     public function testValidateSignatureInvalid(): void
     {
         $validate = new Validator();
-        
+
         $this->assertFalse($validate->signature('hello', 'world'));
     }
 

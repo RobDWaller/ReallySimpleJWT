@@ -76,7 +76,7 @@ class TokensTest extends TestCase
         $tokens = new Tokens();
 
         $validate = $tokens->validate(TokenFixtures::TOKEN, TokenFixtures::SECRET);
-        
+
         $this->assertInstanceOf(Validate::class, $validate);
     }
 
