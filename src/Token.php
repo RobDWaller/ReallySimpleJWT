@@ -4,14 +4,7 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Build;
-use ReallySimpleJWT\Parse;
-use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Secret;
-use ReallySimpleJWT\Encode;
-use ReallySimpleJWT\Exception\ValidateException;
-use ReallySimpleJWT\Helper\Errors;
+use ReallySimpleJWT\Tokens;
 
 /**
  * A simple Package for creating JSON Web Tokens that uses HMAC SHA256 to sign
@@ -26,8 +19,6 @@ use ReallySimpleJWT\Helper\Errors;
  */
 class Token
 {
-    use Errors;
-
     /**
      * Create a JSON Web Token that contains a user identifier and a basic
      * payload including issued at, expiration and issuer.
@@ -41,15 +32,14 @@ class Token
      */
     public static function create($userId, string $secret, int $expiration, string $issuer): string
     {
-        $builder = self::builder();
-
-        return $builder->setPayloadClaim('user_id', $userId)
-            ->setSecret($secret)
-            ->setExpiration($expiration)
-            ->setIssuer($issuer)
-            ->setIssuedAt(time())
-            ->build()
-            ->getToken();
+        $tokens = new Tokens();
+        return $tokens->createBasicToken(
+            'user_id',
+            $userId,
+            $secret,
+            $expiration,
+            $issuer
+        )->getToken();
     }
 
     /**
@@ -62,19 +52,8 @@ class Token
      */
     public static function customPayload(array $payload, string $secret): string
     {
-        $builder = self::builder();
-
-        foreach ($payload as $key => $value) {
-            if (is_int($key)) {
-                throw new ValidateException('Invalid payload claim.', 8);
-            }
-
-            $builder->setPayloadClaim($key, $value);
-        }
-
-        return $builder->setSecret($secret)
-            ->build()
-            ->getToken();
+        $tokens = new Tokens();
+        return $tokens->createCustomToken($payload, $secret)->getToken();
     }
 
     /**
@@ -88,17 +67,8 @@ class Token
      */
     public static function validate(string $token, string $secret): bool
     {
-        $parse = self::parser($token, $secret);
-
-        if (!self::validateWithExpiration($parse)) {
-            return false;
-        }
-
-        if (!self::validateNotBefore($parse)) {
-            return false;
-        }
-
-        return true;
+        $tokens = new Tokens();
+        return $tokens->basicValidation($token, $secret);
     }
 
     /**
@@ -111,9 +81,8 @@ class Token
      */
     public static function getHeader(string $token, string $secret): array
     {
-        $parser = self::parser($token, $secret);
-
-        return $parser->validate()->parse()->getHeader();
+        $tokens = new Tokens();
+        return $tokens->getHeader($token, $secret);
     }
 
     /**
@@ -126,9 +95,8 @@ class Token
      */
     public static function getPayload(string $token, string $secret): array
     {
-        $parser = self::parser($token, $secret);
-
-        return $parser->validate()->parse()->getPayload();
+        $tokens = new Tokens();
+        return $tokens->getPayload($token, $secret);
     }
 
     /**
@@ -138,7 +106,8 @@ class Token
      */
     public static function builder(): Build
     {
-        return new Build('JWT', new Validate(), new Secret(), new Encode());
+        $tokens = new Tokens();
+        return $tokens->builder();
     }
 
     /**
@@ -148,9 +117,8 @@ class Token
      */
     public static function parser(string $token, string $secret): Parse
     {
-        $jwt = new Jwt($token, $secret);
-
-        return new Parse($jwt, new Validate(), new Encode());
+        $tokens = new Tokens();
+        return $tokens->parser($token, $secret);
     }
 
     /**
@@ -159,18 +127,10 @@ class Token
      * @param Parse $parse
      * @return bool
      */
-    private static function validateWithExpiration(Parse $parse): bool
+    public static function validateExpiration(string $token, string $secret): bool
     {
-        try {
-            $parse->validate()
-                ->validateExpiration();
-        } catch (ValidateException $e) {
-            if (self::isExpirationError($e->getCode())) {
-                return false;
-            }
-        }
-
-        return true;
+        $tokens = new Tokens();
+        return $tokens->validateExpiration($token, $secret);
     }
 
     /**
@@ -179,16 +139,9 @@ class Token
      * @param Parse $parse
      * @return bool
      */
-    private static function validateNotBefore(Parse $parse): bool
+    public static function validateNotBefore(string $token, string $secret): bool
     {
-        try {
-            $parse->validateNotBefore();
-        } catch (ValidateException $e) {
-            if ($e->getCode() === 5) {
-                return false;
-            }
-        }
-
-        return true;
+        $tokens = new Tokens();
+        return $tokens->validateNotBefore($token, $secret);
     }
 }

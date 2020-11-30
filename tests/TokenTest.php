@@ -93,7 +93,7 @@ class TokenTest extends TestCase
             'iss' => 'localhost'
         ], 'Hello&MikeFooBar123');
 
-        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
+        $this->assertFalse(Token::validateExpiration($token, 'Hello&MikeFooBar123'));
     }
 
     public function testValidateCustomPayloadWithNotBefore(): void
@@ -106,19 +106,7 @@ class TokenTest extends TestCase
             'iss' => 'localhost'
         ], 'Hello&MikeFooBar123');
 
-        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
-    }
-
-    public function testValidateCustomPayloadWithBadNotBeforeNoExpiration(): void
-    {
-        $token = Token::customPayload([
-            'iat' => time(),
-            'uid' => 1,
-            'nbf' => time() + 20,
-            'iss' => 'localhost'
-        ], 'Hello&MikeFooBar123');
-
-        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
+        $this->assertFalse(Token::validateNotBefore($token, 'Hello&MikeFooBar123'));
     }
 
     public function testCustomPayloadBadArray(): void
@@ -174,12 +162,8 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate('World', 'FooBar'));
     }
 
-    public function testGetPayloadFail(): void
+    public function testBadTokenGetPayloadEmpty(): void
     {
-        $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Token is invalid.');
-        $this->expectExceptionCode(1);
-
-        Token::getPayload('Hello', 'CarPark');
+        $this->assertEmpty(Token::getPayload('Hello', 'CarPark'));
     }
 }
