@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests;
+namespace Tests\Helper;
 
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Helper\Validator;
-use ReallySimpleJWT\Encode;
+use ReallySimpleJWT\Encoders\EncodeHs256;
 use ReallySimpleJWT\Token;
 
 class ValidatorTest extends TestCase
@@ -44,40 +44,15 @@ class ValidatorTest extends TestCase
     public function testValidateSignature(): void
     {
         $validate = new Validator();
-        $encode = new Encode();
-
-        $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
-        $payload = json_encode(json_decode('{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}'));
-
-        $signature = $encode->signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56');
-
-        $this->assertTrue($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
+        
+        $this->assertTrue($validate->signature('hello', 'hello'));
     }
 
     public function testValidateSignatureInvalid(): void
     {
         $validate = new Validator();
-        $encode = new Encode();
-
-        $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
-        $payload = json_encode(json_decode('{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}'));
-
-        $signature = $encode->signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56');
-
-        $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hVZxGDBe3YRPeH871_Cjs-h23jbTI'));
-    }
-
-    public function testValidateSignatureInvalidTwo(): void
-    {
-        $validate = new Validator();
-        $encode = new Encode();
-
-        $header = json_encode(json_decode('{"alg": "HS256", "typ": "JWT"}'));
-        $payload = json_encode(json_decode('{"sub": "1234567890", "name": "Jane Doe", "iat": 1516239022}'));
-
-        $signature = $encode->signature(!$header ? '' : $header, !$payload ? '' : $payload, 'foo1234He$$llo56');
-
-        $this->assertFalse($validate->signature($signature, 'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbTI'));
+        
+        $this->assertFalse($validate->signature('hello', 'world'));
     }
 
     public function testValidateNotBefore(): void
