@@ -75,9 +75,7 @@ class ParsedTest extends TestCase
 
     public function testGetIssuer(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -91,9 +89,7 @@ class ParsedTest extends TestCase
 
     public function testGetIssuerNotSet(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -107,9 +103,7 @@ class ParsedTest extends TestCase
 
     public function testGetSubject(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -123,9 +117,7 @@ class ParsedTest extends TestCase
 
     public function testGetSubjectNotSet(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -139,9 +131,7 @@ class ParsedTest extends TestCase
 
     public function testGetAudience(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -155,9 +145,7 @@ class ParsedTest extends TestCase
 
     public function testGetAudienceIsArray(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -172,9 +160,7 @@ class ParsedTest extends TestCase
 
     public function testGetAudienceNotSet(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -188,9 +174,7 @@ class ParsedTest extends TestCase
 
     public function testGetExpiration(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -204,9 +188,7 @@ class ParsedTest extends TestCase
 
     public function testGetExpirationNotSet(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -220,9 +202,7 @@ class ParsedTest extends TestCase
 
     public function testGetNotBefore(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -236,9 +216,7 @@ class ParsedTest extends TestCase
 
     public function testGetNotBeforeNotSet(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -252,9 +230,7 @@ class ParsedTest extends TestCase
 
     public function testGetIssuedAt(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -268,9 +244,7 @@ class ParsedTest extends TestCase
 
     public function testGetIssuedAtNotSet(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -284,9 +258,7 @@ class ParsedTest extends TestCase
 
     public function testGetJwtId(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -300,9 +272,7 @@ class ParsedTest extends TestCase
 
     public function testGetJwtIdNotSet(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -316,9 +286,7 @@ class ParsedTest extends TestCase
 
     public function testGetAlgorithm(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -332,9 +300,7 @@ class ParsedTest extends TestCase
 
     public function testGetType(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -348,9 +314,7 @@ class ParsedTest extends TestCase
 
     public function testGetTypeNotSet(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -364,9 +328,7 @@ class ParsedTest extends TestCase
 
     public function testGetContentType(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -380,9 +342,7 @@ class ParsedTest extends TestCase
 
     public function testGetContentTypeNotSet(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $parsed = new Parsed(
             $token,
@@ -396,9 +356,7 @@ class ParsedTest extends TestCase
 
     public function testGetExpiresIn(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $time = time() + 300;
 
@@ -416,9 +374,7 @@ class ParsedTest extends TestCase
 
     public function testGetExpiresInNegative(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $time = time() - 100;
 
@@ -434,9 +390,7 @@ class ParsedTest extends TestCase
 
     public function testGetUsableIn(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $time = time() + 200;
 
@@ -454,9 +408,7 @@ class ParsedTest extends TestCase
 
     public function testGetUsableInNegative(): void
     {
-        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
-
-        $token = $build->setSecret('foo1234He$$llo56')->setIssuer('localhost')->build();
+        $token = $this->createMock(Jwt::class);
 
         $time = time() - 100;
 
