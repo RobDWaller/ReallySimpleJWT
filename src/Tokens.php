@@ -37,6 +37,18 @@ class Tokens
         );
     }
 
+    public function getHeader(string $token, string $secret): array
+    {
+        $parser = $this->parser($token, $secret);
+        return $parser->parse()->getHeader();
+    }
+
+    public function getPayload(string $token, string $secret): array
+    {
+        $parser = $this->parser($token, $secret);
+        return $parser->parse()->getPayload();
+    }
+
     public function createBasicToken(string $key, $id, string $secret, int $expiration, string $issuer): Jwt
     {
         $builder = $this->builder();

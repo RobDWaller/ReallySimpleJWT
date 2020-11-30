@@ -149,4 +149,22 @@ class TokensTest extends TestCase
             $tokens->validateNotBefore($token->getToken(), 'secret123#ABC')
         );
     }
+
+    public function testGetHeader(): void
+    {
+        $tokens = new Tokens();
+
+        $header = $tokens->getHeader(TokenFixtures::TOKEN, TokenFixtures::SECRET);
+
+        $this->assertSame($header, TokenFixtures::DECODED_HEADER);
+    }
+
+    public function testGetPayload(): void
+    {
+        $tokens = new Tokens();
+
+        $payload = $tokens->getPayload(TokenFixtures::TOKEN, TokenFixtures::SECRET);
+
+        $this->assertSame($payload, TokenFixtures::DECODED_PAYLOAD);
+    }
 }
