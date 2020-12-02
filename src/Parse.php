@@ -114,7 +114,7 @@ class Parse
 
         return $this;
     }
-    
+
     /**
      * Validate the audience claim exists and is a string or an array
      * of strings.
