@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use ReallySimpleJWT\Helper\Errors;
 use PHPUnit\Framework\TestCase;
