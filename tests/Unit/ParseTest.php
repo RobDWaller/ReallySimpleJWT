@@ -39,7 +39,7 @@ class ParseTest extends TestCase
         $this->assertSame('Sandra Thompson', $parsed->getPayload()['name']);
     }
 
-    public function testGetSignature()
+    public function testGetSignature(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -56,7 +56,7 @@ class ParseTest extends TestCase
         $this->assertSame($parse->getSignature(), Tokens::SIGNATURE);
     }
 
-    public function testGetSignatureEmpty()
+    public function testGetSignatureEmpty(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -73,7 +73,7 @@ class ParseTest extends TestCase
         $this->assertEmpty($parse->getSignature());
     }
 
-    public function testGetExpiration()
+    public function testGetExpiration(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -94,7 +94,7 @@ class ParseTest extends TestCase
         $this->assertSame($parse->getExpiration(), Tokens::DECODED_PAYLOAD['exp']);
     }
 
-    public function testGetExpirationFail()
+    public function testGetExpirationFail(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -118,7 +118,7 @@ class ParseTest extends TestCase
         $parse->getExpiration();
     }
 
-    public function testGetNotBefore()
+    public function testGetNotBefore(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -139,7 +139,7 @@ class ParseTest extends TestCase
         $this->assertSame($parse->getNotBefore(), Tokens::DECODED_PAYLOAD['nbf']);
     }
 
-    public function testGetNotBeforeFail()
+    public function testGetNotBeforeFail(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -163,7 +163,7 @@ class ParseTest extends TestCase
         $parse->getNotBefore();
     }
 
-    public function testGetAudience()
+    public function testGetAudience(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -184,7 +184,7 @@ class ParseTest extends TestCase
         $this->assertSame($parse->getAudience(), Tokens::DECODED_PAYLOAD['aud']);
     }
 
-    public function testGetAudienceFail()
+    public function testGetAudienceFail(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -208,7 +208,7 @@ class ParseTest extends TestCase
         $parse->getAudience();
     }
 
-    public function testGetAlgorithm()
+    public function testGetAlgorithm(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -229,7 +229,7 @@ class ParseTest extends TestCase
         $this->assertSame($parse->getAlgorithm(), Tokens::DECODED_HEADER['alg']);
     }
 
-    public function testGetAlgorithmFail()
+    public function testGetAlgorithmFail(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -253,7 +253,7 @@ class ParseTest extends TestCase
         $parse->getAlgorithm();
     }
 
-    public function testGetDecodedHeader()
+    public function testGetDecodedHeader(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -274,7 +274,7 @@ class ParseTest extends TestCase
         $this->assertSame($parse->getDecodedHeader(), Tokens::DECODED_HEADER);
     }
 
-    public function testGetDecodedPayload()
+    public function testGetDecodedPayload(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -295,7 +295,7 @@ class ParseTest extends TestCase
         $this->assertSame($parse->getDecodedPayload(), Tokens::DECODED_PAYLOAD);
     }
 
-    public function testGetToken()
+    public function testGetToken(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
@@ -312,7 +312,7 @@ class ParseTest extends TestCase
         $this->assertSame($parse->getToken(), Tokens::TOKEN);
     }
 
-    public function testGetSecret()
+    public function testGetSecret(): void
     {
         $jwt = $this->createMock(Jwt::class);
         $jwt->expects($this->once())
