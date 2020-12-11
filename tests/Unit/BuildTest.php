@@ -14,11 +14,11 @@ use ReflectionMethod;
 
 class BuildTest extends TestCase
 {
-    public function testGetHeader()
+    public function testGetHeader(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createStub(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHs256::class);
         $encode->expects($this->once())
             ->method('getAlgorithm')
             ->willReturn(Tokens::ALGORITHM);
@@ -29,7 +29,7 @@ class BuildTest extends TestCase
         $this->assertSame($header['typ'], 'JWT');
     }
 
-    public function testGetPayload()
+    public function testGetPayload(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -41,7 +41,7 @@ class BuildTest extends TestCase
         $this->assertSame($payload['exp'], 123);
     }
 
-    public function testSetContentType()
+    public function testSetContentType(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -54,7 +54,7 @@ class BuildTest extends TestCase
         $this->assertSame($header['cty'], 'JWT');
     }
 
-    public function testSetHeaderClaim()
+    public function testSetHeaderClaim(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -67,7 +67,7 @@ class BuildTest extends TestCase
         $this->assertSame($header['lng'], 'en-GB');
     }
 
-    public function testSetIssuer()
+    public function testSetIssuer(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -80,7 +80,7 @@ class BuildTest extends TestCase
         $this->assertSame($payload['iss'], 'www.thesite.com');
     }
 
-    public function testSetSubject()
+    public function testSetSubject(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -93,7 +93,7 @@ class BuildTest extends TestCase
         $this->assertSame($payload['sub'], 'admin');
     }
 
-    public function testSetAudienceString()
+    public function testSetAudienceString(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -106,7 +106,7 @@ class BuildTest extends TestCase
         $this->assertSame($payload['aud'], 'www.thesite.com');
     }
 
-    public function testSetAudienceArray()
+    public function testSetAudienceArray(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -120,7 +120,7 @@ class BuildTest extends TestCase
         $this->assertSame($payload['aud'][2], 'payment.thesite.com');
     }
 
-    public function testSetAudienceFail()
+    public function testSetAudienceFail(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -133,11 +133,11 @@ class BuildTest extends TestCase
         $build->setAudience(1);
     }
 
-    public function testSetExpiration()
+    public function testSetExpiration(): void
     {
         $expiration = time() + 3600;
 
-        $validator = $this->createStub(Validator::class);
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('expiration')
             ->with($expiration)
@@ -153,11 +153,11 @@ class BuildTest extends TestCase
         $this->assertSame($payload['exp'], $expiration);
     }
 
-    public function testSetExpirationFail()
+    public function testSetExpirationFail(): void
     {
         $expiration = time() - 3600;
 
-        $validator = $this->createStub(Validator::class);
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('expiration')
             ->with($expiration)
@@ -173,7 +173,7 @@ class BuildTest extends TestCase
         $build->setExpiration($expiration);
     }
 
-    public function testSetNotBefore()
+    public function testSetNotBefore(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -187,7 +187,7 @@ class BuildTest extends TestCase
         $this->assertSame($payload['nbf'], $nbf);
     }
 
-    public function testSetIssuedAt()
+    public function testSetIssuedAt(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -201,7 +201,7 @@ class BuildTest extends TestCase
         $this->assertSame($payload['iat'], $iat);
     }
 
-    public function testSetJwtId()
+    public function testSetJwtId(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -214,7 +214,7 @@ class BuildTest extends TestCase
         $this->assertSame($payload['jti'], '123');
     }
 
-    public function testSetPayloadClaim()
+    public function testSetPayloadClaim(): void
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
@@ -227,10 +227,10 @@ class BuildTest extends TestCase
         $this->assertSame($payload['uid'], 4);
     }
 
-    public function testSetSecret()
+    public function testSetSecret(): void
     {
         $validator = $this->createMock(Validator::class);
-        $secret = $this->createStub(Secret::class);
+        $secret = $this->createMock(Secret::class);
         $secret->expects($this->once())
             ->method('validate')
             ->with('ABC!123*def')
@@ -242,10 +242,10 @@ class BuildTest extends TestCase
         $this->assertInstanceOf(Build::class, $result);
     }
 
-    public function testSetSecretFail()
+    public function testSetSecretFail(): void
     {
         $validator = $this->createMock(Validator::class);
-        $secret = $this->createStub(Secret::class);
+        $secret = $this->createMock(Secret::class);
         $secret->expects($this->once())
             ->method('validate')
             ->with('secret')
@@ -259,11 +259,11 @@ class BuildTest extends TestCase
         $build->setSecret('secret');
     }
 
-    public function testBuild()
+    public function testBuild(): void
     {
         $validator = $this->createMock(Validator::class);
 
-        $secret = $this->createStub(Secret::class);
+        $secret = $this->createMock(Secret::class);
         $secret->expects($this->exactly(2))
             ->method('validate')
             ->with(Tokens::SECRET)
