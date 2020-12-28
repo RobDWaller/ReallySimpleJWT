@@ -1,14 +1,17 @@
 <?php
 
-namespace Tests;
+namespace Tests\Integration;
 
-use ReallySimpleJWT\Build;
-use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Helper\Validator;
+use ReallySimpleJWT\Interfaces\Encode;
 use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Encode;
-use ReallySimpleJWT\Secret;
-use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Interfaces\Secret;
+use ReallySimpleJWT\Exception\BuildException;
+use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Parsed;
+use ReallySimpleJWT\Exception\ParseException;
+use ReallySimpleJWT\Interfaces\Decode;
+use ReallySimpleJWT\Helper\JsonEncoder;
 use PHPUnit\Framework\TestCase;
 
 class EndToEndTest extends TestCase
