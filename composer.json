@@ -37,7 +37,7 @@
     "scripts" : {
         "pipeline": [
             "vendor/bin/phpcs --standard=psr12 src/ tests/ benchmarks/",
-            "vendor/bin/phpstan analyse -l 7 src/ tests/",
+            "vendor/bin/phpstan analyse -l 8 src/ tests/",
             "vendor/bin/phpmd src/ text ruleset.xml",
             "vendor/bin/phpunit --coverage-clover=coverage.xml",
             "vendor/bin/infection -s --min-msi=95 --threads=2",
