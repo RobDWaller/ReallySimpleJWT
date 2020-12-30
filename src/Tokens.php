@@ -57,6 +57,7 @@ class Tokens
 
     /**
      * @param mixed $id
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function createBasicToken(string $key, $id, string $secret, int $expiration, string $issuer): Jwt
     {
