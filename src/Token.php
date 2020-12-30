@@ -62,7 +62,7 @@ class Token
     /**
      * Return the header of the token as an associative array. You should run
      * the validate method on your token before retrieving the header.
-     * 
+     *
      * @return mixed[]
      */
     public static function getHeader(string $token, string $secret): array
@@ -74,7 +74,7 @@ class Token
     /**
      * Return the payload of the token as an associative array. You should run
      * the validate method on your token before retrieving the payload.
-     * 
+     *
      * @return mixed[]
      */
     public static function getPayload(string $token, string $secret): array
@@ -103,7 +103,7 @@ class Token
 
     /**
      * Run standard validation and expiration validation against the token.
-     * 
+     *
      * @return bool
      */
     public static function validateExpiration(string $token, string $secret): bool
@@ -114,7 +114,7 @@ class Token
 
     /**
      * Run not before validation against token.
-     * 
+     *
      * @return bool
      */
     public static function validateNotBefore(string $token, string $secret): bool

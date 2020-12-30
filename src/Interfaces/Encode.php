@@ -8,14 +8,14 @@ interface Encode
 
     /**
      * Encode a JSON string so it is base64URL compliant.
-     * 
+     *
      * @param mixed[] $toEncode
      */
     public function encode(array $toEncode): string;
 
     /**
      * Create the JSON Web Token signature string.
-     * 
+     *
      * @param mixed[] $header
      * @param mixed[] $payload
      */

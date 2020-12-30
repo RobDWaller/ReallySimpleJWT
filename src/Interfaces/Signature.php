@@ -6,7 +6,7 @@ interface Signature
 {
     /**
      * @param mixed[] $header
-     * @param mixed[] $payload 
+     * @param mixed[] $payload
      */
     public function make(array $header, array $payload, string $secret): string;
 }

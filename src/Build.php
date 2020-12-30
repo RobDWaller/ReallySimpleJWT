@@ -120,7 +120,7 @@ class Build
      * Set the JWT secret for encrypting the JWT signature. The secret must
      * comply with the validation rules defined in the
      * ReallySimpleJWT\Validate class.
-     * 
+     *
      * @throws BuildException
      */
     public function setSecret(string $secret): Build
@@ -230,7 +230,7 @@ class Build
      * Set a custom payload claim on the JWT. The RFC calls these private
      * claims. Eg you may wish to set a user_id or a username in the
      * JWT payload.
-     * 
+     *
      * @param mixed $value
      */
     public function setPayloadClaim(string $key, $value): Build
@@ -288,7 +288,7 @@ class Build
     /**
      * Generate and return the JWT signature this is made up of the header,
      * payload and secret.
-     * 
+     *
      * @throws BuildException
      */
     private function getSignature(): string
