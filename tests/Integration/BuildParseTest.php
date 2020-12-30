@@ -22,7 +22,7 @@ class BuildParseTest extends TestCase
     public function testBuildAndParse(): void
     {
         $build = new Build(
-            'JWT', 
+            'JWT',
             new Validator(),
             new Secret(),
             new EncodeHs256()
@@ -67,7 +67,7 @@ class BuildParseTest extends TestCase
     public function testMultipleTokens(): void
     {
         $build = new Build(
-            'JWT', 
+            'JWT',
             new Validator(),
             new Secret(),
             new EncodeHs256()
@@ -91,7 +91,7 @@ class BuildParseTest extends TestCase
             ->build();
 
         $build1 = new Build(
-            'JWT', 
+            'JWT',
             new Validator(),
             new Secret(),
             new EncodeHs256()
@@ -161,7 +161,7 @@ class BuildParseTest extends TestCase
     public function testMultipleTokensWithReset(): void
     {
         $build = $build = new Build(
-            'JWT', 
+            'JWT',
             new Validator(),
             new Secret(),
             new EncodeHs256()
@@ -249,7 +249,7 @@ class BuildParseTest extends TestCase
     public function testMultipleTokensRemovedFields(): void
     {
         $build = $build = new Build(
-            'JWT', 
+            'JWT',
             new Validator(),
             new Secret(),
             new EncodeHs256()
@@ -273,7 +273,7 @@ class BuildParseTest extends TestCase
             ->build();
 
         $build1 = $build = new Build(
-            'JWT', 
+            'JWT',
             new Validator(),
             new Secret(),
             new EncodeHs256()
@@ -340,7 +340,7 @@ class BuildParseTest extends TestCase
     public function testMultipleTokensWithResetRemoveFields(): void
     {
         $build = $build = new Build(
-            'JWT', 
+            'JWT',
             new Validator(),
             new Secret(),
             new EncodeHs256()

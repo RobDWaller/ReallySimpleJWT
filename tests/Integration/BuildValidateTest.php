@@ -12,7 +12,6 @@ use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Helper\Validator;
 use ReallySimpleJWT\Encoders\EncodeHs256;
 use ReallySimpleJWT\Decoders\DecodeHs256;
-
 use PHPUnit\Framework\TestCase;
 
 class BuildValidateTest extends TestCase
@@ -20,7 +19,7 @@ class BuildValidateTest extends TestCase
     public function testBadExpiration(): void
     {
         $build = new Build(
-            'JWT', 
+            'JWT',
             new Validator(),
             new Secret(),
             new EncodeHs256()
@@ -57,7 +56,7 @@ class BuildValidateTest extends TestCase
     public function testBadNotBefore(): void
     {
         $build = new Build(
-            'JWT', 
+            'JWT',
             new Validator(),
             new Secret(),
             new EncodeHs256()
