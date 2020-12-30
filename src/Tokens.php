@@ -37,18 +37,27 @@ class Tokens
         );
     }
 
+    /** 
+     * @return mixed[]
+     */
     public function getHeader(string $token, string $secret): array
     {
         $parser = $this->parser($token, $secret);
         return $parser->parse()->getHeader();
     }
 
+    /** 
+     * @return mixed[]
+     */
     public function getPayload(string $token, string $secret): array
     {
         $parser = $this->parser($token, $secret);
         return $parser->parse()->getPayload();
     }
 
+    /** 
+     * @param mixed $id
+     */
     public function createBasicToken(string $key, $id, string $secret, int $expiration, string $issuer): Jwt
     {
         $builder = $this->builder();
@@ -61,6 +70,9 @@ class Tokens
             ->build();
     }
 
+    /**
+     * @param mixed[] $payload
+     */
     public function createCustomToken(array $payload, string $secret): Jwt
     {
         $builder = $this->builder();
