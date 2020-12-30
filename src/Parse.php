@@ -30,24 +30,16 @@ class Parse
 
     /**
      * The JSON Web Token value object.
-     *
-     * @var Jwt
      */
     private Jwt $jwt;
 
     /**
      * A class to decode JWT tokens.
-     *
-     * @var Interfaces\Encoder
      */
     private Decode $decode;
 
     /**
      * Parse constructor
-     *
-     * @param Jwt $jwt
-     * @param Validate $validate
-     * @param Encoder $encode
      */
     public function __construct(Jwt $jwt, Decode $decode)
     {
@@ -59,8 +51,6 @@ class Parse
     /**
      * Generate the Parsed Value Object. This method should be called last
      * after the relevant validate methods have been called.
-     *
-     * @return Parsed
      */
     public function parse(): Parsed
     {
