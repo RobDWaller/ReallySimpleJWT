@@ -288,7 +288,7 @@ class Build
      * Generate and return the JWT signature this is made up of the header,
      * payload and secret.
      * 
-     * @throws Exception\BuildException
+     * @throws BuildException
      */
     private function getSignature(): string
     {
