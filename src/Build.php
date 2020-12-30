@@ -277,11 +277,12 @@ class Build
      */
     public function reset(): Build
     {
-        $this->payload = [];
-        $this->header = [];
-        $this->secret = '';
-
-        return $this;
+        return new Build(
+            $this->type,
+            $this->validate,
+            $this->secretValidator,
+            $this->encode
+        );
     }
 
     /**
