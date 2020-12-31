@@ -316,11 +316,11 @@ class BuildTest extends TestCase
             ->method('encode');
 
         $build = new Build('JWT', $validator, $secret, $encode);
-        
+
         $this->expectException(BuildException::class);
         $this->expectExceptionMessage('Invalid secret.');
         $this->expectExceptionCode(9);
-        
+
         $build->setPayloadClaim('sub', Tokens::DECODED_PAYLOAD['sub'])
             ->build();
     }
