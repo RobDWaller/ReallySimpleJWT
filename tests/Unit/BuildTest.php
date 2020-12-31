@@ -296,4 +296,43 @@ class BuildTest extends TestCase
 
         $this->assertInstanceOf(Jwt::class, $result);
     }
+
+    public function testBuildBadSecret(): void
+    {
+        $validator = $this->createMock(Validator::class);
+
+        $secret = $this->createMock(Secret::class);
+        $secret->expects($this->once())
+            ->method('validate')
+            ->with('')
+            ->willReturn(false);
+
+        $encode = $this->createMock(EncodeHs256::class);
+        $encode->expects($this->once())
+            ->method('getAlgorithm')
+            ->willReturn(Tokens::ALGORITHM);
+
+        $encode->expects($this->exactly(2))
+            ->method('encode');
+
+        $build = new Build('JWT', $validator, $secret, $encode);
+        
+        $this->expectException(BuildException::class);
+        $this->expectExceptionMessage('Invalid secret.');
+        $this->expectExceptionCode(9);
+        
+        $build->setPayloadClaim('sub', Tokens::DECODED_PAYLOAD['sub'])
+            ->build();
+    }
+
+    public function testReset(): void
+    {
+        $validator = $this->createMock(Validator::class);
+        $secret = $this->createMock(Secret::class);
+        $encode = $this->createMock(EncodeHs256::class);
+
+        $build = new Build('JWT', $validator, $secret, $encode);
+
+        $this->assertInstanceOf(Build::class, $build->reset());
+    }
 }

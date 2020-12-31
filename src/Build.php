@@ -49,7 +49,7 @@ class Build
     /**
      * The secret string for encoding the JWT signature.
      */
-    private string $secret;
+    private string $secret = '';
 
     /**
      * Token claim validator.
