@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Helper;
 
 use ReallySimpleJWT\Helper\JsonEncoder;
 use PHPUnit\Framework\TestCase;
