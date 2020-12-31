@@ -41,7 +41,7 @@
             "vendor/bin/phpmd src/ text ruleset.xml",
             "vendor/bin/phpunit --testsuite unit --coverage-clover=coverage.xml",
             "vendor/bin/phpunit --testsuite integration",
-            "vendor/bin/infection --test-framework-options='--testsuite unit' -s --min-msi=95 --threads=2",
+            "vendor/bin/infection --test-framework-options='--testsuite unit' -s --min-msi=93 --threads=2",
             "vendor/bin/phpcpd --min-lines=2 --min-tokens=35 src/",
             "vendor/bin/phpbench run benchmarks/ReallySimpleJWTBench.php --report=aggregate",
             "vendor/bin/phploc src/"
