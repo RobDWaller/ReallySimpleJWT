@@ -13,8 +13,11 @@
          failOnRisky="true"
          failOnWarning="true">
     <testsuites>
-        <testsuite name="Really Simple JWT Test Suite">
-            <directory suffix=".php">./tests/</directory>
+        <testsuite name="unit">
+            <directory suffix=".php">./tests/Unit/</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory suffix=".php">./tests/Integration/</directory>
         </testsuite>
     </testsuites>
     <filter>
