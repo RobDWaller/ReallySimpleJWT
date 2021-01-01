@@ -25,8 +25,13 @@ jobs:
     - name: Validate Composer
       run: composer validate --strict
 
-    - name: Install Composer Dependencies
+    - name: Install Composer Dependencies PHP 7.4
+      if: ${{ matrix.php-versions == '7.4' }}
       run: composer install --no-interaction --prefer-dist
+
+    - name: Install Composer Dependencies PHP 8.0
+      if: ${{ matrix.php-versions == '8.0' }}
+      run: composer install --no-interaction --prefer-dist --ignore-platform-reqs
 
     - name: Run Tests
       run: composer run-script pipeline
