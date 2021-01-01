@@ -4,10 +4,12 @@ on: [push, pull_request, release]
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         php-versions: ['7.4', '8.0']
+        os: [ubuntu-20.04]
     name: PHP ${{ matrix.php-versions }} Test
     steps:
     - name: Checkout
