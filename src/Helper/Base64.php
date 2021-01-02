@@ -6,9 +6,6 @@ trait Base64
 {
     /**
      * Convert a base64 string to a base64 Url string.
-     *
-     * @param string $base64
-     * @return string
      */
     public function toBase64Url(string $base64): string
     {
@@ -17,9 +14,6 @@ trait Base64
 
     /**
      * Convert a base64 URL string to a base64 string.
-     *
-     * @param string $urlString
-     * @return string
      */
     public function toBase64(string $urlString): string
     {
@@ -30,9 +24,6 @@ trait Base64
      * Add padding to base64 strings which require it. Some base64 URL strings
      * which are decoded will have missing padding which is represented by the
      * equals sign.
-     *
-     * @param string $base64String
-     * @return string
      */
     public function addPadding(string $base64String): string
     {

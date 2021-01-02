@@ -12,24 +12,14 @@ class Jwt
 {
     /**
      * The JSON Web Token string
-     *
-     * @var string $token
      */
-    private $token;
+    private string $token;
 
     /**
     * The secret used to create the JWT signature
-    *
-    * @var string $secret
     */
-    private $secret;
+    private string $secret;
 
-    /**
-     * JWT Constructor
-     *
-     * @param string $token
-     * @param string $secret
-     */
     public function __construct(string $token, string $secret)
     {
         $this->token = $token;
@@ -39,8 +29,6 @@ class Jwt
 
     /**
      * Return the JSON Web Token String
-     *
-     * @return string
      */
     public function getToken(): string
     {
@@ -49,8 +37,6 @@ class Jwt
 
     /**
      * Return the secret used to encode the JWT signature
-     *
-     * @return string
      */
     public function getSecret(): string
     {
