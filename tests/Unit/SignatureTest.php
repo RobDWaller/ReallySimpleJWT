@@ -9,7 +9,6 @@ use Tests\Fixtures\Tokens;
 
 class SignatureTest extends TestCase
 {
-
     public function testMake(): void
     {
         $encode = $this->createMock(EncodeHs256::class);
