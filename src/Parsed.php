@@ -40,7 +40,7 @@ class Parsed
 
     /**
      * The Parsed constructor
-     * 
+     *
      * @param mixed[] $header
      * @param mixed[] $payload
      */

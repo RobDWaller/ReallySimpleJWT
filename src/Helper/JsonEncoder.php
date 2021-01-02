@@ -23,7 +23,7 @@ trait JsonEncoder
     /**
      * Consumes a json string and decodes it, will always return an
      * associative array.
-     * 
+     *
      * @return mixed[]
      */
     public function jsonDecode(string $json): array

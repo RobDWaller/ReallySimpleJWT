@@ -102,7 +102,7 @@ class Parse
 
     /**
      * Retrieve the expiration claim from the JWT.
-     * 
+     *
      * @throws ParseException
      */
     public function getExpiration(): int
@@ -118,7 +118,7 @@ class Parse
 
     /**
      * Retrieve the not before claim from the JWT.
-     * 
+     *
      * @throws ParseException
      */
     public function getNotBefore(): int
@@ -151,7 +151,7 @@ class Parse
 
     /**
      * Retrieve the algorithm claim from the JWT.
-     * 
+     *
      * @throws ParseException
      */
     public function getAlgorithm(): string
