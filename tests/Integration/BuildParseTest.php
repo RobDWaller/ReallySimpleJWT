@@ -126,13 +126,13 @@ class BuildParseTest extends TestCase
         $this->assertSame($token->getSecret(), $parsed->getJwt()->getSecret());
         $this->assertSame(self::TOKEN_TYPE, $parsed->getType());
         $this->assertSame(self::TOKEN_TYPE, $parsed->getContentType());
+        $this->assertSame($expiration, $parsed->getExpiration());
+        $this->assertSame($notBefore, $parsed->getNotBefore());
+        $this->assertSame($issuedAt, $parsed->getIssuedAt());
         $this->assertSame('foo bar', $parsed->getHeader()['info']);
         $this->assertSame('mysite.com', $parsed->getIssuer());
         $this->assertSame('admins', $parsed->getSubject());
         $this->assertSame('https://amazon.com', $parsed->getAudience());
-        $this->assertSame($expiration, $parsed->getExpiration());
-        $this->assertSame($notBefore, $parsed->getNotBefore());
-        $this->assertSame($issuedAt, $parsed->getIssuedAt());
         $this->assertSame('TYHUIP', $parsed->getJwtId());
         $this->assertSame(5, $parsed->getPayload()['uid']);
         $this->assertSame(explode('.', $token->getToken())[2], $parsed->getSignature());
@@ -210,42 +210,42 @@ class BuildParseTest extends TestCase
 
         $parsed = $parse->parse();
 
-        $this->assertSame($token->getToken(), $parsed->getJwt()->getToken());
-        $this->assertSame($token->getSecret(), $parsed->getJwt()->getSecret());
         $this->assertSame(self::TOKEN_TYPE, $parsed->getType());
         $this->assertSame(self::TOKEN_TYPE, $parsed->getContentType());
+        $this->assertSame($token->getToken(), $parsed->getJwt()->getToken());
+        $this->assertSame($token->getSecret(), $parsed->getJwt()->getSecret());
         $this->assertSame('carpark', $parsed->getHeader()['info']);
         $this->assertSame('thesite.com', $parsed->getIssuer());
         $this->assertSame('editors', $parsed->getSubject());
         $this->assertSame('https://twitter.com', $parsed->getAudience());
-        $this->assertSame($expiration, $parsed->getExpiration());
         $this->assertSame($notBefore, $parsed->getNotBefore());
+        $this->assertSame($expiration, $parsed->getExpiration());
         $this->assertSame($issuedAt, $parsed->getIssuedAt());
         $this->assertSame('56UJ', $parsed->getJwtId());
-        $this->assertSame(65, $parsed->getPayload()['uid']);
         $this->assertSame(explode('.', $token->getToken())[2], $parsed->getSignature());
+        $this->assertSame(65, $parsed->getPayload()['uid']);
 
         $parse1 = new Parse($token1, new DecodeHs256());
 
         $parsed1 = $parse1->parse();
 
-        $this->assertSame($token1->getToken(), $parsed1->getJwt()->getToken());
         $this->assertSame($token1->getSecret(), $parsed1->getJwt()->getSecret());
-        $this->assertSame(self::TOKEN_TYPE, $parsed1->getType());
+        $this->assertSame($token1->getToken(), $parsed1->getJwt()->getToken());
         $this->assertSame('JWE', $parsed1->getContentType());
+        $this->assertSame(self::TOKEN_TYPE, $parsed1->getType());
         $this->assertSame('FooBar', $parsed1->getHeader()['claim']);
         $this->assertArrayNotHasKey('info', $parsed1->getHeader());
         $this->assertSame('instagram.com', $parsed1->getIssuer());
         $this->assertSame('admins', $parsed1->getSubject());
         $this->assertSame('https://apple.com', $parsed1->getAudience()[0]);
         $this->assertSame('https://duckduckgo.com', $parsed1->getAudience()[1]);
-        $this->assertSame($expiration1, $parsed1->getExpiration());
-        $this->assertSame($notBefore1, $parsed1->getNotBefore());
-        $this->assertSame($issuedAt1, $parsed1->getIssuedAt());
         $this->assertSame('456HGF', $parsed1->getJwtId());
         $this->assertSame(711, $parsed1->getPayload()['user_id']);
         $this->assertArrayNotHasKey('uid', $parsed1->getPayload());
         $this->assertSame(explode('.', $token1->getToken())[2], $parsed1->getSignature());
+        $this->assertSame($expiration1, $parsed1->getExpiration());
+        $this->assertSame($notBefore1, $parsed1->getNotBefore());
+        $this->assertSame($issuedAt1, $parsed1->getIssuedAt());
     }
 
     public function testMultipleTokensRemovedFields(): void
@@ -300,20 +300,20 @@ class BuildParseTest extends TestCase
 
         $parsed = $parse->parse();
 
-        $this->assertSame($token->getToken(), $parsed->getJwt()->getToken());
-        $this->assertSame($token->getSecret(), $parsed->getJwt()->getSecret());
-        $this->assertSame(self::TOKEN_TYPE, $parsed->getType());
-        $this->assertSame(self::TOKEN_TYPE, $parsed->getContentType());
         $this->assertSame('Star Wars', $parsed->getHeader()['info']);
         $this->assertSame('twitter.com', $parsed->getIssuer());
         $this->assertSame('managers', $parsed->getSubject());
         $this->assertSame('https://reddit.com', $parsed->getAudience());
         $this->assertSame($expiration, $parsed->getExpiration());
-        $this->assertSame($notBefore, $parsed->getNotBefore());
         $this->assertSame($issuedAt, $parsed->getIssuedAt());
+        $this->assertSame($notBefore, $parsed->getNotBefore());
         $this->assertSame('5674', $parsed->getJwtId());
         $this->assertSame(268, $parsed->getPayload()['uid']);
         $this->assertSame(explode('.', $token->getToken())[2], $parsed->getSignature());
+        $this->assertSame($token->getToken(), $parsed->getJwt()->getToken());
+        $this->assertSame($token->getSecret(), $parsed->getJwt()->getSecret());
+        $this->assertSame(self::TOKEN_TYPE, $parsed->getType());
+        $this->assertSame(self::TOKEN_TYPE, $parsed->getContentType());
 
         $parse1 = new Parse($token1, new DecodeHs256());
 
@@ -322,13 +322,11 @@ class BuildParseTest extends TestCase
         $this->assertSame($token1->getToken(), $parsed1->getJwt()->getToken());
         $this->assertSame($token1->getSecret(), $parsed1->getJwt()->getSecret());
         $this->assertSame(self::TOKEN_TYPE, $parsed1->getType());
-        $this->assertSame('', $parsed1->getContentType());
         $this->assertSame('FooBar', $parsed1->getHeader()['claim']);
         $this->assertArrayNotHasKey('info', $parsed1->getHeader());
         $this->assertSame('whatsapp.com', $parsed1->getIssuer());
-        $this->assertSame('', $parsed1->getSubject());
-        $this->assertSame('https://imgur.com', $parsed1->getAudience()[0]);
         $this->assertSame('https://youtube.com', $parsed1->getAudience()[1]);
+        $this->assertSame('https://imgur.com', $parsed1->getAudience()[0]);
         $this->assertSame($expiration1, $parsed1->getExpiration());
         $this->assertSame(0, $parsed1->getNotBefore());
         $this->assertSame($issuedAt1, $parsed1->getIssuedAt());
@@ -336,6 +334,8 @@ class BuildParseTest extends TestCase
         $this->assertSame(5, $parsed1->getPayload()['user_id']);
         $this->assertArrayNotHasKey('uid', $parsed1->getPayload());
         $this->assertSame(explode('.', $token1->getToken())[2], $parsed1->getSignature());
+        $this->assertSame('', $parsed1->getSubject());
+        $this->assertSame('', $parsed1->getContentType());
     }
 
     public function testMultipleTokensWithResetRemoveFields(): void
@@ -353,7 +353,7 @@ class BuildParseTest extends TestCase
 
         $token = $build->setContentType(self::TOKEN_TYPE)
             ->setHeaderClaim('info', 'Yo yo yo.')
-            ->setIssuer('https://imgur.com')
+            ->setIssuer('https://bing.com')
             ->setSubject('users')
             ->setExpiration($expiration)
             ->setAudience('https://api.imgur.com')
@@ -385,37 +385,37 @@ class BuildParseTest extends TestCase
 
         $parsed = $parse->parse();
 
+        $this->assertSame('users', $parsed->getSubject());
+        $this->assertSame('https://api.imgur.com', $parsed->getAudience());
         $this->assertSame($token->getToken(), $parsed->getJwt()->getToken());
         $this->assertSame($token->getSecret(), $parsed->getJwt()->getSecret());
         $this->assertSame(self::TOKEN_TYPE, $parsed->getType());
         $this->assertSame(self::TOKEN_TYPE, $parsed->getContentType());
-        $this->assertSame('Yo yo yo.', $parsed->getHeader()['info']);
-        $this->assertSame('https://imgur.com', $parsed->getIssuer());
-        $this->assertSame('users', $parsed->getSubject());
-        $this->assertSame('https://api.imgur.com', $parsed->getAudience());
         $this->assertSame($expiration, $parsed->getExpiration());
         $this->assertSame($notBefore, $parsed->getNotBefore());
         $this->assertSame($issuedAt, $parsed->getIssuedAt());
         $this->assertSame('4567', $parsed->getJwtId());
         $this->assertSame(5232, $parsed->getPayload()['uid']);
         $this->assertSame(explode('.', $token->getToken())[2], $parsed->getSignature());
+        $this->assertSame('Yo yo yo.', $parsed->getHeader()['info']);
+        $this->assertSame('https://bing.com', $parsed->getIssuer());
 
         $parse1 = new Parse($token1, new DecodeHs256());
 
         $parsed1 = $parse1->parse();
 
+        $this->assertSame('JWE', $parsed1->getContentType());
+        $this->assertSame('FooBar', $parsed1->getHeader()['claim']);
         $this->assertSame($token1->getToken(), $parsed1->getJwt()->getToken());
         $this->assertSame($token1->getSecret(), $parsed1->getJwt()->getSecret());
         $this->assertSame(self::TOKEN_TYPE, $parsed1->getType());
-        $this->assertSame('JWE', $parsed1->getContentType());
-        $this->assertSame('FooBar', $parsed1->getHeader()['claim']);
         $this->assertArrayNotHasKey('info', $parsed1->getHeader());
         $this->assertSame('', $parsed1->getIssuer());
         $this->assertSame('admins', $parsed1->getSubject());
-        $this->assertSame('https://keep.google.com', $parsed1->getAudience()[0]);
-        $this->assertSame('https://vimeo.com', $parsed1->getAudience()[1]);
         $this->assertSame($expiration1, $parsed1->getExpiration());
         $this->assertSame($notBefore1, $parsed1->getNotBefore());
+        $this->assertSame('https://keep.google.com', $parsed1->getAudience()[0]);
+        $this->assertSame('https://vimeo.com', $parsed1->getAudience()[1]);
         $this->assertSame(0, $parsed1->getIssuedAt());
         $this->assertSame('45I9kl', $parsed1->getJwtId());
         $this->assertSame(5, $parsed1->getPayload()['user_id']);
