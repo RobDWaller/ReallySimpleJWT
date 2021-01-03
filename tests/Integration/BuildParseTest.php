@@ -80,16 +80,16 @@ class BuildParseTest extends TestCase
         $issuedAt = time();
 
         $token = $build->setContentType(self::TOKEN_TYPE)
-            ->setHeaderClaim('info', 'foo bar')
             ->setSecret('456yuTu#!3456')
-            ->setIssuer('mysite.com')
-            ->setSubject('admins')
             ->setAudience('https://amazon.com')
             ->setExpiration($expiration)
             ->setNotBefore($notBefore)
             ->setIssuedAt($issuedAt)
+            ->setIssuer('mysite.com')
+            ->setSubject('admins')
             ->setJwtId('TYHUIP')
             ->setPayloadClaim('uid', 5)
+            ->setHeaderClaim('info', 'foo bar')
             ->build();
 
         $build1 = new Build(
@@ -105,13 +105,13 @@ class BuildParseTest extends TestCase
 
         $token1 = $build1->setContentType('JWE')
             ->setHeaderClaim('claim', 'FooBar')
-            ->setSecret('456zxcDEF!$*0921')
-            ->setIssuer('facebook.com')
+            ->setSecret('456zxHgEF!**217')
             ->setSubject('admins')
-            ->setAudience(['https://maps.google.com', 'https://youtube.com'])
+            ->setIssuer('facebook.com')
+            ->setAudience(['https://maps.google.com', 'https://youtube.co.uk'])
             ->setExpiration($expiration1)
-            ->setNotBefore($notBefore1)
             ->setIssuedAt($issuedAt1)
+            ->setNotBefore($notBefore1)
             ->setJwtId('456jkl')
             ->setPayloadClaim('user_id', 5)
             ->build();
@@ -150,7 +150,7 @@ class BuildParseTest extends TestCase
         $this->assertSame('facebook.com', $parsed1->getIssuer());
         $this->assertSame('admins', $parsed1->getSubject());
         $this->assertSame('https://maps.google.com', $parsed1->getAudience()[0]);
-        $this->assertSame('https://youtube.com', $parsed1->getAudience()[1]);
+        $this->assertSame('https://youtube.co.uk', $parsed1->getAudience()[1]);
         $this->assertSame($expiration1, $parsed1->getExpiration());
         $this->assertSame($notBefore1, $parsed1->getNotBefore());
         $this->assertSame($issuedAt1, $parsed1->getIssuedAt());
@@ -174,16 +174,16 @@ class BuildParseTest extends TestCase
         $issuedAt = time();
 
         $token = $build->setContentType(self::TOKEN_TYPE)
-            ->setHeaderClaim('info', 'carpark')
             ->setSecret('55556kiOP!5555')
+            ->setHeaderClaim('info', 'carpark')
             ->setIssuer('thesite.com')
             ->setSubject('editors')
             ->setAudience('https://twitter.com')
+            ->setJwtId('56UJ')
+            ->setPayloadClaim('uid', 65)
             ->setExpiration($expiration)
             ->setNotBefore($notBefore)
             ->setIssuedAt($issuedAt)
-            ->setJwtId('56UJ')
-            ->setPayloadClaim('uid', 65)
             ->build();
 
         $expiration1 = time() + 20;
@@ -191,16 +191,16 @@ class BuildParseTest extends TestCase
         $issuedAt1 = time() + 10;
 
         $token1 = $build->reset()
-            ->setContentType('JWE')
+            ->setJwtId('456HGF')
             ->setHeaderClaim('claim', 'FooBar')
-            ->setSecret('456zxcDEF!$*0921')
-            ->setIssuer('facebook.com')
+            ->setContentType('JWE')
+            ->setSecret('456zxcYUT!$*0921')
+            ->setIssuer('instagram.com')
             ->setSubject('admins')
             ->setAudience(['https://apple.com', 'https://duckduckgo.com'])
             ->setExpiration($expiration1)
-            ->setNotBefore($notBefore1)
             ->setIssuedAt($issuedAt1)
-            ->setJwtId('456jkl')
+            ->setNotBefore($notBefore1)
             ->setPayloadClaim('user_id', 711)
             ->build();
 
@@ -235,14 +235,14 @@ class BuildParseTest extends TestCase
         $this->assertSame('JWE', $parsed1->getContentType());
         $this->assertSame('FooBar', $parsed1->getHeader()['claim']);
         $this->assertArrayNotHasKey('info', $parsed1->getHeader());
-        $this->assertSame('facebook.com', $parsed1->getIssuer());
+        $this->assertSame('instagram.com', $parsed1->getIssuer());
         $this->assertSame('admins', $parsed1->getSubject());
         $this->assertSame('https://apple.com', $parsed1->getAudience()[0]);
         $this->assertSame('https://duckduckgo.com', $parsed1->getAudience()[1]);
         $this->assertSame($expiration1, $parsed1->getExpiration());
         $this->assertSame($notBefore1, $parsed1->getNotBefore());
         $this->assertSame($issuedAt1, $parsed1->getIssuedAt());
-        $this->assertSame('456jkl', $parsed1->getJwtId());
+        $this->assertSame('456HGF', $parsed1->getJwtId());
         $this->assertSame(711, $parsed1->getPayload()['user_id']);
         $this->assertArrayNotHasKey('uid', $parsed1->getPayload());
         $this->assertSame(explode('.', $token1->getToken())[2], $parsed1->getSignature());
@@ -262,15 +262,15 @@ class BuildParseTest extends TestCase
         $issuedAt = time();
 
         $token = $build->setContentType(self::TOKEN_TYPE)
-            ->setHeaderClaim('info', 'Star Wars')
             ->setSecret('AHDJ989%653ads')
             ->setIssuer('twitter.com')
             ->setSubject('managers')
+            ->setHeaderClaim('info', 'Star Wars')
             ->setAudience('https://reddit.com')
             ->setExpiration($expiration)
+            ->setJwtId('5674')
             ->setNotBefore($notBefore)
             ->setIssuedAt($issuedAt)
-            ->setJwtId('5674')
             ->setPayloadClaim('uid', 268)
             ->build();
 
@@ -284,14 +284,13 @@ class BuildParseTest extends TestCase
         $expiration1 = time() + 20;
         $issuedAt1 = time() + 10;
 
-        $token1 = $build1->setContentType('JWE')
-            ->setHeaderClaim('claim', 'FooBar')
-            ->setSecret('456zxcDEF!$*0921')
-            ->setIssuer('facebook.com')
+        $token1 = $build1->setHeaderClaim('claim', 'FooBar')
+            ->setSecret('983zxcDEF!$*8921')
             ->setAudience(['https://imgur.com', 'https://youtube.com'])
+            ->setIssuer('whatsapp.com')
             ->setExpiration($expiration1)
             ->setIssuedAt($issuedAt1)
-            ->setJwtId('456jkl')
+            ->setJwtId('321jkl')
             ->setPayloadClaim('user_id', 5)
             ->build();
 
@@ -323,17 +322,17 @@ class BuildParseTest extends TestCase
         $this->assertSame($token1->getToken(), $parsed1->getJwt()->getToken());
         $this->assertSame($token1->getSecret(), $parsed1->getJwt()->getSecret());
         $this->assertSame(self::TOKEN_TYPE, $parsed1->getType());
-        $this->assertSame('JWE', $parsed1->getContentType());
+        $this->assertSame('', $parsed1->getContentType());
         $this->assertSame('FooBar', $parsed1->getHeader()['claim']);
         $this->assertArrayNotHasKey('info', $parsed1->getHeader());
-        $this->assertSame('facebook.com', $parsed1->getIssuer());
+        $this->assertSame('whatsapp.com', $parsed1->getIssuer());
         $this->assertSame('', $parsed1->getSubject());
         $this->assertSame('https://imgur.com', $parsed1->getAudience()[0]);
         $this->assertSame('https://youtube.com', $parsed1->getAudience()[1]);
         $this->assertSame($expiration1, $parsed1->getExpiration());
         $this->assertSame(0, $parsed1->getNotBefore());
         $this->assertSame($issuedAt1, $parsed1->getIssuedAt());
-        $this->assertSame('456jkl', $parsed1->getJwtId());
+        $this->assertSame('321jkl', $parsed1->getJwtId());
         $this->assertSame(5, $parsed1->getPayload()['user_id']);
         $this->assertArrayNotHasKey('uid', $parsed1->getPayload());
         $this->assertSame(explode('.', $token1->getToken())[2], $parsed1->getSignature());
@@ -354,12 +353,12 @@ class BuildParseTest extends TestCase
 
         $token = $build->setContentType(self::TOKEN_TYPE)
             ->setHeaderClaim('info', 'Yo yo yo.')
-            ->setSecret('HYjuI9o!ropP')
             ->setIssuer('https://imgur.com')
             ->setSubject('users')
-            ->setAudience('https://api.imgur.com')
             ->setExpiration($expiration)
+            ->setAudience('https://api.imgur.com')
             ->setNotBefore($notBefore)
+            ->setSecret('HYjuI9o!ropP')
             ->setIssuedAt($issuedAt)
             ->setJwtId('4567')
             ->setPayloadClaim('uid', 5232)
@@ -369,14 +368,14 @@ class BuildParseTest extends TestCase
         $notBefore1 = time() - 20;
 
         $token1 = $build->reset()
-            ->setContentType('JWE')
+            ->setAudience(['https://keep.google.com', 'https://vimeo.com'])
             ->setHeaderClaim('claim', 'FooBar')
             ->setSecret('456zxcDEF!$*0921')
             ->setSubject('admins')
-            ->setAudience(['https://youtube.com', 'https://vimeo.com'])
             ->setExpiration($expiration1)
+            ->setContentType('JWE')
             ->setNotBefore($notBefore1)
-            ->setJwtId('456jkl')
+            ->setJwtId('45I9kl')
             ->setPayloadClaim('user_id', 5)
             ->build();
 
@@ -413,12 +412,12 @@ class BuildParseTest extends TestCase
         $this->assertArrayNotHasKey('info', $parsed1->getHeader());
         $this->assertSame('', $parsed1->getIssuer());
         $this->assertSame('admins', $parsed1->getSubject());
-        $this->assertSame('https://youtube.com', $parsed1->getAudience()[0]);
+        $this->assertSame('https://keep.google.com', $parsed1->getAudience()[0]);
         $this->assertSame('https://vimeo.com', $parsed1->getAudience()[1]);
         $this->assertSame($expiration1, $parsed1->getExpiration());
         $this->assertSame($notBefore1, $parsed1->getNotBefore());
         $this->assertSame(0, $parsed1->getIssuedAt());
-        $this->assertSame('456jkl', $parsed1->getJwtId());
+        $this->assertSame('45I9kl', $parsed1->getJwtId());
         $this->assertSame(5, $parsed1->getPayload()['user_id']);
         $this->assertArrayNotHasKey('uid', $parsed1->getPayload());
         $this->assertSame(explode('.', $token1->getToken())[2], $parsed1->getSignature());
