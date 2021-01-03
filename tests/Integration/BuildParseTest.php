@@ -250,7 +250,7 @@ class BuildParseTest extends TestCase
 
     public function testMultipleTokensRemovedFields(): void
     {
-        $build = $build = new Build(
+        $build = new Build(
             self::TOKEN_TYPE,
             new Validator(),
             new Secret(),
@@ -274,7 +274,7 @@ class BuildParseTest extends TestCase
             ->setPayloadClaim('uid', 268)
             ->build();
 
-        $build1 = $build = new Build(
+        $build1 = new Build(
             self::TOKEN_TYPE,
             new Validator(),
             new Secret(),
@@ -340,7 +340,7 @@ class BuildParseTest extends TestCase
 
     public function testMultipleTokensWithResetRemoveFields(): void
     {
-        $build = $build = new Build(
+        $build = new Build(
             self::TOKEN_TYPE,
             new Validator(),
             new Secret(),
