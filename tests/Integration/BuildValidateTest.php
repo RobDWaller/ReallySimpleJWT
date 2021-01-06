@@ -26,8 +26,6 @@ class BuildValidateTest extends TestCase
         );
 
         $expiration = time() - 20;
-        $notBefore = time() - 10;
-        $issuedAt = time();
 
         $token = $build->setContentType('JWT')
             ->setHeaderClaim('info', 'Hello World')
@@ -68,7 +66,7 @@ class BuildValidateTest extends TestCase
 
         $token = $build->setContentType('JWT')
             ->setHeaderClaim('info', 'Hello World')
-            ->setSecret('123abcDEF!$£%456')
+            ->setSecret('DEF987!$£%456vdg')
             ->setIssuer('localhost')
             ->setSubject('users')
             ->setAudience('https://google.com')
@@ -103,7 +101,7 @@ class BuildValidateTest extends TestCase
 
         $token = new Jwt(
             $token,
-            '123abcDEF!$£%456'
+            '!$£%456hftYuJi2'
         );
 
         $parse = new Parse($token, new DecodeHs256());
