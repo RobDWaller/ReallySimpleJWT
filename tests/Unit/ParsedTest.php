@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Validate;
@@ -10,19 +10,19 @@ use ReallySimpleJWT\Token;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Encode;
 use ReallySimpleJWT\Secret;
+use Tests\Fixtures\Tokens;
 
 class ParsedTest extends TestCase
 {
     public function testParsedGetJWT(): void
     {
+        $jwt = $this->createMock(Jwt::class);
+
         $parsed = new Parsed(
-            new Jwt(
-                Token::create(1, 'foo1234He$$llo56', time() + 300, '127.0.0.1'),
-                'foo1234He$$llo56'
-            ),
-            ["typ" => "JWT"],
-            ["iss" => "127.0.0.1"],
-            'hello'
+            $jwt,
+            Tokens::DECODED_HEADER,
+            Tokens::DECODED_PAYLOAD,
+            Tokens::SECRET
         );
 
         $this->assertInstanceOf(Jwt::class, $parsed->getJwt());
@@ -30,14 +30,13 @@ class ParsedTest extends TestCase
 
     public function testParsedGetHeader(): void
     {
+        $jwt = $this->createMock(Jwt::class);
+
         $parsed = new Parsed(
-            new Jwt(
-                Token::create(1, 'foo1234He$$llo56', time() + 300, '127.0.0.1'),
-                'foo1234He$$llo56'
-            ),
-            ["typ" => "JWT"],
-            ["iss" => "127.0.0.1"],
-            'hello'
+            $jwt,
+            Tokens::DECODED_HEADER,
+            Tokens::DECODED_PAYLOAD,
+            Tokens::SECRET
         );
 
         $this->assertSame('JWT', $parsed->getHeader()['typ']);
@@ -45,32 +44,30 @@ class ParsedTest extends TestCase
 
     public function testParsedGetPayload(): void
     {
+        $jwt = $this->createMock(Jwt::class);
+
         $parsed = new Parsed(
-            new Jwt(
-                Token::create(1, 'foo1234He$$llo56', time() + 300, '127.0.0.1'),
-                'foo1234He$$llo56'
-            ),
-            ["typ" => "JWT"],
-            ["iss" => "127.0.0.1"],
-            'hello'
+            $jwt,
+            Tokens::DECODED_HEADER,
+            Tokens::DECODED_PAYLOAD,
+            Tokens::SECRET
         );
 
-        $this->assertSame('127.0.0.1', $parsed->getPayload()['iss']);
+        $this->assertSame('mysite.com', $parsed->getPayload()['aud']);
     }
 
     public function testParsedGetSignature(): void
     {
+        $jwt = $this->createMock(Jwt::class);
+
         $parsed = new Parsed(
-            new Jwt(
-                Token::create(1, 'foo1234He$$llo56', time() + 300, '127.0.0.1'),
-                'foo1234He$$llo56'
-            ),
-            ["typ" => "JWT"],
-            ["iss" => "127.0.0.1"],
-            'hello'
+            $jwt,
+            Tokens::DECODED_HEADER,
+            Tokens::DECODED_PAYLOAD,
+            Tokens::SECRET
         );
 
-        $this->assertSame('hello', $parsed->getSignature());
+        $this->assertSame(Tokens::SECRET, $parsed->getSignature());
     }
 
     public function testGetIssuer(): void
@@ -369,7 +366,8 @@ class ParsedTest extends TestCase
 
         $result = $parsed->getExpiresIn();
 
-        $this->assertTrue(300 === $result || 299 === $result);
+        $this->assertGreaterThan(298, $result);
+        $this->assertLessThan(302, $result);
     }
 
     public function testGetExpiresInNegative(): void
@@ -403,7 +401,8 @@ class ParsedTest extends TestCase
 
         $result = $parsed->getUsableIn();
 
-        $this->assertTrue(200 === $result || 199 === $result);
+        $this->assertGreaterThan(198, $result);
+        $this->assertLessThan(202, $result);
     }
 
     public function testGetUsableInNegative(): void

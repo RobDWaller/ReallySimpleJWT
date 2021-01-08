@@ -18,9 +18,6 @@ class Secret implements SecretInterface
      * special character *&!@%^#$. It should be at least 12 characters in length.
      *
      * The regex here uses lookahead assertions.
-     *
-     * @param string $secret
-     * @return bool
      */
     public function validate(string $secret): bool
     {

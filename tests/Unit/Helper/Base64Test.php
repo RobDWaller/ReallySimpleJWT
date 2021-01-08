@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Helper;
+namespace Tests\Unit\Helper;
 
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Helper\Base64;

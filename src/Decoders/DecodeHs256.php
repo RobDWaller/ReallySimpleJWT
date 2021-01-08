@@ -13,9 +13,6 @@ class DecodeHs256 implements Decode
 
     /**
      * Decode a Base64 Url string to a json string
-     *
-     * @param string $toDecode
-     * @return string
      */
     private function urlDecode(string $toDecode): string
     {
@@ -25,6 +22,9 @@ class DecodeHs256 implements Decode
         );
     }
 
+    /**
+     * @return mixed[]
+     */
     public function decode(string $toDecode): array
     {
         return $this->jsonDecode($this->urlDecode($toDecode));

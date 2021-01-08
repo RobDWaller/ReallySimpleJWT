@@ -27,8 +27,6 @@ class EncodeHs256 implements Encode
     /**
      * Get the algorithm used to encode the signature. Note this is for show,
      * it is what is displayed in the JWT header as the alg claim.
-     *
-     * @return string
      */
     public function getAlgorithm(): string
     {
@@ -38,8 +36,6 @@ class EncodeHs256 implements Encode
     /**
      * Get the hash algorithm string to be used when encoding the signature,
      * this is the actual hash type used to encode the signature.
-     *
-     * @return string
      */
     private function getHashAlgorithm(): string
     {
@@ -54,8 +50,7 @@ class EncodeHs256 implements Encode
     /**
      * Encode a json string in Base64 Url format.
      *
-     * @param string $toEncode
-     * @return string
+     * @param mixed[] $toEncode
      */
     public function encode(array $toEncode): string
     {
@@ -67,10 +62,8 @@ class EncodeHs256 implements Encode
      * concatenated with a dot, hashed via sha256 with a secret, and then
      * encoded and returned.
      *
-     * @param string $header
-     * @param string $payload
-     * @param string $secret
-     * @return string
+     * @param mixed[] $header
+     * @param mixed[] $payload
      */
     public function signature(array $header, array $payload, string $secret): string
     {
@@ -85,11 +78,6 @@ class EncodeHs256 implements Encode
 
     /**
      * Hash the JWT signature string using sha256.
-     *
-     * @param string $algorithm
-     * @param string $toHash
-     * @param string $secret
-     * @return string
      */
     private function hash(string $algorithm, string $toHash, string $secret): string
     {

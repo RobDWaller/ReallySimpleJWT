@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Signature;
@@ -9,7 +9,6 @@ use Tests\Fixtures\Tokens;
 
 class SignatureTest extends TestCase
 {
-
     public function testMake(): void
     {
         $encode = $this->createMock(EncodeHs256::class);

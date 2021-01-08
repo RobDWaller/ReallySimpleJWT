@@ -30,24 +30,16 @@ class Parse
 
     /**
      * The JSON Web Token value object.
-     *
-     * @var Jwt
      */
     private Jwt $jwt;
 
     /**
      * A class to decode JWT tokens.
-     *
-     * @var Interfaces\Encoder
      */
     private Decode $decode;
 
     /**
      * Parse constructor
-     *
-     * @param Jwt $jwt
-     * @param Validate $validate
-     * @param Encoder $encode
      */
     public function __construct(Jwt $jwt, Decode $decode)
     {
@@ -59,8 +51,6 @@ class Parse
     /**
      * Generate the Parsed Value Object. This method should be called last
      * after the relevant validate methods have been called.
-     *
-     * @return Parsed
      */
     public function parse(): Parsed
     {
@@ -86,8 +76,6 @@ class Parse
     /**
      * Get the header string from the JWT string. This is the first part of the
      * JWT string.
-     *
-     * @return string
      */
     private function getHeader(): string
     {
@@ -97,8 +85,6 @@ class Parse
     /**
      * Get the payload string from the JWT string. This is the second part of
      * the JWT string.
-     *
-     * @return string
      */
     private function getPayload(): string
     {
@@ -108,8 +94,6 @@ class Parse
     /**
      * Get the signature string from the JWT string. This is the third part of
      * the JWT string.
-     *
-     * @return string
      */
     public function getSignature(): string
     {
@@ -119,7 +103,6 @@ class Parse
     /**
      * Retrieve the expiration claim from the JWT.
      *
-     * @return int
      * @throws ParseException
      */
     public function getExpiration(): int
@@ -136,7 +119,6 @@ class Parse
     /**
      * Retrieve the not before claim from the JWT.
      *
-     * @return int
      * @throws ParseException
      */
     public function getNotBefore(): int
@@ -170,7 +152,6 @@ class Parse
     /**
      * Retrieve the algorithm claim from the JWT.
      *
-     * @return string
      * @throws ParseException
      */
     public function getAlgorithm(): string

@@ -24,11 +24,6 @@ class Token
      * payload including issued at, expiration and issuer.
      *
      * @param mixed $userId
-     * @param string $secret
-     * @param int $expiration
-     * @param string $issuer
-     *
-     * @return string
      */
     public static function create($userId, string $secret, int $expiration, string $issuer): string
     {
@@ -47,8 +42,6 @@ class Token
      * value array.
      *
      * @param mixed[] $payload
-     *
-     * @return string
      */
     public static function customPayload(array $payload, string $secret): string
     {
@@ -59,11 +52,6 @@ class Token
     /**
      * Validate the Json web token, check it's structure and signature. Also
      * check its expiration claim and not before claim if they are set.
-     *
-     * @param string $token
-     * @param string $secret
-     *
-     * @return bool
      */
     public static function validate(string $token, string $secret): bool
     {
@@ -74,8 +62,6 @@ class Token
     /**
      * Return the header of the token as an associative array. You should run
      * the validate method on your token before retrieving the header.
-     *
-     * @param string $token
      *
      * @return mixed[]
      */
@@ -89,8 +75,6 @@ class Token
      * Return the payload of the token as an associative array. You should run
      * the validate method on your token before retrieving the payload.
      *
-     * @param string $token
-     *
      * @return mixed[]
      */
     public static function getPayload(string $token, string $secret): array
@@ -101,8 +85,6 @@ class Token
 
     /**
      * Factory method to return an instance of the ReallySimpleJWT\Build class.
-     *
-     * @return Build
      */
     public static function builder(): Build
     {
@@ -112,8 +94,6 @@ class Token
 
     /**
      * Factory method to return instance of the ReallySimpleJWT\Parse class.
-     *
-     * @return Parse
      */
     public static function parser(string $token, string $secret): Parse
     {
@@ -124,7 +104,6 @@ class Token
     /**
      * Run standard validation and expiration validation against the token.
      *
-     * @param Parse $parse
      * @return bool
      */
     public static function validateExpiration(string $token, string $secret): bool
@@ -136,7 +115,6 @@ class Token
     /**
      * Run not before validation against token.
      *
-     * @param Parse $parse
      * @return bool
      */
     public static function validateNotBefore(string $token, string $secret): bool

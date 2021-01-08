@@ -4,7 +4,6 @@ namespace Tests\Fixtures;
 
 class Tokens
 {
-
     public const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlNhbmRyYSB' .
         'UaG9tcHNvbiIsImlhdCI6MTUxNjIzOTAyMiwiZXhwIjoxNT' .

@@ -30,10 +30,9 @@ class Validate
      * Validate the JWT has the right string structure and the signature
      * is valid and has not been tampered with.
      *
-     * @return Parse
      * @throws ValidateException
      */
-    public function validate(): self
+    public function validate(): Validate
     {
         if (!$this->validate->structure($this->parse->getToken())) {
             throw new ValidateException('Token is invalid.', 1);
@@ -48,10 +47,9 @@ class Validate
      * Validate the JWT's expiration claim (exp). This claim defines when a
      * token can be used until.
      *
-     * @return Parse
      * @throws ValidateException
      */
-    public function expiration(): self
+    public function expiration(): Validate
     {
         if (!$this->validate->expiration($this->parse->getExpiration())) {
             throw new ValidateException('Expiration claim has expired.', 4);
@@ -64,10 +62,9 @@ class Validate
      * Validate the JWT's not before claim (nbf). This claim defines when a
      * token can be used from.
      *
-     * @return Parse
      * @throws ValidateException
      */
-    public function notBefore(): self
+    public function notBefore(): Validate
     {
         if (!$this->validate->notBefore($this->parse->getNotBefore())) {
             throw new ValidateException('Not Before claim has not elapsed.', 5);
@@ -80,10 +77,9 @@ class Validate
      * Validate the audience claim exists and is a string or an array
      * of strings.
      *
-     * @return Parse
      * @throws ValidateException
      */
-    public function audience(string $check): self
+    public function audience(string $check): Validate
     {
         if (!$this->validate->audience($this->parse->getAudience(), $check)) {
             throw new ValidateException(
@@ -98,8 +94,11 @@ class Validate
     /**
      * Validate the tokens alg claim is a valid digital signature or MAC
      * algorithm. Value can also be "none". See RFC 7518 for more details.
+     *
+     * @param array<string> $additional
+     * @throws ValidateException
      */
-    public function algorithm(array $additional = []): self
+    public function algorithm(array $additional = []): Validate
     {
         if (!$this->validate->algorithm($this->parse->getAlgorithm(), $additional)) {
             throw new ValidateException(

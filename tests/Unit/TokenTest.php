@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use ReallySimpleJWT\Token;
 use ReallySimpleJWT\Exception\ValidateException;

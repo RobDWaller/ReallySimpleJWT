@@ -25,9 +25,6 @@ class Validator
     /**
      * Confirm the structure of a JSON Web Token, it has three parts separated
      * by dots and complies with Base64URL standards.
-     *
-     * @param string $jwt
-     * @return bool
      */
     public function structure(string $jwt): bool
     {
@@ -41,9 +38,6 @@ class Validator
      * Check the validity of the JWT's expiration claim as defined in the
      * token payload. Returns false if the expiration time has surpassed the
      * current time.
-     *
-     * @param int $expiration
-     * @return bool
      */
     public function expiration(int $expiration): bool
     {
@@ -54,9 +48,6 @@ class Validator
      * Check the validity of the JWT's not before claim as defined in the
      * token payload. Returns false if the not before time has not surpassed
      * the current time.
-     *
-     * @param int $notBefore
-     * @return bool
      */
     public function notBefore(int $notBefore): bool
     {
