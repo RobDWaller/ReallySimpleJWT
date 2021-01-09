@@ -116,6 +116,6 @@ class BuildValidateTest extends TestCase
         $this->expectExceptionMessage('Signature is invalid.');
         $this->expectExceptionCode(3);
 
-        $validate->validate();
+        $validate->signature();
     }
 }
