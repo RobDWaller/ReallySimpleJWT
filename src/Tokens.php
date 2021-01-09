@@ -108,7 +108,8 @@ class Tokens
         $validate = $this->validate($token, $secret);
 
         try {
-            $validate->validate();
+            $validate->structure();
+            $validate->signature();
             return true;
         } catch (ValidateException $e) {
             return false;
