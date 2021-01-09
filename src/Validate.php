@@ -32,13 +32,11 @@ class Validate
      *
      * @throws ValidateException
      */
-    public function validate(): Validate
+    public function structure(): Validate
     {
         if (!$this->validate->structure($this->parse->getToken())) {
             throw new ValidateException('Token is invalid.', 1);
         }
-
-        $this->signature();
 
         return $this;
     }
@@ -116,7 +114,7 @@ class Validate
      *
      * @throws ValidateException
      */
-    public function signature(): void
+    public function signature(): Validate
     {
         $signature = $this->signature->make(
             $this->parse->getDecodedHeader(),
@@ -127,5 +125,7 @@ class Validate
         if (!$this->validate->signature($signature, $this->parse->getSignature())) {
             throw new ValidateException('Signature is invalid.', 3);
         }
+
+        return $this;
     }
 }

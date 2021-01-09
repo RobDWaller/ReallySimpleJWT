@@ -12,7 +12,27 @@ use Tests\Fixtures\Tokens;
 
 class ValidateTest extends TestCase
 {
-    public function testValidateFail(): void
+    public function testStructureSuccess(): void
+    {
+        $parse = $this->createMock(Parse::class);
+        $parse->expects($this->once())
+            ->method('getToken')
+            ->willReturn(Tokens::TOKEN);
+
+        $validator = $this->createMock(Validator::class);
+        $validator->expects($this->once())
+            ->method('structure')
+            ->with(Tokens::TOKEN)
+            ->willReturn(true);
+
+        $signature = $this->createMock(Signature::class);
+
+        $validate = new Validate($parse, $signature, $validator);
+
+        $this->assertInstanceOf(Validate::class, $validate->structure());
+    }
+
+    public function testStructureFail(): void
     {
         $parse = $this->createMock(Parse::class);
         $parse->expects($this->once())
@@ -32,69 +52,12 @@ class ValidateTest extends TestCase
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Token is invalid.');
         $this->expectExceptionCode(1);
-        $validate->validate();
+        $validate->structure();
     }
 
-    public function testValidateSignatureFail(): void
+    public function testSignatureSuccess(): void
     {
         $parse = $this->createMock(Parse::class);
-        $parse->expects($this->once())
-            ->method('getToken')
-            ->willReturn(Tokens::TOKEN);
-
-        $validator = $this->createMock(Validator::class);
-        $validator->expects($this->once())
-            ->method('structure')
-            ->with(Tokens::TOKEN)
-            ->willReturn(true);
-
-        $parse->expects($this->once())
-            ->method('getDecodedHeader')
-            ->willReturn(Tokens::DECODED_HEADER);
-
-        $parse->expects($this->once())
-            ->method('getDecodedPayload')
-            ->willReturn(Tokens::DECODED_PAYLOAD);
-
-        $parse->expects($this->once())
-            ->method('getSecret')
-            ->willReturn('hello');
-
-        $signature = $this->createMock(Signature::class);
-        $signature->expects($this->once())
-            ->method('make')
-            ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, 'hello')
-            ->willReturn('mX0_2dzFlPqR0fyh4J3PPmfQYBz9PlqUut5vXgJaSxY');
-
-        $parse->expects($this->once())
-            ->method('getSignature')
-            ->willReturn(Tokens::SIGNATURE);
-
-        $validator->expects($this->once())
-            ->method('signature')
-            ->with('mX0_2dzFlPqR0fyh4J3PPmfQYBz9PlqUut5vXgJaSxY', Tokens::SIGNATURE)
-            ->willReturn(false);
-
-        $validate = new Validate($parse, $signature, $validator);
-
-        $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Signature is invalid.');
-        $this->expectExceptionCode(3);
-        $validate->validate();
-    }
-
-    public function testValidateSuccess(): void
-    {
-        $parse = $this->createMock(Parse::class);
-        $parse->expects($this->once())
-            ->method('getToken')
-            ->willReturn(Tokens::TOKEN);
-
-        $validator = $this->createMock(Validator::class);
-        $validator->expects($this->once())
-            ->method('structure')
-            ->with(Tokens::TOKEN)
-            ->willReturn(true);
 
         $parse->expects($this->once())
             ->method('getDecodedHeader')
@@ -118,6 +81,7 @@ class ValidateTest extends TestCase
             ->method('getSignature')
             ->willReturn(Tokens::SIGNATURE);
 
+        $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('signature')
             ->with(Tokens::SIGNATURE, Tokens::SIGNATURE)
@@ -125,7 +89,47 @@ class ValidateTest extends TestCase
 
         $validate = new Validate($parse, $signature, $validator);
 
-        $this->assertInstanceOf(Validate::class, $validate->validate());
+        $this->assertInstanceOf(Validate::class, $validate->signature());
+    }
+
+    public function testSignatureFail(): void
+    {
+        $parse = $this->createMock(Parse::class);
+
+        $parse->expects($this->once())
+            ->method('getDecodedHeader')
+            ->willReturn(Tokens::DECODED_HEADER);
+
+        $parse->expects($this->once())
+            ->method('getDecodedPayload')
+            ->willReturn(Tokens::DECODED_PAYLOAD);
+
+        $parse->expects($this->once())
+            ->method('getSecret')
+            ->willReturn('hello');
+
+        $signature = $this->createMock(Signature::class);
+        $signature->expects($this->once())
+            ->method('make')
+            ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, 'hello')
+            ->willReturn('mX0_2dzFlPqR0fyh4J3PPmfQYBz9PlqUut5vXgJaSxY');
+
+        $parse->expects($this->once())
+            ->method('getSignature')
+            ->willReturn(Tokens::SIGNATURE);
+
+        $validator = $this->createMock(Validator::class);
+        $validator->expects($this->once())
+            ->method('signature')
+            ->with('mX0_2dzFlPqR0fyh4J3PPmfQYBz9PlqUut5vXgJaSxY', Tokens::SIGNATURE)
+            ->willReturn(false);
+
+        $validate = new Validate($parse, $signature, $validator);
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Signature is invalid.');
+        $this->expectExceptionCode(3);
+        $validate->signature();
     }
 
     public function testValidateExpiration(): void
