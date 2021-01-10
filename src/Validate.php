@@ -93,12 +93,12 @@ class Validate
      * Validate the tokens alg claim is a valid digital signature or MAC
      * algorithm. Value can also be "none". See RFC 7518 for more details.
      *
-     * @param array<string> $additional
+     * @param string[] $algorithms
      * @throws ValidateException
      */
-    public function algorithm(array $additional = []): Validate
+    public function algorithm(array $algorithms = []): Validate
     {
-        if (!$this->validate->algorithm($this->parse->getAlgorithm(), $additional)) {
+        if (!$this->validate->algorithm($this->parse->getAlgorithm(), $algorithms)) {
             throw new ValidateException(
                 'Algorithm claim is not valid.',
                 12

@@ -85,12 +85,10 @@ class Validator
      * valid digital signatures, MAC algorithms or "none" as
      * defined in RFC 7518.
      *
-     * @param string[] $additional
+     * @param string[] $algorithms
      */
-    public function algorithm(string $algorithm, array $additional): bool
+    public function algorithm(string $algorithm, array $algorithms): bool
     {
-        $base = ["none", "HS256"];
-
-        return in_array($algorithm, array_merge($base, $additional));
+        return in_array($algorithm, $algorithms);
     }
 }

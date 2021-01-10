@@ -115,51 +115,24 @@ class ValidatorTest extends TestCase
 
         $algorithm = "HS256";
 
-        $this->assertTrue($validate->algorithm($algorithm, []));
-    }
-
-    public function testValidateAlgorithmNone(): void
-    {
-        $validate = new Validator();
-
-        $algorithm = "none";
-
-        $this->assertTrue($validate->algorithm($algorithm, []));
+        $this->assertTrue($validate->algorithm($algorithm, ["HS256"]));
     }
 
     public function testValidateAlgorithmFail(): void
     {
         $validate = new Validator();
 
-        $algorithm = "HB256";
+        $algorithm = "HS256";
 
         $this->assertFalse($validate->algorithm($algorithm, []));
     }
 
-    public function testValidateAlgorithmCustom(): void
+    public function testValidateAlgorithmList(): void
     {
         $validate = new Validator();
 
         $algorithm = "HS384";
 
-        $this->assertTrue($validate->algorithm($algorithm, ["HS384"]));
-    }
-
-    public function testValidateAlgorithmCustomFail(): void
-    {
-        $validate = new Validator();
-
-        $algorithm = "HB384";
-
-        $this->assertFalse($validate->algorithm($algorithm, ["HS384"]));
-    }
-
-    public function testValidateAlgorithmCustomStandard(): void
-    {
-        $validate = new Validator();
-
-        $algorithm = "HS256";
-
-        $this->assertTrue($validate->algorithm($algorithm, ["HS384"]));
+        $this->assertTrue($validate->algorithm($algorithm, ["HS256", "HS384"]));
     }
 }
