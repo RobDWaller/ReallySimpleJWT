@@ -3,6 +3,9 @@
 namespace Tests\Unit;
 
 use ReallySimpleJWT\Token;
+use ReallySimpleJWT\Build;
+use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Exception\ValidateException;
 use PHPUnit\Framework\TestCase;
 
@@ -125,12 +128,17 @@ class TokenTest extends TestCase
 
     public function testBuilder(): void
     {
-        $this->assertInstanceOf('ReallySimpleJWT\Build', Token::builder());
+        $this->assertInstanceOf(Build::class, Token::builder());
+    }
+
+    public function testParser(): void
+    {
+        $this->assertInstanceOf(Parse::class, Token::parser('Hello', '1234'));
     }
 
     public function testValidator(): void
     {
-        $this->assertInstanceOf('ReallySimpleJWT\Parse', Token::parser('Hello', '1234'));
+        $this->assertInstanceOf(Validate::class, Token::validator('Hello', '1234'));
     }
 
     public function testGetPayload(): void

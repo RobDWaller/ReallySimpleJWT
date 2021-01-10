@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Tokens;
+use ReallySimpleJWT\Build;
+use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Validate;
 
 /**
  * A simple Package for creating JSON Web Tokens that uses HMAC SHA256 to sign
@@ -23,12 +26,12 @@ class Token
      * Create a JSON Web Token that contains a user identifier and a basic
      * payload including issued at, expiration and issuer.
      *
-     * @param mixed $userId
+     * @param string|int $userId
      */
     public static function create($userId, string $secret, int $expiration, string $issuer): string
     {
         $tokens = new Tokens();
-        return $tokens->createBasicToken(
+        return $tokens->create(
             'user_id',
             $userId,
             $secret,
@@ -46,7 +49,7 @@ class Token
     public static function customPayload(array $payload, string $secret): string
     {
         $tokens = new Tokens();
-        return $tokens->createCustomToken($payload, $secret)->getToken();
+        return $tokens->customPayload($payload, $secret)->getToken();
     }
 
     /**
@@ -56,7 +59,7 @@ class Token
     public static function validate(string $token, string $secret): bool
     {
         $tokens = new Tokens();
-        return $tokens->basicValidation($token, $secret);
+        return $tokens->validate($token, $secret);
     }
 
     /**
@@ -99,6 +102,12 @@ class Token
     {
         $tokens = new Tokens();
         return $tokens->parser($token, $secret);
+    }
+
+    public static function validator(string $token, string $secret): Validate
+    {
+        $tokens = new Tokens();
+        return $tokens->validator($token, $secret);
     }
 
     /**

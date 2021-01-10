@@ -37,6 +37,19 @@ class Tokens
         );
     }
 
+    public function validator(string $token, string $secret): Validate
+    {
+        $parse = $this->parser($token, $secret);
+
+        return new Validate(
+            $parse,
+            new Signature(
+                new EncodeHs256()
+            ),
+            new Validator()
+        );
+    }
+
     /**
      * @return mixed[]
      */
@@ -56,14 +69,13 @@ class Tokens
     }
 
     /**
-     * @param mixed $id
-     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @param string|int $userId
      */
-    public function createBasicToken(string $key, $id, string $secret, int $expiration, string $issuer): Jwt
+    public function create(string $userKey, $userId, string $secret, int $expiration, string $issuer): Jwt
     {
         $builder = $this->builder();
 
-        return $builder->setPayloadClaim($key, $id)
+        return $builder->setPayloadClaim($userKey, $userId)
             ->setSecret($secret)
             ->setExpiration($expiration)
             ->setIssuer($issuer)
@@ -74,7 +86,7 @@ class Tokens
     /**
      * @param mixed[] $payload
      */
-    public function createCustomToken(array $payload, string $secret): Jwt
+    public function customPayload(array $payload, string $secret): Jwt
     {
         $builder = $this->builder();
 
@@ -90,22 +102,9 @@ class Tokens
             ->build();
     }
 
-    public function validate(string $token, string $secret): Validate
+    public function validate(string $token, string $secret): bool
     {
-        $parse = $this->parser($token, $secret);
-
-        return new Validate(
-            $parse,
-            new Signature(
-                new EncodeHs256()
-            ),
-            new Validator()
-        );
-    }
-
-    public function basicValidation(string $token, string $secret): bool
-    {
-        $validate = $this->validate($token, $secret);
+        $validate = $this->validator($token, $secret);
 
         try {
             $validate->structure();
@@ -118,7 +117,7 @@ class Tokens
 
     public function validateExpiration(string $token, string $secret): bool
     {
-        $validate = $this->validate($token, $secret);
+        $validate = $this->validator($token, $secret);
 
         try {
             $validate->expiration();
@@ -130,7 +129,7 @@ class Tokens
 
     public function validateNotBefore(string $token, string $secret): bool
     {
-        $validate = $this->validate($token, $secret);
+        $validate = $this->validator($token, $secret);
 
         try {
             $validate->notBefore();
