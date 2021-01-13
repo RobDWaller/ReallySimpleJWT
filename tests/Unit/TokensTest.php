@@ -124,6 +124,15 @@ class TokensTest extends TestCase
         );
     }
 
+    public function testValidateNoExpiration(): void
+    {
+        $tokens = new Tokens();
+
+        $this->assertFalse(
+            $tokens->validateExpiration(TokenFixtures::TOKEN_NO_TIMES, TokenFixtures::SECRET)
+        );
+    }
+
     public function testValidateNotBefore(): void
     {
         $tokens = new Tokens();
@@ -147,6 +156,15 @@ class TokensTest extends TestCase
 
         $this->assertFalse(
             $tokens->validateNotBefore($token->getToken(), 'secret123#ABC')
+        );
+    }
+
+    public function testValidateNoNotBefore(): void
+    {
+        $tokens = new Tokens();
+
+        $this->assertFalse(
+            $tokens->validateNotBefore(TokenFixtures::TOKEN_NO_TIMES, TokenFixtures::SECRET)
         );
     }
 

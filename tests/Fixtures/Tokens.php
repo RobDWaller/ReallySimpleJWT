@@ -32,4 +32,8 @@ class Tokens
     ];
 
     public const ALGORITHM = 'HS256';
+
+    public const TOKEN_NO_TIMES = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' . 
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        'z8KOZagJYYZ5CfTPFUEn59ksYpm8Fo2kldmZqwwoAic';
 }
