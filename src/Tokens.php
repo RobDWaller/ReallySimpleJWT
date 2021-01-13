@@ -13,6 +13,7 @@ use ReallySimpleJWT\Decoders\DecodeHs256;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Exception\ParseException;
 
 class Tokens
 {
@@ -124,6 +125,8 @@ class Tokens
             return true;
         } catch (ValidateException $e) {
             return false;
+        } catch (ParseException $e) {
+            return false;
         }
     }
 
@@ -135,6 +138,8 @@ class Tokens
             $validate->notBefore();
             return true;
         } catch (ValidateException $e) {
+            return false;
+        } catch (ParseException $e) {
             return false;
         }
     }
