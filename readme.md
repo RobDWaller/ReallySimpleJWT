@@ -84,7 +84,7 @@ Add the following to your composer.json file:
 
 ```javascript
 "require": {
-    "rbdwllr/reallysimplejwt": "^2.0"
+    "rbdwllr/reallysimplejwt": "^4.0"
 }
 ```
 
