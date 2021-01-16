@@ -6,7 +6,7 @@ use ReallySimpleJWT\Token;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Exception\TokensException;
 use Tests\Fixtures\Tokens;
 use PHPUnit\Framework\TestCase;
 
@@ -43,36 +43,9 @@ class TokenTest extends TestCase
         $this->assertIsString($token);
     }
 
-    public function testValidateCustomPayloadBadStructure(): void
-    {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-            'eyJpYXQiOjE1NjUzNDYyNDcsInVpZCI6MSwiaXNzIjoibG9jYWxob3N0In0';
-
-        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
-    }
-
-    public function testValidateCustomPayloadBadSignature(): void
-    {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-            'eyJpYXQiOjE1NjUzNDYyNDcsInVpZCI6MSwiaXNzIjoibG9jYWxob3N0In0.' .
-            'Z1qtnsznCGB8vDaZKb5h9A0swhyD_Vt5DhFPkL43Kq';
-
-        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
-    }
-
-    public function testValidateCustomPayloadExpired(): void
-    {
-        $this->assertFalse(Token::validateExpiration(Tokens::TOKEN, Tokens::SECRET));
-    }
-
-    public function testValidateCustomPayloadWithNotBefore(): void
-    {
-        $this->assertTrue(Token::validateNotBefore(Tokens::TOKEN, Tokens::SECRET));
-    }
-
     public function testCustomPayloadBadArray(): void
     {
-        $this->expectException(ValidateException::class);
+        $this->expectException(TokensException::class);
         $this->expectExceptionMessage('Invalid payload claim.');
         $this->expectExceptionCode(8);
 
@@ -82,6 +55,33 @@ class TokenTest extends TestCase
             time() + 10,
             'localhost'
         ], 'Hello&MikeFooBar123');
+    }
+
+    public function testValidateBadStructure(): void
+    {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+            'eyJpYXQiOjE1NjUzNDYyNDcsInVpZCI6MSwiaXNzIjoibG9jYWxob3N0In0';
+
+        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
+    public function testValidateBadSignature(): void
+    {
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+            'eyJpYXQiOjE1NjUzNDYyNDcsInVpZCI6MSwiaXNzIjoibG9jYWxob3N0In0.' .
+            'Z1qtnsznCGB8vDaZKb5h9A0swhyD_Vt5DhFPkL43Kq';
+
+        $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
+    }
+
+    public function testValidateExpired(): void
+    {
+        $this->assertFalse(Token::validateExpiration(Tokens::TOKEN, Tokens::SECRET));
+    }
+
+    public function testValidateNotBefore(): void
+    {
+        $this->assertTrue(Token::validateNotBefore(Tokens::TOKEN, Tokens::SECRET));
     }
 
     public function testBuilder(): void

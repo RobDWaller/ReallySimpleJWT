@@ -12,6 +12,7 @@ use ReallySimpleJWT\Encoders\EncodeHs256;
 use ReallySimpleJWT\Decoders\DecodeHs256;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
+use ReallySimpleJWT\Exception\TokensException;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Exception\ParseException;
 
@@ -93,7 +94,7 @@ class Tokens
 
         foreach ($payload as $key => $value) {
             if (is_int($key)) {
-                throw new ValidateException('Invalid payload claim.', 8);
+                throw new TokensException('Invalid payload claim.', 8);
             }
 
             $builder->setPayloadClaim($key, $value);

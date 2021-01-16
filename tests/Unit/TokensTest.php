@@ -8,7 +8,7 @@ use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Exception\TokensException;
 use Tests\Fixtures\Tokens as TokenFixtures;
 
 class TokensTest extends TestCase
@@ -74,7 +74,7 @@ class TokensTest extends TestCase
             'nbf' => time() - 20
         ];
 
-        $this->expectException(ValidateException::class);
+        $this->expectException(TokensException::class);
         $this->expectExceptionMessage('Invalid payload claim.');
         $this->expectExceptionCode(8);
         $tokens->customPayload($payload, 'secret123#ABC');
