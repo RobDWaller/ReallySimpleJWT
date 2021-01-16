@@ -25,11 +25,6 @@ class TokenTest extends TestCase
         $this->assertIsString($token);
     }
 
-    public function testValidateToken(): void
-    {
-        $this->assertTrue(Token::validate(Tokens::TOKEN, Tokens::SECRET));
-    }
-
     public function testCustomPayload(): void
     {
         $token = Token::customPayload([
@@ -43,18 +38,9 @@ class TokenTest extends TestCase
         $this->assertIsString($token);
     }
 
-    public function testCustomPayloadBadArray(): void
+    public function testValidateToken(): void
     {
-        $this->expectException(TokensException::class);
-        $this->expectExceptionMessage('Invalid payload claim.');
-        $this->expectExceptionCode(8);
-
-        Token::customPayload([
-            time(),
-            1,
-            time() + 10,
-            'localhost'
-        ], 'Hello&MikeFooBar123');
+        $this->assertTrue(Token::validate(Tokens::TOKEN, Tokens::SECRET));
     }
 
     public function testValidateBadStructure(): void

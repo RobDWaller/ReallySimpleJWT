@@ -3,10 +3,54 @@
 namespace Tests\Integration;
 
 use ReallySimpleJWT\Token;
+use ReallySimpleJWT\Exception\BuildException;
+use ReallySimpleJWT\Exception\TokensException;
 use PHPUnit\Framework\TestCase;
 
 class TokenTest extends TestCase
 {
+    public function testCreateBadSignature(): void
+    {
+        $this->expectException(BuildException::class);
+        $this->expectExceptionMessage('Invalid secret.');
+        $this->expectExceptionCode(9);
+
+        Token::create(
+            5,
+            '123',
+            time() + 20,
+            'localhost'
+        );
+    }
+
+    public function testCreateBadExpiration(): void
+    {
+        $this->expectException(BuildException::class);
+        $this->expectExceptionMessage('Expiration claim has expired.');
+        $this->expectExceptionCode(4);
+
+        Token::create(
+            5,
+            'Hello!123GoodBye',
+            time() - 20,
+            'localhost'
+        );
+    }
+
+    public function testCustomPayloadBadArray(): void
+    {
+        $this->expectException(TokensException::class);
+        $this->expectExceptionMessage('Invalid payload claim.');
+        $this->expectExceptionCode(8);
+
+        Token::customPayload([
+            time(),
+            1,
+            time() + 10,
+            'localhost'
+        ], 'Hello&MikeFooBar123');
+    }
+
     public function testCreateValidate(): void
     {
         $token = Token::create(
