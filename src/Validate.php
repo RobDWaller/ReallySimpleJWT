@@ -7,21 +7,21 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Helper\Validator;
 use ReallySimpleJWT\Exception\ValidateException;
-use ReallySimpleJWT\Interfaces\Signature;
+use ReallySimpleJWT\Interfaces\Encode;
 
 class Validate
 {
     private Parse $parse;
 
-    private Signature $signature;
+    private Encode $encode;
 
     private Validator $validate;
 
-    public function __construct(Parse $parse, Signature $signature, Validator $validate)
+    public function __construct(Parse $parse, Encode $encode, Validator $validate)
     {
         $this->parse = $parse;
 
-        $this->signature = $signature;
+        $this->encode = $encode;
 
         $this->validate = $validate;
     }
@@ -116,7 +116,7 @@ class Validate
      */
     public function signature(): Validate
     {
-        $signature = $this->signature->make(
+        $signature = $this->encode->signature(
             $this->parse->getDecodedHeader(),
             $this->parse->getDecodedPayload(),
             $this->parse->getSecret()

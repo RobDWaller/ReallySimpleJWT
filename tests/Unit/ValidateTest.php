@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Helper\Validator;
-use ReallySimpleJWT\Signature;
+use ReallySimpleJWT\Encoders\EncodeHs256;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Exception\ValidateException;
 use Tests\Fixtures\Tokens;
@@ -25,9 +25,9 @@ class ValidateTest extends TestCase
             ->with(Tokens::TOKEN)
             ->willReturn(true);
 
-        $signature = $this->createMock(Signature::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->assertInstanceOf(Validate::class, $validate->structure());
     }
@@ -45,9 +45,9 @@ class ValidateTest extends TestCase
             ->with('abc')
             ->willReturn(false);
 
-        $signature = $this->createMock(Signature::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Token is invalid.');
@@ -71,9 +71,9 @@ class ValidateTest extends TestCase
             ->method('getSecret')
             ->willReturn(Tokens::SECRET);
 
-        $signature = $this->createMock(Signature::class);
-        $signature->expects($this->once())
-            ->method('make')
+        $encode = $this->createMock(EncodeHs256::class);
+        $encode->expects($this->once())
+            ->method('signature')
             ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, Tokens::SECRET)
             ->willReturn(Tokens::SIGNATURE);
 
@@ -87,7 +87,7 @@ class ValidateTest extends TestCase
             ->with(Tokens::SIGNATURE, Tokens::SIGNATURE)
             ->willReturn(true);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->assertInstanceOf(Validate::class, $validate->signature());
     }
@@ -108,9 +108,9 @@ class ValidateTest extends TestCase
             ->method('getSecret')
             ->willReturn('hello');
 
-        $signature = $this->createMock(Signature::class);
-        $signature->expects($this->once())
-            ->method('make')
+        $encode = $this->createMock(EncodeHs256::class);
+        $encode->expects($this->once())
+            ->method('signature')
             ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, 'hello')
             ->willReturn('mX0_2dzFlPqR0fyh4J3PPmfQYBz9PlqUut5vXgJaSxY');
 
@@ -124,7 +124,7 @@ class ValidateTest extends TestCase
             ->with('mX0_2dzFlPqR0fyh4J3PPmfQYBz9PlqUut5vXgJaSxY', Tokens::SIGNATURE)
             ->willReturn(false);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Signature is invalid.');
@@ -145,9 +145,9 @@ class ValidateTest extends TestCase
             ->with(1000)
             ->willReturn(true);
 
-        $signature = $this->createMock(Signature::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->assertInstanceOf(Validate::class, $validate->expiration());
     }
@@ -165,9 +165,9 @@ class ValidateTest extends TestCase
             ->with(-5)
             ->willReturn(false);
 
-        $signature = $this->createMock(Signature::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Expiration claim has expired.');
@@ -188,9 +188,9 @@ class ValidateTest extends TestCase
             ->with(-5)
             ->willReturn(true);
 
-        $signature = $this->createMock(Signature::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->assertInstanceOf(Validate::class, $validate->notBefore());
     }
@@ -208,9 +208,9 @@ class ValidateTest extends TestCase
             ->with(500)
             ->willReturn(false);
 
-        $signature = $this->createMock(Signature::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Not Before claim has not elapsed.');
@@ -231,9 +231,9 @@ class ValidateTest extends TestCase
             ->with('site.com', 'site.com')
             ->willReturn(true);
 
-        $signature = $this->createMock(Signature::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->assertInstanceOf(Validate::class, $validate->audience('site.com'));
     }
@@ -251,9 +251,9 @@ class ValidateTest extends TestCase
             ->with('other.site.com', 'site.com')
             ->willReturn(false);
 
-        $signature = $this->createMock(Signature::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Audience claim does not contain provided StringOrURI.');
@@ -274,9 +274,9 @@ class ValidateTest extends TestCase
             ->with('HS256', [])
             ->willReturn(true);
 
-        $signature = $this->createMock(Signature::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->assertInstanceOf(Validate::class, $validate->algorithm());
     }
@@ -294,9 +294,9 @@ class ValidateTest extends TestCase
             ->with('RS256', [])
             ->willReturn(false);
 
-        $signature = $this->createMock(Signature::class);
+        $encode = $this->createMock(EncodeHs256::class);
 
-        $validate = new Validate($parse, $signature, $validator);
+        $validate = new Validate($parse, $encode, $validator);
 
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Algorithm claim is not valid.');
