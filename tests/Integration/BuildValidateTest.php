@@ -40,7 +40,7 @@ class BuildValidateTest extends TestCase
 
         $validate = new Validate(
             $parse,
-            new Signature(new EncodeHs256()),
+            new EncodeHs256(),
             new Validator()
         );
 
@@ -81,7 +81,7 @@ class BuildValidateTest extends TestCase
 
         $validate = new Validate(
             $parse,
-            new Signature(new EncodeHs256()),
+            new EncodeHs256(),
             new Validator()
         );
 
@@ -108,7 +108,7 @@ class BuildValidateTest extends TestCase
 
         $validate = new Validate(
             $parse,
-            new Signature(new EncodeHs256()),
+            new EncodeHs256(),
             new Validator()
         );
 

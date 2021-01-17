@@ -7,7 +7,6 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Helper\Validator;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Signature;
 use ReallySimpleJWT\Encoders\EncodeHs256;
 use ReallySimpleJWT\Decoders\DecodeHs256;
 use ReallySimpleJWT\Parse;
@@ -45,9 +44,7 @@ class Tokens
 
         return new Validate(
             $parse,
-            new Signature(
-                new EncodeHs256()
-            ),
+            new EncodeHs256(),
             new Validator()
         );
     }
