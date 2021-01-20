@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Helper\Validator;
-use ReallySimpleJWT\Encoders\EncodeHs256;
+use ReallySimpleJWT\Encoders\EncodeHS256;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Exception\ValidateException;
 use Tests\Fixtures\Tokens;
@@ -25,7 +25,7 @@ class ValidateTest extends TestCase
             ->with(Tokens::TOKEN)
             ->willReturn(true);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 
@@ -45,7 +45,7 @@ class ValidateTest extends TestCase
             ->with('abc')
             ->willReturn(false);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 
@@ -71,7 +71,7 @@ class ValidateTest extends TestCase
             ->method('getSecret')
             ->willReturn(Tokens::SECRET);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
         $encode->expects($this->once())
             ->method('signature')
             ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, Tokens::SECRET)
@@ -108,7 +108,7 @@ class ValidateTest extends TestCase
             ->method('getSecret')
             ->willReturn('hello');
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
         $encode->expects($this->once())
             ->method('signature')
             ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, 'hello')
@@ -145,7 +145,7 @@ class ValidateTest extends TestCase
             ->with(1000)
             ->willReturn(true);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 
@@ -165,7 +165,7 @@ class ValidateTest extends TestCase
             ->with(-5)
             ->willReturn(false);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 
@@ -188,7 +188,7 @@ class ValidateTest extends TestCase
             ->with(-5)
             ->willReturn(true);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 
@@ -208,7 +208,7 @@ class ValidateTest extends TestCase
             ->with(500)
             ->willReturn(false);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 
@@ -231,7 +231,7 @@ class ValidateTest extends TestCase
             ->with('site.com', 'site.com')
             ->willReturn(true);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 
@@ -251,7 +251,7 @@ class ValidateTest extends TestCase
             ->with('other.site.com', 'site.com')
             ->willReturn(false);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 
@@ -274,7 +274,7 @@ class ValidateTest extends TestCase
             ->with('HS256', [])
             ->willReturn(true);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 
@@ -294,7 +294,7 @@ class ValidateTest extends TestCase
             ->with('RS256', [])
             ->willReturn(false);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 

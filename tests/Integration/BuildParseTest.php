@@ -7,7 +7,7 @@ use ReallySimpleJWT\Interfaces\Encode;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
-use ReallySimpleJWT\Encoders\EncodeHs256;
+use ReallySimpleJWT\Encoders\EncodeHS256;
 use ReallySimpleJWT\Decoders\DecodeHs256;
 use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Exception\BuildException;
@@ -27,7 +27,7 @@ class BuildParseTest extends TestCase
             self::TOKEN_TYPE,
             new Validator(),
             new Secret(),
-            new EncodeHs256()
+            new EncodeHS256()
         );
 
         $expiration = time() + 10;
@@ -72,7 +72,7 @@ class BuildParseTest extends TestCase
             self::TOKEN_TYPE,
             new Validator(),
             new Secret(),
-            new EncodeHs256()
+            new EncodeHS256()
         );
 
         $expiration = time() + 11;
@@ -96,7 +96,7 @@ class BuildParseTest extends TestCase
             self::TOKEN_TYPE,
             new Validator(),
             new Secret(),
-            new EncodeHs256()
+            new EncodeHS256()
         );
 
         $expiration1 = time() + 20;
@@ -166,7 +166,7 @@ class BuildParseTest extends TestCase
             self::TOKEN_TYPE,
             new Validator(),
             new Secret(),
-            new EncodeHs256()
+            new EncodeHS256()
         );
 
         $expiration = time() + 19;
@@ -254,7 +254,7 @@ class BuildParseTest extends TestCase
             self::TOKEN_TYPE,
             new Validator(),
             new Secret(),
-            new EncodeHs256()
+            new EncodeHS256()
         );
 
         $expiration = time() + 10;
@@ -278,7 +278,7 @@ class BuildParseTest extends TestCase
             self::TOKEN_TYPE,
             new Validator(),
             new Secret(),
-            new EncodeHs256()
+            new EncodeHS256()
         );
 
         $expiration1 = time() + 20;
@@ -344,7 +344,7 @@ class BuildParseTest extends TestCase
             self::TOKEN_TYPE,
             new Validator(),
             new Secret(),
-            new EncodeHs256()
+            new EncodeHS256()
         );
 
         $expiration = time() + 10;

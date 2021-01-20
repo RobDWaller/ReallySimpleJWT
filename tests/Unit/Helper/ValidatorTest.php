@@ -4,7 +4,7 @@ namespace Tests\Unit\Helper;
 
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Helper\Validator;
-use ReallySimpleJWT\Encoders\EncodeHs256;
+use ReallySimpleJWT\Encoders\EncodeHS256;
 use ReallySimpleJWT\Token;
 
 class ValidatorTest extends TestCase

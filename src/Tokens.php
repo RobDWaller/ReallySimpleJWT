@@ -7,7 +7,7 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Helper\Validator;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Encoders\EncodeHs256;
+use ReallySimpleJWT\Encoders\EncodeHS256;
 use ReallySimpleJWT\Decoders\DecodeHs256;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
@@ -23,7 +23,7 @@ class Tokens
             'JWT',
             new Validator(),
             new Secret(),
-            new EncodeHs256()
+            new EncodeHS256()
         );
     }
 
@@ -44,7 +44,7 @@ class Tokens
 
         return new Validate(
             $parse,
-            new EncodeHs256(),
+            new EncodeHS256(),
             new Validator()
         );
     }
