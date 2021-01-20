@@ -1,12 +1,12 @@
 <?php
 
-namespace ReallySimpleJWT\Decoders;
+namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Interfaces\Decode;
+use ReallySimpleJWT\Interfaces\Decode as DecodeInterface;
 use ReallySimpleJWT\Helper\Base64;
 use ReallySimpleJWT\Helper\JsonEncoder;
 
-class DecodeHs256 implements Decode
+class Decode implements DecodeInterface
 {
     use Base64;
     use JsonEncoder;
