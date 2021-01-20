@@ -7,7 +7,7 @@ use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Encoders\EncodeHs256;
+use ReallySimpleJWT\Encoders\EncodeHS256;
 use ReallySimpleJWT\Decoders\DecodeHs256;
 use ReallySimpleJWT\Helper\Validator;
 
@@ -23,7 +23,7 @@ class ReallySimpleJWTBench
             'JWT',
             new Validator(),
             new Secret(),
-            new EncodeHs256()
+            new EncodeHS256()
         );
 
         $expiration = time() + 10;
@@ -69,7 +69,7 @@ class ReallySimpleJWTBench
             'JWT',
             new Validator(),
             new Secret(),
-            new EncodeHs256()
+            new EncodeHS256()
         );
 
         $expiration = time() + 10;
