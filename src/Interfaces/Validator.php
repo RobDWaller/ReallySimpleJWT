@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ReallySimpleJWT\Helper;
-
-use ReallySimpleJWT\Interfaces\Validator as ValidatorInterface;
+namespace ReallySimpleJWT\Interfaces;
 
 /**
  * A validation helper class which offers methods to confirm the validity of
@@ -22,39 +20,27 @@ use ReallySimpleJWT\Interfaces\Validator as ValidatorInterface;
  * 9: Invalid secret: See README for more information.
  * 10: Invalid Audience claim: Must be either a string or array of strings.
  */
-class Validator implements ValidatorInterface
+interface Validator
 {
     /**
      * Confirm the structure of a JSON Web Token, it has three parts separated
      * by dots and complies with Base64URL standards.
      */
-    public function structure(string $jwt): bool
-    {
-        return preg_match(
-            '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
-            $jwt
-        ) === 1;
-    }
+    public function structure(string $jwt): bool;
 
     /**
      * Check the validity of the JWT's expiration claim as defined in the
      * token payload. Returns false if the expiration time has surpassed the
      * current time.
      */
-    public function expiration(int $expiration): bool
-    {
-        return $expiration > time();
-    }
+    public function expiration(int $expiration): bool;
 
     /**
      * Check the validity of the JWT's not before claim as defined in the
      * token payload. Returns false if the not before time has not surpassed
      * the current time.
      */
-    public function notBefore(int $notBefore): bool
-    {
-        return $notBefore < time();
-    }
+    public function notBefore(int $notBefore): bool;
 
     /**
      * Check the validity of the JWT's audience claim. The audience claim
@@ -63,24 +49,14 @@ class Validator implements ValidatorInterface
      *
      * @param string|string[] $audience
      */
-    public function audience($audience, string $check): bool
-    {
-        if (is_array($audience)) {
-            return in_array($check, $audience);
-        }
-
-        return $audience === $check;
-    }
+    public function audience($audience, string $check): bool;
 
     /**
      * Check two signature hashes match. One signature is supplied by the token.
      * The other is newly generated from the token's header and payload. They
      * should match, if they don't someone has likely tampered with the token.
      */
-    public function signature(string $generatedSignature, string $tokenSignature): bool
-    {
-        return hash_equals($generatedSignature, $tokenSignature);
-    }
+    public function signature(string $generatedSignature, string $tokenSignature): bool;
 
     /**
      * Check the alg claim is in the list of valid algorithms. These are the
@@ -89,8 +65,5 @@ class Validator implements ValidatorInterface
      *
      * @param string[] $validAlgorithms
      */
-    public function algorithm(string $algorithm, array $validAlgorithms): bool
-    {
-        return in_array($algorithm, $validAlgorithms);
-    }
+    public function algorithm(string $algorithm, array $validAlgorithms): bool;
 }
