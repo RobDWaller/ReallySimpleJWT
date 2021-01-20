@@ -8,7 +8,7 @@ use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Encoders\EncodeHS256;
-use ReallySimpleJWT\Decoders\DecodeHs256;
+use ReallySimpleJWT\Decode;
 use ReallySimpleJWT\Helper\Validator;
 
 class ReallySimpleJWTBench
@@ -54,7 +54,7 @@ class ReallySimpleJWTBench
         'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
         'dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio';
 
-        $parse = new Parse(new Jwt($token, '123$car*PARK456'), new DecodeHs256());
+        $parse = new Parse(new Jwt($token, '123$car*PARK456'), new Decode());
 
         $parse->parse();
     }
@@ -89,7 +89,7 @@ class ReallySimpleJWTBench
             ->setPayloadClaim('uid', 2)
             ->build();
 
-        $parse = new Parse($token, new DecodeHs256());
+        $parse = new Parse($token, new Decode());
 
         $parse->parse();
     }

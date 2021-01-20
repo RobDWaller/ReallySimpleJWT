@@ -8,7 +8,7 @@ use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Exception\ParseException;
 use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Decoders\DecodeHs256;
+use ReallySimpleJWT\Decode;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReflectionMethod;
 
@@ -21,7 +21,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->exactly(2))
             ->method('decode')
             ->withConsecutive([Tokens::HEADER], [Tokens::PAYLOAD])
@@ -46,7 +46,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
 
         $parse = new Parse(
             $jwt,
@@ -63,7 +63,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn('abc');
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
 
         $parse = new Parse(
             $jwt,
@@ -80,7 +80,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::PAYLOAD)
@@ -101,7 +101,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn('abc.def.hij');
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with('def')
@@ -125,7 +125,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::PAYLOAD)
@@ -146,7 +146,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn('abc.def.hij');
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with('def')
@@ -170,7 +170,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::PAYLOAD)
@@ -191,7 +191,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn('abc.def.hij');
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with('def')
@@ -215,7 +215,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::HEADER)
@@ -236,7 +236,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn('abc.def.hij');
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with('abc')
@@ -260,7 +260,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::HEADER)
@@ -281,7 +281,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
         $decode->expects($this->once())
             ->method('decode')
             ->with(Tokens::PAYLOAD)
@@ -302,7 +302,7 @@ class ParseTest extends TestCase
             ->method('getToken')
             ->willReturn(Tokens::TOKEN);
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
 
         $parse = new Parse(
             $jwt,
@@ -319,7 +319,7 @@ class ParseTest extends TestCase
             ->method('getSecret')
             ->willReturn(Tokens::SECRET);
 
-        $decode = $this->createMock(DecodeHs256::class);
+        $decode = $this->createMock(Decode::class);
 
         $parse = new Parse(
             $jwt,

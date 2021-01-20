@@ -11,7 +11,7 @@ use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Helper\Validator;
 use ReallySimpleJWT\Encoders\EncodeHS256;
-use ReallySimpleJWT\Decoders\DecodeHs256;
+use ReallySimpleJWT\Decode;
 use PHPUnit\Framework\TestCase;
 
 class BuildValidateTest extends TestCase
@@ -36,7 +36,7 @@ class BuildValidateTest extends TestCase
             ->setPayloadClaim('exp', $expiration)
             ->build();
 
-        $parse = new Parse($token, new DecodeHs256());
+        $parse = new Parse($token, new Decode());
 
         $validate = new Validate(
             $parse,
@@ -77,7 +77,7 @@ class BuildValidateTest extends TestCase
             ->setPayloadClaim('uid', 2)
             ->build();
 
-        $parse = new Parse($token, new DecodeHs256());
+        $parse = new Parse($token, new Decode());
 
         $validate = new Validate(
             $parse,
@@ -104,7 +104,7 @@ class BuildValidateTest extends TestCase
             '!$£%456hftYuJi2'
         );
 
-        $parse = new Parse($token, new DecodeHs256());
+        $parse = new Parse($token, new Decode());
 
         $validate = new Validate(
             $parse,

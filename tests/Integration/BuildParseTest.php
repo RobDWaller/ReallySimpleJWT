@@ -8,12 +8,12 @@ use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Encoders\EncodeHS256;
-use ReallySimpleJWT\Decoders\DecodeHs256;
+use ReallySimpleJWT\Decode;
 use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Exception\BuildException;
 use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Exception\ParseException;
-use ReallySimpleJWT\Interfaces\Decode;
+//use ReallySimpleJWT\Interfaces\Decode;
 use ReallySimpleJWT\Helper\JsonEncoder;
 use PHPUnit\Framework\TestCase;
 
@@ -47,7 +47,7 @@ class BuildParseTest extends TestCase
             ->setPayloadClaim('uid', 2)
             ->build();
 
-        $parse = new Parse($token, new DecodeHs256());
+        $parse = new Parse($token, new Decode());
         $parsed = $parse->parse();
 
         $this->assertSame($token->getToken(), $parsed->getJwt()->getToken());
@@ -118,7 +118,7 @@ class BuildParseTest extends TestCase
 
         $this->assertNotSame($token->getToken(), $token1->getToken());
 
-        $parse = new Parse($token, new DecodeHs256());
+        $parse = new Parse($token, new Decode());
 
         $parsed = $parse->parse();
 
@@ -137,7 +137,7 @@ class BuildParseTest extends TestCase
         $this->assertSame(5, $parsed->getPayload()['uid']);
         $this->assertSame(explode('.', $token->getToken())[2], $parsed->getSignature());
 
-        $parse1 = new Parse($token1, new DecodeHs256());
+        $parse1 = new Parse($token1, new Decode());
 
         $parsed1 = $parse1->parse();
 
@@ -206,7 +206,7 @@ class BuildParseTest extends TestCase
 
         $this->assertNotSame($token->getToken(), $token1->getToken());
 
-        $parse = new Parse($token, new DecodeHs256());
+        $parse = new Parse($token, new Decode());
 
         $parsed = $parse->parse();
 
@@ -225,7 +225,7 @@ class BuildParseTest extends TestCase
         $this->assertSame(explode('.', $token->getToken())[2], $parsed->getSignature());
         $this->assertSame(65, $parsed->getPayload()['uid']);
 
-        $parse1 = new Parse($token1, new DecodeHs256());
+        $parse1 = new Parse($token1, new Decode());
 
         $parsed1 = $parse1->parse();
 
@@ -296,7 +296,7 @@ class BuildParseTest extends TestCase
 
         $this->assertNotSame($token->getToken(), $token1->getToken());
 
-        $parse = new Parse($token, new DecodeHs256());
+        $parse = new Parse($token, new Decode());
 
         $parsed = $parse->parse();
 
@@ -315,7 +315,7 @@ class BuildParseTest extends TestCase
         $this->assertSame(self::TOKEN_TYPE, $parsed->getType());
         $this->assertSame(self::TOKEN_TYPE, $parsed->getContentType());
 
-        $parse1 = new Parse($token1, new DecodeHs256());
+        $parse1 = new Parse($token1, new Decode());
 
         $parsed1 = $parse1->parse();
 
@@ -381,7 +381,7 @@ class BuildParseTest extends TestCase
 
         $this->assertNotSame($token->getToken(), $token1->getToken());
 
-        $parse = new Parse($token, new DecodeHs256());
+        $parse = new Parse($token, new Decode());
 
         $parsed = $parse->parse();
 
@@ -400,7 +400,7 @@ class BuildParseTest extends TestCase
         $this->assertSame('Yo yo yo.', $parsed->getHeader()['info']);
         $this->assertSame('https://bing.com', $parsed->getIssuer());
 
-        $parse1 = new Parse($token1, new DecodeHs256());
+        $parse1 = new Parse($token1, new Decode());
 
         $parsed1 = $parse1->parse();
 
