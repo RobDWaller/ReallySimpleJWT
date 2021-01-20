@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Helper\Validator;
+use ReallySimpleJWT\Interfaces\Validator;
 use ReallySimpleJWT\Interfaces\Encode;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Interfaces\Secret;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Parse;
-use ReallySimpleJWT\Helper\Validator;
+use ReallySimpleJWT\Interfaces\Validator;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Interfaces\Encode;
 
