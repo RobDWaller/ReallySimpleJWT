@@ -6,7 +6,7 @@ use ReallySimpleJWT\Interfaces\Encode;
 use ReallySimpleJWT\Helper\JsonEncoder;
 use ReallySimpleJWT\Helper\Base64;
 
-class EncodeHs256 implements Encode
+class EncodeHS256 implements Encode
 {
     use JsonEncoder;
     use Base64;
