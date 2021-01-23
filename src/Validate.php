@@ -9,6 +9,9 @@ use ReallySimpleJWT\Interfaces\Validator;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Interfaces\Encode;
 
+/** 
+ * Core validation class for ensuring a token and its claims are valid.
+ */
 class Validate
 {
     private Parse $parse;
@@ -27,8 +30,7 @@ class Validate
     }
 
     /**
-     * Validate the JWT has the right string structure and the signature
-     * is valid and has not been tampered with.
+     * Validate the JWT has the correct structure.
      *
      * @throws ValidateException
      */
@@ -42,7 +44,7 @@ class Validate
     }
 
     /**
-     * Validate the JWT's expiration claim (exp). This claim defines when a
+     * Validate the JWT's expiration claim (exp). This claim defines how  a
      * token can be used until.
      *
      * @throws ValidateException
