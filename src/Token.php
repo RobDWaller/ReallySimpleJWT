@@ -26,6 +26,7 @@ class Token
      * Create a JSON Web Token that contains a user identifier and a basic
      * payload including issued at, expiration and issuer.
      *
+     * @see ReallySimpleJWT\Tokens::create()
      * @param string|int $userId
      */
     public static function create($userId, string $secret, int $expiration, string $issuer): string
@@ -41,9 +42,7 @@ class Token
     }
 
     /**
-     * Create a JSON Web Token with a custom payload built from a key
-     * value array.
-     *
+     * @see ReallySimpleJWT\Tokens::customPayload()
      * @param mixed[] $payload
      */
     public static function customPayload(array $payload, string $secret): string
@@ -53,8 +52,7 @@ class Token
     }
 
     /**
-     * Validate the Json web token, check it's structure and signature. Also
-     * check its expiration claim and not before claim if they are set.
+     * @see ReallySimpleJWT\Tokens::validate()
      */
     public static function validate(string $token, string $secret): bool
     {
@@ -63,9 +61,7 @@ class Token
     }
 
     /**
-     * Return the header of the token as an associative array. You should run
-     * the validate method on your token before retrieving the header.
-     *
+     * @see ReallySimpleJWT\Tokens::getHeader()
      * @return mixed[]
      */
     public static function getHeader(string $token, string $secret): array
@@ -75,9 +71,7 @@ class Token
     }
 
     /**
-     * Return the payload of the token as an associative array. You should run
-     * the validate method on your token before retrieving the payload.
-     *
+     * @see ReallySimpleJWT\Tokens::getPayload()
      * @return mixed[]
      */
     public static function getPayload(string $token, string $secret): array
@@ -87,7 +81,7 @@ class Token
     }
 
     /**
-     * Factory method to return an instance of the ReallySimpleJWT\Build class.
+     * @see ReallySimpleJWT\Tokens::builder()
      */
     public static function builder(): Build
     {
@@ -96,7 +90,7 @@ class Token
     }
 
     /**
-     * Factory method to return instance of the ReallySimpleJWT\Parse class.
+     * @see ReallySimpleJWT\Tokens::parser()
      */
     public static function parser(string $token, string $secret): Parse
     {
@@ -104,6 +98,9 @@ class Token
         return $tokens->parser($token, $secret);
     }
 
+    /**
+     * @see ReallySimpleJWT\Tokens::validator()
+     */
     public static function validator(string $token, string $secret): Validate
     {
         $tokens = new Tokens();
@@ -111,9 +108,7 @@ class Token
     }
 
     /**
-     * Run standard validation and expiration validation against the token.
-     *
-     * @return bool
+     * @see ReallySimpleJWT\Tokens::validateExpiration()
      */
     public static function validateExpiration(string $token, string $secret): bool
     {
@@ -122,9 +117,7 @@ class Token
     }
 
     /**
-     * Run not before validation against token.
-     *
-     * @return bool
+     * @see ReallySimpleJWT\Tokens::validateNotBefore()
      */
     public static function validateNotBefore(string $token, string $secret): bool
     {
