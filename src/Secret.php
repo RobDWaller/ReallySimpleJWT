@@ -8,6 +8,7 @@ use ReallySimpleJWT\Interfaces\Secret as SecretInterface;
 
 /**
  * Validate the secret used to secure the token signature is strong enough.
+ *
  * You can define your own secret validation by creating a new class and
  * implementing the Secret interface.
  */
