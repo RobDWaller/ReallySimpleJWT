@@ -36,7 +36,7 @@ class Tokens
 
     /**
      * Factory method to return an instance of the Parse class for parsing a JWT
-     * and gaining access to the token's header and payload claims data. 
+     * and gaining access to the token's header and payload claims data.
      */
     public function parser(string $token, string $secret): Parse
     {
@@ -66,7 +66,7 @@ class Tokens
 
     /**
      * Return the header claims data from a JWT.
-     * 
+     *
      * @return mixed[]
      */
     public function getHeader(string $token, string $secret): array
@@ -77,7 +77,7 @@ class Tokens
 
     /**
      * Return the payload claims data from a JWT.
-     *  
+     *
      * @return mixed[]
      */
     public function getPayload(string $token, string $secret): array
@@ -89,7 +89,7 @@ class Tokens
     /**
      * Create a basic JSON Web Token for a user, define the user key and id to
      * identify the user along with an expiration and issuer.
-     * 
+     *
      * @param string|int $userId
      */
     public function create(string $userKey, $userId, string $secret, int $expiration, string $issuer): Jwt
@@ -106,8 +106,8 @@ class Tokens
 
     /**
      * Create a basic token based on an array of payload claims.
-     * Format [string: mixed]. 
-     * 
+     * Format [string: mixed].
+     *
      * @param mixed[] $payload
      */
     public function customPayload(array $payload, string $secret): Jwt
@@ -144,7 +144,7 @@ class Tokens
 
     /**
      * Validate the expiration claim of a token to see if it has expired. Will
-     * return false if the expiration (exp) claim is not set. 
+     * return false if the expiration (exp) claim is not set.
      */
     public function validateExpiration(string $token, string $secret): bool
     {
@@ -161,8 +161,8 @@ class Tokens
     }
 
     /**
-     * Validate the not before claim of a token to see if it is ready to use. 
-     * Will return false if the not before (nbf) claim is not set. 
+     * Validate the not before claim of a token to see if it is ready to use.
+     * Will return false if the not before (nbf) claim is not set.
      */
     public function validateNotBefore(string $token, string $secret): bool
     {

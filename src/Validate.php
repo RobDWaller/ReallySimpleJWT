@@ -9,7 +9,7 @@ use ReallySimpleJWT\Interfaces\Validator;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Interfaces\Encode;
 
-/** 
+/**
  * Core validation class for ensuring a token and its claims are valid.
  */
 class Validate
