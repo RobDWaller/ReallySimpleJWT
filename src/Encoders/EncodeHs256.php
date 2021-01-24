@@ -6,6 +6,11 @@ use ReallySimpleJWT\Interfaces\Encode;
 use ReallySimpleJWT\Helper\JsonEncoder;
 use ReallySimpleJWT\Helper\Base64;
 
+/**
+ * HS256 / sha256 implementation of the Encode interface.
+ *
+ * Also the core ReallySimpleJWT token encoder class.
+ */
 class EncodeHS256 implements Encode
 {
     use JsonEncoder;
@@ -42,6 +47,9 @@ class EncodeHS256 implements Encode
         return self::HASH_ALGORITHM;
     }
 
+    /**
+     * Encode a JSON string to a Base64Url string.
+     */
     private function urlEncode(string $toEncode): string
     {
         return $this->toBase64Url(base64_encode($toEncode));
