@@ -7,8 +7,7 @@ namespace ReallySimpleJWT\Exception;
 use Exception;
 
 /**
- * Simple PHP exception class for all tokens exceptions so exceptions are
- * more specific and obvious.
+ * Exception class for exceptions which occur in the Tokens class.
  */
 class TokensException extends Exception
 {
