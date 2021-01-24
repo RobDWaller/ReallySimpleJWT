@@ -12,13 +12,11 @@ use ReallySimpleJWT\Interfaces\Decode;
 use ReallySimpleJWT\Helper\JsonEncoder;
 
 /**
- * This class parses and validates a JSON Web Token. The token is housed in
- * the JWT value object. The class outputs a Parsed value object to give
- * access to the data held within the JSON Web Token header and payload.
+ * This class parses and validates a JSON Web Token.
  *
- * @author Rob Waller <rdwaller1984@googlemail.com>
- * @todo JsonEncoder trait should probably be part of the encode class. 4.0.0 fix.
- * @todo Separate the split token functionality out into it's own class. 4.0.0 fix.
+ * The token is housed in the JWT value object. The class outputs a Parsed value
+ * object to give access to the data held within the JSON Web Token header
+ * and payload.
  */
 class Parse
 {
@@ -189,11 +187,17 @@ class Parse
         );
     }
 
+    /**
+     * Retrieve the JSON Web Token string.
+     */
     public function getToken(): string
     {
         return $this->jwt->getToken();
     }
 
+    /**
+     * Retrieve the JSON Web Token secret.
+     */
     public function getSecret(): string
     {
         return $this->jwt->getSecret();
