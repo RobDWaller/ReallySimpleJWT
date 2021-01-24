@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace ReallySimpleJWT;
 
 /**
- * Value object for the generated JSON Web Token, takes the token and
- * the secret.
+ * JWT Value object.
+ *
+ * Consumes a token and a secret string, used when parsing a JWT and generated
+ * when creating a JWT.
  */
 class Jwt
 {
