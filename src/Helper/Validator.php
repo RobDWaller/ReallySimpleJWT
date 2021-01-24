@@ -9,18 +9,6 @@ use ReallySimpleJWT\Interfaces\Validator as ValidatorInterface;
 /**
  * A validation helper class which offers methods to confirm the validity of
  * a JSON Web Token along with aspects of its content.
- *
- * Error codes and messages:
- * 1: Token is invalid: Token must have three parts separated by dots.
- * 2: Audience claim does not contain provided StringOrURI.
- * 3: Signature is invalid: Signature does not match header / payload content.
- * 4: Expiration claim has expired.
- * 5: Not Before claim has not elapsed.
- * 6: Expiration claim is not set.
- * 7: Not Before claim is not set.
- * 8: Invalid payload claim: Claims must be key values of type string:mixed.
- * 9: Invalid secret: See README for more information.
- * 10: Invalid Audience claim: Must be either a string or array of strings.
  */
 class Validator implements ValidatorInterface
 {
