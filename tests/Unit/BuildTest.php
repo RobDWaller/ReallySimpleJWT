@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\Tokens;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Helper\Validator;
-use ReallySimpleJWT\Encoders\EncodeHs256;
+use ReallySimpleJWT\Encoders\EncodeHS256;
 use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Exception\BuildException;
 use ReallySimpleJWT\Jwt;
@@ -18,7 +18,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
         $encode->expects($this->once())
             ->method('getAlgorithm')
             ->willReturn(Tokens::ALGORITHM);
@@ -33,7 +33,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $build->setPayloadClaim('exp', 123);
@@ -45,7 +45,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $result = $build->setContentType('JWT');
@@ -58,7 +58,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $result = $build->setHeaderClaim('lng', 'en-GB');
@@ -71,7 +71,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $result = $build->setIssuer('www.thesite.com');
@@ -84,7 +84,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $result = $build->setSubject('admin');
@@ -97,7 +97,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $result = $build->setAudience('www.thesite.com');
@@ -110,7 +110,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $build->setAudience(['www.thesite.com', 'blog.thesite.com', 'payment.thesite.com']);
@@ -124,7 +124,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $this->expectException(BuildException::class);
@@ -144,7 +144,7 @@ class BuildTest extends TestCase
             ->willReturn(true);
 
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $result = $build->setExpiration($expiration);
@@ -164,7 +164,7 @@ class BuildTest extends TestCase
             ->willReturn(false);
 
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $this->expectException(BuildException::class);
@@ -177,7 +177,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $nbf = time();
@@ -191,7 +191,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $iat = time();
@@ -205,7 +205,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $result = $build->setJwtId('123');
@@ -218,7 +218,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $result = $build->setPayloadClaim('uid', 4);
@@ -235,7 +235,7 @@ class BuildTest extends TestCase
             ->method('validate')
             ->with('ABC!123*def')
             ->willReturn(true);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $result = $build->setSecret('ABC!123*def');
@@ -250,7 +250,7 @@ class BuildTest extends TestCase
             ->method('validate')
             ->with('secret')
             ->willReturn(false);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
         $this->expectException(BuildException::class);
@@ -269,7 +269,7 @@ class BuildTest extends TestCase
             ->with(Tokens::SECRET)
             ->willReturn(true);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
         $encode->expects($this->exactly(2))
             ->method('getAlgorithm')
             ->willReturn(Tokens::ALGORITHM);
@@ -307,7 +307,7 @@ class BuildTest extends TestCase
             ->with('')
             ->willReturn(false);
 
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
         $encode->expects($this->once())
             ->method('getAlgorithm')
             ->willReturn(Tokens::ALGORITHM);
@@ -329,7 +329,7 @@ class BuildTest extends TestCase
     {
         $validator = $this->createMock(Validator::class);
         $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHs256::class);
+        $encode = $this->createMock(EncodeHS256::class);
 
         $build = new Build('JWT', $validator, $secret, $encode);
 

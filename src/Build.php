@@ -4,29 +4,21 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Helper\Validator;
+use ReallySimpleJWT\Interfaces\Validator;
 use ReallySimpleJWT\Interfaces\Encode;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Interfaces\Secret;
 use ReallySimpleJWT\Exception\BuildException;
 
 /**
- * A class to build a JSON Web Token, returns the token as an instance of
- * ReallySimpleJWT\Jwt.
+ * A class to help build a JSON Web Token.
  *
  * Class contains helper methods that allow you to easily set JWT claims
  * defined in the JWT RFC. Eg setIssuer() will set the iss claim in the
  * JWT payload.
- *
- * For more information on JSON Web Tokens please refer to the RFC. This
- * library attempts to comply with the JWT RFC as closely as possible.
- * https://tools.ietf.org/html/rfc7519
- *
- * @author Rob Waller <rdwaller1984@googlemail.com>
  */
 class Build
 {
-
     /**
      * Defines the type of JWT to be created, usually just JWT.
      */

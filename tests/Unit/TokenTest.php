@@ -3,7 +3,11 @@
 namespace Tests\Unit;
 
 use ReallySimpleJWT\Token;
-use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Build;
+use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Validate;
+use ReallySimpleJWT\Exception\TokensException;
+use Tests\Fixtures\Tokens;
 use PHPUnit\Framework\TestCase;
 
 class TokenTest extends TestCase
@@ -18,18 +22,7 @@ class TokenTest extends TestCase
         );
 
         $this->assertNotEmpty($token);
-    }
-
-    public function testValidateToken(): void
-    {
-        $token = Token::create(
-            'abdY',
-            'Hello&MikeFooBar123',
-            time() + 300,
-            'http://127.0.0.1'
-        );
-
-        $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
+        $this->assertIsString($token);
     }
 
     public function testCustomPayload(): void
@@ -42,32 +35,15 @@ class TokenTest extends TestCase
         ], 'Hello&MikeFooBar123');
 
         $this->assertNotEmpty($token);
+        $this->assertIsString($token);
     }
 
-    public function testValidateCustomPayload(): void
+    public function testValidateToken(): void
     {
-        $token = Token::customPayload([
-            'iat' => time(),
-            'uid' => 1,
-            'exp' => time() + 10,
-            'iss' => 'localhost'
-        ], 'Hello&MikeFooBar123');
-
-        $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
+        $this->assertTrue(Token::validate(Tokens::TOKEN, Tokens::SECRET));
     }
 
-    public function testValidateCustomPayloadWithoutExpiration(): void
-    {
-        $token = Token::customPayload([
-            'iat' => time(),
-            'uid' => 1,
-            'iss' => 'localhost'
-        ], 'Hello&MikeFooBar123');
-
-        $this->assertTrue(Token::validate($token, 'Hello&MikeFooBar123'));
-    }
-
-    public function testValidateCustomPayloadBadStructure(): void
+    public function testValidateBadStructure(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
             'eyJpYXQiOjE1NjUzNDYyNDcsInVpZCI6MSwiaXNzIjoibG9jYWxob3N0In0';
@@ -75,7 +51,7 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    public function testValidateCustomPayloadBadSignature(): void
+    public function testValidateBadSignature(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
             'eyJpYXQiOjE1NjUzNDYyNDcsInVpZCI6MSwiaXNzIjoibG9jYWxob3N0In0.' .
@@ -84,77 +60,39 @@ class TokenTest extends TestCase
         $this->assertFalse(Token::validate($token, 'Hello&MikeFooBar123'));
     }
 
-    public function testValidateCustomPayloadExpired(): void
+    public function testValidateExpired(): void
     {
-        $token = Token::customPayload([
-            'iat' => time(),
-            'uid' => 1,
-            'exp' => time() - 20,
-            'iss' => 'localhost'
-        ], 'Hello&MikeFooBar123');
-
-        $this->assertFalse(Token::validateExpiration($token, 'Hello&MikeFooBar123'));
+        $this->assertFalse(Token::validateExpiration(Tokens::TOKEN, Tokens::SECRET));
     }
 
-    public function testValidateCustomPayloadWithNotBefore(): void
+    public function testValidateNotBefore(): void
     {
-        $token = Token::customPayload([
-            'iat' => time(),
-            'uid' => 1,
-            'exp' => time() + 20,
-            'nbf' => time() + 20,
-            'iss' => 'localhost'
-        ], 'Hello&MikeFooBar123');
-
-        $this->assertFalse(Token::validateNotBefore($token, 'Hello&MikeFooBar123'));
-    }
-
-    public function testCustomPayloadBadArray(): void
-    {
-        $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Invalid payload claim.');
-        $this->expectExceptionCode(8);
-
-        Token::customPayload([
-            time(),
-            1,
-            time() + 10,
-            'localhost'
-        ], 'Hello&MikeFooBar123');
+        $this->assertTrue(Token::validateNotBefore(Tokens::TOKEN, Tokens::SECRET));
     }
 
     public function testBuilder(): void
     {
-        $this->assertInstanceOf('ReallySimpleJWT\Build', Token::builder());
+        $this->assertInstanceOf(Build::class, Token::builder());
+    }
+
+    public function testParser(): void
+    {
+        $this->assertInstanceOf(Parse::class, Token::parser('Hello', '1234'));
     }
 
     public function testValidator(): void
     {
-        $this->assertInstanceOf('ReallySimpleJWT\Parse', Token::parser('Hello', '1234'));
+        $this->assertInstanceOf(Validate::class, Token::validator('Hello', '1234'));
     }
 
     public function testGetPayload(): void
     {
-        $token = Token::create(
-            'abdY',
-            'Hello*JamesFooBar$!3',
-            time() + 300,
-            'http://127.0.0.1'
-        );
-
-        $this->assertSame('abdY', Token::getPayload($token, 'Hello*JamesFooBar$!3')['user_id']);
+        $this->assertSame(Tokens::DECODED_PAYLOAD, Token::getPayload(Tokens::TOKEN, Tokens::SECRET));
     }
 
     public function testGetHeader(): void
     {
-        $token = Token::create(
-            'abdY',
-            'Hello*JamesFooBar$!3',
-            time() + 300,
-            'http://127.0.0.1'
-        );
-
-        $this->assertSame('JWT', Token::getHeader($token, 'Hello*JamesFooBar$!3')['typ']);
+        $this->assertSame(Tokens::DECODED_HEADER, Token::getHeader(Tokens::TOKEN, Tokens::SECRET));
     }
 
     public function testValidateTokenFail(): void

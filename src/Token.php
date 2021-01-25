@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Tokens;
+use ReallySimpleJWT\Build;
+use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Validate;
 
 /**
  * A simple Package for creating JSON Web Tokens that uses HMAC SHA256 to sign
- * signatures. Exposes a simple interface to allow you to create a token
- * that stores a user identifier. The Package is set up to allow extension and
- * the use of larger payloads. You can use your own encoding if you choose.
+ * signatures.
+ *
+ * Exposes a simple interface to allow you to create a token that stores a user
+ * identifier. The Package is set up to allow extension and the use of larger
+ * payloads. You can use your own encoding if you choose.
  *
  * For more information on JSON Web Tokens please see https://jwt.io
  * along with the RFC https://tools.ietf.org/html/rfc7519
@@ -23,12 +28,13 @@ class Token
      * Create a JSON Web Token that contains a user identifier and a basic
      * payload including issued at, expiration and issuer.
      *
-     * @param mixed $userId
+     * @see Tokens::create()
+     * @param string|int $userId
      */
     public static function create($userId, string $secret, int $expiration, string $issuer): string
     {
         $tokens = new Tokens();
-        return $tokens->createBasicToken(
+        return $tokens->create(
             'user_id',
             $userId,
             $secret,
@@ -38,31 +44,26 @@ class Token
     }
 
     /**
-     * Create a JSON Web Token with a custom payload built from a key
-     * value array.
-     *
+     * @see Tokens::customPayload()
      * @param mixed[] $payload
      */
     public static function customPayload(array $payload, string $secret): string
     {
         $tokens = new Tokens();
-        return $tokens->createCustomToken($payload, $secret)->getToken();
+        return $tokens->customPayload($payload, $secret)->getToken();
     }
 
     /**
-     * Validate the Json web token, check it's structure and signature. Also
-     * check its expiration claim and not before claim if they are set.
+     * @see Tokens::validate()
      */
     public static function validate(string $token, string $secret): bool
     {
         $tokens = new Tokens();
-        return $tokens->basicValidation($token, $secret);
+        return $tokens->validate($token, $secret);
     }
 
     /**
-     * Return the header of the token as an associative array. You should run
-     * the validate method on your token before retrieving the header.
-     *
+     * @see Tokens::getHeader()
      * @return mixed[]
      */
     public static function getHeader(string $token, string $secret): array
@@ -72,9 +73,7 @@ class Token
     }
 
     /**
-     * Return the payload of the token as an associative array. You should run
-     * the validate method on your token before retrieving the payload.
-     *
+     * @see Tokens::getPayload()
      * @return mixed[]
      */
     public static function getPayload(string $token, string $secret): array
@@ -84,7 +83,7 @@ class Token
     }
 
     /**
-     * Factory method to return an instance of the ReallySimpleJWT\Build class.
+     * @see Tokens::builder()
      */
     public static function builder(): Build
     {
@@ -93,7 +92,7 @@ class Token
     }
 
     /**
-     * Factory method to return instance of the ReallySimpleJWT\Parse class.
+     * @see Tokens::parser()
      */
     public static function parser(string $token, string $secret): Parse
     {
@@ -102,9 +101,16 @@ class Token
     }
 
     /**
-     * Run standard validation and expiration validation against the token.
-     *
-     * @return bool
+     * @see Tokens::validator()
+     */
+    public static function validator(string $token, string $secret): Validate
+    {
+        $tokens = new Tokens();
+        return $tokens->validator($token, $secret);
+    }
+
+    /**
+     * @see Tokens::validateExpiration()
      */
     public static function validateExpiration(string $token, string $secret): bool
     {
@@ -113,9 +119,7 @@ class Token
     }
 
     /**
-     * Run not before validation against token.
-     *
-     * @return bool
+     * @see Tokens::validateNotBefore()
      */
     public static function validateNotBefore(string $token, string $secret): bool
     {

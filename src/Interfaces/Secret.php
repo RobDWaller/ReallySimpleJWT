@@ -3,11 +3,14 @@
 namespace ReallySimpleJWT\Interfaces;
 
 /**
- * Enable custom validation of JSON Web Token signature secrets. It is
- * advised secrets are as strong as possible to make sure the token
- * is as secure as possible.
+ * Interface for Secret class, enables custom secret validation.
  */
 interface Secret
 {
+    /**
+     * Validate the provided signature secret.
+     *
+     * @see Secret::validate()
+     */
     public function validate(string $secret): bool;
 }

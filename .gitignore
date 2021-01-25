@@ -12,3 +12,4 @@ docker-compose.yml
 Dockerfile
 .phpunit.result.cache
 coverage.xml
+.DS_Store

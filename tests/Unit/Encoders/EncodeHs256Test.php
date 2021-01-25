@@ -5,15 +5,15 @@ namespace Tests\Unit\Encoders;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\Tokens;
 use ReallySimpleJWT\Helper\Validator;
-use ReallySimpleJWT\Encoders\EncodeHs256;
+use ReallySimpleJWT\Encoders\EncodeHS256;
 use ReallySimpleJWT\Token;
 use ReflectionMethod;
 
-class EncodeHs256Test extends TestCase
+class EncodeHS256Test extends TestCase
 {
     public function testEncode(): void
     {
-        $encode = new EncodeHs256();
+        $encode = new EncodeHS256();
 
         $this->assertSame(Tokens::HEADER, $encode->encode(Tokens::DECODED_HEADER));
         $this->assertSame(Tokens::PAYLOAD, $encode->encode(Tokens::DECODED_PAYLOAD));
@@ -21,7 +21,7 @@ class EncodeHs256Test extends TestCase
 
     public function testSignature(): void
     {
-        $encode = new EncodeHs256();
+        $encode = new EncodeHS256();
 
         $signature = $encode->signature(
             Tokens::DECODED_HEADER,
@@ -34,9 +34,9 @@ class EncodeHs256Test extends TestCase
 
     public function testUrlEncode(): void
     {
-        $encode = new EncodeHs256();
+        $encode = new EncodeHS256();
 
-        $method = new ReflectionMethod(EncodeHs256::class, 'urlEncode');
+        $method = new ReflectionMethod(EncodeHS256::class, 'urlEncode');
         $method->setAccessible(true);
 
         $result = $method->invokeArgs($encode, ['!"£$%^&*()1235_-+={POp}[]:;@abE~#,><.?/|\¬']);
@@ -46,9 +46,9 @@ class EncodeHs256Test extends TestCase
 
     public function testUrlEncodeIsBase64Url(): void
     {
-        $encode = new EncodeHs256();
+        $encode = new EncodeHS256();
 
-        $method = new ReflectionMethod(EncodeHs256::class, 'urlEncode');
+        $method = new ReflectionMethod(EncodeHS256::class, 'urlEncode');
         $method->setAccessible(true);
 
         $result = $method->invokeArgs($encode, ['crayon+/=']);
@@ -58,9 +58,9 @@ class EncodeHs256Test extends TestCase
 
     public function testHash(): void
     {
-        $encode = new EncodeHs256();
+        $encode = new EncodeHS256();
 
-        $method = new ReflectionMethod(EncodeHs256::class, 'hash');
+        $method = new ReflectionMethod(EncodeHS256::class, 'hash');
         $method->setAccessible(true);
 
         $result = $method->invokeArgs($encode, [ 'sha256', 'hello', '123']);
@@ -70,16 +70,16 @@ class EncodeHs256Test extends TestCase
 
     public function testGetAlgorithm(): void
     {
-        $encode = new EncodeHs256();
+        $encode = new EncodeHS256();
 
         $this->assertSame('HS256', $encode->getAlgorithm());
     }
 
     public function testGetHash(): void
     {
-        $encode = new EncodeHs256();
+        $encode = new EncodeHS256();
 
-        $method = new ReflectionMethod(EncodeHs256::class, 'getHashAlgorithm');
+        $method = new ReflectionMethod(EncodeHS256::class, 'getHashAlgorithm');
         $method->setAccessible(true);
 
         $result = $method->invoke($encode);

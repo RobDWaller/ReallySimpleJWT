@@ -8,7 +8,7 @@ use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Exception\TokensException;
 use Tests\Fixtures\Tokens as TokenFixtures;
 
 class TokensTest extends TestCase
@@ -31,16 +31,25 @@ class TokensTest extends TestCase
         $this->assertInstanceOf(Parse::class, $parser);
     }
 
-    public function testCreateBasicToken(): void
+    public function testValidator(): void
     {
         $tokens = new Tokens();
 
-        $token = $tokens->createBasicToken('user_id', 123, 'secret123#ABC', time() + 30, 'localhost');
+        $validator = $tokens->validator('abc.def.ghi', 'secret');
+
+        $this->assertInstanceOf(Validate::class, $validator);
+    }
+
+    public function testCreate(): void
+    {
+        $tokens = new Tokens();
+
+        $token = $tokens->create('user_id', 123, 'secret123#ABC', time() + 30, 'localhost');
 
         $this->assertInstanceOf(Jwt::class, $token);
     }
 
-    public function testCreateCustomToken(): void
+    public function testCustomPayload(): void
     {
         $tokens = new Tokens();
 
@@ -50,7 +59,7 @@ class TokensTest extends TestCase
             'nbf' => time() - 20
         ];
 
-        $token = $tokens->createCustomToken($payload, 'secret123#ABC');
+        $token = $tokens->customPayload($payload, 'secret123#ABC');
 
         $this->assertInstanceOf(Jwt::class, $token);
     }
@@ -65,27 +74,18 @@ class TokensTest extends TestCase
             'nbf' => time() - 20
         ];
 
-        $this->expectException(ValidateException::class);
+        $this->expectException(TokensException::class);
         $this->expectExceptionMessage('Invalid payload claim.');
         $this->expectExceptionCode(8);
-        $tokens->createCustomToken($payload, 'secret123#ABC');
+        $tokens->customPayload($payload, 'secret123#ABC');
     }
 
     public function testValidate(): void
     {
         $tokens = new Tokens();
 
-        $validate = $tokens->validate(TokenFixtures::TOKEN, TokenFixtures::SECRET);
-
-        $this->assertInstanceOf(Validate::class, $validate);
-    }
-
-    public function testBasicValidation(): void
-    {
-        $tokens = new Tokens();
-
         $this->assertTrue(
-            $tokens->basicValidation(TokenFixtures::TOKEN, TokenFixtures::SECRET)
+            $tokens->validate(TokenFixtures::TOKEN, TokenFixtures::SECRET)
         );
     }
 
@@ -94,7 +94,7 @@ class TokensTest extends TestCase
         $tokens = new Tokens();
 
         $this->assertFalse(
-            $tokens->basicValidation(TokenFixtures::TOKEN, '123')
+            $tokens->validate(TokenFixtures::TOKEN, '123')
         );
     }
 
@@ -108,7 +108,7 @@ class TokensTest extends TestCase
             'nbf' => time() - 20
         ];
 
-        $token = $tokens->createCustomToken($payload, 'secret123#ABC');
+        $token = $tokens->customPayload($payload, 'secret123#ABC');
 
         $this->assertTrue(
             $tokens->validateExpiration($token->getToken(), 'secret123#ABC')
@@ -121,6 +121,15 @@ class TokensTest extends TestCase
 
         $this->assertFalse(
             $tokens->validateExpiration(TokenFixtures::TOKEN, TokenFixtures::SECRET)
+        );
+    }
+
+    public function testValidateNoExpiration(): void
+    {
+        $tokens = new Tokens();
+
+        $this->assertFalse(
+            $tokens->validateExpiration(TokenFixtures::TOKEN_NO_TIMES, TokenFixtures::SECRET)
         );
     }
 
@@ -143,10 +152,19 @@ class TokensTest extends TestCase
             'nbf' => time() + 20
         ];
 
-        $token = $tokens->createCustomToken($payload, 'secret123#ABC');
+        $token = $tokens->customPayload($payload, 'secret123#ABC');
 
         $this->assertFalse(
             $tokens->validateNotBefore($token->getToken(), 'secret123#ABC')
+        );
+    }
+
+    public function testValidateNoNotBefore(): void
+    {
+        $tokens = new Tokens();
+
+        $this->assertFalse(
+            $tokens->validateNotBefore(TokenFixtures::TOKEN_NO_TIMES, TokenFixtures::SECRET)
         );
     }
 

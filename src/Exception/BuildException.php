@@ -8,8 +8,7 @@ use Exception;
 use Throwable;
 
 /**
- * Simple PHP exception class for all validation exceptions so exceptions are
- * more specific and obvious.
+ * Exception class for exceptions which occur in the Build class.
  */
 class BuildException extends Exception
 {

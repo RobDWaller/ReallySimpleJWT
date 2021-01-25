@@ -5,46 +5,46 @@ declare(strict_types=1);
 namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Parse;
-use ReallySimpleJWT\Helper\Validator;
+use ReallySimpleJWT\Interfaces\Validator;
 use ReallySimpleJWT\Exception\ValidateException;
-use ReallySimpleJWT\Interfaces\Signature;
+use ReallySimpleJWT\Interfaces\Encode;
 
+/**
+ * Core validation class for ensuring a token and its claims are valid.
+ */
 class Validate
 {
     private Parse $parse;
 
-    private Signature $signature;
+    private Encode $encode;
 
     private Validator $validate;
 
-    public function __construct(Parse $parse, Signature $signature, Validator $validate)
+    public function __construct(Parse $parse, Encode $encode, Validator $validate)
     {
         $this->parse = $parse;
 
-        $this->signature = $signature;
+        $this->encode = $encode;
 
         $this->validate = $validate;
     }
 
     /**
-     * Validate the JWT has the right string structure and the signature
-     * is valid and has not been tampered with.
+     * Validate the JWT has the correct structure.
      *
      * @throws ValidateException
      */
-    public function validate(): Validate
+    public function structure(): Validate
     {
         if (!$this->validate->structure($this->parse->getToken())) {
             throw new ValidateException('Token is invalid.', 1);
         }
 
-        $this->signature();
-
         return $this;
     }
 
     /**
-     * Validate the JWT's expiration claim (exp). This claim defines when a
+     * Validate the JWT's expiration claim (exp). This claim defines how  a
      * token can be used until.
      *
      * @throws ValidateException
@@ -95,12 +95,12 @@ class Validate
      * Validate the tokens alg claim is a valid digital signature or MAC
      * algorithm. Value can also be "none". See RFC 7518 for more details.
      *
-     * @param array<string> $additional
+     * @param string[] $algorithms
      * @throws ValidateException
      */
-    public function algorithm(array $additional = []): Validate
+    public function algorithm(array $algorithms = []): Validate
     {
-        if (!$this->validate->algorithm($this->parse->getAlgorithm(), $additional)) {
+        if (!$this->validate->algorithm($this->parse->getAlgorithm(), $algorithms)) {
             throw new ValidateException(
                 'Algorithm claim is not valid.',
                 12
@@ -116,9 +116,9 @@ class Validate
      *
      * @throws ValidateException
      */
-    public function signature(): void
+    public function signature(): Validate
     {
-        $signature = $this->signature->make(
+        $signature = $this->encode->signature(
             $this->parse->getDecodedHeader(),
             $this->parse->getDecodedPayload(),
             $this->parse->getSecret()
@@ -127,5 +127,7 @@ class Validate
         if (!$this->validate->signature($signature, $this->parse->getSignature())) {
             throw new ValidateException('Signature is invalid.', 3);
         }
+
+        return $this;
     }
 }

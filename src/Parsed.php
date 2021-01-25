@@ -7,8 +7,9 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Jwt;
 
 /**
- * This 'value object' is generated when the JWT has been parsed and validated,
- * it contains the original JWT value object, and the header and payload
+ * This value object is generated when the JWT has been parsed.
+ *
+ * It contains the original JWT value object, and the header and payload
  * associative arrays. The class also offers helper methods which provide
  * access to the header and payload claim data.
  */
