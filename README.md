@@ -178,7 +178,7 @@ Token::getPayload($token, $secret);
 
 ### Build, Parse and Validate Factory Methods
 
-The `ReallySimpleJWT\Token` class also provides three factory methods to gain access to the core `ReallySimpleJWT\Build`, `ReallySimpleJWT\Parse`, `ReallySimpleJWT\Validate` classes. These classes allow you to build custom tokens, and parse and validate tokens as you see fit.
+The `ReallySimpleJWT\Token` class also provides three factory methods to gain access to the core `ReallySimpleJWT\Build`, `ReallySimpleJWT\Parse`, and `ReallySimpleJWT\Validate` classes. These classes allow you to build custom tokens, and parse and validate tokens as you see fit.
 
 ```php
 Token::builder(); // Returns an instance of ReallySimpleJWT\Build
@@ -188,9 +188,9 @@ Token::parser($token, $secret); // Returns an instance of ReallySimpleJWT\Parse
 Token::validator($token, $secret); // Returns an instance of ReallySimpleJWT\Validate
 ```
 
-### Non-Static Access
+### Non-Static Usage
 
-The `ReallySimpleJWT\Token` class is also just a wrapper of the `ReallySimpleJWT\Tokens` class for those who'd prefer to access the functionality non statically.
+The `ReallySimpleJWT\Token` class is also just a wrapper of the `ReallySimpleJWT\Tokens` class which can be used directly for those who'd prefer to instantiate and inject the functionality.
 
 ```php
 use ReallySimpleJWT\Tokens;
@@ -203,7 +203,14 @@ $expiration = time() + 50;
 $issuer = 'localhost';
 
 $token = $tokens->create('id', $id, $secret, $expiration, $issuer);
+$token->getToken();
 ```
+
+Please note when calling the `create()` and `customPayload()` methods on the `Tokens` class they will return an instance of the `Jwt` class unlike the `Token` class which will return a token string.
+
+In addition, the `create()` method has a slightly different signature on the `Tokens` class as a user identifier key must be passed in.
+
+`create(string $userKey, $userId, string $secret, int $expiration, string $issuer): Jwt`
 
 ## Advanced Usage
 
@@ -221,9 +228,9 @@ The methods can be chained together and when the `build()` method is called the 
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Helper\Validator;
-use ReallySimpleJWT\Encoders\EncodeHs256;
+use ReallySimpleJWT\Encoders\EncodeHS256;
 
-$build = new Build('JWT', new Validator(), new Secret(), new EncodeHs256());
+$build = new Build('JWT', new Validator(), new Secret(), new EncodeHS256());
 
 $token = $build->setContentType('JWT')
     ->setHeaderClaim('info', 'foo')
@@ -262,19 +269,19 @@ $jwt->getSecret();
 
 ### Parse Token
 
-The `ReallySimpleJWT\Parse` class allows a developer to parse a JWT based on a provided decoder. The `parse()` method will decode the JSON Web Token and return the result as a `ReallySimpleJWT\Parsed` object. This will provide access to the header and payload claims data the token holds.
+The `ReallySimpleJWT\Parse` class allows a developer to parse a JWT and the `parse()` method will decode the JSON Web Token and return the result as a `ReallySimpleJWT\Parsed` object. This will provide access to the header and payload claims data the token holds.
 
 ```php
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Decoders\DecodeHs256;
+use ReallySimpleJWT\Decode;
 
 $token = 'aaa.bbb.ccc';
 $secret = '!secReT$123*';
 
 $jwt = new Jwt($token, $secret);
 
-$parse = new Parse($jwt, new DecodeHs256());
+$parse = new Parse($jwt, new Decode());
 
 $parsed = $parse->parse();
 
@@ -317,8 +324,8 @@ To Validate a JSON Web Token a developer can use the `ReallySimpleJWT\Validate` 
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJwt\Decoders\DecodeHs256;
-use ReallySimpleJwt\Encoders\EncodeHs256;
+use ReallySimpleJwt\Decode;
+use ReallySimpleJwt\Encoders\EncodeHS256;
 use ReallySimpleJwt\Helper\Validator;
 
 $token = new Jwt(
@@ -326,11 +333,11 @@ $token = new Jwt(
     '!$£%456hftYuJi2'
 );
 
-$parse = new Parse($token, new DecodeHs256());
+$parse = new Parse($token, new Decode());
 
 $validate = new Validate(
     $parse,
-    new EncodeHs256(),
+    new EncodeHS256(),
     new Validator()
 );
 
@@ -352,7 +359,7 @@ Each validation method will throw a `ReallySimpleJWT\Exception\ValidateException
 
 ### Custom Encoding
 
-By default this library hashes and encodes the JWT signature via `hash_hmac()` using the sha256 algorithm. If a developer would like to use a customised form of encoding they just need to generate a custom encode class which complies with the `ReallySimpleJWT\Interfaces\Encode` interface.
+By default this library hashes and encodes the JWT signature via `hash_hmac()` using the sha256 algorithm. If a developer would like to use a customised form of encoding they just need to generate a custom encode class which complies with the `ReallySimpleJWT\Interfaces\Encode` interface. This can then be injected into the `ReallySimpleJWT\Build` and `ReallySimpleJWT\Validate` classes.
 
 ```php
 interface EncodeInterface
@@ -378,18 +385,18 @@ There are four exception types that may be thrown:
 | Code | Message                           | Explanation                                |
 |:----:| --------------------------------- | ------------------------------------------ |
 | 1    | Token is invalid.                 | Token must have three parts separated by dots. |
-| 2    | Audience claim does not contain provided StringOrURI.        | The aud claim must contain the provided string or URI string provided. |
+| 2    | Audience claim does not contain provided StringOrURI.        | The `aud` claim must contain the provided string or URI string provided. |
 | 3    | Signature is invalid.             | Signature does not match header / payload content. Could not replicate signature with provided header, payload and secret. |
-| 4    | Expiration claim has expired.     | The exp claim must be a valid date time number in the future. |
-| 5    | Not Before claim has not elapsed. | The nbf claim must be a valid date time number in the past. |
-| 6    | Expiration claim is not set.      | Attempt was made to validate an Expiration claim which does not exist. |
-| 7    | Not Before claim is not set.      | Attempt was made to validate a Not Before claim which does not exist. |
-| 8    | Invalid payload claim.            | Payload claims must be key value pairs of the format string: mixed. |
-| 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$`` |
-| 10   | Invalid Audience claim.           | The aud claim can either be a string or an array of strings nothing else. |
-| 11   | Audience claim is not set.      | Attempt was made to validate an Audience claim which does not exist. |
-| 12   | Algorithm claim is not valid.   | Algorithm should be a valid Digital Signature or MAC Algorithm, or none. See RFC 7518. |
-| 13   | Algorithm claim is not set.      | Attempt was made to validate an Algorithm claim which does not exist. |
+| 4    | Expiration claim has expired.     | The `exp` claim must be a valid date time number in the future. |
+| 5    | Not Before claim has not elapsed. | The `nbf` claim must be a valid date time number in the past. |
+| 6    | Expiration claim is not set.      | Attempt was made to validate an `exp` claim which does not exist. |
+| 7    | Not Before claim is not set.      | Attempt was made to validate a `nbf` claim which does not exist. |
+| 8    | Invalid payload claim.            | Payload claims must be key value pairs of the format `string: mixed`. |
+| 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$` |
+| 10   | Invalid Audience claim.           | The `aud` claim can either be a string or an array of strings nothing else. |
+| 11   | Audience claim is not set.      | Attempt was made to validate an `aud` claim which does not exist. |
+| 12   | Algorithm claim is not valid.   | Algorithm should be a valid Digital Signature or MAC Algorithm, or none. See [RFC 7518](https://tools.ietf.org/html/rfc7518). |
+| 13   | Algorithm claim is not set.      | Attempt was made to validate an `alg` claim which does not exist. |
 
 ## Token Security
 
