@@ -98,7 +98,7 @@ class Validate
      * @param string[] $algorithms
      * @throws ValidateException
      */
-    public function algorithm(array $algorithms = []): Validate
+    public function algorithm(array $algorithms): Validate
     {
         if (!$this->validate->algorithm($this->parse->getAlgorithm(), $algorithms)) {
             throw new ValidateException(

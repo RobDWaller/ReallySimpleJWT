@@ -271,14 +271,14 @@ class ValidateTest extends TestCase
         $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
             ->method('algorithm')
-            ->with('HS256', [])
+            ->with('HS256', ['HS256'])
             ->willReturn(true);
 
         $encode = $this->createMock(EncodeHS256::class);
 
         $validate = new Validate($parse, $encode, $validator);
 
-        $this->assertInstanceOf(Validate::class, $validate->algorithm());
+        $this->assertInstanceOf(Validate::class, $validate->algorithm(['HS256']));
     }
 
     public function testValidateAlgorithmFail(): void

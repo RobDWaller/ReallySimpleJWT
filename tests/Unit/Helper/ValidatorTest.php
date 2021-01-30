@@ -124,6 +124,15 @@ class ValidatorTest extends TestCase
 
         $algorithm = "HS256";
 
+        $this->assertFalse($validate->algorithm($algorithm, ["HS384"]));
+    }
+
+    public function testValidateAlgorithmFailEmpty(): void
+    {
+        $validate = new Validator();
+
+        $algorithm = "HS256";
+
         $this->assertFalse($validate->algorithm($algorithm, []));
     }
 
