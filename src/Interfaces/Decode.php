@@ -3,7 +3,7 @@
 namespace ReallySimpleJWT\Interfaces;
 
 /**
- * Interface for Decode class if customisation is required.
+ * Interface for Decode classes if customisation is required.
  */
 interface Decode
 {

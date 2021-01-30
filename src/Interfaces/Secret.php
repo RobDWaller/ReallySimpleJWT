@@ -3,7 +3,7 @@
 namespace ReallySimpleJWT\Interfaces;
 
 /**
- * Interface for Secret class, enables custom secret validation.
+ * Interface for Secret classes, enables custom secret validation.
  */
 interface Secret
 {

@@ -40,8 +40,6 @@ class Parsed
     private string $signature;
 
     /**
-     * The Parsed constructor
-     *
      * @param mixed[] $header
      * @param mixed[] $payload
      */
@@ -125,8 +123,7 @@ class Parsed
     }
 
     /**
-     * Access the audience claim from the payload. Can return a string or an
-     * array. Will return an empty string if not set.
+     * Access the audience claim from the payload.
      *
      * @return string|string[]
      */

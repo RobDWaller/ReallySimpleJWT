@@ -16,9 +16,8 @@ class Secret implements SecretInterface
 {
     /**
      * The secret should contain a number, a upper and a lowercase letter, and a
-     * special character *&!@%^#$. It should be at least 12 characters in length.
-     *
-     * The regex here uses lookahead assertions.
+     * special character *&!@%^#$. It should be at least 12 characters in 
+     * length. The regex here uses lookahead assertions.
      */
     public function validate(string $secret): bool
     {

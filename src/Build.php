@@ -111,7 +111,7 @@ class Build
     /**
      * Set the JWT secret for encrypting the JWT signature. The secret must
      * comply with the validation rules defined in the
-     * ReallySimpleJWT\Validate class.
+     * ReallySimpleJWT\Secret class.
      *
      * @throws BuildException
      */
@@ -263,9 +263,8 @@ class Build
     }
 
     /**
-     * If you wish to use the same build instance to generate two or more
-     * tokens you can use this reset method to unset the pre-defined header,
-     * payload and secret properties.
+     * Generate a new token with the same initial setup. Allows you to chain the
+     * creation of multiple tokens.
      */
     public function reset(): Build
     {
@@ -278,7 +277,7 @@ class Build
     }
 
     /**
-     * Generate and return the JWT signature this is made up of the header,
+     * Generate and return the JWT signature, this is made up of the header,
      * payload and secret.
      *
      * @throws BuildException

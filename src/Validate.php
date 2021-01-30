@@ -44,8 +44,8 @@ class Validate
     }
 
     /**
-     * Validate the JWT's expiration claim (exp). This claim defines how  a
-     * token can be used until.
+     * Validate the JWT's expiration claim (exp). This claim defines how long a
+     * token can be used for.
      *
      * @throws ValidateException
      */

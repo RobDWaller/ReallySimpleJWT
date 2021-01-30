@@ -9,7 +9,8 @@ use ReallySimpleJWT\Helper\Base64;
 /**
  * HS256 / sha256 implementation of the Encode interface.
  *
- * Also the core ReallySimpleJWT token encoder class.
+ * Core ReallySimpleJWT token encoder class for encoding JWT parts
+ * and signatures.
  */
 class EncodeHS256 implements Encode
 {
