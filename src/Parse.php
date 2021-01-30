@@ -9,23 +9,15 @@ use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Exception\ParseException;
 use ReallySimpleJWT\Interfaces\Decode;
-use ReallySimpleJWT\Helper\JsonEncoder;
 
 /**
- * This class parses and validates a JSON Web Token.
+ * This class parses a JSON Web Token.
  *
- * The token is housed in the JWT value object. The class outputs a Parsed value
- * object to give access to the data held within the JSON Web Token header
- * and payload.
+ * The token is housed in the Jwt value object. The class outputs a Parsed value
+ * object to provide access to the data held within the JWT header and payload.
  */
 class Parse
 {
-    /**
-     * This is a trait to tidy away the JSON encode / decode functionality.
-     * exposes the methods jsonEncode and jsonDecode to class.
-     */
-    use JsonEncoder;
-
     /**
      * The JSON Web Token value object.
      */
@@ -47,8 +39,7 @@ class Parse
     }
 
     /**
-     * Generate the Parsed Value Object. This method should be called last
-     * after the relevant validate methods have been called.
+     * Parse the JWT and generate the Parsed Value Object.
      */
     public function parse(): Parsed
     {
