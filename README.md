@@ -17,12 +17,14 @@ If you need to read tokens in the browser please take a look at our JavaScript /
     - [Create Token](#create-token)
     - [Validate Token](#validate-token)
     - [Get Header and Payload Claims Data](#get-header-and-payload-claims-data)
-    - [Build and Parse Factory Methods](#build-and-parse-factory-methods)
+    - [Build, Parse and Validate Factory Methods](#build-parse-and-validate-factory-methods)
+    - [Non-Static Usage](#non-static-usage)
 - [Advanced Usage](#advanced-usage)
     - [Create Custom Token](#create-custom-token)
     - [Access the Token](#access-the-token)
-    - [Parse and Validate Token](#parse-and-validate-token)
+    - [Parse Token](#parse-token)
     - [Access Token Claims Data](#access-token-claims-data)
+    - [Token Validation Methods](#token-validation-methods)
     - [Custom Encoding](#custom-encoding)
 - [Error Messages and Codes](#error-messages-and-codes)
 - [Token Security](#token-security)
@@ -316,7 +318,7 @@ Alternatively a developer can call one of the [RFC](https://tools.ietf.org/html/
 - `getExpiresIn()`
 - `getUsableIn()`
 
-### Validate Token
+### Token Validation Methods
 
 To Validate a JSON Web Token a developer can use the `ReallySimpleJWT\Validate` class. To use the validate class you need to create and inject an instance of the `ReallySimpleJWT\Parse` class. This is so the validate class can access the information contained within the token. 
 
