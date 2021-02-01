@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Decoders;
+namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\Tokens;
