@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.2/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          forceCoversAnnotation="false"
          beStrictAboutCoversAnnotation="false"
@@ -10,10 +10,14 @@
          colors="true"
          executionOrder="random"
          resolveDependencies="true"
-         failOnRisky="true">
+         failOnRisky="true"
+         failOnWarning="true">
     <testsuites>
-        <testsuite name="Really Simple JWT Test Suite">
-            <directory suffix=".php">./tests/</directory>
+        <testsuite name="unit">
+            <directory suffix=".php">./tests/Unit/</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory suffix=".php">./tests/Integration/</directory>
         </testsuite>
     </testsuites>
     <filter>

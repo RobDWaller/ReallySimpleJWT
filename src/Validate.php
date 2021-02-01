@@ -4,97 +4,130 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
+use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Interfaces\Validator;
+use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Interfaces\Encode;
+
 /**
- * A validation helper class which offers methods to confirm the validity of
- * a JSON Web Token along with aspects of its content.
- *
- * Error codes and messages:
- * 1: Token is invalid: Token must have three parts separated by dots.
- * 2: Audience claim does not contain provided StringOrURI.
- * 3: Signature is invalid: Signature does not match header / payload content.
- * 4: Expiration claim has expired.
- * 5: Not Before claim has not elapsed.
- * 6: Expiration claim is not set.
- * 7: Not Before claim is not set.
- * 8: Invalid payload claim: Claims must be key values of type string:mixed.
- * 9: Invalid secret: See README for more information.
- * 10: Invalid Audience claim: Must be either a string or array of strings.
+ * Core validation class for ensuring a token and its claims are valid.
  */
 class Validate
 {
-    /**
-     * Confirm the structure of a JSON Web Token, it has three parts separated
-     * by dots and complies with Base64URL standards.
-     *
-     * @param string $jwt
-     * @return bool
-     */
-    public function structure(string $jwt): bool
+    private Parse $parse;
+
+    private Encode $encode;
+
+    private Validator $validate;
+
+    public function __construct(Parse $parse, Encode $encode, Validator $validate)
     {
-        return preg_match(
-            '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
-            $jwt
-        ) === 1;
+        $this->parse = $parse;
+
+        $this->encode = $encode;
+
+        $this->validate = $validate;
     }
 
     /**
-     * Check the validity of the JWT's expiration claim as defined in the
-     * token payload. Returns false if the expiration time has surpassed the
-     * current time.
+     * Validate the JWT has the correct structure.
      *
-     * @param int $expiration
-     * @return bool
+     * @throws ValidateException
      */
-    public function expiration(int $expiration): bool
+    public function structure(): Validate
     {
-        return $expiration > time();
-    }
-
-    /**
-     * Check the validity of the JWT's not before claim as defined in the
-     * token payload. Returns false if the not before time has not surpassed
-     * the current time.
-     *
-     * @param int $notBefore
-     * @return bool
-     */
-    public function notBefore(int $notBefore): bool
-    {
-        return $notBefore < time();
-    }
-
-    /**
-     * Check the validity of the JWT's audience claim. The audience claim
-     * defines the recipient or recipients allowed to process the token. This
-     * claim can either be a StringOrURI or an array of StringOrURIs.
-     */
-    public function audience($audience, string $check): bool
-    {
-        if (is_array($audience)) {
-            return in_array($check, $audience);
+        if (!$this->validate->structure($this->parse->getToken())) {
+            throw new ValidateException('Token is invalid.', 1);
         }
 
-        return $audience === $check;
+        return $this;
     }
 
     /**
-     * Check two signature hashes match. One signature is supplied by the token.
-     * The other is newly generated from the token's header and payload. They
-     * should match, if they don't someone has likely tampered with the token.
+     * Validate the JWT's expiration claim (exp). This claim defines how long a
+     * token can be used for.
+     *
+     * @throws ValidateException
      */
-    public function signature(string $signature, string $comparison): bool
+    public function expiration(): Validate
     {
-        return hash_equals($signature, $comparison);
+        if (!$this->validate->expiration($this->parse->getExpiration())) {
+            throw new ValidateException('Expiration claim has expired.', 4);
+        }
+
+        return $this;
     }
 
     /**
-     * Check the alg claim is in the list of valid algorithms. These are the
-     * valid digital signatures, MAC algorithms as defined in RFC 7518.
+     * Validate the JWT's not before claim (nbf). This claim defines when a
+     * token can be used from.
+     *
+     * @throws ValidateException
      */
-    public function algorithm(string $algorithm, array $additional): bool
+    public function notBefore(): Validate
     {
-        $base = ["HS256"];
+        if (!$this->validate->notBefore($this->parse->getNotBefore())) {
+            throw new ValidateException('Not Before claim has not elapsed.', 5);
+        }
 
-        return in_array($algorithm, array_merge($base, $additional));
+        return $this;
+    }
+
+    /**
+     * Validate the audience claim exists and is a string or an array
+     * of strings.
+     *
+     * @throws ValidateException
+     */
+    public function audience(string $check): Validate
+    {
+        if (!$this->validate->audience($this->parse->getAudience(), $check)) {
+            throw new ValidateException(
+                'Audience claim does not contain provided StringOrURI.',
+                2
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate the tokens alg claim is a valid digital signature or MAC
+     * algorithm. Value can also be "none". See RFC 7518 for more details.
+     *
+     * @param string[] $algorithms
+     * @throws ValidateException
+     */
+    public function algorithm(array $algorithms): Validate
+    {
+        if (!$this->validate->algorithm($this->parse->getAlgorithm(), $algorithms)) {
+            throw new ValidateException(
+                'Algorithm claim is not valid.',
+                12
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate the JWT's signature. The signature taken from the JWT should
+     * match a new one generated from the JWT header and payload, and secret.
+     *
+     * @throws ValidateException
+     */
+    public function signature(): Validate
+    {
+        $signature = $this->encode->signature(
+            $this->parse->getDecodedHeader(),
+            $this->parse->getDecodedPayload(),
+            $this->parse->getSecret()
+        );
+
+        if (!$this->validate->signature($signature, $this->parse->getSignature())) {
+            throw new ValidateException('Signature is invalid.', 3);
+        }
+
+        return $this;
     }
 }

@@ -1,0 +1,84 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ReallySimpleJWT\Helper;
+
+use ReallySimpleJWT\Interfaces\Validator as ValidatorInterface;
+
+/**
+ * A validation helper class which offers methods to confirm the validity of
+ * a JSON Web Token along with aspects of its content.
+ */
+class Validator implements ValidatorInterface
+{
+    /**
+     * Confirm the structure of a JSON Web Token, it has three parts separated
+     * by dots and complies with Base64URL standards.
+     */
+    public function structure(string $jwt): bool
+    {
+        return preg_match(
+            '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
+            $jwt
+        ) === 1;
+    }
+
+    /**
+     * Check the validity of the JWT's expiration claim as defined in the
+     * token payload. Returns false if the expiration time has surpassed the
+     * current time.
+     */
+    public function expiration(int $expiration): bool
+    {
+        return $expiration > time();
+    }
+
+    /**
+     * Check the validity of the JWT's not before claim as defined in the
+     * token payload. Returns false if the not before time has not surpassed
+     * the current time.
+     */
+    public function notBefore(int $notBefore): bool
+    {
+        return $notBefore < time();
+    }
+
+    /**
+     * Check the validity of the JWT's audience claim. The audience claim
+     * defines the recipient or recipients allowed to process the token. This
+     * claim can either be a StringOrURI or an array of StringOrURIs.
+     *
+     * @param string|string[] $audience
+     */
+    public function audience($audience, string $check): bool
+    {
+        if (is_array($audience)) {
+            return in_array($check, $audience);
+        }
+
+        return $audience === $check;
+    }
+
+    /**
+     * Check two signature hashes match. One signature is supplied by the token.
+     * The other is newly generated from the token's header and payload. They
+     * should match, if they don't someone has likely tampered with the token.
+     */
+    public function signature(string $generatedSignature, string $tokenSignature): bool
+    {
+        return hash_equals($generatedSignature, $tokenSignature);
+    }
+
+    /**
+     * Check the alg claim is in the list of valid algorithms. These are the
+     * valid digital signatures, MAC algorithms or "none" as
+     * defined in RFC 7518.
+     *
+     * @param string[] $validAlgorithms
+     */
+    public function algorithm(string $algorithm, array $validAlgorithms): bool
+    {
+        return in_array($algorithm, $validAlgorithms);
+    }
+}

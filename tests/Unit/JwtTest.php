@@ -1,27 +1,20 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use ReallySimpleJWT\Jwt;
 use PHPUnit\Framework\TestCase;
 
 class JwtTest extends TestCase
 {
-    public function testJwt()
-    {
-        $jwt = new Jwt('Hello', 'secret');
-
-        $this->assertInstanceOf(Jwt::class, $jwt);
-    }
-
-    public function testgetToken()
+    public function testgetToken(): void
     {
         $jwt = new Jwt('Hello', 'secret');
 
         $this->assertSame('Hello', $jwt->getToken());
     }
 
-    public function testgetTokenWithRealToken()
+    public function testgetTokenWithRealToken(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
@@ -32,7 +25,7 @@ class JwtTest extends TestCase
         $this->assertSame($token, $jwt->getToken());
     }
 
-    public function testGetSecret()
+    public function testGetSecret(): void
     {
         $jwt = new Jwt('Hello', 'secret');
 

@@ -7,8 +7,9 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Jwt;
 
 /**
- * This 'value object' is generated when the JWT has been parsed and validated,
- * it contains the original JWT value object, and the header and payload
+ * This value object is generated when the JWT has been parsed.
+ *
+ * It contains the original JWT value object, and the header and payload
  * associative arrays. The class also offers helper methods which provide
  * access to the header and payload claim data.
  */
@@ -16,39 +17,31 @@ class Parsed
 {
     /**
      * The pre-parsed JWT value object
-     *
-     * @var Jwt
      */
-    private $jwt;
+    private Jwt $jwt;
 
     /**
      * Associative array of header claims
      *
-     * @var array
+     * @var mixed[]
      */
-    private $header;
+    private array $header;
 
     /**
      * Associative array of payload claims
      *
-     * @var array
+     * @var mixed[]
      */
-    private $payload;
+    private array $payload;
 
     /**
      * The JWT signature string
-     *
-     * @var string
      */
-    private $signature;
+    private string $signature;
 
     /**
-     * The Parsed constructor
-     *
-     * @param Jwt $jwt
-     * @param array $header
-     * @param array $payload
-     * @param string $signature
+     * @param mixed[] $header
+     * @param mixed[] $payload
      */
     public function __construct(Jwt $jwt, array $header, array $payload, string $signature)
     {
@@ -63,8 +56,6 @@ class Parsed
 
     /**
      * Return the original JWT value object.
-     *
-     * @return Jwt
      */
     public function getJwt(): Jwt
     {
@@ -74,7 +65,7 @@ class Parsed
     /**
      * Get the header claims data as an associative array.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getHeader(): array
     {
@@ -83,8 +74,6 @@ class Parsed
 
     /**
      * Access the algorithm claim from the header.
-     *
-     * @return string
      */
     public function getAlgorithm(): string
     {
@@ -93,8 +82,6 @@ class Parsed
 
     /**
      * Access the type claim from the header.
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -103,8 +90,6 @@ class Parsed
 
     /**
      * Access the content type claim from the header.
-     *
-     * @return string
      */
     public function getContentType(): string
     {
@@ -114,7 +99,7 @@ class Parsed
     /**
      * Get the payload claims data as an associative array.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getPayload(): array
     {
@@ -123,8 +108,6 @@ class Parsed
 
     /**
      * Access the issuer claim from the payload.
-     *
-     * @return string
      */
     public function getIssuer(): string
     {
@@ -133,8 +116,6 @@ class Parsed
 
     /**
      * Access the subject claim from the payload.
-     *
-     * @return string
      */
     public function getSubject(): string
     {
@@ -142,10 +123,9 @@ class Parsed
     }
 
     /**
-     * Access the audience claim from the payload. Can return a string or an
-     * array. Will return an empty string if not set.
+     * Access the audience claim from the payload.
      *
-     * @return string|array
+     * @return string|string[]
      */
     public function getAudience()
     {
@@ -154,8 +134,6 @@ class Parsed
 
     /**
      * Access the expiration claim from the payload.
-     *
-     * @return int
      */
     public function getExpiration(): int
     {
@@ -164,8 +142,6 @@ class Parsed
 
     /**
      * Calculate how long the token has until it expires.
-     *
-     * @return int
      */
     public function getExpiresIn(): int
     {
@@ -175,8 +151,6 @@ class Parsed
 
     /**
      * Access the not before claim from the payload.
-     *
-     * @return int
      */
     public function getNotBefore(): int
     {
@@ -186,8 +160,6 @@ class Parsed
     /**
      * Calculate how long until the Not Before claim expires and the token
      * is usable.
-     *
-     * @return int
      */
     public function getUsableIn(): int
     {
@@ -197,8 +169,6 @@ class Parsed
 
     /**
      * Access the issued at claim from the payload.
-     *
-     * @return int
      */
     public function getIssuedAt(): int
     {
@@ -207,8 +177,6 @@ class Parsed
 
     /**
      * Access the JWT Id claim from the payload.
-     *
-     * @return string
      */
     public function getJwtId(): string
     {
@@ -217,8 +185,6 @@ class Parsed
 
     /**
      * Get the JWT signature string if required.
-     *
-     * @return string
      */
     public function getSignature(): string
     {

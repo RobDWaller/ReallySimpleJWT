@@ -5,7 +5,11 @@ composer.lock
 build
 coverage/
 infection.log
+infection-debug.log
+infection-per-mutator.md
+infection-summary.log
 docker-compose.yml
 Dockerfile
 .phpunit.result.cache
 coverage.xml
+.DS_Store
