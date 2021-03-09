@@ -154,6 +154,11 @@ $result = Token::validate($token, $secret);
 There are also methods available to validate the token's expiration claim and not before claim. Both will return true on success and false on failure.
 
 ```php
+use ReallySimpleJWT\Token;
+
+$token = 'aaa.bbb.ccc';
+$secret = 'sec!ReT423*&';
+
 Token::validateExpiration($token, $secret);
 
 Token::validateNotBefore($token, $secret);
