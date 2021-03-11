@@ -1,5 +1,5 @@
 # Really Simple JSON Web Tokens
-[![Actions Status](https://github.com/robdwaller/reallysimplejwt/workflows/ci/badge.svg)](https://github.com/robdwaller/reallysimplejwt/actions) [![codecov](https://codecov.io/gh/RobDWaller/ReallySimpleJWT/branch/master/graph/badge.svg)](https://codecov.io/gh/RobDWaller/ReallySimpleJWT) [![Infection MSI](https://badge.stryker-mutator.io/github.com/RobDWaller/ReallySimpleJWT/master)](https://infection.github.io) [![StyleCI](https://styleci.io/repos/82379868/shield?branch=master)](https://styleci.io/repos/82379868) [![Latest Stable Version](https://poser.pugx.org/rbdwllr/reallysimplejwt/v/stable)](https://packagist.org/packages/rbdwllr/reallysimplejwt) ![PHP Version Support](https://img.shields.io/travis/php-v/RobDWaller/ReallySimpleJWT/master) [![Total Downloads](https://poser.pugx.org/rbdwllr/reallysimplejwt/downloads)](https://packagist.org/packages/rbdwllr/reallysimplejwt)
+[![Actions Status](https://github.com/robdwaller/reallysimplejwt/workflows/ci/badge.svg)](https://github.com/robdwaller/reallysimplejwt/actions) [![codecov](https://codecov.io/gh/RobDWaller/ReallySimpleJWT/branch/master/graph/badge.svg)](https://codecov.io/gh/RobDWaller/ReallySimpleJWT) [![Infection MSI](https://badge.stryker-mutator.io/github.com/RobDWaller/ReallySimpleJWT/master)](https://infection.github.io) [![StyleCI](https://styleci.io/repos/82379868/shield?branch=master)](https://styleci.io/repos/82379868) [![Latest Stable Version](https://poser.pugx.org/rbdwllr/reallysimplejwt/v/stable)](https://packagist.org/packages/rbdwllr/reallysimplejwt) ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/rbdwllr/reallysimplejwt) [![Total Downloads](https://poser.pugx.org/rbdwllr/reallysimplejwt/downloads)](https://packagist.org/packages/rbdwllr/reallysimplejwt)
 
 A simple PHP library for creating JSON Web Tokens that uses HMAC SHA256 to sign signatures. For basic usage the library exposes a static interface to allow developers to create a token that stores a user identifier and expiration time.
 
@@ -154,6 +154,11 @@ $result = Token::validate($token, $secret);
 There are also methods available to validate the token's expiration claim and not before claim. Both will return true on success and false on failure.
 
 ```php
+use ReallySimpleJWT\Token;
+
+$token = 'aaa.bbb.ccc';
+$secret = 'sec!ReT423*&';
+
 Token::validateExpiration($token, $secret);
 
 Token::validateNotBefore($token, $secret);
