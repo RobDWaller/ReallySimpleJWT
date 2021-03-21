@@ -40,8 +40,7 @@ jobs:
 
     - name: Run Partial Tests 7.4
       if: ${{ matrix.php-versions == '7.4' }}
-      run: vendor/bin/phpstan analyse -l 7 src/ tests/
-      run: vendor/bin/phpunit
+      run: vendor/bin/phpstan analyse -l 7 src/ tests/ && vendor/bin/phpunit
 
     - name: Code Coverage
       run: bash <(curl -s https://codecov.io/bash)
