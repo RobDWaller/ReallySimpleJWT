@@ -353,7 +353,7 @@ $validate->structure();
 $validate->signature();
 ```
 
-Six validation methods are available which can all be chained:
+Seven validation methods are available which can all be chained:
 
 - `structure()` confirms the structure of the token is correct.
 - `signature()` confirms the token signature is valid.
@@ -361,6 +361,7 @@ Six validation methods are available which can all be chained:
 - `notBefore()` confirms the token not before claim (`nbf`) has elapsed.
 - `audience()` confirms the token audience claim (`aud`) matches what is expected.
 - `algorithm()` confirms the token algorithm claim (`alg`) matches what is expected and is valid (See: [RFC 7518](https://www.rfc-editor.org/rfc/rfc7518.html)).
+- `algorithmNotNone()` confirms the token algorithm claim (`alg`) is not set to none.
 
 Each validation method will throw a `ReallySimpleJWT\Exception\ValidateException` if there is anything wrong with the supplied token.
 
