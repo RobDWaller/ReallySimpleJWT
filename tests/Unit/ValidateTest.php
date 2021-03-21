@@ -303,4 +303,70 @@ class ValidateTest extends TestCase
         $this->expectExceptionCode(12);
         $validate->algorithm([]);
     }
+
+    public function testValidateAlgorithmNotNone(): void
+    {
+        $parse = $this->createMock(Parse::class);
+        $parse->expects($this->once())
+            ->method('getAlgorithm')
+            ->willReturn('HS256');
+
+        $validator = $this->createMock(Validator::class);
+        $validator->expects($this->once())
+            ->method('algorithm')
+            ->with('hs256', ['none'])
+            ->willReturn(false);
+
+        $encode = $this->createMock(EncodeHS256::class);
+
+        $validate = new Validate($parse, $encode, $validator);
+
+        $this->assertInstanceOf(Validate::class, $validate->algorithmNotNone());
+    }
+
+    public function testValidateAlgorithmNotNoneFail(): void
+    {
+        $parse = $this->createMock(Parse::class);
+        $parse->expects($this->once())
+            ->method('getAlgorithm')
+            ->willReturn('none');
+
+        $validator = $this->createMock(Validator::class);
+        $validator->expects($this->once())
+            ->method('algorithm')
+            ->with('none', ['none'])
+            ->willReturn(true);
+
+        $encode = $this->createMock(EncodeHS256::class);
+
+        $validate = new Validate($parse, $encode, $validator);
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Algorithm claim should not be none.');
+        $this->expectExceptionCode(14);
+        $validate->algorithmNotNone();
+    }
+
+    public function testValidateAlgorithmNotNoneCapitalCaseFail(): void
+    {
+        $parse = $this->createMock(Parse::class);
+        $parse->expects($this->once())
+            ->method('getAlgorithm')
+            ->willReturn('None');
+
+        $validator = $this->createMock(Validator::class);
+        $validator->expects($this->once())
+            ->method('algorithm')
+            ->with('none', ['none'])
+            ->willReturn(true);
+
+        $encode = $this->createMock(EncodeHS256::class);
+
+        $validate = new Validate($parse, $encode, $validator);
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Algorithm claim should not be none.');
+        $this->expectExceptionCode(14);
+        $validate->algorithmNotNone();
+    }
 }

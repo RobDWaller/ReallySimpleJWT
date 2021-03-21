@@ -111,6 +111,23 @@ class Validate
     }
 
     /**
+     * Validate the token's alg claim is not none.
+     *
+     * @throws ValidateException
+     */
+    public function algorithmNotNone(): Validate
+    {
+        if ($this->validate->algorithm(strtolower($this->parse->getAlgorithm()), ['none'])) {
+            throw new ValidateException(
+                'Algorithm claim should not be none.',
+                14
+            );
+        }
+
+        return $this;
+    }
+
+    /**
      * Validate the JWT's signature. The signature taken from the JWT should
      * match a new one generated from the JWT header and payload, and secret.
      *
