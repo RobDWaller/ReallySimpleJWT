@@ -140,7 +140,7 @@ class Parse
      */
     public function validateAlgorithm(): self
     {
-        if (!$this->validate->algorithm($this->getAlgorithm(), [])) {
+        if (!$this->validate->algorithm($this->getAlgorithm(), ['HS256'])) {
             throw new ValidateException(
                 'Algorithm claim is not valid.',
                 12
