@@ -26,21 +26,10 @@ jobs:
     - name: Install Composer Dependencies 
       run: composer install --no-interaction --prefer-source
     
-    - name: Run Full Tests 7.2
-      if: ${{ matrix.php-versions == '7.2' }}
+    - name: Run Tests
       run: composer pipeline
       env: 
         STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-
-    - name: Run Full Tests 7.3
-      if: ${{ matrix.php-versions == '7.3' }}
-      run: composer pipeline
-      env: 
-        STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-
-    - name: Run Partial Tests 7.4
-      if: ${{ matrix.php-versions == '7.4' }}
-      run: vendor/bin/phpstan analyse -l 7 src/ tests/ && vendor/bin/phpunit
 
     - name: Code Coverage
       run: bash <(curl -s https://codecov.io/bash)
