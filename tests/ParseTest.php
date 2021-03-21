@@ -138,7 +138,12 @@ class ParseTest extends TestCase
     public function testParseValidateBadTokenGoodStructure()
     {
         $parse = new Parse(
-            new Jwt('hello.hello.hello', 'foo1234He$$llo56'),
+            new Jwt(
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+                'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+                'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+                'foo1234He$$llo56'
+            ),
             new Validate(),
             new Encode()
         );

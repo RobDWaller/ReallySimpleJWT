@@ -78,6 +78,7 @@ class Parse
             throw new ValidateException('Token is invalid.', 1);
         }
 
+        $this->validateAlgorithmNotNone();
         $this->validateSignature();
 
         return $this;
@@ -143,6 +144,21 @@ class Parse
             throw new ValidateException(
                 'Algorithm claim is not valid.',
                 12
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate the tokens alg claim is not none.
+     */
+    public function validateAlgorithmNotNone(): self
+    {
+        if ($this->validate->algorithm($this->getAlgorithm(), ['none'])) {
+            throw new ValidateException(
+                'Algorithm claim should not be none.',
+                14
             );
         }
 
