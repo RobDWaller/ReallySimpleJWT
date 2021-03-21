@@ -347,6 +347,7 @@ The ReallySimpleJWT library will in a number of situations throw exceptions to h
 | 11   | Audience claim is not set.      | Attempt was made to validate an Audience claim which does not exist. |
 | 12   | Algorithm claim is not valid.   | Algorithm should be a valid Digital Signature or MAC Algorithm, or none. See RFC 7518. |
 | 13   | Algorithm claim is not set.      | Attempt was made to validate an Algorithm claim which does not exist. |
+| 14   | Algorithm claim should not be none.      | Attempt was made to validate an Algorithm claim which which was set to none. |
 
 ## Token Security
 
