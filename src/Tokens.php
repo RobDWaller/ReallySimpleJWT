@@ -135,6 +135,7 @@ class Tokens
 
         try {
             $validate->structure();
+            $validate->algorithmNotNone();
             $validate->signature();
             return true;
         } catch (ValidateException $e) {
