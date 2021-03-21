@@ -134,9 +134,9 @@ class Tokens
         $validate = $this->validator($token, $secret);
 
         try {
-            $validate->structure();
-            $validate->algorithmNotNone();
-            $validate->signature();
+            $validate->structure()
+                ->algorithmNotNone()
+                ->signature();
             return true;
         } catch (ValidateException $e) {
             return false;
