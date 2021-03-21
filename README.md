@@ -404,6 +404,7 @@ There are four exception types that may be thrown:
 | 11   | Audience claim is not set.      | Attempt was made to validate an `aud` claim which does not exist. |
 | 12   | Algorithm claim is not valid.   | Algorithm should be a valid Digital Signature or MAC Algorithm, or none. See [RFC 7518](https://tools.ietf.org/html/rfc7518). |
 | 13   | Algorithm claim is not set.      | Attempt was made to validate an `alg` claim which does not exist. |
+| 14   | Algorithm claim should not be none.      | The `alg` claim should not be set to none. |
 
 ## Token Security
 
