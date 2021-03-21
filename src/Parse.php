@@ -135,8 +135,7 @@ class Parse
     }
 
     /**
-     * Validate the tokens alg claim is a valid digital signature or MAC
-     * algorithm. Value can also be "none". See RFC 7518 for more details.
+     * Validate the tokens alg claim is HS256.
      */
     public function validateAlgorithm(): self
     {
