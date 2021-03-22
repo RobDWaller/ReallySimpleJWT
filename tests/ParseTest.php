@@ -806,6 +806,51 @@ class ParseTest extends TestCase
         $parse->validateAlgorithm();
     }
 
+    public function testParseValidateAlgorithmNotNone()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setAudience(['https://example.com', 'https://test.com'])
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $this->assertInstanceOf(Parse::class, $parse->validateAlgorithmNotNone());
+    }
+
+    public function testParseValidateAlgorithmNotNoneFail()
+    {
+        $encode = $this->getMockBuilder(Encode::class)
+            ->setMethods(['getAlgorithm'])
+            ->getMock();
+
+        $encode->expects($this->exactly(2))
+            ->method('getAlgorithm')
+            ->willReturn('none');
+
+        $build = new Build('JWT', new Validate(), new Secret(), $encode);
+
+        $token = $build->setSecret('Hoo1234%&HePPo99')
+            ->setAudience(['https://example.com', 'https://test.com'])
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Algorithm claim should not be none.');
+        $this->expectExceptionCode(14);
+        $parse->validateAlgorithmNotNone();
+    }
+
     public function testParseGetAlgorithm()
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
