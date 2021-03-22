@@ -1,0 +1,7 @@
+parameters:
+    level: 7
+    paths:
+        - src
+        - tests
+    ignoreErrors:
+        - '#encode of class ReallySimpleJWT\\Build constructor expects ReallySimpleJWT\\Interfaces\\Encoder, PHPUnit\\Framework\\MockObject\\MockObject given#'
