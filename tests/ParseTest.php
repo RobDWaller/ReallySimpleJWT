@@ -24,11 +24,13 @@ class ParseTest extends TestCase
 
     private const AUDIENCE_TWO = 'https://test.com';
 
-    private const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+    private const TOKEN_HEADER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.';
+
+    private const TOKEN = self::TOKEN_HEADER .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
         'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
 
-    private const TOKEN_EXPIRATION_EXPIRED = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+    private const TOKEN_EXPIRATION_EXPIRED = self::TOKEN_HEADER .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyMzkwMjJ9.' .
         'FruqGMjzi7Ql7a8WJeMz6f6G5UeUQcy5kauLmeO8Ksc';
 
@@ -36,15 +38,15 @@ class ParseTest extends TestCase
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
         '--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s';
 
-    private const TOKEN_NO_SECRET = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+    private const TOKEN_NO_SECRET = self::TOKEN_HEADER .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkphbWVzIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
         'BtrZtcOwhxY9BuV0-Eqc7CybKiWqgr6Y5jFVr15zcFk';
 
-    private const TOKEN_INVALID_SECRET = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+    private const TOKEN_INVALID_SECRET = self::TOKEN_HEADER .
         'eyJqdGkiOiJSVzg0LTIwMTkwMTA5IiwibmFtZSI6IlJvYiIsImlhdCI6MTUxNjIzOTAyMn0.' .
         'JojSqQXc-nsiongo1I33lsd7eJZ9WbMoZn65_LL1U8A';
 
-    private const TOKEN_RANDOM = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
+    private const TOKEN_RANDOM = self::TOKEN_HEADER .
         'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
         'dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio';
 
