@@ -365,8 +365,6 @@ class ValidateTest extends TestCase
         $validate = new Validate($parse, $encode, $validator);
 
         $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Algorithm claim should not be none.');
-        $this->expectExceptionCode(14);
         $validate->algorithmNotNone();
     }
 }
