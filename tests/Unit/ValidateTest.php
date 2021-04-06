@@ -349,10 +349,7 @@ class ValidateTest extends TestCase
 
     public function testValidateAlgorithmNotNoneCapitalCaseFail(): void
     {
-        $parse = $this->createMock(Parse::class);
-        $parse->expects($this->once())
-            ->method('getAlgorithm')
-            ->willReturn('None');
+        $encode = $this->createMock(EncodeHS256::class);
 
         $validator = $this->createMock(Validator::class);
         $validator->expects($this->once())
@@ -360,7 +357,10 @@ class ValidateTest extends TestCase
             ->with('none', ['none'])
             ->willReturn(true);
 
-        $encode = $this->createMock(EncodeHS256::class);
+        $parse = $this->createMock(Parse::class);
+        $parse->expects($this->once())
+            ->method('getAlgorithm')
+            ->willReturn('None');
 
         $validate = new Validate($parse, $encode, $validator);
 
