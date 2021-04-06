@@ -16,6 +16,40 @@ use ReflectionMethod;
 
 class ParseTest extends TestCase
 {
+    private const SECRET = 'foo1234He$$llo56';
+
+    private const SECRET_TWO = 'Hoo1234%&HePPo99';
+
+    private const AUDIENCE = 'https://example.com';
+
+    private const AUDIENCE_TWO = 'https://test.com';
+
+    private const TOKEN_HEADER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.';
+
+    private const TOKEN = self::TOKEN_HEADER .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+
+    private const TOKEN_EXPIRATION_EXPIRED = self::TOKEN_HEADER .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyMzkwMjJ9.' .
+        'FruqGMjzi7Ql7a8WJeMz6f6G5UeUQcy5kauLmeO8Ksc';
+
+    private const TOKEN_EXPIRATION_NOT_SET = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        '--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s';
+
+    private const TOKEN_NO_SECRET = self::TOKEN_HEADER .
+        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkphbWVzIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
+        'BtrZtcOwhxY9BuV0-Eqc7CybKiWqgr6Y5jFVr15zcFk';
+
+    private const TOKEN_INVALID_SECRET = self::TOKEN_HEADER .
+        'eyJqdGkiOiJSVzg0LTIwMTkwMTA5IiwibmFtZSI6IlJvYiIsImlhdCI6MTUxNjIzOTAyMn0.' .
+        'JojSqQXc-nsiongo1I33lsd7eJZ9WbMoZn65_LL1U8A';
+
+    private const TOKEN_RANDOM = self::TOKEN_HEADER .
+        'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
+        'dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio';
+
     public function testParse()
     {
         $parse = new Parse(new JWT('Hello', 'secret'), new Validate(), new Encode());
@@ -26,7 +60,7 @@ class ParseTest extends TestCase
     public function testParseParse()
     {
         $parse = new Parse(
-            new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, '127.0.0.1'), 'foo1234He$$llo56'),
+            new Jwt(Token::create(1, self::SECRET, time() + 300, '127.0.0.1'), self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -37,7 +71,7 @@ class ParseTest extends TestCase
     public function testParseIssuer()
     {
         $parse = new Parse(
-            new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56'),
+            new Jwt(Token::create(1, self::SECRET, time() + 300, 'localhost'), self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -49,12 +83,10 @@ class ParseTest extends TestCase
 
     public function testParseSplitToken()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
-        'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+        $token = self::TOKEN;
 
         $parse = new Parse(
-            new Jwt($token, 'foo1234He$$llo56'),
+            new Jwt($token, self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -71,7 +103,7 @@ class ParseTest extends TestCase
 
     public function testParseGetPayload()
     {
-        $token = new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56');
+        $token = new Jwt(Token::create(1, self::SECRET, time() + 300, 'localhost'), self::SECRET);
 
         $parse = new Parse(
             $token,
@@ -89,11 +121,9 @@ class ParseTest extends TestCase
 
     public function testParseGetHeader()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
-        '--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s';
+        $token = self::TOKEN;
 
-        $token = new Jwt($token, 'foo1234He$$llo56');
+        $token = new Jwt($token, self::SECRET);
 
         $parse = new Parse(
             $token,
@@ -112,7 +142,7 @@ class ParseTest extends TestCase
     public function testParseValidate()
     {
         $parse = new Parse(
-            new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56'),
+            new Jwt(Token::create(1, self::SECRET, time() + 300, 'localhost'), self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -123,7 +153,7 @@ class ParseTest extends TestCase
     public function testParseValidateInvalidStructure()
     {
         $parse = new Parse(
-            new Jwt('hello', 'foo1234He$$llo56'),
+            new Jwt('hello', self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -138,7 +168,10 @@ class ParseTest extends TestCase
     public function testParseValidateBadTokenGoodStructure()
     {
         $parse = new Parse(
-            new Jwt('hello.hello.hello', 'foo1234He$$llo56'),
+            new Jwt(
+                self::TOKEN,
+                self::SECRET
+            ),
             new Validate(),
             new Encode()
         );
@@ -152,12 +185,10 @@ class ParseTest extends TestCase
 
     public function testParseValidateInvalidSignature()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
-        'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbT';
+        $token = self::TOKEN;
 
         $parse = new Parse(
-            new Jwt($token, 'foo1234He$$llo56'),
+            new Jwt($token, self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -171,12 +202,10 @@ class ParseTest extends TestCase
 
     public function testGetSignature()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
-        '--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s';
+        $token = self::TOKEN;
 
         $parse = new Parse(
-            new Jwt($token, 'foo1234He$$llo56'),
+            new Jwt($token, self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -186,13 +215,13 @@ class ParseTest extends TestCase
 
         $result = $method->invoke($parse);
 
-        $this->assertSame('--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s', $result);
+        $this->assertSame('SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c', $result);
     }
 
     public function testParseValidateExpiration()
     {
         $parse = new Parse(
-            new Jwt(Token::create(1, 'Hoo1234%&HePPo99', time() + 300, 'localhost'), 'Hoo1234%&HePPo99'),
+            new Jwt(Token::create(1, self::SECRET_TWO, time() + 300, 'localhost'), self::SECRET_TWO),
             new Validate(),
             new Encode()
         );
@@ -202,12 +231,10 @@ class ParseTest extends TestCase
 
     public function testParseValidateExpirationInvalid()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyMzkwMjJ9.' .
-        'FruqGMjzi7Ql7a8WJeMz6f6G5UeUQcy5kauLmeO8Ksc';
+        $token = self::TOKEN_EXPIRATION_EXPIRED;
 
         $parse = new Parse(
-            new Jwt($token, 'Hoo1234%&HePPo99'),
+            new Jwt($token, self::SECRET_TWO),
             new Validate(),
             new Encode()
         );
@@ -221,12 +248,10 @@ class ParseTest extends TestCase
 
     public function testParseValidateExpirationInvalidTwo()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXRSJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
-        '--dv9fqzYnGdaXstbHDgg5t8ddLZW-YthIOMlNxj__s';
+        $token = self::TOKEN_EXPIRATION_NOT_SET;
 
         $parse = new Parse(
-            new Jwt($token, 'Hoo1234%&HePPo99'),
+            new Jwt($token, self::SECRET_TWO),
             new Validate(),
             new Encode()
         );
@@ -243,7 +268,7 @@ class ParseTest extends TestCase
         $timestamp = time() + 300;
 
         $parse = new Parse(
-            new Jwt(Token::create(1, 'Hoo1234%&HePPo99', $timestamp, 'localhost'), 'Hoo1234%&HePPo99'),
+            new Jwt(Token::create(1, self::SECRET_TWO, $timestamp, 'localhost'), self::SECRET_TWO),
             new Validate(),
             new Encode()
         );
@@ -262,7 +287,7 @@ class ParseTest extends TestCase
 
         $time = time() - 10;
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
+        $token = $build->setSecret(self::SECRET_TWO)
             ->setNotBefore($time)
             ->build();
 
@@ -284,7 +309,7 @@ class ParseTest extends TestCase
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
+        $token = $build->setSecret(self::SECRET_TWO)
             ->setNotBefore(time() - 10)
             ->build();
 
@@ -301,7 +326,7 @@ class ParseTest extends TestCase
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
+        $token = $build->setSecret(self::SECRET_TWO)
             ->setNotBefore(time() + 100)
             ->build();
 
@@ -322,7 +347,7 @@ class ParseTest extends TestCase
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
+        $token = $build->setSecret(self::SECRET_TWO)
             ->setExpiration(time() + 100)
             ->build();
 
@@ -343,7 +368,7 @@ class ParseTest extends TestCase
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
+        $token = $build->setSecret(self::SECRET_TWO)
             ->setNotBefore(time() + 100)
             ->build();
 
@@ -366,7 +391,7 @@ class ParseTest extends TestCase
 
         $time = time() - 10;
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
+        $token = $build->setSecret(self::SECRET_TWO)
             ->setNotBefore($time)
             ->build();
 
@@ -390,7 +415,7 @@ class ParseTest extends TestCase
 
         $time = time() - 10;
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
+        $token = $build->setSecret(self::SECRET_TWO)
             ->setNotBefore($time)
             ->build();
 
@@ -411,7 +436,7 @@ class ParseTest extends TestCase
     public function testValidateSignature()
     {
         $parse = new Parse(
-            new Jwt(Token::create(1, 'foo1234He$$llo56', time() + 300, 'localhost'), 'foo1234He$$llo56'),
+            new Jwt(Token::create(1, self::SECRET, time() + 300, 'localhost'), self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -425,7 +450,7 @@ class ParseTest extends TestCase
     public function testValidateSignatureBadTokenGoodStructure()
     {
         $parse = new Parse(
-            new Jwt('hello.hello.hello', 'foo1234He$$llo56'),
+            new Jwt('hello.hello.hello', self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -443,7 +468,7 @@ class ParseTest extends TestCase
     public function testValidateSignatureEmptyToken()
     {
         $parse = new Parse(
-            new Jwt('', 'foo1234He$$llo56'),
+            new Jwt('', self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -461,7 +486,7 @@ class ParseTest extends TestCase
     public function testValidateSignatureBadTokenStructure()
     {
         $parse = new Parse(
-            new Jwt('car', 'foo1234He$$llo56'),
+            new Jwt('car', self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -478,12 +503,10 @@ class ParseTest extends TestCase
 
     public function testValidateSignatureInvalidSignature()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
-        'tsVs-jHudH5hV3nNZxGDBe3YRPeH871_Cjs-h23jbT';
+        $token = self::TOKEN;
 
         $parse = new Parse(
-            new Jwt($token, 'foo1234He$$llo56'),
+            new Jwt($token, self::SECRET),
             new Validate(),
             new Encode()
         );
@@ -500,9 +523,7 @@ class ParseTest extends TestCase
 
     public function testParseRandomTokenNoSecret()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkphbWVzIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
-        'BtrZtcOwhxY9BuV0-Eqc7CybKiWqgr6Y5jFVr15zcFk';
+        $token = self::TOKEN_NO_SECRET;
 
         $parse = new Parse(
             new Jwt($token, ''),
@@ -522,9 +543,7 @@ class ParseTest extends TestCase
 
     public function testParseRandomTokenInvalidSecret()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJqdGkiOiJSVzg0LTIwMTkwMTA5IiwibmFtZSI6IlJvYiIsImlhdCI6MTUxNjIzOTAyMn0.' .
-        'JojSqQXc-nsiongo1I33lsd7eJZ9WbMoZn65_LL1U8A';
+        $token = self::TOKEN_INVALID_SECRET;
 
         $parse = new Parse(
             new Jwt($token, 'hello'),
@@ -544,9 +563,7 @@ class ParseTest extends TestCase
 
     public function testParseRandomTokenValidSecret()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
-        'dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio';
+        $token = self::TOKEN_RANDOM;
 
         $parse = new Parse(
             new Jwt($token, '123$car*PARK456'),
@@ -564,31 +581,9 @@ class ParseTest extends TestCase
         $this->assertSame($parsed->getIssuedAt(), 1516239022);
     }
 
-    public function testParseRandomTokenExpirationException()
-    {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJleHAiOjE1MTYyMzkwMjJ9.' .
-        'Pzio_7YdNC2NCcBBmVjRlTTgC4RNofEGYWm9ygx41JQ';
-
-        $parse = new Parse(
-            new Jwt($token, '123$car*PARK456'),
-            new Validate(),
-            new Encode()
-        );
-
-        $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Expiration claim has expired.');
-        $this->expectExceptionCode(4);
-
-        $parse->validate()
-            ->validateExpiration();
-    }
-
     public function testParseRandomTokenExpirationNotSetException()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
-        'dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio';
+        $token = self::TOKEN_RANDOM;
 
         $parse = new Parse(
             new Jwt($token, '123$car*PARK456'),
@@ -606,9 +601,7 @@ class ParseTest extends TestCase
 
     public function testParseRandomTokenNotBeforeNotSetException()
     {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJhdWQiOiJodHRwczovL2dvb2dsZS5jb20iLCJuYW1lIjoiQ2hyaXMiLCJpYXQiOjE1MTYyMzkwMjJ9.' .
-        'dA-VMA__ZkvaLjSui-dOgNi23KLU52Y--_dutVvohio';
+        $token = self::TOKEN_RANDOM;
 
         $parse = new Parse(
             new Jwt($token, '123$car*PARK456'),
@@ -628,8 +621,8 @@ class ParseTest extends TestCase
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
-            ->setAudience('https://example.com')
+        $token = $build->setSecret(self::SECRET_TWO)
+            ->setAudience(self::AUDIENCE)
             ->build();
 
         $parse = new Parse(
@@ -643,15 +636,15 @@ class ParseTest extends TestCase
 
         $result = $method->invoke($parse);
 
-        $this->assertSame($result, 'https://example.com');
+        $this->assertSame($result, self::AUDIENCE);
     }
 
     public function testGetAudienceArray()
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
-            ->setAudience(['https://example.com', 'https://test.com'])
+        $token = $build->setSecret(self::SECRET_TWO)
+            ->setAudience([self::AUDIENCE, self::AUDIENCE_TWO])
             ->build();
 
         $parse = new Parse(
@@ -665,14 +658,14 @@ class ParseTest extends TestCase
 
         $result = $method->invoke($parse);
 
-        $this->assertSame($result, ['https://example.com', 'https://test.com']);
+        $this->assertSame($result, [self::AUDIENCE, self::AUDIENCE_TWO]);
     }
 
     public function testGetAudienceFail()
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
+        $token = $build->setSecret(self::SECRET_TWO)
             ->build();
 
         $parse = new Parse(
@@ -694,8 +687,8 @@ class ParseTest extends TestCase
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
-            ->setAudience('https://example.com')
+        $token = $build->setSecret(self::SECRET_TWO)
+            ->setAudience(self::AUDIENCE)
             ->build();
 
         $parse = new Parse(
@@ -704,15 +697,15 @@ class ParseTest extends TestCase
             new Encode()
         );
 
-        $this->assertInstanceOf(Parse::class, $parse->validateAudience('https://example.com'));
+        $this->assertInstanceOf(Parse::class, $parse->validateAudience(self::AUDIENCE));
     }
 
     public function testParseValidateAudienceArray()
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
-            ->setAudience(['https://example.com', 'https://test.com'])
+        $token = $build->setSecret(self::SECRET_TWO)
+            ->setAudience([self::AUDIENCE, self::AUDIENCE_TWO])
             ->build();
 
         $parse = new Parse(
@@ -721,15 +714,15 @@ class ParseTest extends TestCase
             new Encode()
         );
 
-        $this->assertInstanceOf(Parse::class, $parse->validateAudience('https://test.com'));
+        $this->assertInstanceOf(Parse::class, $parse->validateAudience(self::AUDIENCE_TWO));
     }
 
     public function testParseValidateAudienceFail()
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
-            ->setAudience('https://example.com')
+        $token = $build->setSecret(self::SECRET_TWO)
+            ->setAudience(self::AUDIENCE)
             ->build();
 
         $parse = new Parse(
@@ -748,8 +741,8 @@ class ParseTest extends TestCase
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
-            ->setAudience(['https://example.com', 'https://test.com'])
+        $token = $build->setSecret(self::SECRET_TWO)
+            ->setAudience([self::AUDIENCE, self::AUDIENCE_TWO])
             ->build();
 
         $parse = new Parse(
@@ -768,8 +761,8 @@ class ParseTest extends TestCase
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
-            ->setAudience(['https://example.com', 'https://test.com'])
+        $token = $build->setSecret(self::SECRET_TWO)
+            ->setAudience([self::AUDIENCE, self::AUDIENCE_TWO])
             ->build();
 
         $parse = new Parse(
@@ -801,12 +794,57 @@ class ParseTest extends TestCase
         $parse->validateAlgorithm();
     }
 
+    public function testParseValidateAlgorithmNotNone()
+    {
+        $build = new Build('JWT', new Validate(), new Secret(), new Encode());
+
+        $token = $build->setSecret(self::SECRET_TWO)
+            ->setAudience([self::AUDIENCE, self::AUDIENCE_TWO])
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $this->assertInstanceOf(Parse::class, $parse->validateAlgorithmNotNone());
+    }
+
+    public function testParseValidateAlgorithmNotNoneFail()
+    {
+        $encode = $this->getMockBuilder(Encode::class)
+            ->setMethods(['getAlgorithm'])
+            ->getMock();
+
+        $encode->expects($this->exactly(2))
+            ->method('getAlgorithm')
+            ->willReturn('none');
+
+        $build = new Build('JWT', new Validate(), new Secret(), $encode);
+
+        $token = $build->setSecret(self::SECRET_TWO)
+            ->setAudience([self::AUDIENCE, self::AUDIENCE_TWO])
+            ->build();
+
+        $parse = new Parse(
+            $token,
+            new Validate(),
+            new Encode()
+        );
+
+        $this->expectException(ValidateException::class);
+        $this->expectExceptionMessage('Algorithm claim should not be none.');
+        $this->expectExceptionCode(14);
+        $parse->validateAlgorithmNotNone();
+    }
+
     public function testParseGetAlgorithm()
     {
         $build = new Build('JWT', new Validate(), new Secret(), new Encode());
 
-        $token = $build->setSecret('Hoo1234%&HePPo99')
-            ->setAudience(['https://example.com', 'https://test.com'])
+        $token = $build->setSecret(self::SECRET_TWO)
+            ->setAudience([self::AUDIENCE, self::AUDIENCE_TWO])
             ->build();
 
         $parse = new Parse(

@@ -19,8 +19,6 @@
         "phpmd/phpmd": "^2.7",
         "squizlabs/php_codesniffer": "^3.0",
         "infection/infection": "^0.14",
-        "phploc/phploc": "^5.0",
-        "sebastian/phpcpd": "^4.1",
         "phpbench/phpbench": "^0.16",
         "roave/backward-compatibility-check": "^3.0"
     },
@@ -38,13 +36,11 @@
     "scripts" : {
         "pipeline": [
             "vendor/bin/phpcs --standard=psr12 src/ tests/ benchmarks/",
-            "vendor/bin/phpstan analyse -l 7 src/ tests/",
+            "vendor/bin/phpstan analyse -c phpstan.neon",
             "vendor/bin/phpmd src/ text ruleset.xml",
             "vendor/bin/phpunit --coverage-clover=coverage.xml",
             "vendor/bin/infection -s --min-msi=90 --threads=2",
-            "vendor/bin/phpcpd --min-lines=2 --min-tokens=35 src/",
-            "vendor/bin/phpbench run benchmarks/ReallySimpleJWTBench.php --report=aggregate",
-            "vendor/bin/phploc src/"
+            "vendor/bin/phpbench run benchmarks/ReallySimpleJWTBench.php --report=aggregate"
         ]
     }
 }

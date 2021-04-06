@@ -166,7 +166,7 @@ class ValidateTest extends TestCase
 
         $algorithm = "HS256";
 
-        $this->assertTrue($validate->algorithm($algorithm, []));
+        $this->assertTrue($validate->algorithm($algorithm, ["HS256"]));
     }
 
     public function testValidateAlgorithmFail()
@@ -200,7 +200,7 @@ class ValidateTest extends TestCase
     {
         $validate = new Validate();
 
-        $algorithm = "HS256";
+        $algorithm = "HS384";
 
         $this->assertTrue($validate->algorithm($algorithm, ["HS384"]));
     }

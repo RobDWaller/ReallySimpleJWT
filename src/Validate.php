@@ -93,7 +93,7 @@ class Validate
      */
     public function algorithm(string $algorithm, array $additional): bool
     {
-        $base = ["HS256"];
+        $base = [];
 
         return in_array($algorithm, array_merge($base, $additional));
     }
