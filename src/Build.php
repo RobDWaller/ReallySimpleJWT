@@ -118,7 +118,7 @@ class Build
     public function setSecret(string $secret): Build
     {
         if (!$this->secretValidator->validate($secret)) {
-            throw new BuildException('Invalid secret.', 9);
+            throw new BuildException('Invalid secret. See https://github.com/RobDWaller/ReallySimpleJWT#signature-secret for secret requirements', 9);
         }
 
         $this->secret = $secret;
