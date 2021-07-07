@@ -41,7 +41,7 @@ class Validator implements ValidatorInterface
      */
     public function notBefore(int $notBefore): bool
     {
-        return $notBefore < time();
+        return $notBefore <= time();
     }
 
     /**
