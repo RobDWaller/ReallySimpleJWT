@@ -26,8 +26,8 @@ class Validator implements ValidatorInterface
 
     /**
      * Check the validity of the JWT's expiration claim as defined in the
-     * token payload. Returns false if the expiration time has surpassed the
-     * current time.
+     * token payload. Returns false if the current time has surpassed the
+     * expiration time. Time = 100 and Expiration = 99 token has expired.
      */
     public function expiration(int $expiration): bool
     {
@@ -36,12 +36,12 @@ class Validator implements ValidatorInterface
 
     /**
      * Check the validity of the JWT's not before claim as defined in the
-     * token payload. Returns false if the not before time has not surpassed
-     * the current time.
+     * token payload. Returns false if the current time has not surpassed
+     * the not before time. Time = 100 and NotBefore = 101 token is not usable.
      */
     public function notBefore(int $notBefore): bool
     {
-        return $notBefore < time();
+        return $notBefore <= time();
     }
 
     /**
