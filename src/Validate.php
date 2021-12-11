@@ -7,6 +7,7 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Interfaces\Validator;
 use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Exception\ParseException;
 use ReallySimpleJWT\Interfaces\Encode;
 
 /**
@@ -48,6 +49,7 @@ class Validate
      * token can be used for.
      *
      * @throws ValidateException
+     * @throws ParseException
      */
     public function expiration(): Validate
     {
@@ -63,6 +65,7 @@ class Validate
      * token can be used from.
      *
      * @throws ValidateException
+     * @throws ParseException
      */
     public function notBefore(): Validate
     {
