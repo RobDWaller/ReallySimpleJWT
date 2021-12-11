@@ -3,18 +3,19 @@
 namespace Tests\Unit;
 
 use ReallySimpleJWT\Jwt;
+use ReallySimpleJWT\Exception\JwtException;
 use PHPUnit\Framework\TestCase;
 
 class JwtTest extends TestCase
 {
-    public function testgetToken(): void
+    public function testGetToken(): void
     {
-        $jwt = new Jwt('Hello', 'secret');
+        $jwt = new Jwt('Hello.World.Hello', 'secret');
 
-        $this->assertSame('Hello', $jwt->getToken());
+        $this->assertSame('Hello.World.Hello', $jwt->getToken());
     }
 
-    public function testgetTokenWithRealToken(): void
+    public function testGetTokenWithRealToken(): void
     {
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
@@ -25,10 +26,11 @@ class JwtTest extends TestCase
         $this->assertSame($token, $jwt->getToken());
     }
 
-    public function testGetSecret(): void
+    public function testGetTokenFail(): void
     {
-        $jwt = new Jwt('Hello', 'secret');
-
-        $this->assertSame('secret', $jwt->getSecret());
+        $this->expectException(JwtException::class);
+        $this->expectExceptionMessage("Token has an invalid structure.");
+        $this->expectExceptionCode(1);
+        new Jwt('Hello', 'secret');
     }
 }
