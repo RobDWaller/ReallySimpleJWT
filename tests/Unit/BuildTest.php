@@ -120,19 +120,6 @@ class BuildTest extends TestCase
         $this->assertSame($payload['aud'][2], 'payment.thesite.com');
     }
 
-    public function testSetAudienceFail(): void
-    {
-        $validator = $this->createMock(Validator::class);
-        $secret = $this->createMock(Secret::class);
-        $encode = $this->createMock(EncodeHS256::class);
-
-        $build = new Build('JWT', $validator, $secret, $encode);
-        $this->expectException(BuildException::class);
-        $this->expectExceptionMessage('Invalid Audience claim.');
-        $this->expectExceptionCode(10);
-        $build->setAudience(1);
-    }
-
     public function testSetExpiration(): void
     {
         $expiration = time() + 3600;
