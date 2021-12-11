@@ -12,49 +12,6 @@ use Tests\Fixtures\Tokens;
 
 class ValidateTest extends TestCase
 {
-    public function testStructureSuccess(): void
-    {
-        $parse = $this->createMock(Parse::class);
-        $parse->expects($this->once())
-            ->method('getToken')
-            ->willReturn(Tokens::TOKEN);
-
-        $validator = $this->createMock(Validator::class);
-        $validator->expects($this->once())
-            ->method('structure')
-            ->with(Tokens::TOKEN)
-            ->willReturn(true);
-
-        $encode = $this->createMock(EncodeHS256::class);
-
-        $validate = new Validate($parse, $encode, $validator);
-
-        $this->assertInstanceOf(Validate::class, $validate->structure());
-    }
-
-    public function testStructureFail(): void
-    {
-        $parse = $this->createMock(Parse::class);
-        $parse->expects($this->once())
-            ->method('getToken')
-            ->willReturn('abc');
-
-        $validator = $this->createMock(Validator::class);
-        $validator->expects($this->once())
-            ->method('structure')
-            ->with('abc')
-            ->willReturn(false);
-
-        $encode = $this->createMock(EncodeHS256::class);
-
-        $validate = new Validate($parse, $encode, $validator);
-
-        $this->expectException(ValidateException::class);
-        $this->expectExceptionMessage('Token is invalid.');
-        $this->expectExceptionCode(1);
-        $validate->structure();
-    }
-
     public function testSignatureSuccess(): void
     {
         $parse = $this->createMock(Parse::class);

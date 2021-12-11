@@ -31,20 +31,6 @@ class Validate
     }
 
     /**
-     * Validate the JWT has the correct structure.
-     *
-     * @throws ValidateException
-     */
-    public function structure(): Validate
-    {
-        if (!$this->validate->structure($this->parse->getToken())) {
-            throw new ValidateException('Token is invalid.', 1);
-        }
-
-        return $this;
-    }
-
-    /**
      * Validate the JWT's expiration claim (exp). This claim defines how long a
      * token can be used for.
      *
