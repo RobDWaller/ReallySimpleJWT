@@ -19,15 +19,15 @@ class Validate
 
     private Encode $encode;
 
-    private Validator $validate;
+    private Validator $validator;
 
-    public function __construct(Parse $parse, Encode $encode, Validator $validate)
+    public function __construct(Parse $parse, Encode $encode, Validator $validator)
     {
         $this->parse = $parse;
 
         $this->encode = $encode;
 
-        $this->validate = $validate;
+        $this->validator = $validator;
     }
 
     /**
@@ -39,7 +39,7 @@ class Validate
      */
     public function expiration(): Validate
     {
-        if (!$this->validate->expiration($this->parse->getExpiration())) {
+        if (!$this->validator->expiration($this->parse->getExpiration())) {
             throw new ValidateException('Expiration claim has expired.', 4);
         }
 
@@ -55,7 +55,7 @@ class Validate
      */
     public function notBefore(): Validate
     {
-        if (!$this->validate->notBefore($this->parse->getNotBefore())) {
+        if (!$this->validator->notBefore($this->parse->getNotBefore())) {
             throw new ValidateException('Not Before claim has not elapsed.', 5);
         }
 
@@ -70,7 +70,7 @@ class Validate
      */
     public function audience(string $check): Validate
     {
-        if (!$this->validate->audience($this->parse->getAudience(), $check)) {
+        if (!$this->validator->audience($this->parse->getAudience(), $check)) {
             throw new ValidateException(
                 'Audience claim does not contain provided StringOrURI.',
                 2
@@ -89,7 +89,7 @@ class Validate
      */
     public function algorithm(array $algorithms): Validate
     {
-        if (!$this->validate->algorithm($this->parse->getAlgorithm(), $algorithms)) {
+        if (!$this->validator->algorithm($this->parse->getAlgorithm(), $algorithms)) {
             throw new ValidateException(
                 'Algorithm claim is not valid.',
                 12
@@ -106,7 +106,7 @@ class Validate
      */
     public function algorithmNotNone(): Validate
     {
-        if ($this->validate->algorithm(strtolower($this->parse->getAlgorithm()), ['none'])) {
+        if ($this->validator->algorithm(strtolower($this->parse->getAlgorithm()), ['none'])) {
             throw new ValidateException(
                 'Algorithm claim should not be none.',
                 14
@@ -130,7 +130,7 @@ class Validate
             $this->parse->getSecret()
         );
 
-        if (!$this->validate->signature($signature, $this->parse->getSignature())) {
+        if (!$this->validator->signature($signature, $this->parse->getSignature())) {
             throw new ValidateException('Signature is invalid.', 3);
         }
 
