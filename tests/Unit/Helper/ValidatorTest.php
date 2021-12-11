@@ -9,24 +9,6 @@ use ReallySimpleJWT\Token;
 
 class ValidatorTest extends TestCase
 {
-    public function testValidateStructure(): void
-    {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvZSBCbG9ncyIsImlhdCI6MTUxNjIzOTAyMn0.' .
-        '-wvw8Qad0enQkwNhG2j-GCT-7PbrMN_gtUwOKZTu54M';
-
-        $validate = new Validator();
-
-        $this->assertTrue($validate->structure($token));
-    }
-
-    public function testValidateStructureInvalid(): void
-    {
-        $validate = new Validator();
-
-        $this->assertFalse($validate->structure('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'));
-    }
-
     public function testValidateExpiration(): void
     {
         $validate = new Validator();

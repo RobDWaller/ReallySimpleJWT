@@ -13,18 +13,6 @@ use ReallySimpleJWT\Interfaces\Validator as ValidatorInterface;
 class Validator implements ValidatorInterface
 {
     /**
-     * Confirm the structure of a JSON Web Token, it has three parts separated
-     * by dots and complies with Base64URL standards.
-     */
-    public function structure(string $jwt): bool
-    {
-        return preg_match(
-            '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
-            $jwt
-        ) === 1;
-    }
-
-    /**
      * Check the validity of the JWT's expiration claim as defined in the
      * token payload. Returns false if the current time has surpassed the
      * expiration time. Time = 100 and Expiration = 99 token has expired.

@@ -11,13 +11,6 @@ namespace ReallySimpleJWT\Interfaces;
 interface Validator
 {
     /**
-     * Confirm the structure of a JSON Web Token.
-     *
-     * @see Helper\Validator::structure()
-     */
-    public function structure(string $jwt): bool;
-
-    /**
      * Check the validity of the JWT's expiration claim.
      *
      * @see Helper\Validator::expiration()
