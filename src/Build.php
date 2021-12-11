@@ -83,10 +83,8 @@ class Build
 
     /**
      * Add custom claims to the JWT header
-     *
-     * @param mixed $value
      */
-    public function setHeaderClaim(string $key, $value): Build
+    public function setHeaderClaim(string $key, mixed $value): Build
     {
         $this->header[$key] = $value;
 
@@ -154,18 +152,14 @@ class Build
      * users who use this token. This claim can either be a single string or an
      * array of strings.
      *
-     * @param mixed $audience
+     * @param string|mixed[] $audience
      * @throws BuildException
      */
-    public function setAudience($audience): Build
+    public function setAudience(string|array $audience): Build
     {
-        if (is_string($audience) || is_array($audience)) {
-            $this->payload['aud'] = $audience;
+        $this->payload['aud'] = $audience;
 
-            return $this;
-        }
-
-        throw new BuildException('Invalid Audience claim.', 10);
+        return $this;
     }
 
     /**
@@ -222,10 +216,8 @@ class Build
      * Set a custom payload claim on the JWT. The RFC calls these private
      * claims. Eg you may wish to set a user_id or a username in the
      * JWT payload.
-     *
-     * @param mixed $value
      */
-    public function setPayloadClaim(string $key, $value): Build
+    public function setPayloadClaim(string $key, mixed $value): Build
     {
         $this->payload[$key] = $value;
 
