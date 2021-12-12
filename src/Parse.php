@@ -185,12 +185,4 @@ class Parse
     {
         return $this->jwt->getToken();
     }
-
-    /**
-     * Retrieve the JSON Web Token secret.
-     */
-    public function getSecret(): string
-    {
-        return $this->jwt->getSecret();
-    }
 }

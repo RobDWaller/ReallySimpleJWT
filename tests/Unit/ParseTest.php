@@ -311,21 +311,4 @@ class ParseTest extends TestCase
 
         $this->assertSame($parse->getToken(), Tokens::TOKEN);
     }
-
-    public function testGetSecret(): void
-    {
-        $jwt = $this->createMock(Jwt::class);
-        $jwt->expects($this->once())
-            ->method('getSecret')
-            ->willReturn(Tokens::SECRET);
-
-        $decode = $this->createMock(Decode::class);
-
-        $parse = new Parse(
-            $jwt,
-            $decode
-        );
-
-        $this->assertSame($parse->getSecret(), Tokens::SECRET);
-    }
 }
