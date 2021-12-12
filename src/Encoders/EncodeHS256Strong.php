@@ -16,7 +16,7 @@ class EncodeHS256Strong extends EncodeHS256
             throw new EncodeException('Invalid secret.', 9);
         }
 
-        $this->secret = $secret;
+        parent::__construct($secret);
     }
 
     /**
