@@ -17,7 +17,7 @@ class TokensTest extends TestCase
     {
         $tokens = new Tokens();
 
-        $builder = $tokens->builder();
+        $builder = $tokens->builder('Hello123!FooBar');
 
         $this->assertInstanceOf(Build::class, $builder);
     }
