@@ -13,7 +13,7 @@ class EncodeHS256Test extends TestCase
 {
     public function testEncode(): void
     {
-        $encode = new EncodeHS256();
+        $encode = new EncodeHS256('');
 
         $this->assertSame(Tokens::HEADER, $encode->encode(Tokens::DECODED_HEADER));
         $this->assertSame(Tokens::PAYLOAD, $encode->encode(Tokens::DECODED_PAYLOAD));
@@ -21,12 +21,11 @@ class EncodeHS256Test extends TestCase
 
     public function testSignature(): void
     {
-        $encode = new EncodeHS256();
+        $encode = new EncodeHS256(Tokens::SECRET);
 
         $signature = $encode->signature(
             Tokens::DECODED_HEADER,
-            Tokens::DECODED_PAYLOAD,
-            Tokens::SECRET
+            Tokens::DECODED_PAYLOAD
         );
 
         $this->assertSame(Tokens::SIGNATURE, $signature);
@@ -34,7 +33,7 @@ class EncodeHS256Test extends TestCase
 
     public function testUrlEncode(): void
     {
-        $encode = new EncodeHS256();
+        $encode = new EncodeHS256('');
 
         $method = new ReflectionMethod(EncodeHS256::class, 'urlEncode');
         $method->setAccessible(true);
@@ -46,7 +45,7 @@ class EncodeHS256Test extends TestCase
 
     public function testUrlEncodeIsBase64Url(): void
     {
-        $encode = new EncodeHS256();
+        $encode = new EncodeHS256('');
 
         $method = new ReflectionMethod(EncodeHS256::class, 'urlEncode');
         $method->setAccessible(true);
@@ -58,7 +57,7 @@ class EncodeHS256Test extends TestCase
 
     public function testHash(): void
     {
-        $encode = new EncodeHS256();
+        $encode = new EncodeHS256('');
 
         $method = new ReflectionMethod(EncodeHS256::class, 'hash');
         $method->setAccessible(true);
@@ -70,14 +69,14 @@ class EncodeHS256Test extends TestCase
 
     public function testGetAlgorithm(): void
     {
-        $encode = new EncodeHS256();
+        $encode = new EncodeHS256('');
 
         $this->assertSame('HS256', $encode->getAlgorithm());
     }
 
     public function testGetHash(): void
     {
-        $encode = new EncodeHS256();
+        $encode = new EncodeHS256('');
 
         $method = new ReflectionMethod(EncodeHS256::class, 'getHashAlgorithm');
         $method->setAccessible(true);

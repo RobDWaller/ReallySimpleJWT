@@ -30,5 +30,5 @@ interface Encode
      * @param mixed[] $header
      * @param mixed[] $payload
      */
-    public function signature(array $header, array $payload, string $secret): string;
+    public function signature(array $header, array $payload): string;
 }

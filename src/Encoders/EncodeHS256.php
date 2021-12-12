@@ -30,6 +30,13 @@ class EncodeHS256 implements Encode
      */
     private const HASH_ALGORITHM = 'sha256';
 
+    private string $secret;
+
+    public function __construct(string $secret)
+    {
+        $this->secret = $secret;
+    }
+
     /**
      * Get the algorithm used to encode the signature. Note this is for show,
      * it is what is displayed in the JWT header as the alg claim.
@@ -74,13 +81,13 @@ class EncodeHS256 implements Encode
      * @param mixed[] $header
      * @param mixed[] $payload
      */
-    public function signature(array $header, array $payload, string $secret): string
+    public function signature(array $header, array $payload): string
     {
         return $this->urlEncode(
             $this->hash(
                 $this->getHashAlgorithm(),
                 $this->encode($header) . "." . $this->encode($payload),
-                $secret
+                $this->secret
             )
         );
     }
