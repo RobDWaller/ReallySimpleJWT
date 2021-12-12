@@ -126,8 +126,7 @@ class Validate
     {
         $signature = $this->encode->signature(
             $this->parse->getDecodedHeader(),
-            $this->parse->getDecodedPayload(),
-            $this->parse->getSecret()
+            $this->parse->getDecodedPayload()
         );
 
         if (!$this->validator->signature($signature, $this->parse->getSignature())) {

@@ -24,14 +24,10 @@ class ValidateTest extends TestCase
             ->method('getDecodedPayload')
             ->willReturn(Tokens::DECODED_PAYLOAD);
 
-        $parse->expects($this->once())
-            ->method('getSecret')
-            ->willReturn(Tokens::SECRET);
-
         $encode = $this->createMock(EncodeHS256::class);
         $encode->expects($this->once())
             ->method('signature')
-            ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, Tokens::SECRET)
+            ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD)
             ->willReturn(Tokens::SIGNATURE);
 
         $parse->expects($this->once())
@@ -61,14 +57,10 @@ class ValidateTest extends TestCase
             ->method('getDecodedPayload')
             ->willReturn(Tokens::DECODED_PAYLOAD);
 
-        $parse->expects($this->once())
-            ->method('getSecret')
-            ->willReturn('hello');
-
         $encode = $this->createMock(EncodeHS256::class);
         $encode->expects($this->once())
             ->method('signature')
-            ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD, 'hello')
+            ->with(Tokens::DECODED_HEADER, Tokens::DECODED_PAYLOAD)
             ->willReturn('mX0_2dzFlPqR0fyh4J3PPmfQYBz9PlqUut5vXgJaSxY');
 
         $parse->expects($this->once())
