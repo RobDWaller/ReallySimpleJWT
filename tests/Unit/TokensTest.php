@@ -177,6 +177,15 @@ class TokensTest extends TestCase
         $this->assertSame($header, TokenFixtures::DECODED_HEADER);
     }
 
+    public function testGetHeaderFail(): void
+    {
+        $tokens = new Tokens();
+
+        $header = $tokens->getHeader('');
+
+        $this->assertEmpty($header);
+    }
+
     public function testGetPayload(): void
     {
         $tokens = new Tokens();
@@ -184,5 +193,14 @@ class TokensTest extends TestCase
         $payload = $tokens->getPayload(TokenFixtures::TOKEN);
 
         $this->assertSame($payload, TokenFixtures::DECODED_PAYLOAD);
+    }
+
+    public function testGetPayloadFail(): void
+    {
+        $tokens = new Tokens();
+
+        $payload = $tokens->getPayload('');
+
+        $this->assertEmpty($payload);
     }
 }
