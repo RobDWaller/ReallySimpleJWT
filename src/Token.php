@@ -76,28 +76,28 @@ class Token
      * @see Tokens::getPayload()
      * @return mixed[]
      */
-    public static function getPayload(string $token, string $secret): array
+    public static function getPayload(string $token): array
     {
         $tokens = new Tokens();
-        return $tokens->getPayload($token, $secret);
+        return $tokens->getPayload($token);
     }
 
     /**
      * @see Tokens::builder()
      */
-    public static function builder(): Build
+    public static function builder(string $secret): Build
     {
         $tokens = new Tokens();
-        return $tokens->builder();
+        return $tokens->builder($secret);
     }
 
     /**
      * @see Tokens::parser()
      */
-    public static function parser(string $token, string $secret): Parse
+    public static function parser(string $token): Parse
     {
         $tokens = new Tokens();
-        return $tokens->parser($token, $secret);
+        return $tokens->parser($token);
     }
 
     /**

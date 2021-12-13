@@ -72,22 +72,22 @@ class TokenTest extends TestCase
 
     public function testBuilder(): void
     {
-        $this->assertInstanceOf(Build::class, Token::builder());
+        $this->assertInstanceOf(Build::class, Token::builder(Tokens::SECRET_STRONG));
     }
 
     public function testParser(): void
     {
-        $this->assertInstanceOf(Parse::class, Token::parser('Hello', '1234'));
+        $this->assertInstanceOf(Parse::class, Token::parser(Tokens::TOKEN));
     }
 
     public function testValidator(): void
     {
-        $this->assertInstanceOf(Validate::class, Token::validator('Hello', '1234'));
+        $this->assertInstanceOf(Validate::class, Token::validator(Tokens::TOKEN, Tokens::SECRET));
     }
 
     public function testGetPayload(): void
     {
-        $this->assertSame(Tokens::DECODED_PAYLOAD, Token::getPayload(Tokens::TOKEN, Tokens::SECRET));
+        $this->assertSame(Tokens::DECODED_PAYLOAD, Token::getPayload(Tokens::TOKEN));
     }
 
     public function testGetHeader(): void

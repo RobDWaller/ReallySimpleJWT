@@ -14,6 +14,7 @@ use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Exception\TokensException;
 use ReallySimpleJWT\Exception\ValidateException;
+use ReallySimpleJWT\Exception\JwtException;
 use ReallySimpleJWT\Exception\ParseException;
 
 /**
@@ -68,8 +69,14 @@ class Tokens
      */
     public function getHeader(string $token): array
     {
-        $parser = $this->parser($token);
-        return $parser->parse()->getHeader();
+        try {
+            $parser = $this->parser($token);
+            return $parser->parse()->getHeader();
+        }
+        catch (JwtException $e) {
+            return [];
+        }
+        
     }
 
     /**
@@ -79,8 +86,13 @@ class Tokens
      */
     public function getPayload(string $token): array
     {
-        $parser = $this->parser($token);
-        return $parser->parse()->getPayload();
+        try {
+            $parser = $this->parser($token);
+            return $parser->parse()->getPayload();
+        }
+        catch (JwtException $e) {
+            return [];
+        }
     }
 
     /**
@@ -126,13 +138,14 @@ class Tokens
      */
     public function validate(string $token, string $secret): bool
     {
-        $validate = $this->validator($token, $secret);
-
         try {
+            $validate = $this->validator($token, $secret);
             $validate->algorithmNotNone()
                 ->signature();
             return true;
         } catch (ValidateException $e) {
+            return false;
+        } catch (JwtException $e) {
             return false;
         }
     }
