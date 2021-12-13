@@ -4,6 +4,7 @@ namespace Tests\Integration;
 
 use ReallySimpleJWT\Token;
 use ReallySimpleJWT\Exception\BuildException;
+use ReallySimpleJWT\Exception\EncodeException;
 use ReallySimpleJWT\Exception\TokensException;
 use PHPUnit\Framework\TestCase;
 
@@ -11,7 +12,7 @@ class TokenTest extends TestCase
 {
     public function testCreateBadSignature(): void
     {
-        $this->expectException(BuildException::class);
+        $this->expectException(EncodeException::class);
         $this->expectExceptionMessage('Invalid secret.');
         $this->expectExceptionCode(9);
 
