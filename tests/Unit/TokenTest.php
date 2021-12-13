@@ -62,12 +62,12 @@ class TokenTest extends TestCase
 
     public function testValidateExpired(): void
     {
-        $this->assertFalse(Token::validateExpiration(Tokens::TOKEN, Tokens::SECRET));
+        $this->assertFalse(Token::validateExpiration(Tokens::TOKEN));
     }
 
     public function testValidateNotBefore(): void
     {
-        $this->assertTrue(Token::validateNotBefore(Tokens::TOKEN, Tokens::SECRET));
+        $this->assertTrue(Token::validateNotBefore(Tokens::TOKEN));
     }
 
     public function testBuilder(): void
@@ -92,7 +92,7 @@ class TokenTest extends TestCase
 
     public function testGetHeader(): void
     {
-        $this->assertSame(Tokens::DECODED_HEADER, Token::getHeader(Tokens::TOKEN, Tokens::SECRET));
+        $this->assertSame(Tokens::DECODED_HEADER, Token::getHeader(Tokens::TOKEN));
     }
 
     public function testValidateTokenFail(): void
@@ -102,6 +102,6 @@ class TokenTest extends TestCase
 
     public function testBadTokenGetPayloadEmpty(): void
     {
-        $this->assertEmpty(Token::getPayload('Hello', 'CarPark'));
+        $this->assertEmpty(Token::getPayload('Hello'));
     }
 }

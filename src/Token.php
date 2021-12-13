@@ -66,10 +66,10 @@ class Token
      * @see Tokens::getHeader()
      * @return mixed[]
      */
-    public static function getHeader(string $token, string $secret): array
+    public static function getHeader(string $token): array
     {
         $tokens = new Tokens();
-        return $tokens->getHeader($token, $secret);
+        return $tokens->getHeader($token);
     }
 
     /**
@@ -112,18 +112,18 @@ class Token
     /**
      * @see Tokens::validateExpiration()
      */
-    public static function validateExpiration(string $token, string $secret): bool
+    public static function validateExpiration(string $token): bool
     {
         $tokens = new Tokens();
-        return $tokens->validateExpiration($token, $secret);
+        return $tokens->validateExpiration($token);
     }
 
     /**
      * @see Tokens::validateNotBefore()
      */
-    public static function validateNotBefore(string $token, string $secret): bool
+    public static function validateNotBefore(string $token): bool
     {
         $tokens = new Tokens();
-        return $tokens->validateNotBefore($token, $secret);
+        return $tokens->validateNotBefore($token);
     }
 }

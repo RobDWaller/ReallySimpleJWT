@@ -10,7 +10,7 @@ class JwtTest extends TestCase
 {
     public function testGetToken(): void
     {
-        $jwt = new Jwt('Hello.World.Hello', 'secret');
+        $jwt = new Jwt('Hello.World.Hello');
 
         $this->assertSame('Hello.World.Hello', $jwt->getToken());
     }
@@ -21,7 +21,7 @@ class JwtTest extends TestCase
         'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.' .
         'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
 
-        $jwt = new Jwt($token, 'secret');
+        $jwt = new Jwt($token);
 
         $this->assertSame($token, $jwt->getToken());
     }
@@ -31,6 +31,6 @@ class JwtTest extends TestCase
         $this->expectException(JwtException::class);
         $this->expectExceptionMessage("Token has an invalid structure.");
         $this->expectExceptionCode(1);
-        new Jwt('Hello', 'secret');
+        new Jwt('Hello');
     }
 }

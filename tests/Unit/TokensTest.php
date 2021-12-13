@@ -26,7 +26,7 @@ class TokensTest extends TestCase
     {
         $tokens = new Tokens();
 
-        $parser = $tokens->parser('abc.def.ghi', 'secret');
+        $parser = $tokens->parser('abc.def.ghi');
 
         $this->assertInstanceOf(Parse::class, $parser);
     }
@@ -111,7 +111,7 @@ class TokensTest extends TestCase
         $token = $tokens->customPayload($payload, 'secret123#ABC');
 
         $this->assertTrue(
-            $tokens->validateExpiration($token->getToken(), 'secret123#ABC')
+            $tokens->validateExpiration($token->getToken())
         );
     }
 
@@ -120,7 +120,7 @@ class TokensTest extends TestCase
         $tokens = new Tokens();
 
         $this->assertFalse(
-            $tokens->validateExpiration(TokenFixtures::TOKEN, TokenFixtures::SECRET)
+            $tokens->validateExpiration(TokenFixtures::TOKEN)
         );
     }
 
@@ -129,7 +129,7 @@ class TokensTest extends TestCase
         $tokens = new Tokens();
 
         $this->assertFalse(
-            $tokens->validateExpiration(TokenFixtures::TOKEN_NO_TIMES, TokenFixtures::SECRET)
+            $tokens->validateExpiration(TokenFixtures::TOKEN_NO_TIMES)
         );
     }
 
@@ -138,7 +138,7 @@ class TokensTest extends TestCase
         $tokens = new Tokens();
 
         $this->assertTrue(
-            $tokens->validateNotBefore(TokenFixtures::TOKEN, TokenFixtures::SECRET)
+            $tokens->validateNotBefore(TokenFixtures::TOKEN)
         );
     }
 
@@ -155,7 +155,7 @@ class TokensTest extends TestCase
         $token = $tokens->customPayload($payload, 'secret123#ABC');
 
         $this->assertFalse(
-            $tokens->validateNotBefore($token->getToken(), 'secret123#ABC')
+            $tokens->validateNotBefore($token->getToken())
         );
     }
 
@@ -164,7 +164,7 @@ class TokensTest extends TestCase
         $tokens = new Tokens();
 
         $this->assertFalse(
-            $tokens->validateNotBefore(TokenFixtures::TOKEN_NO_TIMES, TokenFixtures::SECRET)
+            $tokens->validateNotBefore(TokenFixtures::TOKEN_NO_TIMES)
         );
     }
 
@@ -172,7 +172,7 @@ class TokensTest extends TestCase
     {
         $tokens = new Tokens();
 
-        $header = $tokens->getHeader(TokenFixtures::TOKEN, TokenFixtures::SECRET);
+        $header = $tokens->getHeader(TokenFixtures::TOKEN);
 
         $this->assertSame($header, TokenFixtures::DECODED_HEADER);
     }
@@ -181,7 +181,7 @@ class TokensTest extends TestCase
     {
         $tokens = new Tokens();
 
-        $payload = $tokens->getPayload(TokenFixtures::TOKEN, TokenFixtures::SECRET);
+        $payload = $tokens->getPayload(TokenFixtures::TOKEN);
 
         $this->assertSame($payload, TokenFixtures::DECODED_PAYLOAD);
     }
