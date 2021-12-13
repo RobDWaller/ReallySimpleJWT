@@ -20,6 +20,8 @@ class Tokens
 
     public const SECRET = 'hello123';
 
+    public const SECRET_STRONG = 'hello123!*World456';
+
     public const DECODED_HEADER = ["alg" => "HS256", "typ" => "JWT"];
 
     public const DECODED_PAYLOAD = [
