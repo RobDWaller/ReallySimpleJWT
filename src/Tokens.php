@@ -72,11 +72,9 @@ class Tokens
         try {
             $parser = $this->parser($token);
             return $parser->parse()->getHeader();
-        }
-        catch (JwtException $e) {
+        } catch (JwtException $e) {
             return [];
         }
-        
     }
 
     /**
@@ -89,8 +87,7 @@ class Tokens
         try {
             $parser = $this->parser($token);
             return $parser->parse()->getPayload();
-        }
-        catch (JwtException $e) {
+        } catch (JwtException $e) {
             return [];
         }
     }
