@@ -3,13 +3,8 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Token;
-use ReallySimpleJWT\Build;
-use ReallySimpleJWT\Encode;
-use ReallySimpleJWT\Secret;
 use Tests\Fixtures\Tokens;
 
 class ParsedTest extends TestCase

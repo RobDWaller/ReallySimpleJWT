@@ -5,7 +5,6 @@ namespace Tests\Integration;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Signature;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Helper\Validator;

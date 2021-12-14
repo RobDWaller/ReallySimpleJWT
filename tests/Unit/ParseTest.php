@@ -9,8 +9,6 @@ use ReallySimpleJWT\Exception\ParseException;
 use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Decode;
-use ReallySimpleJWT\Exception\ValidateException;
-use ReflectionMethod;
 
 class ParseTest extends TestCase
 {

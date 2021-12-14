@@ -5,7 +5,6 @@ namespace Tests\Unit\Encoders;
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Encoders\EncodeHS256Strong;
 use ReallySimpleJWT\Exception\EncodeException;
-use ReflectionMethod;
 
 class EncodeHS256StrongTest extends TestCase
 {

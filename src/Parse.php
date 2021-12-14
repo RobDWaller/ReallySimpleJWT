@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Exception\ParseException;
 use ReallySimpleJWT\Interfaces\Decode;
 

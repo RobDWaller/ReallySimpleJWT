@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Jwt;
-
 /**
  * This value object is generated when the JWT has been parsed.
  *

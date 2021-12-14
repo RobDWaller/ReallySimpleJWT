@@ -3,18 +3,11 @@
 namespace Tests\Integration;
 
 use ReallySimpleJWT\Helper\Validator;
-use ReallySimpleJWT\Interfaces\Encode;
-use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Encoders\EncodeHS256;
 use ReallySimpleJWT\Encoders\EncodeHS256Strong;
 use ReallySimpleJWT\Decode;
-use ReallySimpleJWT\Secret;
-use ReallySimpleJWT\Exception\BuildException;
-use ReallySimpleJWT\Parsed;
-use ReallySimpleJWT\Exception\ParseException;
-use ReallySimpleJWT\Helper\JsonEncoder;
 use PHPUnit\Framework\TestCase;
 
 class BuildParseTest extends TestCase

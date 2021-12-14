@@ -6,8 +6,6 @@ namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Interfaces\Validator;
 use ReallySimpleJWT\Interfaces\Encode;
-use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Interfaces\Secret;
 use ReallySimpleJWT\Exception\BuildException;
 
 /**

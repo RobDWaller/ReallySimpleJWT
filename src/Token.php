@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Tokens;
-use ReallySimpleJWT\Build;
-use ReallySimpleJWT\Parse;
-use ReallySimpleJWT\Validate;
-
 /**
  * A simple Package for creating JSON Web Tokens that uses HMAC SHA256 to sign
  * signatures.

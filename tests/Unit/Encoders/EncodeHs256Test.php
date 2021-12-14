@@ -4,9 +4,7 @@ namespace Tests\Unit\Encoders;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\Tokens;
-use ReallySimpleJWT\Helper\Validator;
 use ReallySimpleJWT\Encoders\EncodeHS256;
-use ReallySimpleJWT\Token;
 use ReflectionMethod;
 
 class EncodeHS256Test extends TestCase

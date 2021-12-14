@@ -6,7 +6,6 @@ use ReallySimpleJWT\Token;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Exception\TokensException;
 use Tests\Fixtures\Tokens;
 use PHPUnit\Framework\TestCase;
 

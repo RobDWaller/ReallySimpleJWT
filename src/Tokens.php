@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Helper\Validator;
-use ReallySimpleJWT\Validate;
 use ReallySimpleJWT\Encoders\EncodeHS256;
 use ReallySimpleJWT\Encoders\EncodeHS256Strong;
-use ReallySimpleJWT\Decode;
-use ReallySimpleJWT\Parse;
-use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Exception\TokensException;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Exception\JwtException;
