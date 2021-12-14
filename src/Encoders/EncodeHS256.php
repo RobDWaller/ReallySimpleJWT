@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ReallySimpleJWT\Encoders;
 
 use ReallySimpleJWT\Interfaces\Encode;

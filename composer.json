@@ -38,7 +38,7 @@
     "scripts" : {
         "pipeline": [
             "vendor/bin/phpcs --standard=psr12 src/ tests/ benchmarks/",
-            "vendor/bin/php-cs-fixer fix --dry-run -v --diff --using-cache no",
+            "vendor/bin/php-cs-fixer fix --dry-run -v --diff --using-cache=no --allow-risky=yes",
             "vendor/bin/phpstan analyse -l 8 src/ tests/ benchmarks/",
             "vendor/bin/phpmd src/ text ruleset.xml",
             "vendor/bin/phpunit --testsuite unit --coverage-clover=coverage.xml",
