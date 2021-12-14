@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Benchmarks;
 
 use ReallySimpleJWT\Build;
-use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Encoders\EncodeHS256;
