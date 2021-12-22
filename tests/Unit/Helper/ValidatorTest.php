@@ -44,11 +44,18 @@ class ValidatorTest extends TestCase
         $this->assertTrue($validate->notBefore(time() - 10));
     }
 
-    public function testValidateNotFalse(): void
+    public function testValidateNotBeforeFalse(): void
     {
         $validate = new Validator();
 
         $this->assertFalse($validate->notBefore(time() + 10));
+    }
+
+    public function testValidateNotBeforeZero(): void
+    {
+        $validate = new Validator();
+
+        $this->assertFalse($validate->notBefore(0));
     }
 
     public function testValidateAudience(): void
