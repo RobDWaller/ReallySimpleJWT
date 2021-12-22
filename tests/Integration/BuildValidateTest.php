@@ -38,7 +38,7 @@ class BuildValidateTest extends TestCase
         $parse = new Parse($token, new Decode());
 
         $validate = new Validate(
-            $parse,
+            $parse->parse(),
             new EncodeHS256('123abcDEF!$£%456'),
             new Validator()
         );
@@ -77,7 +77,7 @@ class BuildValidateTest extends TestCase
         $parse = new Parse($token, new Decode());
 
         $validate = new Validate(
-            $parse,
+            $parse->parse(),
             new EncodeHS256('DEF987!$£%456vdg'),
             new Validator()
         );
@@ -101,7 +101,7 @@ class BuildValidateTest extends TestCase
         $parse = new Parse($jwt, new Decode());
 
         $validate = new Validate(
-            $parse,
+            $parse->parse(),
             new EncodeHS256('!$£%456hftYuJi2'),
             new Validator()
         );
