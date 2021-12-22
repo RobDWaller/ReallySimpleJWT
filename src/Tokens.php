@@ -48,10 +48,8 @@ class Tokens
      */
     public function validator(string $token, string $secret = ''): Validate
     {
-        $parse = $this->parser($token);
-
         return new Validate(
-            $parse,
+            $this->parser($token)->parse(),
             new EncodeHS256($secret),
             new Validator()
         );
