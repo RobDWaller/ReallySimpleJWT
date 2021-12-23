@@ -10,6 +10,7 @@ use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Encoders\EncodeHS256;
 use ReallySimpleJWT\Encoders\EncodeHS256Strong;
 use ReallySimpleJWT\Decode;
+use ReallySimpleJWT\Exception\ParsedException;
 use PHPUnit\Framework\TestCase;
 
 class BuildParseTest extends TestCase
@@ -229,7 +230,7 @@ class BuildParseTest extends TestCase
         $this->assertSame($issuedAt1, $parsed1->getIssuedAt());
     }
 
-    public function testMultipleTokensRemovedFields(): void
+    public function testMultipleTokensRemoveFields(): void
     {
         $build = new Build(
             self::TOKEN_TYPE,
@@ -303,14 +304,23 @@ class BuildParseTest extends TestCase
         $this->assertSame('https://youtube.com', $parsed1->getAudience()[1]);
         $this->assertSame('https://imgur.com', $parsed1->getAudience()[0]);
         $this->assertSame($expiration1, $parsed1->getExpiration());
-        $this->assertSame(0, $parsed1->getNotBefore());
         $this->assertSame($issuedAt1, $parsed1->getIssuedAt());
         $this->assertSame('321jkl', $parsed1->getJwtId());
         $this->assertSame(5, $parsed1->getPayload()['user_id']);
         $this->assertArrayNotHasKey('uid', $parsed1->getPayload());
         $this->assertSame(explode('.', $token1->getToken())[2], $parsed1->getSignature());
-        $this->assertSame('', $parsed1->getSubject());
-        $this->assertSame('', $parsed1->getContentType());
+        
+        $this->expectException(ParsedException::class);
+        $this->expectExceptionMessage('The payload claim nbf is not set.');
+        $parsed1->getNotBefore();
+
+        $this->expectException(ParsedException::class);
+        $this->expectExceptionMessage('The payload claim sub is not set.');
+        $parsed1->getSubject();
+
+        $this->expectException(ParsedException::class);
+        $this->expectExceptionMessage('The header claim cty is not set.');
+        $parsed1->getContentType();
     }
 
     public function testMultipleTokensWithResetRemoveFields(): void
@@ -380,16 +390,22 @@ class BuildParseTest extends TestCase
         $this->assertSame($token1->getToken(), $parsed1->getJwt()->getToken());
         $this->assertSame(self::TOKEN_TYPE, $parsed1->getType());
         $this->assertArrayNotHasKey('info', $parsed1->getHeader());
-        $this->assertSame('', $parsed1->getIssuer());
         $this->assertSame('admins', $parsed1->getSubject());
         $this->assertSame($expiration1, $parsed1->getExpiration());
         $this->assertSame($notBefore1, $parsed1->getNotBefore());
         $this->assertSame('https://keep.google.com', $parsed1->getAudience()[0]);
         $this->assertSame('https://vimeo.com', $parsed1->getAudience()[1]);
-        $this->assertSame(0, $parsed1->getIssuedAt());
         $this->assertSame('45I9kl', $parsed1->getJwtId());
         $this->assertSame(5, $parsed1->getPayload()['user_id']);
         $this->assertArrayNotHasKey('uid', $parsed1->getPayload());
         $this->assertSame(explode('.', $token1->getToken())[2], $parsed1->getSignature());
+
+        $this->expectException(ParsedException::class);
+        $this->expectExceptionMessage('The payload claim iss is not set.');
+        $parsed1->getIssuer();
+
+        $this->expectException(ParsedException::class);
+        $this->expectExceptionMessage('The payload claim iat is not set.');
+        $parsed1->getIssuedAt();
     }
 }
