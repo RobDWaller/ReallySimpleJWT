@@ -309,7 +309,7 @@ class BuildParseTest extends TestCase
         $this->assertSame(5, $parsed1->getPayload()['user_id']);
         $this->assertArrayNotHasKey('uid', $parsed1->getPayload());
         $this->assertSame(explode('.', $token1->getToken())[2], $parsed1->getSignature());
-        
+
         $this->expectException(ParsedException::class);
         $this->expectExceptionMessage('The payload claim nbf is not set.');
         $parsed1->getNotBefore();
