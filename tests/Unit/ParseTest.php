@@ -7,7 +7,6 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\Tokens;
 use ReallySimpleJWT\Parse;
-use ReallySimpleJWT\Exception\ParseException;
 use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Decode;

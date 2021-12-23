@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Exception\ParseException;
 use ReallySimpleJWT\Interfaces\Decode;
 
 /**
