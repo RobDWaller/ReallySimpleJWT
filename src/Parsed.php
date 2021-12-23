@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
+use ReallySimpleJWT\Exception\ParsedException;
+
 /**
  * This value object is generated when the JWT has been parsed.
  *
@@ -52,6 +54,18 @@ class Parsed
         $this->signature = $signature;
     }
 
+    public function getHeaderClaim(string $claim): mixed
+    {
+        return $this->header[$claim] ?? 
+            throw new ParsedException('The header claim ' . $claim . ' is not set.', 1);
+    }
+
+    public function getPayloadClaim(string $claim): mixed
+    {
+        return $this->payload[$claim] ?? 
+            throw new ParsedException('The payload claim ' . $claim . ' is not set.', 2);
+    }
+
     /**
      * Return the original JWT value object.
      */
@@ -75,7 +89,7 @@ class Parsed
      */
     public function getAlgorithm(): string
     {
-        return $this->header['alg'] ?? '';
+        return (string) $this->getHeaderClaim('alg');
     }
 
     /**
@@ -83,7 +97,7 @@ class Parsed
      */
     public function getType(): string
     {
-        return $this->header['typ'] ?? '';
+        return (string) $this->getHeaderClaim('typ');
     }
 
     /**
@@ -91,7 +105,7 @@ class Parsed
      */
     public function getContentType(): string
     {
-        return $this->header['cty'] ?? '';
+        return (string) $this->getHeaderClaim('cty');
     }
 
     /**
@@ -109,7 +123,7 @@ class Parsed
      */
     public function getIssuer(): string
     {
-        return $this->payload['iss'] ?? '';
+        return (string) $this->getPayloadClaim('iss');
     }
 
     /**
@@ -117,7 +131,7 @@ class Parsed
      */
     public function getSubject(): string
     {
-        return $this->payload['sub'] ?? '';
+        return (string) $this->getPayloadClaim('sub');
     }
 
     /**
@@ -125,9 +139,9 @@ class Parsed
      *
      * @return string|string[]
      */
-    public function getAudience()
+    public function getAudience(): string|array
     {
-        return $this->payload['aud'] ?? '';
+        return $this->getPayloadClaim('aud');
     }
 
     /**
@@ -135,7 +149,7 @@ class Parsed
      */
     public function getExpiration(): int
     {
-        return $this->payload['exp'] ?? 0;
+        return (int) $this->getPayloadClaim('exp');
     }
 
     /**
@@ -152,7 +166,7 @@ class Parsed
      */
     public function getNotBefore(): int
     {
-        return $this->payload['nbf'] ?? 0;
+        return (int) $this->getPayloadClaim('nbf');
     }
 
     /**
@@ -170,7 +184,7 @@ class Parsed
      */
     public function getIssuedAt(): int
     {
-        return $this->payload['iat'] ?? 0;
+        return (int) $this->getPayloadClaim('iat');
     }
 
     /**
@@ -178,7 +192,7 @@ class Parsed
      */
     public function getJwtId(): string
     {
-        return $this->payload['jti'] ?? '';
+        return (string) $this->getPayloadClaim('jti');
     }
 
     /**
