@@ -10,7 +10,7 @@ use ReallySimpleJWT\Encoders\EncodeHS256Strong;
 use ReallySimpleJWT\Exception\TokensException;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Exception\JwtException;
-use ReallySimpleJWT\Exception\ParseException;
+use ReallySimpleJWT\Exception\ParsedException;
 
 /**
  * Core factory and interface class for creating basic JSON Web Tokens.
@@ -153,7 +153,7 @@ class Tokens
             return true;
         } catch (ValidateException $e) {
             return false;
-        } catch (ParseException $e) {
+        } catch (ParsedException $e) {
             return false;
         }
     }
@@ -171,7 +171,7 @@ class Tokens
             return true;
         } catch (ValidateException $e) {
             return false;
-        } catch (ParseException $e) {
+        } catch (ParsedException $e) {
             return false;
         }
     }
