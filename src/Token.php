@@ -24,9 +24,8 @@ class Token
      * payload including issued at, expiration and issuer.
      *
      * @see Tokens::create()
-     * @param string|int $userId
      */
-    public static function create($userId, string $secret, int $expiration, string $issuer): string
+    public static function create(string|int $userId, string $secret, int $expiration, string $issuer): string
     {
         $tokens = new Tokens();
         return $tokens->create(
