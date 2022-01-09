@@ -89,7 +89,7 @@ class Parsed
      */
     public function getAlgorithm(): string
     {
-        return (string) $this->getHeaderClaim('alg');
+        return $this->getHeaderClaim('alg');
     }
 
     /**
@@ -97,7 +97,7 @@ class Parsed
      */
     public function getType(): string
     {
-        return (string) $this->getHeaderClaim('typ');
+        return $this->getHeaderClaim('typ');
     }
 
     /**
@@ -105,7 +105,7 @@ class Parsed
      */
     public function getContentType(): string
     {
-        return (string) $this->getHeaderClaim('cty');
+        return $this->getHeaderClaim('cty');
     }
 
     /**
@@ -123,7 +123,7 @@ class Parsed
      */
     public function getIssuer(): string
     {
-        return (string) $this->getPayloadClaim('iss');
+        return $this->getPayloadClaim('iss');
     }
 
     /**
@@ -131,7 +131,7 @@ class Parsed
      */
     public function getSubject(): string
     {
-        return (string) $this->getPayloadClaim('sub');
+        return $this->getPayloadClaim('sub');
     }
 
     /**
@@ -149,7 +149,7 @@ class Parsed
      */
     public function getExpiration(): int
     {
-        return (int) $this->getPayloadClaim('exp');
+        return $this->getPayloadClaim('exp');
     }
 
     /**
@@ -166,7 +166,7 @@ class Parsed
      */
     public function getNotBefore(): int
     {
-        return (int) $this->getPayloadClaim('nbf');
+        return $this->getPayloadClaim('nbf');
     }
 
     /**
@@ -184,7 +184,7 @@ class Parsed
      */
     public function getIssuedAt(): int
     {
-        return (int) $this->getPayloadClaim('iat');
+        return $this->getPayloadClaim('iat');
     }
 
     /**
@@ -192,7 +192,7 @@ class Parsed
      */
     public function getJwtId(): string
     {
-        return (string) $this->getPayloadClaim('jti');
+        return $this->getPayloadClaim('jti');
     }
 
     /**
