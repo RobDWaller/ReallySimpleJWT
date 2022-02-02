@@ -32,6 +32,9 @@ class EncodeHS256 implements Encode
      */
     private const HASH_ALGORITHM = 'sha256';
 
+    /**
+     * The secret string required to secure the token signature.
+     */
     private string $secret;
 
     public function __construct(string $secret)
