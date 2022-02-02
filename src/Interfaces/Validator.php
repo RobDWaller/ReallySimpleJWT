@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ReallySimpleJWT\Interfaces;
 
 /**
- * Interface for Validator classse to allow developers to implement custom token
+ * Interface for Validator classes to allow developers to implement custom token
  * validation if required.
  */
 interface Validator
