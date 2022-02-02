@@ -7,10 +7,9 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Interfaces\Decode;
 
 /**
- * This class parses a JSON Web Token.
- *
- * The token is housed in the Jwt value object. The class outputs a Parsed value
- * object to provide access to the data held within the JWT header and payload.
+ * This class parses a JSON Web Token. The token is housed in the Jwt value
+ * object. The class outputs a Parsed value object to provide access to the data
+ * held within the JWT header and payload.
  */
 class Parse
 {
@@ -24,9 +23,6 @@ class Parse
      */
     private Decode $decode;
 
-    /**
-     * Parse constructor
-     */
     public function __construct(Jwt $jwt, Decode $decode)
     {
         $this->jwt = $jwt;
