@@ -117,7 +117,7 @@ class Validate
 
     /**
      * Validate the JWT's signature. The signature taken from the JWT should
-     * match a new one generated from the JWT header and payload, and secret.
+     * match a new one generated from the JWT header, payload and secret.
      *
      * @throws ValidateException
      */
