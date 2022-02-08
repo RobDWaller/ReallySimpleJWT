@@ -382,20 +382,17 @@ There are six exception types that may be thrown:
 
 | Code | Message                           | Explanation                                |
 |:----:| --------------------------------- | ------------------------------------------ |
-| 1    | Token is invalid.                 | Token must have three parts separated by dots. |
+| 1    | Token has an invalid structure.   | Token must have three parts separated by dots. |
 | 2    | Audience claim does not contain provided StringOrURI.        | The `aud` claim must contain the provided string or URI string provided. |
 | 3    | Signature is invalid.             | Signature does not match header / payload content. Could not replicate signature with provided header, payload and secret. |
 | 4    | Expiration claim has expired.     | The `exp` claim must be a valid date time number in the future. |
 | 5    | Not Before claim has not elapsed. | The `nbf` claim must be a valid date time number in the past. |
-| 6    | Expiration claim is not set.      | Attempt was made to validate an `exp` claim which does not exist. |
-| 7    | Not Before claim is not set.      | Attempt was made to validate a `nbf` claim which does not exist. |
+| 6    | The header claim [~claim~] is not set. | Attempt was made to access a header claim which does not exist. |
+| 7    | The payload claim [~claim~] is not set. | Attempt was made to access a payload claim which does not exist. |
 | 8    | Invalid payload claim.            | Payload claims must be key value pairs of the format `string: mixed`. |
 | 9    | Invalid secret.                   | Must be 12 characters in length, contain upper and lower case letters, a number, and a special character `*&!@%^#$` |
-| 10   | Invalid Audience claim.           | The `aud` claim can either be a string or an array of strings nothing else. |
-| 11   | Audience claim is not set.      | Attempt was made to validate an `aud` claim which does not exist. |
-| 12   | Algorithm claim is not valid.   | Algorithm should be a valid Digital Signature or MAC Algorithm, or none. See [RFC 7518](https://tools.ietf.org/html/rfc7518). |
-| 13   | Algorithm claim is not set.      | Attempt was made to validate an `alg` claim which does not exist. |
-| 14   | Algorithm claim should not be none.      | The `alg` claim should not be set to none. |
+| 10   | Algorithm claim is not valid.   | Algorithm should be a valid Digital Signature or MAC Algorithm, or none. See [RFC 7518](https://tools.ietf.org/html/rfc7518). |
+| 11   | Algorithm claim should not be none.      | The `alg` claim should not be set to none. |
 
 ## Token Security
 
