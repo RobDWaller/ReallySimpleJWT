@@ -251,7 +251,7 @@ class ValidateTest extends TestCase
 
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Algorithm claim is not valid.');
-        $this->expectExceptionCode(12);
+        $this->expectExceptionCode(10);
         $validate->algorithm([]);
     }
 
@@ -294,7 +294,7 @@ class ValidateTest extends TestCase
 
         $this->expectException(ValidateException::class);
         $this->expectExceptionMessage('Algorithm claim should not be none.');
-        $this->expectExceptionCode(14);
+        $this->expectExceptionCode(11);
         $validate->algorithmNotNone();
     }
 

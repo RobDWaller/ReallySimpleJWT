@@ -91,7 +91,7 @@ class Validate
         if (!$this->validator->algorithm($this->parsed->getAlgorithm(), $algorithms)) {
             throw new ValidateException(
                 'Algorithm claim is not valid.',
-                12
+                10
             );
         }
 
@@ -108,7 +108,7 @@ class Validate
         if ($this->validator->algorithm(strtolower($this->parsed->getAlgorithm()), ['none'])) {
             throw new ValidateException(
                 'Algorithm claim should not be none.',
-                14
+                11
             );
         }
 
