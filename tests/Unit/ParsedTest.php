@@ -53,7 +53,7 @@ class ParsedTest extends TestCase
 
         $this->expectException(ParsedException::class);
         $this->expectExceptionMessage('The header claim alb is not set.');
-        $this->expectExceptionCode(1);
+        $this->expectExceptionCode(6);
         $parsed->getHeaderClaim('alb');
     }
 
@@ -84,7 +84,7 @@ class ParsedTest extends TestCase
 
         $this->expectException(ParsedException::class);
         $this->expectExceptionMessage('The payload claim nbt is not set.');
-        $this->expectExceptionCode(2);
+        $this->expectExceptionCode(7);
         $parsed->getPayloadClaim('nbt');
     }
 
@@ -187,23 +187,6 @@ class ParsedTest extends TestCase
         $this->assertSame('admins', $parsed->getAudience()[1]);
     }
 
-    public function testGetAudienceNotSet(): void
-    {
-        $token = $this->createMock(Jwt::class);
-
-        $parsed = new Parsed(
-            $token,
-            ["typ" => "JWT"],
-            ["iat" => 123],
-            'hello'
-        );
-
-        $this->expectException(ParsedException::class);
-        $this->expectExceptionMessage('The payload claim aud is not set.');
-        $this->expectExceptionCode(2);
-        $parsed->getAudience();
-    }
-
     public function testGetExpiration(): void
     {
         $token = $this->createMock(Jwt::class);
@@ -286,24 +269,6 @@ class ParsedTest extends TestCase
         );
 
         $this->assertSame('JWT', $parsed->getType());
-    }
-
-    public function testGetTypeNotSet(): void
-    {
-        $token = $this->createMock(Jwt::class);
-
-        $parsed = new Parsed(
-            $token,
-            ["alg" => "HS256"],
-            ["jti" => "he6236Yui"],
-            'hello'
-        );
-
-        $this->expectException(ParsedException::class);
-        $this->expectExceptionMessage('The header claim typ is not set.');
-        $this->expectExceptionCode(1);
-
-        $parsed->getType();
     }
 
     public function testGetContentType(): void
