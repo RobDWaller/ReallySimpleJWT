@@ -40,6 +40,12 @@ jobs:
     - name: Code Coverage
       run: bash <(curl -s https://codecov.io/bash)
 
+    - name: Fix Code Coverage File Paths
+      run: sed -i -e 's/\/home\/runner\/work\/ReallySimpleJWT\/ReallySimpleJWT\///g' coverage.xml
+
+    - name: Fix Test Report File Paths
+      run: sed -i -e 's/\/home\/runner\/work\/ReallySimpleJWT\/ReallySimpleJWT\///g' test-report.xml
+
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
