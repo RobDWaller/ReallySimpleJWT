@@ -31,8 +31,8 @@ class Tokens
     }
 
     /**
-     * Factory method to return an instance of the Parse class for parsing a JWT
-     * and gaining access to the token's header and payload claims data.
+     * Factory method to return an instance of the Parse class for
+     * parsing a JWT.
      */
     public function parser(string $token): Parse
     {

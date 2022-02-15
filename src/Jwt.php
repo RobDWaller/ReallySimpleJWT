@@ -7,18 +7,17 @@ namespace ReallySimpleJWT;
 use ReallySimpleJWT\Exception\JwtException;
 
 /**
- * JWT Value object.
- *
- * Consumes a token and a secret string, used when parsing a JWT and generated
- * when creating a JWT.
+ * JWT Value object which consumes a token string and ensures it is valid. It is
+ * generated when creating a JWT and consumed when parsing a JWT.
  */
 class Jwt
 {
-    /**
-     * The JSON Web Token string
-     */
     private string $token;
 
+    /**
+     * Value object will only be instantiated if the JWT token string provided
+     * is valid.
+     */
     public function __construct(string $token)
     {
         if (!$this->valid($token)) {
@@ -40,9 +39,6 @@ class Jwt
         ) === 1;
     }
 
-    /**
-     * Return the JSON Web Token String
-     */
     public function getToken(): string
     {
         return $this->token;

@@ -57,13 +57,13 @@ class Parsed
     public function getHeaderClaim(string $claim): mixed
     {
         return $this->header[$claim] ??
-            throw new ParsedException('The header claim ' . $claim . ' is not set.', 1);
+            throw new ParsedException('The header claim ' . $claim . ' is not set.', 6);
     }
 
     public function getPayloadClaim(string $claim): mixed
     {
         return $this->payload[$claim] ??
-            throw new ParsedException('The payload claim ' . $claim . ' is not set.', 2);
+            throw new ParsedException('The payload claim ' . $claim . ' is not set.', 7);
     }
 
     /**

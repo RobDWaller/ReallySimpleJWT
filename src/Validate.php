@@ -91,7 +91,7 @@ class Validate
         if (!$this->validator->algorithm($this->parsed->getAlgorithm(), $algorithms)) {
             throw new ValidateException(
                 'Algorithm claim is not valid.',
-                12
+                10
             );
         }
 
@@ -108,7 +108,7 @@ class Validate
         if ($this->validator->algorithm(strtolower($this->parsed->getAlgorithm()), ['none'])) {
             throw new ValidateException(
                 'Algorithm claim should not be none.',
-                14
+                11
             );
         }
 
@@ -117,7 +117,7 @@ class Validate
 
     /**
      * Validate the JWT's signature. The signature taken from the JWT should
-     * match a new one generated from the JWT header and payload, and secret.
+     * match a new one generated from the JWT header, payload and secret.
      *
      * @throws ValidateException
      */
