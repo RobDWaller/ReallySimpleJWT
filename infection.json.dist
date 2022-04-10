@@ -12,8 +12,8 @@
         "summary": "infection-summary.log",
         "debug": "infection-debug.log",
         "perMutator": "infection-per-mutator.md",
-        "badge": {
-            "branch": "master"
+        "stryker": {
+            "badge": "master"
         }
     },
     "mutators": {
