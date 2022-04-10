@@ -318,11 +318,11 @@ Alternatively a developer can call one of the [RFC](https://tools.ietf.org/html/
 
 ### Token Validation Methods
 
-To Validate a JSON Web Token a developer can use the `ReallySimpleJWT\Validate` class. To use the validate class you need to create and inject an instance of the `ReallySimpleJWT\Parse` class. This is so the validate class can access the information contained within the token. 
+To Validate a JSON Web Token a developer can use the `ReallySimpleJWT\Validate` class. To use the validate class you need to create and inject a `ReallySimpleJWT\Parsed` object. This is so the validate class can access the information contained within the token. 
 
 ```php
 use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Parse;
+use ReallySimpleJWT\Parsed;
 use ReallySimpleJWT\Validate;
 use ReallySimpleJwt\Decode;
 use ReallySimpleJwt\Encoders\EncodeHS256;
@@ -330,10 +330,10 @@ use ReallySimpleJwt\Helper\Validator;
 
 $token = new Jwt('abc.def.ghi');
 
-$parse = new Parse($token, new Decode());
+$parsed = new Parsed($token, new Decode());
 
 $validate = new Validate(
-    $parse,
+    $parsed,
     new EncodeHS256(),
     new Validator()
 );
