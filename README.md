@@ -157,11 +157,10 @@ There are also methods available to validate the token's expiration claim and no
 use ReallySimpleJWT\Token;
 
 $token = 'aaa.bbb.ccc';
-$secret = 'sec!ReT423*&';
 
-Token::validateExpiration($token, $secret);
+Token::validateExpiration($token);
 
-Token::validateNotBefore($token, $secret);
+Token::validateNotBefore($token);
 ```
 
 ### Get Header and Payload Claims Data
