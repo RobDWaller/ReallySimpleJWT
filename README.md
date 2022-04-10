@@ -253,9 +253,9 @@ $token = $build->setContentType('JWT')
 
 ### Access the Token
 
-A `ReallySimpleJWT\Jwt` object is returned when a developer calls the `build()` method on the `ReallySimpleJWT\Build` class. The Jwt class offers two methods `getToken()` and `getSecret()`. The former returns the generated JSON Web Token and the latter returns the secret used for the token signature.
+A `ReallySimpleJWT\Jwt` object is returned when a developer calls the `build()` method on the `ReallySimpleJWT\Build` class. The Jwt class offers a single `getToken()` method which returns the token string.
 
-To parse a JSON Web Token via the `ReallySimpleJWT\Parse` class a developer must first create a new `ReallySimpleJWT\Jwt` object by injecting the token string which will be validated on construction. 
+To parse a JSON Web Token via the `ReallySimpleJWT\Parse` class a developer must first create a new `ReallySimpleJWT\Jwt` object by injecting the token string on instantiation. The Jwt class will validate the structure of the token on instantiation to ensure integrity.
 
 ```php
 use ReallySimpleJWT\Jwt;
