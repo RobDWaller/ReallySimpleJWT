@@ -398,7 +398,7 @@ There are six exception types that may be thrown:
 The JWT [RFC 7519](https://tools.ietf.org/html/rfc7519#section-7) allows for the creation of tokens without signatures and without secured / hashed signatures. The ReallySimpleJWT library however imposes security by default as there is no logical reason not to. All created tokens must have a signature and a strong secret, but the library will parse and validate tokens without a secret or a strong secret. The library will not validate tokens without a signature.
 
 By default The ReallySimpleJWT library makes available two encoding implementations, `ReallySimpleJWT\Encoders\EncodeHS256` and `ReallySimpleJWT\Encoders\EncodeHS256Strong`. The latter enforces strict secret security and is used by default to create tokens via the `Token` and `Tokens` classes. The `EncodeHS256` does not impose strict secret security and can be used with the `Build` class to create tokens when required. In addition,
-ot is possible to create a custom encode class by implementing the `ReallySimpleJWT\Interfaces\Encode` interface. See the section [Custom Encoding](#custom-encoding).
+it is possible to create a custom encode class by implementing the `ReallySimpleJWT\Interfaces\Encode` interface. See the section [Custom Encoding](#custom-encoding).
 
 
 ### Secret Strength
