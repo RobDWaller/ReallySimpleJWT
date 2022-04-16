@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
-use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Parsed;
-use ReallySimpleJWT\Exception\ParseException;
 use ReallySimpleJWT\Interfaces\Decode;
 
 /**
- * This class parses a JSON Web Token.
- *
- * The token is housed in the Jwt value object. The class outputs a Parsed value
- * object to provide access to the data held within the JWT header and payload.
+ * This class parses a JSON Web Token. The token is housed in the Jwt value
+ * object. The class outputs a Parsed value object to provide access to the data
+ * held within the JWT header and payload.
  */
 class Parse
 {
@@ -28,9 +23,6 @@ class Parse
      */
     private Decode $decode;
 
-    /**
-     * Parse constructor
-     */
     public function __construct(Jwt $jwt, Decode $decode)
     {
         $this->jwt = $jwt;
@@ -90,71 +82,6 @@ class Parse
     }
 
     /**
-     * Retrieve the expiration claim from the JWT.
-     *
-     * @throws ParseException
-     */
-    public function getExpiration(): int
-    {
-        $payload = $this->getDecodedPayload();
-
-        if (isset($payload['exp'])) {
-            return $payload['exp'];
-        }
-
-        throw new ParseException('Expiration claim is not set.', 6);
-    }
-
-    /**
-     * Retrieve the not before claim from the JWT.
-     *
-     * @throws ParseException
-     */
-    public function getNotBefore(): int
-    {
-        $payload = $this->getDecodedPayload();
-
-        if (isset($payload['nbf'])) {
-            return $payload['nbf'];
-        }
-
-        throw new ParseException('Not Before claim is not set.', 7);
-    }
-
-    /**
-     * Retrieve the audience claim from the JWT.
-     *
-     * @return string|string[]
-     * @throws ParseException
-     */
-    public function getAudience()
-    {
-        $payload = $this->getDecodedPayload();
-
-        if (isset($payload['aud'])) {
-            return $payload['aud'];
-        }
-
-        throw new ParseException('Audience claim is not set.', 11);
-    }
-
-    /**
-     * Retrieve the algorithm claim from the JWT.
-     *
-     * @throws ParseException
-     */
-    public function getAlgorithm(): string
-    {
-        $header = $this->getDecodedHeader();
-
-        if (isset($header['alg'])) {
-            return $header['alg'];
-        }
-
-        throw new ParseException('Algorithm claim is not set.', 13);
-    }
-
-    /**
      * Decode the JWT header string to an associative array.
      *
      * @return mixed[]
@@ -176,21 +103,5 @@ class Parse
         return $this->decode->decode(
             $this->getPayload()
         );
-    }
-
-    /**
-     * Retrieve the JSON Web Token string.
-     */
-    public function getToken(): string
-    {
-        return $this->jwt->getToken();
-    }
-
-    /**
-     * Retrieve the JSON Web Token secret.
-     */
-    public function getSecret(): string
-    {
-        return $this->jwt->getSecret();
     }
 }

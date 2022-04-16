@@ -4,44 +4,43 @@ declare(strict_types=1);
 
 namespace ReallySimpleJWT;
 
+use ReallySimpleJWT\Exception\JwtException;
+
 /**
- * JWT Value object.
- *
- * Consumes a token and a secret string, used when parsing a JWT and generated
- * when creating a JWT.
+ * JWT Value object which consumes a token string and ensures it is valid. It is
+ * generated when creating a JWT and consumed when parsing a JWT.
  */
 class Jwt
 {
-    /**
-     * The JSON Web Token string
-     */
     private string $token;
 
     /**
-    * The secret used to create the JWT signature
-    */
-    private string $secret;
-
-    public function __construct(string $token, string $secret)
+     * Value object will only be instantiated if the JWT token string provided
+     * is valid.
+     */
+    public function __construct(string $token)
     {
-        $this->token = $token;
+        if (!$this->valid($token)) {
+            throw new JwtException('Token has an invalid structure.', 1);
+        }
 
-        $this->secret = $secret;
+        $this->token = $token;
     }
 
     /**
-     * Return the JSON Web Token String
+     * Confirm the structure of a JSON Web Token, it has three parts separated
+     * by dots and complies with Base64URL standards.
      */
+    private function valid(string $token): bool
+    {
+        return preg_match(
+            '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
+            $token
+        ) === 1;
+    }
+
     public function getToken(): string
     {
         return $this->token;
-    }
-
-    /**
-     * Return the secret used to encode the JWT signature
-     */
-    public function getSecret(): string
-    {
-        return $this->secret;
     }
 }

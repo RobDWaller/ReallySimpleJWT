@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ReallySimpleJWT\Interfaces;
 
 /**
@@ -30,5 +32,5 @@ interface Encode
      * @param mixed[] $header
      * @param mixed[] $payload
      */
-    public function signature(array $header, array $payload, string $secret): string;
+    public function signature(array $header, array $payload): string;
 }

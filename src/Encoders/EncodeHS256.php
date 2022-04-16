@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ReallySimpleJWT\Encoders;
 
 use ReallySimpleJWT\Interfaces\Encode;
@@ -29,6 +31,16 @@ class EncodeHS256 implements Encode
      * This is the actual algorithm used to hash the token's signature string.
      */
     private const HASH_ALGORITHM = 'sha256';
+
+    /**
+     * The secret string required to secure the token signature.
+     */
+    private string $secret;
+
+    public function __construct(string $secret)
+    {
+        $this->secret = $secret;
+    }
 
     /**
      * Get the algorithm used to encode the signature. Note this is for show,
@@ -74,13 +86,13 @@ class EncodeHS256 implements Encode
      * @param mixed[] $header
      * @param mixed[] $payload
      */
-    public function signature(array $header, array $payload, string $secret): string
+    public function signature(array $header, array $payload): string
     {
         return $this->urlEncode(
             $this->hash(
                 $this->getHashAlgorithm(),
                 $this->encode($header) . "." . $this->encode($payload),
-                $secret
+                $this->secret
             )
         );
     }

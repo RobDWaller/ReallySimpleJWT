@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use ReallySimpleJWT\Token;
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Exception\TokensException;
 use Tests\Fixtures\Tokens;
 use PHPUnit\Framework\TestCase;
 
@@ -62,37 +63,37 @@ class TokenTest extends TestCase
 
     public function testValidateExpired(): void
     {
-        $this->assertFalse(Token::validateExpiration(Tokens::TOKEN, Tokens::SECRET));
+        $this->assertFalse(Token::validateExpiration(Tokens::TOKEN));
     }
 
     public function testValidateNotBefore(): void
     {
-        $this->assertTrue(Token::validateNotBefore(Tokens::TOKEN, Tokens::SECRET));
+        $this->assertTrue(Token::validateNotBefore(Tokens::TOKEN));
     }
 
     public function testBuilder(): void
     {
-        $this->assertInstanceOf(Build::class, Token::builder());
+        $this->assertInstanceOf(Build::class, Token::builder(Tokens::SECRET_STRONG));
     }
 
     public function testParser(): void
     {
-        $this->assertInstanceOf(Parse::class, Token::parser('Hello', '1234'));
+        $this->assertInstanceOf(Parse::class, Token::parser(Tokens::TOKEN));
     }
 
     public function testValidator(): void
     {
-        $this->assertInstanceOf(Validate::class, Token::validator('Hello', '1234'));
+        $this->assertInstanceOf(Validate::class, Token::validator(Tokens::TOKEN, Tokens::SECRET));
     }
 
     public function testGetPayload(): void
     {
-        $this->assertSame(Tokens::DECODED_PAYLOAD, Token::getPayload(Tokens::TOKEN, Tokens::SECRET));
+        $this->assertSame(Tokens::DECODED_PAYLOAD, Token::getPayload(Tokens::TOKEN));
     }
 
     public function testGetHeader(): void
     {
-        $this->assertSame(Tokens::DECODED_HEADER, Token::getHeader(Tokens::TOKEN, Tokens::SECRET));
+        $this->assertSame(Tokens::DECODED_HEADER, Token::getHeader(Tokens::TOKEN));
     }
 
     public function testValidateTokenFail(): void
@@ -102,6 +103,6 @@ class TokenTest extends TestCase
 
     public function testBadTokenGetPayloadEmpty(): void
     {
-        $this->assertEmpty(Token::getPayload('Hello', 'CarPark'));
+        $this->assertEmpty(Token::getPayload('Hello'));
     }
 }

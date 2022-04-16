@@ -1,32 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Helper;
 
 use PHPUnit\Framework\TestCase;
 use ReallySimpleJWT\Helper\Validator;
-use ReallySimpleJWT\Encoders\EncodeHS256;
-use ReallySimpleJWT\Token;
 
 class ValidatorTest extends TestCase
 {
-    public function testValidateStructure(): void
-    {
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' .
-        'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvZSBCbG9ncyIsImlhdCI6MTUxNjIzOTAyMn0.' .
-        '-wvw8Qad0enQkwNhG2j-GCT-7PbrMN_gtUwOKZTu54M';
-
-        $validate = new Validator();
-
-        $this->assertTrue($validate->structure($token));
-    }
-
-    public function testValidateStructureInvalid(): void
-    {
-        $validate = new Validator();
-
-        $this->assertFalse($validate->structure('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'));
-    }
-
     public function testValidateExpiration(): void
     {
         $validate = new Validator();
@@ -62,11 +44,18 @@ class ValidatorTest extends TestCase
         $this->assertTrue($validate->notBefore(time() - 10));
     }
 
-    public function testValidateNotFalse(): void
+    public function testValidateNotBeforeFalse(): void
     {
         $validate = new Validator();
 
         $this->assertFalse($validate->notBefore(time() + 10));
+    }
+
+    public function testValidateNotBeforeZero(): void
+    {
+        $validate = new Validator();
+
+        $this->assertFalse($validate->notBefore(0));
     }
 
     public function testValidateAudience(): void

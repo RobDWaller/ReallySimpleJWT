@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Integration;
 
 use ReallySimpleJWT\Build;
 use ReallySimpleJWT\Parse;
 use ReallySimpleJWT\Validate;
-use ReallySimpleJWT\Signature;
-use ReallySimpleJWT\Secret;
 use ReallySimpleJWT\Jwt;
 use ReallySimpleJWT\Exception\ValidateException;
 use ReallySimpleJWT\Helper\Validator;
 use ReallySimpleJWT\Encoders\EncodeHS256;
+use ReallySimpleJWT\Encoders\EncodeHS256Strong;
 use ReallySimpleJWT\Decode;
 use PHPUnit\Framework\TestCase;
 
@@ -21,15 +22,13 @@ class BuildValidateTest extends TestCase
         $build = new Build(
             'JWT',
             new Validator(),
-            new Secret(),
-            new EncodeHS256()
+            new EncodeHS256('123abcDEF!$£%456')
         );
 
         $expiration = time() - 20;
 
         $token = $build->setContentType('JWT')
             ->setHeaderClaim('info', 'Hello World')
-            ->setSecret('123abcDEF!$£%456')
             ->setIssuer('localhost')
             ->setSubject('users')
             ->setAudience('https://google.com')
@@ -39,8 +38,8 @@ class BuildValidateTest extends TestCase
         $parse = new Parse($token, new Decode());
 
         $validate = new Validate(
-            $parse,
-            new EncodeHS256(),
+            $parse->parse(),
+            new EncodeHS256('123abcDEF!$£%456'),
             new Validator()
         );
 
@@ -56,8 +55,7 @@ class BuildValidateTest extends TestCase
         $build = new Build(
             'JWT',
             new Validator(),
-            new Secret(),
-            new EncodeHS256()
+            new EncodeHS256Strong('DEF987!$£%456vdg')
         );
 
         $expiration = time() + 20;
@@ -66,7 +64,6 @@ class BuildValidateTest extends TestCase
 
         $token = $build->setContentType('JWT')
             ->setHeaderClaim('info', 'Hello World')
-            ->setSecret('DEF987!$£%456vdg')
             ->setIssuer('localhost')
             ->setSubject('users')
             ->setAudience('https://google.com')
@@ -80,8 +77,8 @@ class BuildValidateTest extends TestCase
         $parse = new Parse($token, new Decode());
 
         $validate = new Validate(
-            $parse,
-            new EncodeHS256(),
+            $parse->parse(),
+            new EncodeHS256('DEF987!$£%456vdg'),
             new Validator()
         );
 
@@ -99,16 +96,13 @@ class BuildValidateTest extends TestCase
         'jE4MTA2MiwibmJmIjoxNTQ2MTgxMDYyLCJpYXQiOjE1NDYxODEwNDIsImp0aSI6IjEyM0FCQyIsInVpZCI6M30.' .
         'SGxo3LiVYRBfFL8pX1QM-dQSMBCf93OWpE0ZnCiQiFc';
 
-        $token = new Jwt(
-            $token,
-            '!$£%456hftYuJi2'
-        );
+        $jwt = new Jwt($token);
 
-        $parse = new Parse($token, new Decode());
+        $parse = new Parse($jwt, new Decode());
 
         $validate = new Validate(
-            $parse,
-            new EncodeHS256(),
+            $parse->parse(),
+            new EncodeHS256('!$£%456hftYuJi2'),
             new Validator()
         );
 

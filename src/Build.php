@@ -6,8 +6,6 @@ namespace ReallySimpleJWT;
 
 use ReallySimpleJWT\Interfaces\Validator;
 use ReallySimpleJWT\Interfaces\Encode;
-use ReallySimpleJWT\Jwt;
-use ReallySimpleJWT\Interfaces\Secret;
 use ReallySimpleJWT\Exception\BuildException;
 
 /**
@@ -39,32 +37,20 @@ class Build
     private array $payload = [];
 
     /**
-     * The secret string for encoding the JWT signature.
-     */
-    private string $secret = '';
-
-    /**
      * Token claim validator.
      */
-    private Validator $validate;
-
-    /**
-     * Signature secret validator.
-     */
-    private Secret $secretValidator;
+    private Validator $validator;
 
     /**
      * Token Encoder which complies with the encoder interface.
      */
     private Encode $encode;
 
-    public function __construct(string $type, Validator $validate, Secret $secretValidator, Encode $encode)
+    public function __construct(string $type, Validator $validator, Encode $encode)
     {
         $this->type = $type;
 
-        $this->validate = $validate;
-
-        $this->secretValidator =  $secretValidator;
+        $this->validator = $validator;
 
         $this->encode = $encode;
     }
@@ -83,10 +69,8 @@ class Build
 
     /**
      * Add custom claims to the JWT header
-     *
-     * @param mixed $value
      */
-    public function setHeaderClaim(string $key, $value): Build
+    public function setHeaderClaim(string $key, mixed $value): Build
     {
         $this->header[$key] = $value;
 
@@ -106,24 +90,6 @@ class Build
             $this->header,
             ['alg' => $this->encode->getAlgorithm(), 'typ' => $this->type]
         );
-    }
-
-    /**
-     * Set the JWT secret for encrypting the JWT signature. The secret must
-     * comply with the validation rules defined in the
-     * ReallySimpleJWT\Secret class.
-     *
-     * @throws BuildException
-     */
-    public function setSecret(string $secret): Build
-    {
-        if (!$this->secretValidator->validate($secret)) {
-            throw new BuildException('Invalid secret.', 9);
-        }
-
-        $this->secret = $secret;
-
-        return $this;
     }
 
     /**
@@ -154,18 +120,14 @@ class Build
      * users who use this token. This claim can either be a single string or an
      * array of strings.
      *
-     * @param mixed $audience
+     * @param string|mixed[] $audience
      * @throws BuildException
      */
-    public function setAudience($audience): Build
+    public function setAudience(string|array $audience): Build
     {
-        if (is_string($audience) || is_array($audience)) {
-            $this->payload['aud'] = $audience;
+        $this->payload['aud'] = $audience;
 
-            return $this;
-        }
-
-        throw new BuildException('Invalid Audience claim.', 10);
+        return $this;
     }
 
     /**
@@ -176,7 +138,7 @@ class Build
      */
     public function setExpiration(int $timestamp): Build
     {
-        if (!$this->validate->expiration($timestamp)) {
+        if (!$this->validator->expiration($timestamp)) {
             throw new BuildException('Expiration claim has expired.', 4);
         }
 
@@ -222,10 +184,8 @@ class Build
      * Set a custom payload claim on the JWT. The RFC calls these private
      * claims. Eg you may wish to set a user_id or a username in the
      * JWT payload.
-     *
-     * @param mixed $value
      */
-    public function setPayloadClaim(string $key, $value): Build
+    public function setPayloadClaim(string $key, mixed $value): Build
     {
         $this->payload[$key] = $value;
 
@@ -257,8 +217,7 @@ class Build
         return new Jwt(
             $this->encode->encode($this->getHeader()) . "." .
             $this->encode->encode($this->getPayload()) . "." .
-            $this->getSignature(),
-            $this->secret
+            $this->getSignature()
         );
     }
 
@@ -270,8 +229,7 @@ class Build
     {
         return new Build(
             $this->type,
-            $this->validate,
-            $this->secretValidator,
+            $this->validator,
             $this->encode
         );
     }
@@ -279,19 +237,12 @@ class Build
     /**
      * Generate and return the JWT signature, this is made up of the header,
      * payload and secret.
-     *
-     * @throws BuildException
      */
     private function getSignature(): string
     {
-        if ($this->secretValidator->validate($this->secret)) {
-            return $this->encode->signature(
-                $this->getHeader(),
-                $this->getPayload(),
-                $this->secret
-            );
-        }
-
-        throw new BuildException('Invalid secret.', 9);
+        return $this->encode->signature(
+            $this->getHeader(),
+            $this->getPayload()
+        );
     }
 }

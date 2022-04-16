@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\Tokens;
 use ReallySimpleJWT\Decode;
-use ReallySimpleJWT\Token;
 use ReflectionMethod;
 
 class DecodeTest extends TestCase

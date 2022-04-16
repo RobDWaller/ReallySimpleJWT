@@ -13,3 +13,5 @@ Dockerfile
 .phpunit.result.cache
 coverage.xml
 .DS_Store
+.php_cs.cache
+test-report.xml
