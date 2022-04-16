@@ -28,8 +28,7 @@ If you need to read tokens in the browser please take a look at our JavaScript /
     - [Custom Encoding](#custom-encoding)
 - [Error Messages and Codes](#error-messages-and-codes)
 - [Token Security](#token-security)
-    - [Signature Secret](#signature-secret)
-    - [Custom Secrets](#custom-secrets)
+    - [Secret Strength](#secret-strength)
 - [Framework Integration With PSR-JWT Middleware](#framework-integration-with-psr-jwt-middleware)
 - [Browser Integration With RS-JWT](#browser-integration-with-rs-jwt)
 
