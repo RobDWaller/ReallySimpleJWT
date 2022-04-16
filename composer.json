@@ -18,7 +18,7 @@
         "phpstan/phpstan": "^1.2",
         "phpmd/phpmd": "^2.11",
         "squizlabs/php_codesniffer": "^3.6",
-        "infection/infection": "^0.20",
+        "infection/infection": "^0.26",
         "phploc/phploc": "^7.0",
         "sebastian/phpcpd": "^6.0",
         "phpbench/phpbench": "^1.2",
@@ -43,10 +43,15 @@
             "vendor/bin/phpmd src/ text ruleset.xml",
             "vendor/bin/phpunit --testsuite unit --coverage-clover=coverage.xml --log-junit test-report.xml",
             "vendor/bin/phpunit --testsuite integration",
-            "vendor/bin/infection --test-framework-options='--testsuite unit' -s --min-msi=93 --threads=2",
+            "vendor/bin/infection -s --min-msi=90 --threads=2",
             "vendor/bin/phpcpd --min-lines=2 --min-tokens=35 src/",
             "vendor/bin/phpbench run benchmarks/ReallySimpleJWTBench.php --report=aggregate",
             "vendor/bin/phploc src/"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
     }
 }
