@@ -28,9 +28,14 @@ class EncodeHS256Strong extends EncodeHS256
      * The secret should contain a number, a upper and a lowercase letter, and a
      * special character *&!@%^#$. It should be at least 12 characters in
      * length. The regex here uses lookahead assertions.
+     * nonEmptyOnlyValidation is an option to only validate secret is empty or not.
      */
-    private function validSecret(string $secret): bool
+    private function validSecret(string $secret, bool $nonEmptyOnlyValidation = false): bool
     {
+        if ($nonEmptyOnlyValidation) {
+            return !empty($secret);
+        }
+
         if (
             !preg_match(
                 '/^.*(?=.{12,}+)(?=.*\d+)(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\*&!@%\^#\$]+).*$/',
