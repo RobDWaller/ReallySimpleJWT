@@ -21,7 +21,7 @@ class Tokens
      * Factory method to return an instance of the Build class for creating new
      * JSON Web Tokens.
      */
-    public function builder(string $secret, object $options): Build
+    public function builder(string $secret, array $options): Build
     {
         return new Build(
             'JWT',
@@ -91,7 +91,7 @@ class Tokens
      *
      * @param string|int $userId
      */
-    public function create(string $userKey, string|int $userId, string $secret, int $expiration, string $issuer, object $options): Jwt
+    public function create(string $userKey, string|int $userId, string $secret, int $expiration, string $issuer, array $options): Jwt
     {
         $builder = $this->builder($secret, $options);
 

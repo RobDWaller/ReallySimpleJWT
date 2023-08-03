@@ -25,7 +25,7 @@ class Token
      *
      * @see Tokens::create()
      */
-    public static function create(string|int $userId, string $secret, int $expiration, string $issuer, object $options = []): string
+    public static function create(string|int $userId, string $secret, int $expiration, string $issuer, array $options = []): string
     {
         $tokens = new Tokens();
         return $tokens->create(
