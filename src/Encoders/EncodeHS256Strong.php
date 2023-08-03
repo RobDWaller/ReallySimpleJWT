@@ -17,7 +17,7 @@ class EncodeHS256Strong extends EncodeHS256
      */
     public function __construct(string $secret, array $options)
     {
-        if (!$this->validSecret($secret, !!$$options['fixed_secret_length_enabled'])) {
+        if (!$this->validSecret($secret, !!$options['fixed_secret_length_enabled'])) {
             throw new EncodeException('Invalid secret.', 9);
         }
 
